@@ -1,0 +1,267 @@
+---
+interface Props {
+  activePage?: 'home' | 'servicios' | 'talento';
+}
+const { activePage = 'home' } = Astro.props;
+---
+
+<header>
+  <nav class="nav" role="navigation" aria-label="Navegación principal">
+    <a href="/" class="nav-logo" aria-label="Nicolás Hruszczak — Inicio">
+      nh<span>.</span>
+    </a>
+
+    <div class="nav-tabs" role="list">
+      <a
+        href="/"
+        class={`nav-tab ${activePage === 'home' ? 'active' : ''}`}
+        role="listitem"
+        aria-current={activePage === 'home' ? 'page' : undefined}
+        data-en="Home"
+        data-es="Inicio"
+      >Inicio</a>
+
+      <a
+        href="/servicios"
+        class={`nav-tab ${activePage === 'servicios' ? 'active' : ''}`}
+        role="listitem"
+        aria-current={activePage === 'servicios' ? 'page' : undefined}
+        data-en="B2B Services"
+        data-es="Servicios B2B"
+      >Servicios B2B</a>
+
+      <a
+        href="/talento"
+        class={`nav-tab ${activePage === 'talento' ? 'active' : ''}`}
+        role="listitem"
+        aria-current={activePage === 'talento' ? 'page' : undefined}
+        data-en="Profile"
+        data-es="Perfil profesional"
+      >Perfil profesional</a>
+    </div>
+
+    <div class="nav-controls">
+      <button
+        id="theme-btn"
+        class="ctrl-btn"
+        onclick="nhTheme.toggle()"
+        aria-label="Cambiar tema claro/oscuro"
+        title="Tema"
+      >◑ Dark</button>
+
+      <button
+        id="lang-btn"
+        class="ctrl-btn"
+        onclick="nhLang.toggle()"
+        aria-label="Switch to English"
+        title="Language / Idioma"
+      >EN</button>
+
+      <button
+        id="a11y-btn"
+        class="ctrl-btn"
+        onclick="nhA11y.togglePanel()"
+        aria-label="Opciones de accesibilidad"
+        aria-expanded="false"
+        aria-controls="a11y-panel"
+        title="Accesibilidad"
+      >☰ Accesibilidad</button>
+    </div>
+  </nav>
+
+  <!-- Accessibility panel -->
+  <div
+    id="a11y-panel"
+    class="a11y-panel"
+    role="region"
+    aria-label="Panel de accesibilidad"
+  >
+    <div class="a11y-group">
+      <span class="a11y-label" id="font-size-label">Tamaño de texto</span>
+      <div class="a11y-btns" role="group" aria-labelledby="font-size-label">
+        <button class="a11y-btn a11y-fs-btn on" data-scale="1"
+          onclick="nhA11y.setFontScale(1)" aria-pressed="true">A</button>
+        <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
+          onclick="nhA11y.setFontScale(1.15)" aria-pressed="false">A+</button>
+        <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
+          onclick="nhA11y.setFontScale(1.3)" aria-pressed="false">A++</button>
+      </div>
+    </div>
+
+    <div class="a11y-group">
+      <span class="a11y-label" id="contrast-label">Contraste</span>
+      <div class="a11y-btns" role="group" aria-labelledby="contrast-label">
+        <button class="a11y-btn on" id="hc-off"
+          onclick="nhA11y.setHighContrast(false)" aria-pressed="false">Normal</button>
+        <button class="a11y-btn" id="hc-on"
+          onclick="nhA11y.setHighContrast(true)" aria-pressed="false">Alto contraste</button>
+      </div>
+    </div>
+
+    <div class="a11y-group">
+      <span class="a11y-label" id="motion-label">Movimiento</span>
+      <div class="a11y-btns" role="group" aria-labelledby="motion-label">
+        <button class="a11y-btn on" id="mot-on"
+          onclick="nhA11y.setReducedMotion(false)" aria-pressed="true">Activado</button>
+        <button class="a11y-btn" id="mot-off"
+          onclick="nhA11y.setReducedMotion(true)" aria-pressed="false">Reducido</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* ── Nav shell ──────────────────────────────────────────── */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--nav-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-wrap: wrap;
+  }
+
+  /* ── Logo ───────────────────────────────────────────────── */
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--nav-logo-color);
+    text-decoration: none;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-logo:hover { color: var(--nav-logo-color); }
+
+  /* ── Tabs ───────────────────────────────────────────────── */
+  .nav-tabs {
+    display: flex;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-tab {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border: 0.5px solid var(--nav-idle-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--nav-text-idle);
+    background: transparent;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+  }
+  .nav-tab:hover {
+    color: var(--nav-logo-color);
+    border-color: var(--nav-btn-hover-border);
+    background: transparent;
+    transform: translateY(-1px);
+  }
+  .nav-tab.active {
+    color: var(--accent);
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+  }
+
+  /* ── Controls ───────────────────────────────────────────── */
+  .nav-controls { display: flex; gap: 6px; align-items: center; }
+
+  .ctrl-btn {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 11px;
+    border: 0.5px solid var(--nav-idle-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--nav-text-idle);
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+    white-space: nowrap;
+  }
+  .ctrl-btn:hover {
+    border-color: var(--nav-btn-hover-border);
+    color: var(--nav-btn-hover-color);
+    background: var(--nav-btn-hover-bg);
+    transform: translateY(-1px);
+  }
+  .ctrl-btn.on {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  /* ── A11y panel ─────────────────────────────────────────── */
+  .a11y-panel {
+    display: none;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--nav-border);
+    padding: 12px 24px;
+    gap: var(--sp-lg);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .a11y-panel.open { display: flex; }
+
+  .a11y-group { display: flex; align-items: center; gap: var(--sp-sm); }
+  .a11y-label {
+    font-size: var(--text-xs);
+    color: var(--nav-text-idle);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .a11y-btns { display: flex; gap: 4px; }
+  .a11y-btn {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 0.5px solid var(--nav-idle-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--nav-text-idle);
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+  }
+  .a11y-btn:hover,
+  .a11y-btn.on {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .a11y-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  /* ── Mobile: collapse tabs ──────────────────────────────── */
+  @media (max-width: 640px) {
+    .nav-tab[data-es="Servicios B2B"],
+    .nav-tab[data-en="B2B Services"] { display: none; }
+    .nav-tab[data-es="Perfil profesional"],
+    .nav-tab[data-en="Profile"] { display: none; }
+  }
+</style>

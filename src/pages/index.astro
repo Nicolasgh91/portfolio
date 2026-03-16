@@ -1,0 +1,362 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+---
+
+<Layout
+  title="Nicolás Hruszczak — Software, IA y automatización para empresas"
+  description="Desarrollo full stack, análisis funcional e implementación de IA para empresas y pymes que buscan resultados medibles. Diagnóstico gratuito."
+>
+  <Nav activePage="home" />
+
+  <main id="main-content">
+    <div class="page-container">
+
+      <!-- ── Hero ─────────────────────────────────────────── -->
+      <section class="hero" aria-label="Presentación">
+        <div
+          class="badge"
+          data-en="Development · Data · Artificial Intelligence"
+          data-es="Desarrollo · Datos · Inteligencia Artificial"
+        >Desarrollo · Datos · Inteligencia Artificial</div>
+
+        <h1
+          data-en='Software that <em>works</em><br>for your business.'
+          data-es='Software que <em>trabaja</em><br>para su empresa.'
+        >Software que <em>trabaja</em><br>para su empresa.</h1>
+
+        <p
+          class="hero-sub"
+          data-en="Automation, AI agents and tailor-made systems for teams seeking measurable results, not technology budgets."
+          data-es="Automatización, agentes de IA y sistemas a medida para equipos que buscan resultados medibles, no presupuestos en tecnología."
+        >Automatización, agentes de IA y sistemas a medida para equipos que buscan resultados medibles, no presupuestos en tecnología.</p>
+
+        <div class="cta-row">
+          <a
+            href="/servicios"
+            class="btn-primary"
+            data-en="Solutions for my business →"
+            data-es="Soluciones para mi empresa →"
+          >Soluciones para mi empresa →</a>
+
+          <a
+            href="/talento"
+            class="btn-secondary"
+            data-en="Talent / Recruitment →"
+            data-es="Talento / Reclutamiento →"
+          >Talento / Reclutamiento →</a>
+        </div>
+      </section>
+
+      <!-- ── Stats bar ─────────────────────────────────────── -->
+      <div class="stats-bar" role="list" aria-label="Estadísticas">
+        <div class="stat-item" role="listitem">
+          <div class="stat-num">3+</div>
+          <div
+            class="stat-label"
+            data-en="Years in full stack development"
+            data-es="Años en desarrollo de soluciones de productos tecnológicos"
+          >Años en desarrollo de soluciones de productos tecnológicos</div>
+        </div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-num">2</div>
+          <div
+            class="stat-label"
+            data-en="Active engineering projects"
+            data-es="Proyectos de ingeniería activos"
+          >Proyectos de ingeniería activos</div>
+        </div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-num">∞</div>
+          <div
+            class="stat-label"
+            data-en="AI agent expertise"
+            data-es="Dominio de agentes de IA"
+          >Dominio de agentes de IA</div>
+        </div>
+      </div>
+
+      <!-- ── Split CTA ──────────────────────────────────────── -->
+      <nav class="split-cta" aria-label="Rutas de navegación">
+        <a href="/servicios" class="split-cta-col">
+          <h3>
+            <span aria-hidden="true">📊</span>
+            <span
+              data-en="For businesses &amp; SMEs"
+              data-es="Para empresas y pymes"
+            >Para empresas y pymes</span>
+          </h3>
+          <p
+            data-en="Diagnosis, proposal and execution. Fixed cost reduction, process automation, and proprietary management systems."
+            data-es="Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios."
+          >Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios.</p>
+          <span
+            class="split-cta-arrow"
+            data-en="Explore services →"
+            data-es="Explorar servicios →"
+          >Explorar servicios →</span>
+        </a>
+
+        <a href="/talento" class="split-cta-col">
+          <h3>
+            <span aria-hidden="true">💼</span>
+            <span
+              data-en="For recruiters"
+              data-es="Para reclutadores"
+            >Para reclutadores</span>
+          </h3>
+          <p
+            data-en="Functional analyst, full stack developer and software architect. Updated stack, AI expertise and agile methodologies."
+            data-es="Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles."
+          >Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles.</p>
+          <span
+            class="split-cta-arrow"
+            data-en="View technical profile →"
+            data-es="Ver perfil técnico →"
+          >Ver perfil técnico →</span>
+        </a>
+      </nav>
+
+      <div class="divider"></div>
+
+      <!-- ── Recent projects ───────────────────────────────── -->
+      <section class="section" aria-labelledby="projects-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en="Projects"
+            data-es="Proyectos"
+          >Proyectos</span>
+          <h2
+            id="projects-heading"
+            data-en="Recent work"
+            data-es="Trabajo reciente"
+          >Trabajo reciente</h2>
+        </div>
+
+        <div class="grid-2">
+          <article class="project-card">
+            <div class="project-header">
+              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span aria-hidden="true" style="font-size:20px">🌿</span>
+                Huella del Fuego
+              </h3>
+              <a
+                href="https://huelladelfuego.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-url"
+              >huelladelfuego.com&nbsp;↗</a>
+            </div>
+            <p
+              data-en="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Personal project on fire impact monitoring in Argentina."
+              data-es="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto personal sobre monitoreo e impacto del fuego en Argentina."
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto personal sobre monitoreo e impacto del fuego en Argentina.</p>
+            <div class="tags">
+              <a href="/talento#huella" class="tag tag-accent"
+                data-en="View project →"
+                data-es="Ver proyecto →"
+              >Ver proyecto →</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-header">
+              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span aria-hidden="true" style="font-size:20px">⚡</span>
+                Double Click™
+              </h3>
+              <span class="tag tag-accent" style="font-size:10px">
+                <span data-en="In progress" data-es="En progreso">En progreso</span>
+              </span>
+            </div>
+            <p
+              data-en="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Project in active development."
+              data-es="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto en desarrollo activo."
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto en desarrollo activo.</p>
+            <div class="tags">
+              <a href="/talento#doubleclick" class="tag tag-accent"
+                data-en="View project →"
+                data-es="Ver proyecto →"
+              >Ver proyecto →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="page-container footer-inner">
+      <span class="nav-logo" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted)">
+        nh<span style="color:var(--accent)">.</span>
+      </span>
+      <p style="font-size:var(--text-xs);color:var(--text-muted)">
+        © 2025 Nicolás Hruszczak. Construido con
+        <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> +
+        <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>.
+      </p>
+      <div style="display:flex;gap:var(--sp-md)">
+        <a href="https://github.com/Nicolasgh91" target="_blank" rel="noopener noreferrer"
+          aria-label="GitHub" style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
+        <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer"
+          aria-label="LinkedIn" style="font-size:var(--text-xs);color:var(--text-muted)">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .cta-row > a {
+    flex: 1;
+    min-width: 250px;
+    max-width: 320px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ── Stats bar ───────────────────────────────────────────── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 0.5px solid var(--border-normal);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--sp-xl);
+  }
+  @media (max-width: 480px) {
+    .stats-bar {
+      grid-template-columns: 1fr;
+    }
+  }
+  .stat-item {
+    padding: var(--sp-lg);
+    text-align: center;
+    border-right: 0.5px solid var(--border-normal);
+  }
+  .stat-item:last-child { border-right: none; }
+  @media (max-width: 480px) {
+    .stat-item {
+      border-right: none;
+      border-bottom: 0.5px solid var(--border-normal);
+    }
+    .stat-item:last-child { border-bottom: none; }
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: calc(var(--text-2xl) * var(--font-scale));
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  /* ── Split CTA card (home page) ──────────────────────────── */
+  .split-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 0.5px solid var(--border-normal);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (max-width: 560px) {
+    .split-cta {
+      grid-template-columns: 1fr;
+    }
+  }
+  .split-cta-col {
+    padding: var(--sp-lg);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  .split-cta-col:hover { background: var(--accent-bg); }
+  .split-cta-col:first-child { border-right: 0.5px solid var(--border-normal); }
+  @media (max-width: 560px) {
+    .split-cta-col:first-child {
+      border-right: none;
+      border-bottom: 0.5px solid var(--border-normal);
+    }
+  }
+  .split-cta-col h3 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); }
+  .split-cta-col p { 
+    font-size: var(--text-sm); 
+    line-height: 1.65; 
+    margin-bottom: var(--sp-md); 
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+  .split-cta-arrow { font-size: var(--text-sm); color: var(--accent); margin-top: auto; }
+
+  /* ── Project card ────────────────────────────────────────── */
+  .project-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-lg);
+    transition: border-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  .project-card:hover { border-color: var(--border-normal); }
+
+  .project-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-xs);
+    margin-bottom: var(--sp-sm);
+  }
+  .project-header h3 { margin-bottom: 0; }
+  .project-url {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .project-url:hover { color: var(--accent); }
+  
+  .project-card p { 
+    font-size: var(--text-sm); 
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    margin-bottom: var(--sp-sm);
+  }
+  .project-card .tags {
+    margin-top: auto;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .site-footer {
+    border-top: 0.5px solid var(--border-subtle);
+    padding: var(--sp-lg) 0;
+    margin-top: var(--sp-2xl);
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+</style>

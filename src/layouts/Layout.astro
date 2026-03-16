@@ -1,0 +1,219 @@
+---
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'es' | 'en';
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  lang = 'es',
+  ogImage = '/og-default.png',
+} = Astro.props;
+
+const canonical = Astro.url.href;
+const siteName = 'Nicolás Hruszczak';
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Nicolás Hruszczak" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FBBF24" />
+
+    <!-- Fonts (Preconnect and Preload) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" />
+
+    <!-- Alternate Languages (hreflang) -->
+    <link rel="alternate" hreflang="es" href={canonical} />
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
+    <!-- Favicons — replace with actual assets -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- JSON-LD: Person schema for recruiter SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nicolás Hruszczak",
+        "jobTitle": "Analista Funcional y Desarrollador Full Stack",
+        "description": "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
+        "url": `${Astro.site}`,
+        "sameAs": [
+          "https://github.com/Nicolasgh91",
+          "https://linkedin.com/in/tu-usuario"
+        ],
+        "knowsAbout": ["Python", "Astro", "Next.js", "Inteligencia Artificial", "Agentes de IA", "Análisis de datos"]
+      }
+    </script>
+
+    <!-- JSON-LD: LocalBusiness schema for B2B GEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Nicolás Hruszczak — Desarrollo de Software",
+        "description": "Software a medida, automatización inteligente y posicionamiento SEO/GEO para empresas y pymes.",
+        "url": `${Astro.site}`,
+        "areaServed": ["Argentina", "United States"],
+        "availableLanguage": ["Spanish", "English"],
+        "serviceType": [
+          "Desarrollo de software a medida",
+          "Automatización con IA",
+          "Auditoría y optimización de procesos",
+          "Posicionamiento SEO/GEO"
+        ]
+      }
+    </script>
+
+    <title>{title}</title>
+
+    <!-- Inline theme init: prevents flash of wrong theme -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('nh-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = stored ? stored === 'dark' : prefersDark;
+        document.documentElement.classList.toggle('light', !isDark);
+        if (isDark) document.documentElement.classList.remove('light');
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <slot />
+
+    <!-- Global theme / lang / a11y controller -->
+    <script is:inline>
+      // ── Theme ──────────────────────────────────────────────
+      window.nhTheme = {
+        isDark: !document.documentElement.classList.contains('light'),
+        toggle() {
+          this.isDark = !this.isDark;
+          document.documentElement.classList.toggle('light', !this.isDark);
+          localStorage.setItem('nh-theme', this.isDark ? 'dark' : 'light');
+          const btn = document.getElementById('theme-btn');
+          if (btn) btn.textContent = this.isDark ? '◑ Dark' : '◑ Light';
+        }
+      };
+
+      // ── Language ───────────────────────────────────────────
+      window.nhLang = {
+        isEN: false,
+        toggle() {
+          this.isEN = !this.isEN;
+          const lang = this.isEN ? 'en' : 'es';
+          document.documentElement.lang = lang;
+          const btn = document.getElementById('lang-btn');
+          if (btn) btn.textContent = this.isEN ? 'ES' : 'EN';
+          document.querySelectorAll('[data-en][data-es]').forEach(el => {
+            const val = this.isEN ? el.dataset.en : el.dataset.es;
+            if (!val) return;
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = val;
+            } else if (el.tagName === 'OPTION') {
+              el.textContent = val;
+            } else {
+              el.innerHTML = val;
+            }
+          });
+          // Update aria-label on lang button
+          if (btn) btn.setAttribute('aria-label', this.isEN ? 'Cambiar a español' : 'Switch to English');
+        }
+      };
+
+      // ── Accessibility ──────────────────────────────────────
+      window.nhA11y = {
+        panelOpen: false,
+        motionReduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+
+        togglePanel() {
+          this.panelOpen = !this.panelOpen;
+          const panel = document.getElementById('a11y-panel');
+          const btn   = document.getElementById('a11y-btn');
+          if (panel) panel.classList.toggle('open', this.panelOpen);
+          if (btn)   btn.classList.toggle('on', this.panelOpen);
+          if (btn)   btn.setAttribute('aria-expanded', String(this.panelOpen));
+        },
+
+        setFontScale(scale) {
+          document.documentElement.style.setProperty('--font-scale', scale);
+          localStorage.setItem('nh-font-scale', scale);
+          document.querySelectorAll('.a11y-fs-btn').forEach(b => {
+            b.classList.toggle('on', parseFloat(b.dataset.scale) === scale);
+            b.setAttribute('aria-pressed', String(parseFloat(b.dataset.scale) === scale));
+          });
+        },
+
+        setHighContrast(on) {
+          document.documentElement.classList.toggle('hc', on);
+          localStorage.setItem('nh-hc', on);
+          document.getElementById('hc-off')?.classList.toggle('on', !on);
+          document.getElementById('hc-on')?.classList.toggle('on', on);
+        },
+
+        setReducedMotion(on) {
+          this.motionReduced = on;
+          let style = document.getElementById('nh-no-motion');
+          if (on) {
+            if (!style) {
+              style = document.createElement('style');
+              style.id = 'nh-no-motion';
+              style.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+              document.head.appendChild(style);
+            }
+          } else {
+            style?.remove();
+          }
+          document.getElementById('mot-on')?.classList.toggle('on', !on);
+          document.getElementById('mot-off')?.classList.toggle('on', on);
+        }
+      };
+
+      // Restore persisted a11y settings
+      const savedScale = localStorage.getItem('nh-font-scale');
+      if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
+      const savedHC = localStorage.getItem('nh-hc');
+      if (savedHC === 'true') nhA11y.setHighContrast(true);
+      if (nhA11y.motionReduced) nhA11y.setReducedMotion(true);
+    </script>
+  </body>
+</html>

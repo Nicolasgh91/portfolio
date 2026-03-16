@@ -1,0 +1,306 @@
+---
+// Web3Forms contact form
+// 1. Go to https://web3forms.com and enter your email
+// 2. Copy the Access Key you receive
+// 3. Replace YOUR_WEB3FORMS_ACCESS_KEY below with your actual key
+//    (you can also store it in a .env file as PUBLIC_WEB3FORMS_KEY
+//     and reference it as import.meta.env.PUBLIC_WEB3FORMS_KEY)
+
+const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_ACCESS_KEY';
+---
+
+<div class="form-wrap" role="form" aria-label="Formulario de contacto B2B">
+  <h3
+    data-en="Evaluate your company's potential"
+    data-es="Evaluar el potencial de su empresa"
+  >Evaluar el potencial de su empresa</h3>
+  <p
+    data-en="Complete the form to schedule a free diagnosis session."
+    data-es="Complete el formulario para coordinar un diagnóstico sin costo."
+  >Complete el formulario para coordinar un diagnóstico sin costo.</p>
+
+  <form id="contact-form" novalidate>
+    <!-- Honeypot anti-spam -->
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+    <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+    <input type="hidden" name="subject" data-en="New B2B inquiry — Portfolio" data-es="Nueva consulta B2B — Portfolio" value="Nueva consulta B2B — Portfolio" />
+    <input type="hidden" name="from_name" value="Portfolio NH" />
+    <input type="hidden" name="redirect" value="false" />
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="contact-name" data-en="Full name *" data-es="Nombre completo *">
+          Nombre completo *
+        </label>
+        <input
+          type="text"
+          id="contact-name"
+          name="name"
+          placeholder="Juan García"
+          autocomplete="name"
+          required
+          aria-required="true"
+        />
+        <span class="field-error" id="name-error" role="alert" aria-live="polite"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="contact-email" data-en="Work email *" data-es="Email de trabajo *">
+          Email de trabajo *
+        </label>
+        <input
+          type="email"
+          id="contact-email"
+          name="email"
+          placeholder="juan@miempresa.com"
+          autocomplete="email"
+          required
+          aria-required="true"
+        />
+        <span class="field-error" id="email-error" role="alert" aria-live="polite"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="contact-company" data-en="Company" data-es="Empresa">
+          Empresa
+        </label>
+        <input
+          type="text"
+          id="contact-company"
+          name="company"
+          placeholder="Mi Empresa S.A."
+          autocomplete="organization"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contact-metric" data-en="Expected success metric" data-es="Métrica de éxito esperada">
+          Métrica de éxito esperada
+        </label>
+        <select id="contact-metric" name="metric">
+          <option value="" data-en="Select a metric..." data-es="Seleccionar métrica...">Seleccionar métrica...</option>
+          <option value="cost-reduction" data-en="Reduction of operational costs" data-es="Reducción de costos operativos">Reducción de costos operativos</option>
+          <option value="automation" data-en="Process automation" data-es="Automatización de procesos manuales">Automatización de procesos manuales</option>
+          <option value="sales" data-en="Increased sales / leads" data-es="Aumento de ventas / leads">Aumento de ventas / leads</option>
+          <option value="visibility" data-en="Improved online visibility" data-es="Mejora de visibilidad online">Mejora de visibilidad online</option>
+          <option value="centralization" data-en="Operations centralization" data-es="Centralización de operaciones">Centralización de operaciones</option>
+          <option value="other" data-en="Other" data-es="Otra métrica">Otra métrica</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label for="contact-challenge" data-en="Main operational challenge to solve *" data-es="Desafío operativo principal a resolver *">
+          Desafío operativo principal a resolver *
+        </label>
+        <textarea
+          id="contact-challenge"
+          name="challenge"
+          rows="4"
+          placeholder="Describa el problema o ineficiencia que quiere resolver, mencionando el impacto actual en su operación..."
+          required
+          aria-required="true"
+        ></textarea>
+        <span class="field-error" id="challenge-error" role="alert" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <!-- Status messages -->
+    <div id="form-success" class="form-message success" role="alert" aria-live="polite" hidden>
+      <span>✓</span>
+      <span data-en="Message sent. I'll be in touch within 24 hours." data-es="Mensaje enviado. Me pondré en contacto en menos de 24 horas.">
+        Mensaje enviado. Me pondré en contacto en menos de 24 horas.
+      </span>
+    </div>
+    <div id="form-error" class="form-message error" role="alert" aria-live="polite" hidden>
+      <span>✕</span>
+      <span data-en="Something went wrong. Please try again or write to me directly." data-es="Algo salió mal. Por favor intentá de nuevo o escribime directamente.">
+        Algo salió mal. Por favor intentá de nuevo o escribime directamente.
+      </span>
+    </div>
+
+    <button
+      type="submit"
+      class="btn-primary submit-btn"
+      id="submit-btn"
+      data-en="Evaluate my company's potential"
+      data-es="Evaluar el potencial de mi empresa"
+    >
+      Evaluar el potencial de mi empresa
+    </button>
+  </form>
+</div>
+
+<style>
+  .form-wrap {
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border-normal);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-xl);
+    margin-top: var(--sp-xl);
+  }
+  .form-wrap h3 { margin-bottom: 6px; }
+  .form-wrap > p { margin-bottom: var(--sp-lg); font-size: var(--text-sm); }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-md);
+  }
+  @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    letter-spacing: 0.2px;
+  }
+
+  input, textarea, select {
+    background: var(--bg-tertiary);
+    border: 0.5px solid var(--border-normal);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent-border);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+  }
+  input[aria-invalid="true"], textarea[aria-invalid="true"] {
+    border-color: #E24B4A;
+  }
+
+  .field-error {
+    font-size: var(--text-xs);
+    color: #E24B4A;
+    min-height: 16px;
+  }
+
+  .form-message {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    padding: var(--sp-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    margin-top: var(--sp-md);
+  }
+  .form-message.success {
+    background: #1D9E7520;
+    border: 0.5px solid #1D9E7540;
+    color: #1D9E75;
+  }
+  .form-message.error {
+    background: #E24B4A20;
+    border: 0.5px solid #E24B4A40;
+    color: #E24B4A;
+  }
+
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--sp-md);
+    padding: 14px;
+    font-size: var(--text-base);
+  }
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const successMsg = document.getElementById('form-success') as HTMLElement;
+  const errorMsg = document.getElementById('form-error') as HTMLElement;
+
+  // Field validation helpers
+  function setError(fieldId: string, errorId: string, msg: string) {
+    const field = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement;
+    const err   = document.getElementById(errorId) as HTMLElement;
+    if (field) field.setAttribute('aria-invalid', 'true');
+    if (err)   err.textContent = msg;
+  }
+  function clearError(fieldId: string, errorId: string) {
+    const field = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement;
+    const err   = document.getElementById(errorId) as HTMLElement;
+    if (field) field.removeAttribute('aria-invalid');
+    if (err)   err.textContent = '';
+  }
+
+  function validateForm(): boolean {
+    let valid = true;
+    const name      = (document.getElementById('contact-name') as HTMLInputElement)?.value.trim();
+    const email     = (document.getElementById('contact-email') as HTMLInputElement)?.value.trim();
+    const challenge = (document.getElementById('contact-challenge') as HTMLTextAreaElement)?.value.trim();
+    const isEN      = document.documentElement.lang === 'en';
+
+    clearError('contact-name', 'name-error');
+    clearError('contact-email', 'email-error');
+    clearError('contact-challenge', 'challenge-error');
+
+    if (!name) {
+      setError('contact-name', 'name-error', isEN ? 'Name is required.' : 'El nombre es obligatorio.');
+      valid = false;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('contact-email', 'email-error', isEN ? 'Enter a valid email.' : 'Ingresá un email válido.');
+      valid = false;
+    }
+    if (!challenge || challenge.length < 20) {
+      setError('contact-challenge', 'challenge-error', isEN ? 'Please describe your challenge (min. 20 characters).' : 'Describí tu desafío (mínimo 20 caracteres).');
+      valid = false;
+    }
+    return valid;
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const isEN = document.documentElement.lang === 'en';
+    submitBtn.disabled = true;
+    submitBtn.textContent = isEN ? 'Sending...' : 'Enviando...';
+    successMsg.hidden = true;
+    errorMsg.hidden   = true;
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const res  = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        form.reset();
+        successMsg.hidden = false;
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        throw new Error(json.message || 'Error');
+      }
+    } catch {
+      errorMsg.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.dataset.es && (submitBtn.textContent = isEN
+        ? (submitBtn.dataset.en ?? '')
+        : (submitBtn.dataset.es ?? ''));
+    }
+  });
+</script>

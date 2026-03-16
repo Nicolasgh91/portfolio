@@ -1,0 +1,499 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+
+// Replace with your Google Drive direct download link
+// To get it: share the file → copy link → change /view to /export?format=pdf
+const GITHUB_URL = 'https://github.com/Nicolasgh91';
+const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
+---
+
+<Layout
+  title="Perfil profesional — Nicolás Hruszczak"
+  description="Analista funcional, desarrollador full stack y arquitecto de software. Stack: Python, Astro, Next.js. Especialización en agentes de IA e ingeniería de contexto."
+>
+  <Nav activePage="talento" />
+
+  <main id="main-content">
+    <div class="page-container">
+
+      <!-- ── Profile hero ──────────────────────────────────── -->
+      <section class="profile-hero" aria-label="Perfil profesional">
+        <div class="avatar" aria-label="Avatar de Nicolás Hruszczak">NH</div>
+        <div class="profile-info">
+          <h1>Nicolás Hruszczak</h1>
+          <h2
+            data-en="Functional analyst and full stack developer."
+            data-es="Analista funcional y desarrollador full stack."
+          >Analista funcional y desarrollador full stack.</h2>
+          <p
+            data-en="Technology management, software architecture and AI implementation for scalable solutions."
+            data-es="Gestión de la tecnología, arquitectura de software e implementación de IA para soluciones escalables."
+          >Gestión de la tecnología, arquitectura de software e implementación de IA para soluciones escalables.</p>
+
+          <div class="profile-btns">
+            <a
+              href={GITHUB_REPOS_URL}
+              class="btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Ver repositorios en GitHub"
+              data-en="⌥ GitHub repositories"
+              data-es="⌥ Repositorios en GitHub"
+            >⌥ Repositorios en GitHub</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Roles ──────────────────────────────────────────── -->
+      <section class="section" aria-labelledby="roles-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en="Capabilities"
+            data-es="Capacidades"
+          >Capacidades</span>
+          <h2
+            id="roles-heading"
+            data-en="Roles &amp; experience"
+            data-es="Roles y experiencia"
+          >Roles y experiencia</h2>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">📋</div>
+            <h3
+              data-en="Functional analyst"
+              data-es="Analista funcional"
+            >Analista funcional</h3>
+            <p
+              data-en="Requirements gathering, process modeling, flow diagramming, and translation of business needs into precise technical specifications."
+              data-es="Levantamiento de requerimientos, modelado de procesos, diagramado de flujos y traducción de necesidades de negocio a especificaciones técnicas precisas."
+            >Levantamiento de requerimientos, modelado de procesos, diagramado de flujos y traducción de necesidades de negocio a especificaciones técnicas precisas.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">⚙️</div>
+            <h3
+              data-en="Developer &amp; software architect"
+              data-es="Desarrollador y arquitecto de software"
+            >Desarrollador y arquitecto de software</h3>
+            <p
+              data-en="Design and implementation of robust architectures, microservices creation, full stack development, and data analysis model integration."
+              data-es="Diseño e implementación de arquitecturas robustas, creación de microservicios, desarrollo full stack e integración de modelos de análisis de datos."
+            >Diseño e implementación de arquitecturas robustas, creación de microservicios, desarrollo full stack e integración de modelos de análisis de datos.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">🎓</div>
+            <h3
+              data-en="Mentor &amp; technical facilitator"
+              data-es="Mentor y facilitador técnico"
+            >Mentor y facilitador técnico</h3>
+            <p
+              data-en="Experience teaching programming fundamentals, student leadership, and effective communication of complex technical concepts."
+              data-es="Experiencia en la enseñanza de fundamentos de programación, liderazgo de alumnos y comunicación efectiva de conceptos técnicos complejos."
+            >Experiencia en la enseñanza de fundamentos de programación, liderazgo de alumnos y comunicación efectiva de conceptos técnicos complejos.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ── Stack & skills ─────────────────────────────────── -->
+      <section class="section" aria-labelledby="stack-heading">
+        <div class="section-header">
+          <span class="label">Tecnologías</span>
+          <h2 id="stack-heading">Stack &amp; skills</h2>
+        </div>
+
+        <div class="skill-category">
+          <h4
+            data-en="Languages &amp; frameworks"
+            data-es="Lenguajes y frameworks"
+          >Lenguajes y frameworks</h4>
+          <div class="skill-tags">
+            <span class="skill-tag skill-tag-hl">Python</span>
+            <span class="skill-tag skill-tag-hl">Astro</span>
+            <span class="skill-tag skill-tag-hl">Next.js</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">TypeScript</span>
+            <span class="skill-tag">MDX</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h4
+            data-en="Architecture &amp; data"
+            data-es="Arquitectura y datos"
+          >Arquitectura y datos</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">APIs REST</span>
+            <span class="skill-tag">Microservicios</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">Análisis de métricas</span>
+            <span class="skill-tag">Diagramado de procesos</span>
+            <span class="skill-tag">Vercel / Netlify</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h4
+            data-en="Artificial intelligence"
+            data-es="Inteligencia artificial"
+          >Inteligencia artificial</h4>
+          <div class="skill-tags">
+            <span class="skill-tag skill-tag-hl"
+              data-en="Context engineering"
+              data-es="Ingeniería de contexto"
+            >Ingeniería de contexto</span>
+            <span class="skill-tag skill-tag-hl"
+              data-en="AI agents"
+              data-es="Agentes de IA"
+            >Agentes de IA</span>
+            <span class="skill-tag">LLMs</span>
+            <span class="skill-tag">Prompt engineering</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ── Education ──────────────────────────────────────── -->
+      <section class="section" aria-labelledby="edu-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en="Education"
+            data-es="Formación"
+          >Formación</span>
+          <h2
+            id="edu-heading"
+            data-en="Academic background"
+            data-es="Estudios"
+          >Estudios</h2>
+        </div>
+
+        <ul class="edu-list" role="list">
+          <li class="edu-item" role="listitem">
+            <div>
+              <div
+                class="edu-title"
+                data-en="Bachelor's degree in technology and information management"
+                data-es="Licenciatura en gestión de tecnología y la información"
+              >Licenciatura en gestión de tecnología y la información</div>
+              <div
+                class="edu-sub"
+                data-en="University · In progress"
+                data-es="Universidad · En curso"
+              >Universidad · En curso</div>
+            </div>
+            <span class="tag"
+              data-en="Degree"
+              data-es="Grado"
+            >Grado</span>
+          </li>
+          <li class="edu-item" role="listitem">
+            <div>
+              <div
+                class="edu-title"
+                data-en="Specialization in AI agent design"
+                data-es="Especialización en diseño de agentes de IA"
+              >Especialización en diseño de agentes de IA</div>
+              <div class="edu-sub">2024–2025</div>
+            </div>
+            <span class="tag"
+              data-en="Specialization"
+              data-es="Especialización"
+            >Especialización</span>
+          </li>
+        </ul>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ── Engineering projects ───────────────────────────── -->
+      <section class="section" aria-labelledby="projects-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en="Engineering"
+            data-es="Ingeniería"
+          >Ingeniería</span>
+          <h2
+            id="projects-heading"
+            data-en="Technical projects"
+            data-es="Proyectos técnicos"
+          >Proyectos técnicos</h2>
+        </div>
+
+        <div class="grid-2">
+
+          <!-- Huella del Fuego -->
+          <article class="project-card" id="huella">
+            <div class="proj-header">
+              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span aria-hidden="true" style="font-size:20px">🌿</span>
+                Huella del Fuego
+              </h3>
+              <a
+                href="https://huelladelfuego.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-url"
+                aria-label="Ver sitio huelladelfuego.com"
+              >huelladelfuego.com&nbsp;↗</a>
+            </div>
+
+            <p
+              data-en="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Personal project on monitoring and analyzing wildfire impact across Argentina."
+              data-es="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto personal sobre monitoreo y análisis del impacto del fuego en Argentina."
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto personal sobre monitoreo y análisis del impacto del fuego en Argentina.</p>
+
+            <div class="code-snippet" aria-label="Fragmento de código o diagrama de arquitectura" style="text-align: left;">
+# Arquitectura / snippet de código
+# → Reemplazar con diagrama real o fragmento representativo
+            </div>
+
+            <div class="tags">
+              <span class="tag">Python</span>
+              <span class="tag">...</span>
+            </div>
+
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary proj-btn"
+              data-en="View code →"
+              data-es="Ver código →"
+            >Ver código →</a>
+          </article>
+
+          <!-- Double Click -->
+          <article class="project-card" id="doubleclick">
+            <div class="proj-header">
+              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span aria-hidden="true" style="font-size:20px">⚡</span>
+                Double Click™
+              </h3>
+              <span class="tag tag-accent" style="font-size:10px"
+                data-en="In progress"
+                data-es="En progreso"
+              >En progreso</span>
+            </div>
+
+            <p
+              data-en="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Project in active development."
+              data-es="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto en desarrollo activo."
+            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proyecto en desarrollo activo.</p>
+
+            <div class="code-snippet" aria-label="Fragmento de código o diagrama de arquitectura" style="text-align: left;">
+# Arquitectura / snippet de código
+# → Reemplazar con diagrama real o fragmento representativo
+            </div>
+
+            <div class="tags">
+              <span class="tag">Next.js</span>
+              <span class="tag">...</span>
+            </div>
+
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary proj-btn"
+              data-en="View code →"
+              data-es="Ver código →"
+            >Ver código →</a>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="page-container footer-inner">
+      <a href="/" class="nav-logo" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-decoration:none">
+        nh<span style="color:var(--accent)">.</span>
+      </a>
+      <p style="font-size:var(--text-xs);color:var(--text-muted)">
+        © 2025 Nicolás Hruszczak
+      </p>
+      <div style="display:flex;gap:var(--sp-md)">
+        <a href="/servicios" style="font-size:var(--text-xs);color:var(--text-muted)"
+          data-en="B2B Services" data-es="Servicios">Servicios</a>
+        <a href={GITHUB_URL} target="_blank" rel="noopener"
+          style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
+        <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener"
+          style="font-size:var(--text-xs);color:var(--text-muted)">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  /* ── Profile hero ────────────────────────────────────────── */
+  .profile-hero {
+    display: flex;
+    gap: var(--sp-lg);
+    align-items: flex-start;
+    padding: var(--sp-xl) 0 var(--sp-xl);
+  }
+  .avatar {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    border-radius: var(--radius-md);
+    background: var(--accent-bg);
+    border: 0.5px solid var(--accent-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .profile-hero h2 {
+    font-family: var(--font-body);
+    font-size: calc(var(--text-base) * var(--font-scale));
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--accent-text);
+    margin-bottom: var(--sp-sm);
+  }
+  .profile-hero p {
+    font-size: calc(var(--text-sm) * var(--font-scale));
+    max-width: 500px;
+  }
+  .profile-btns { display: flex; gap: var(--sp-sm); flex-wrap: wrap; margin-top: var(--sp-md); }
+
+  /* ── Skill tags ──────────────────────────────────────────── */
+  .skill-category { margin-bottom: var(--sp-lg); }
+  .skill-category h4 {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: var(--sp-sm);
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: var(--sp-sm); }
+  .skill-tag {
+    padding: 5px 12px;
+    background: var(--bg-tag);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .skill-tag-hl {
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+    color: var(--accent-text);
+  }
+
+  /* ── Education list ──────────────────────────────────────── */
+  .edu-list { list-style: none; }
+  .edu-item {
+    padding: var(--sp-md) 0;
+    border-bottom: 0.5px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-md);
+  }
+  .edu-item:last-child { border-bottom: none; }
+  .edu-title { font-size: calc(var(--text-sm) * var(--font-scale)); font-weight: 500; color: var(--text-primary); }
+  .edu-sub { font-size: var(--text-xs); color: var(--text-secondary); margin-top: 3px; }
+
+  /* ── Project card snippet ────────────────────────────────────────── */
+  .code-snippet {
+    background: var(--bg-tertiary);
+    border: 0.5px dashed var(--border-normal);
+    border-radius: var(--radius-sm);
+    padding: var(--sp-md);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: var(--sp-md) 0;
+    line-height: 1.7;
+  }
+
+  .profile-info { flex: 1; }
+  .profile-info h1 {
+    text-align: left;
+    font-size: calc(var(--text-2xl) * var(--font-scale));
+    margin-bottom: 4px;
+  }
+
+  .project-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-lg);
+    transition: border-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--sp-sm);
+    align-items: center;
+    text-align: center;
+  }
+  .project-card:hover { border-color: var(--border-normal); }
+  
+  .proj-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-xs);
+    flex-wrap: wrap;
+  }
+  .proj-header h3 { margin-bottom: 0; }
+  .project-url {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .project-url:hover { color: var(--accent); }
+  
+  .project-card p { 
+    font-size: var(--text-sm); 
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .project-card .tags {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .proj-btn {
+    margin-top: auto;
+    padding: 7px 14px;
+    font-size: var(--text-xs);
+    align-self: center;
+  }
+
+  .site-footer {
+    border-top: 0.5px solid var(--border-subtle);
+    padding: var(--sp-lg) 0;
+    margin-top: var(--sp-2xl);
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+</style>
