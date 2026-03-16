@@ -104,20 +104,6 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
       </div>
     </div>
 
-    <!-- Status messages -->
-    <div id="form-success" class="form-message success" role="alert" aria-live="polite" hidden>
-      <span>✓</span>
-      <span data-en="Message sent. I'll be in touch within 24 hours." data-es="Mensaje enviado. Me pondré en contacto en menos de 24 horas.">
-        Mensaje enviado. Me pondré en contacto en menos de 24 horas.
-      </span>
-    </div>
-    <div id="form-error" class="form-message error" role="alert" aria-live="polite" hidden>
-      <span>✕</span>
-      <span data-en="Something went wrong. Please try again or write to me directly." data-es="Algo salió mal. Por favor intentá de nuevo o escribime directamente.">
-        Algo salió mal. Por favor intentá de nuevo o escribime directamente.
-      </span>
-    </div>
-
     <button
       type="submit"
       class="btn-primary submit-btn"
@@ -128,6 +114,19 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
       Evaluar el potencial de mi empresa
     </button>
   </form>
+</div>
+
+<!-- Snackbar — fuera del form-wrap, posicionado fixed -->
+<div
+  id="form-snackbar"
+  class="snackbar"
+  role="alert"
+  aria-live="polite"
+  aria-hidden="true"
+>
+  <span id="snackbar-icon" aria-hidden="true"></span>
+  <span id="snackbar-text"></span>
+  <button class="snackbar-close" id="snackbar-close" aria-label="Cerrar notificación">✕</button>
 </div>
 
 <style>
@@ -189,26 +188,6 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     min-height: 16px;
   }
 
-  .form-message {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-sm);
-    padding: var(--sp-md);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    margin-top: var(--sp-md);
-  }
-  .form-message.success {
-    background: #1D9E7520;
-    border: 0.5px solid #1D9E7540;
-    color: #1D9E75;
-  }
-  .form-message.error {
-    background: #E24B4A20;
-    border: 0.5px solid #E24B4A40;
-    color: #E24B4A;
-  }
-
   .submit-btn {
     width: 100%;
     justify-content: center;
@@ -220,15 +199,105 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     opacity: 0.6;
     cursor: not-allowed;
   }
+
+  /* ── Snackbar ─────────────────────────────────────────────── */
+  .snackbar {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 9999;
+    white-space: nowrap;
+    max-width: calc(100vw - 48px);
+  }
+  .snackbar[aria-hidden="false"] {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .snackbar.success {
+    background: #1D9E75;
+    color: #fff;
+  }
+  .snackbar.error {
+    background: #E24B4A;
+    color: #fff;
+  }
+  .snackbar-close {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.75;
+    font-size: 14px;
+    padding: 0 0 0 6px;
+    line-height: 1;
+    transition: opacity 0.15s;
+  }
+  .snackbar-close:hover { opacity: 1; }
+
+  @media (max-width: 560px) {
+    .snackbar {
+      bottom: 20px;
+      white-space: normal;
+      text-align: left;
+    }
+  }
 </style>
 
 <script>
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-  const successMsg = document.getElementById('form-success') as HTMLElement;
-  const errorMsg = document.getElementById('form-error') as HTMLElement;
+  const form        = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn   = document.getElementById('submit-btn') as HTMLButtonElement;
+  const snackbar    = document.getElementById('form-snackbar') as HTMLElement;
+  const snackIcon   = document.getElementById('snackbar-icon') as HTMLElement;
+  const snackText   = document.getElementById('snackbar-text') as HTMLElement;
+  const snackClose  = document.getElementById('snackbar-close') as HTMLButtonElement;
 
-  // Field validation helpers
+  let dismissTimer: ReturnType<typeof setTimeout>;
+
+  function showSnackbar(type: 'success' | 'error', isEN: boolean) {
+    const messages = {
+      success: {
+        es: 'Mensaje enviado. Me pondré en contacto en menos de 24 horas.',
+        en: "Message sent. I'll be in touch within 24 hours.",
+        icon: '✓',
+      },
+      error: {
+        es: 'Algo salió mal. Por favor intentá de nuevo o escribime directamente.',
+        en: 'Something went wrong. Please try again or write to me directly.',
+        icon: '✕',
+      },
+    };
+
+    const m = messages[type];
+    snackbar.className = `snackbar ${type}`;
+    snackIcon.textContent = m.icon;
+    snackText.textContent = isEN ? m.en : m.es;
+    snackbar.setAttribute('aria-hidden', 'false');
+
+    clearTimeout(dismissTimer);
+    dismissTimer = setTimeout(hideSnackbar, 5000);
+  }
+
+  function hideSnackbar() {
+    clearTimeout(dismissTimer);
+    snackbar.setAttribute('aria-hidden', 'true');
+  }
+
+  snackClose?.addEventListener('click', hideSnackbar);
+
+  // ── Field validation ────────────────────────────────────────
   function setError(fieldId: string, errorId: string, msg: string) {
     const field = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement;
     const err   = document.getElementById(errorId) as HTMLElement;
@@ -268,6 +337,7 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     return valid;
   }
 
+  // ── Submit ──────────────────────────────────────────────────
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -275,8 +345,7 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     const isEN = document.documentElement.lang === 'en';
     submitBtn.disabled = true;
     submitBtn.textContent = isEN ? 'Sending...' : 'Enviando...';
-    successMsg.hidden = true;
-    errorMsg.hidden   = true;
+    hideSnackbar();
 
     try {
       const data = Object.fromEntries(new FormData(form));
@@ -289,18 +358,17 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
 
       if (json.success) {
         form.reset();
-        successMsg.hidden = false;
-        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showSnackbar('success', isEN);
       } else {
         throw new Error(json.message || 'Error');
       }
     } catch {
-      errorMsg.hidden = false;
+      showSnackbar('error', isEN);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.dataset.es && (submitBtn.textContent = isEN
-        ? (submitBtn.dataset.en ?? '')
-        : (submitBtn.dataset.es ?? ''));
+      submitBtn.textContent = isEN
+        ? (submitBtn.dataset.en ?? 'Evaluate my company\'s potential')
+        : (submitBtn.dataset.es ?? 'Evaluar el potencial de mi empresa');
     }
   });
 </script>

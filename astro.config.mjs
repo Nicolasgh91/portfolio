@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // Replace with your actual domain once decided
-  site: 'https://tu-dominio.com.ar',
+  site: 'https://escalatunegocioconia.com',
   integrations: [
     tailwind({ applyBaseStyles: false }),
     mdx(),

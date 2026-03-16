@@ -7,6 +7,7 @@ import ContactForm from '../components/ContactForm.astro';
 <Layout
   title="Servicios B2B — Nicolás Hruszczak"
   description="Software a medida, automatización con IA y auditoría de procesos para empresas y pymes que buscan reducir costos y multiplicar resultados."
+  ogImage="/og-desktop.png"
 >
   <Nav activePage="servicios" />
 
@@ -159,9 +160,9 @@ import ContactForm from '../components/ContactForm.astro';
           <div class="case-header">
             <h2
               id="case-heading"
-              data-en="Success story: comprehensive fitness management"
-              data-es="Caso de éxito: gestión integral deportiva"
-            >Caso de éxito: gestión integral deportiva</h2>
+              data-en="Success story: comprehensive sports management (Double Click™)"
+              data-es="Caso de éxito: gestión integral deportiva (Double Click™)"
+            >Caso de éxito: gestión integral deportiva (Double Click™)</h2>
             <span class="tag tag-warn" aria-label="Proyecto en curso">⚠ En curso</span>
           </div>
 
@@ -206,6 +207,78 @@ import ContactForm from '../components/ContactForm.astro';
         </div>
       </section>
 
+      <!-- ── FAQ ─────────────────────────────────────────────── -->
+      <section class="section" aria-labelledby="faq-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en="FAQ"
+            data-es="Preguntas frecuentes"
+          >Preguntas frecuentes</span>
+          <h2
+            id="faq-heading"
+            data-en="Common questions"
+            data-es="Consultas habituales"
+          >Consultas habituales</h2>
+        </div>
+
+        <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary class="faq-q" itemprop="name"
+              data-en="How long does it take to build a custom system?"
+              data-es="¿Cuánto tiempo lleva construir un sistema a medida?"
+            >¿Cuánto tiempo lleva construir un sistema a medida?</summary>
+            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text"
+                data-en="Depends on scope. A minimum viable product (MVP) is typically delivered in 4–8 weeks. A complete system integrating billing, bookings, and clients generally takes 3–4 months. The free diagnosis session defines the real timeline."
+                data-es="Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real."
+              >Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary class="faq-q" itemprop="name"
+              data-en="Do you work with companies of any size?"
+              data-es="¿Trabajás con empresas de cualquier tamaño?"
+            >¿Trabajás con empresas de cualquier tamaño?</summary>
+            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text"
+                data-en="Yes. The approach is especially valuable for SMEs and growing teams that want to eliminate recurring SaaS costs and replace them with proprietary systems. Large companies also benefit from automation and process audits."
+                data-es="Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos."
+              >Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary class="faq-q" itemprop="name"
+              data-en="What does the free diagnosis consist of?"
+              data-es="¿En qué consiste el diagnóstico gratuito?"
+            >¿En qué consiste el diagnóstico gratuito?</summary>
+            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text"
+                data-en="A 45-minute virtual session to map your main operational pain points, identify immediate automation or optimization opportunities, and define a realistic action plan — with no obligation to hire."
+                data-es="Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación."
+              >Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary class="faq-q" itemprop="name"
+              data-en="What technologies do you use?"
+              data-es="¿Qué tecnologías utilizás?"
+            >¿Qué tecnologías utilizás?</summary>
+            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text"
+                data-en="Python (FastAPI) for backends, React/Next.js or Astro for frontends, PostgreSQL for databases, Docker for deployment. For AI: context engineering, LLM agents, and process automation APIs. Every stack is chosen based on your specific needs."
+                data-es="Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas."
+              >Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas.</p>
+            </div>
+          </details>
+
+        </div>
+      </section>
+
       <!-- ── Contact form ───────────────────────────────────── -->
       <section id="contacto" class="section" aria-labelledby="contact-heading">
         <div class="section-header">
@@ -245,7 +318,100 @@ import ContactForm from '../components/ContactForm.astro';
   </footer>
 </Layout>
 
+<!-- JSON-LD: FAQPage schema for GEO/SEO -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto tiempo lleva construir un sistema a medida?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Trabajás con empresas de cualquier tamaño?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿En qué consiste el diagnóstico gratuito?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué tecnologías utilizás?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas."
+        }
+      }
+    ]
+  }
+</script>
+
 <style>
+  /* ── FAQ ─────────────────────────────────────────────────── */
+  .faq-list {
+    margin-top: var(--sp-xl);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .faq-item {
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  .faq-item[open] {
+    border-color: var(--accent-border);
+  }
+  .faq-q {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-md);
+    padding: var(--sp-md) var(--sp-lg);
+    font-size: calc(var(--text-sm) * var(--font-scale));
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s ease;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::after {
+    content: '+';
+    font-size: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .faq-item[open] .faq-q::after {
+    transform: rotate(45deg);
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-a {
+    padding: 0 var(--sp-lg) var(--sp-md);
+  }
+  .faq-a p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
   /* ── Value banner (B2B) ──────────────────────────────────── */
   .value-banner {
     display: flex;
