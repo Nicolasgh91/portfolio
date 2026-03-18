@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Widget</title>
+
+  <!--
+    PASO 1 — Script síncrono: inyectar tokens ANTES de que chat.css pinte.
+    Debe estar ANTES del <link> al CSS para que los tokens ya existan
+    cuando el browser evalúe las variables en chat.css.
+    NO convertir a type="module". NO mover al body. NO hacer async/defer.
+  -->
+  <script>
+    (function() {
+      try {
+        var parentHtml = window.parent.document.documentElement;
+
+        // Sincronizar clase dark/light
+        if (parentHtml.classList.contains('light'))
+          document.documentElement.classList.add('light');
+
+        // Leer tokens computados del padre e inyectarlos como :root vars
+        var computed = window.parent.getComputedStyle(parentHtml);
+        var tokens = [
+          '--accent-h','--accent-s',
+          '--accent','--accent-hover','--accent-bg','--accent-border','--accent-text',
+          '--bg-primary','--bg-secondary','--bg-tertiary','--bg-card',
+          '--text-primary','--text-secondary','--text-muted',
+          '--border-subtle','--border-normal','--border-strong',
+          '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
+          '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
+          '--font-body','--font-mono','--text-xs','--text-sm','--text-base'
+        ];
+        var decls = tokens.map(function(t) {
+          var v = computed.getPropertyValue(t).trim();
+          return v ? t + ':' + v : null;
+        }).filter(Boolean).join(';');
+
+        var s = document.createElement('style');
+        s.id = 'pt'; // parent-tokens
+        s.textContent = ':root{' + decls + '}';
+        document.head.appendChild(s);
+
+        // Señal para chat.css: los tokens del padre están activos,
+        // no usar los fallbacks de :root:not(.tokens-ready)
+        document.documentElement.classList.add('tokens-ready');
+
+      } catch(e) {
+        // Sin acceso al padre: chat.css tiene fallbacks HSL correctos
+      }
+    })();
+  </script>
+
+  <!-- PASO 2 — CSS carga cuando los tokens ya están disponibles -->
+  <link rel="stylesheet" href="./chat.css">
+
+  <!--
+    PASO 3 — Observer para cambios de tema en tiempo real.
+    Va en <head> también para que esté listo antes de cualquier interacción.
+    Síncrono, no-module.
+  -->
+  <script>
+    (function() {
+      try {
+        new MutationObserver(function() {
+          var parentHtml = window.parent.document.documentElement;
+          document.documentElement.classList.toggle('light',
+            parentHtml.classList.contains('light'));
+
+          // Re-inyectar tokens con los valores del nuevo tema
+          var old = document.getElementById('pt');
+          if (old) old.remove();
+          var computed = window.parent.getComputedStyle(parentHtml);
+          var tokens = [
+            '--accent-h','--accent-s',
+            '--accent','--accent-hover','--accent-bg','--accent-border','--accent-text',
+            '--bg-primary','--bg-secondary','--bg-tertiary','--bg-card',
+            '--text-primary','--text-secondary','--text-muted',
+            '--border-subtle','--border-normal','--border-strong',
+            '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
+            '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
+            '--font-body','--font-mono','--text-xs','--text-sm','--text-base'
+          ];
+          var decls = tokens.map(function(t) {
+            var v = computed.getPropertyValue(t).trim();
+            return v ? t + ':' + v : null;
+          }).filter(Boolean).join(';');
+          var s = document.createElement('style');
+          s.id = 'pt';
+          s.textContent = ':root{' + decls + '}';
+          document.head.appendChild(s);
+        }).observe(
+          window.parent.document.documentElement,
+          { attributes: true, attributeFilter: ['class'] }
+        );
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ── Botón flotante ── -->
+  <button id="chat-trigger" aria-label="Abrir chat">
+    <span id="chat-badge" style="opacity:0">1</span>
+    <svg class="icon-open" width="22" height="22" fill="none" viewBox="0 0 24 24">
+      <path d="M8 10h8M8 14h5M5 3h14a2 2 0 012 2v11a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2z"
+        stroke="hsl(240,10%,6%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="icon-close" width="20" height="20" fill="none" viewBox="0 0 24 24">
+      <path d="M18 6L6 18M6 6l12 12"
+        stroke="hsl(240,10%,6%)" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- ── Ventana del chat ── -->
+  <div id="chat-window" role="dialog" aria-label="Chat asistente">
+
+    <div id="chat-header">
+      <div class="header-avatar">nh<span class="avatar-dot">.</span></div>
+      <div class="header-info">
+        <!--
+          header-name es un enlace mailto — se popula en main.js
+          con el email del config.json. cursor: pointer sin hover en el header.
+        -->
+        <a class="header-name" id="header-name" href="#">Cargando...</a>
+        <div class="header-status">
+          <span class="status-dot"></span>
+          <span>En línea ahora</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- Solo la cruz es clickeable para cerrar -->
+        <button class="header-btn" id="close-btn" title="Cerrar" aria-label="Cerrar chat">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="chat-messages" role="log" aria-live="polite"></div>
+
+    <div id="chat-input-area">
+      <div class="input-row">
+        <textarea
+          id="chat-input"
+          placeholder="Escribí tu mensaje..."
+          rows="1"
+          aria-label="Mensaje"
+        ></textarea>
+        <button id="send-btn" aria-label="Enviar">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+            <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"
+              stroke="hsl(240,10%,6%)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-footer">Respuestas generadas por IA · Puede cometer errores</div>
+    </div>
+
+  </div>
+
+  <!-- Módulos JS — theme.js eliminado del repositorio (su lógica vive en los scripts síncronos del head) -->
+  <script type="module" src="./js/session.js"></script>
+  <script type="module" src="./js/api.js"></script>
+  <script type="module" src="./js/render.js"></script>
+  <script type="module" src="./js/main.js"></script>
+
+</body>
+</html>

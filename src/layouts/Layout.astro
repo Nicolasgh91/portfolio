@@ -20,6 +20,7 @@ const {
 const canonical = Astro.url.href;
 const siteName = 'Nicolás Hruszczak';
 const siteUrl = 'https://escalatunegocioconia.com';
+const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
 ---
 
 <!doctype html>
@@ -222,5 +223,39 @@ const siteUrl = 'https://escalatunegocioconia.com';
       if (savedHC === 'true') nhA11y.setHighContrast(true);
       if (nhA11y.motionReduced) nhA11y.setReducedMotion(true);
     </script>
+
+    
+    <script>
+      (function() {
+        const iframe = document.createElement('iframe');
+        iframe.src = '/chatbot/widget/index.html';
+        iframe.setAttribute('allowtransparency', 'true')
+        iframe.setAttribute('title', 'Asistente virtual');
+        iframe.setAttribute('aria-label', 'Chat de asistencia');
+        iframe.style.cssText = [
+          'position:fixed',
+          'bottom:0',
+          'right:0',
+          'width:420px',
+          'height:680px',
+          'border:none',
+          'z-index:9999',
+          'background:transparent',
+          'pointer-events:none',
+        ].join(';');
+        document.body.appendChild(iframe);
+    
+        // Habilitar pointer-events cuando el iframe cargue
+        iframe.addEventListener('load', () => {
+          iframe.style.pointerEvents = 'all';
+        });
+
+        // Cerrar el chat al hacer click fuera del iframe
+        document.addEventListener('click', () => {
+          try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
+        });
+      })();
+    </script>
+
   </body>
 </html>

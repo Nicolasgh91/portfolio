@@ -18,3 +18,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+.vercel
+.env*.local
+
+#Docs
+docs
+docs/

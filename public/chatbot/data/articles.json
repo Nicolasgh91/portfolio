@@ -1,0 +1,29 @@
+[
+  {
+    "id": "chatbot-costo-cero",
+    "title": "Cómo crear un chatbot con IA sin gastar un peso",
+    "summary": "Guía práctica para integrar un chatbot inteligente en tu sitio web usando APIs gratuitas de Gemini o Groq. Arquitectura completa sin backend ni base de datos.",
+    "tags": ["chatbot", "IA", "Gemini", "tutorial", "gratis"],
+    "url": "/blog/chatbot-costo-cero",
+    "published": "2025-01-01",
+    "reading_time": "8 min"
+  },
+  {
+    "id": "nextjs-vs-astro",
+    "title": "Next.js vs Astro: cuál elegir para tu proyecto en 2025",
+    "summary": "Comparativa honesta entre los dos frameworks más populares para sitios web modernos. Casos de uso, performance, SEO y cuándo usar cada uno.",
+    "tags": ["Next.js", "Astro", "frontend", "comparativa"],
+    "url": "/blog/nextjs-vs-astro",
+    "published": "2025-01-15",
+    "reading_time": "6 min"
+  },
+  {
+    "id": "automatizar-reportes-python",
+    "title": "Automatizá tus reportes con Python y Google Sheets en 30 minutos",
+    "summary": "Tutorial paso a paso para conectar Python con Google Sheets usando la API oficial. Generá reportes automáticos y mandátelos por email sin tocar Excel.",
+    "tags": ["Python", "automatización", "Google Sheets", "tutorial"],
+    "url": "/blog/automatizar-reportes-python",
+    "published": "2025-02-01",
+    "reading_time": "10 min"
+  }
+]

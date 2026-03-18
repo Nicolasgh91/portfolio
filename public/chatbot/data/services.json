@@ -1,0 +1,93 @@
+[
+  {
+    "id": "web-dev",
+    "title": "Desarrollo Web",
+    "emoji": "🌐",
+    "tagline": "Sitios y landing pages que convierten tus servicios en clientes",
+    "description": "Diseño y desarrollo sitios web modernos, rápidos y optimizados para SEO/GEO. Desde landing pages hasta sitios corporativos completos.",
+    "includes": [
+      "Diseño responsive (mobile-first)",
+      "Optimización de velocidad y SEO/GEO técnico (tu web visible en Google y ChatGPT!)",
+      "Integración con CMS (WordPress, Webflow, etc.)",
+      "Formularios de contacto y analítica",
+      "Dominio, hosting y deploy incluido en paquetes"
+    ],
+    "stack": ["HTML/CSS/JS", "React", "Next.js", "WordPress", "Webflow"],
+    "price_from": "ARS 40.000",
+    "delivery": "1-2 semanas (depende de la cantidad de páginas)",
+    "ideal_for": "Emprendedores, profesionales y pequeñas empresas que necesitan presencia web profesional"
+  },
+  {
+    "id": "saas-apps",
+    "title": "Aplicaciones Web / SaaS (Servicios digitales)",
+    "emoji": "⚙️",
+    "tagline": "Tu idea convertida en producto funcional",
+    "description": "Desarrollo aplicaciones web completas con autenticación de usuarios,base de datos, pagos y panel de administración. Comenzá con un solo módulo y escalá a medida que tu empresa crece.",
+    "includes": [
+      "Arquitectura frontend (lo que ves) + backend (lo que no ves)",
+      "Autenticación de usuarios (login, registro, sesiones, segmentación de accesos)",
+      "Base de datos y API REST (almacenamiento y comunicación, definición de modelos de datos)",
+      "Integración de pagos (Stripe [global], MercadoPago con costo adicional)",
+      "Panel de administración, visualizá tu stock, métricas, etc",
+      "Deploy en la nube (disponible en todos tus dispositivos, tablet, cel, notebook)"
+    ],
+    "stack": ["React", "Next.js", "Node.js", "PostgreSQL", "Supabase", "Vercel"],
+    "price_from": "ARS 99.000",
+    "delivery": "4-8 semanas",
+    "ideal_for": "Startups y empresas que quieren lanzar un producto básico inicial y escalar! Digitalizá y posicioná tu marca en el mercado"
+  },
+  {
+    "id": "chatbots-ai",
+    "title": "Chatbots e IA",
+    "emoji": "🤖",
+    "tagline": "Atención al cliente 24/7 sin costo por mensaje",
+    "description": "Creo chatbots inteligentes entrenados con el contenido de tu negocio. Integración en cualquier sitio web.",
+    "includes": [
+      "Chatbot personalizado con tu marca y tono",
+      "Entrenado con tus servicios, preguntas prequentes y productos",
+      "Integración en tu web existente (cualquier plataforma)",
+      "Panel para actualizar el contenido del bot",
+      "Los datos se almacenan local en tu pc o en la nube!",
+      "Soporte post-lanzamiento 30 días incluido"
+    ],
+    "stack": ["Gemini API", "Groq API", "JavaScript", "Python"],
+    "price_from": "ARS 20.000",
+    "delivery": "3-10 días",
+    "ideal_for": "Negocios que quieren responder consultas automáticamente y capturar leads sin contratar personal extra. Detectá preguntas frecuentes"
+  },
+  {
+    "id": "automatizaciones",
+    "title": "Automatizaciones & digitalización",
+    "emoji": "🔄",
+    "tagline": "Eliminá el trabajo repetitivo",
+    "description": "Automatizo procesos manuales y extraigo datos de la web. Reportes automáticos, integraciones entre herramientas, bots de monitoreo y más. Tomá un café, dejá que yo me encargo!",
+    "includes": [
+      "Análisis del proceso a automatizar",
+      "Desarrollo de programaciones automatizadas",
+      "Integración con Google Sheets, Notion, Slack, etc.",
+      "Documentación y entrega del código",
+      "1 mes de soporte"
+    ],
+    "stack": ["Python", "Playwright", "Selenium", "n8n", "GPT", "Claude"],
+    "price_from": "ARS 150.000",
+    "delivery": "2-3 semanas",
+    "ideal_for": "Freelancers, agencias y empresas que pierden horas en tareas repetitivas"
+  },
+  {
+    "id": "consultoria",
+    "title": "Consultoría & Mentoría",
+    "emoji": "🎯",
+    "tagline": "Claridad técnica para tomar mejores decisiones",
+    "description": "Sesiones 1:1 para revisar tu stack, arquitectura, estrategia de producto o ayudarte a escalar tu negocio.",
+    "includes": [
+      "Sesión de 30 minutos",
+      "Análisis de puntos de dolor y mejoras",
+      "Objetivos medibles",
+      "1 semana de seguimiento por chat"
+    ],
+    "stack": ["Python","SQL"],
+    "price_from": "ARS 20.000 / sesión",
+    "delivery": "1 semana",
+    "ideal_for": "Emprendedores técnicos, developers jr. que quieren crecer, o fundadores que necesitan orientación tech"
+  }
+]

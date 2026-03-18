@@ -1,0 +1,29 @@
+{
+  "owner": {
+    "name": "Nicolás Hruszczak",
+    "role": "Analista funcional con habilidades de desarrollo Full Stack",
+    "bio": "Analista funcional con experiencia en el desarrollo de soluciones para sistemas de información. Trabajo con clientes de todo el mundo para construir productos digitales que aumentan tu retorno de inversión, mediante mayor productividad, análitica y toma de decisiones informadas.",
+    "location": "Buenos Aires, Argentina",
+    "languages": ["Español", "Inglés"],
+    "contact": {
+      "whatsapp": "+54 9 11 3061-1776",
+      "email": "comercial@escalatunegocioconia.com",
+      "website": "https://www.escalatunegocioconia.com.ar/"
+    },
+    "availability": "Envia tu consulta y la cotizo en menos de 24 horas"
+  },
+
+  "chatbot": {
+    "name": "Asistente Lionel IA",
+    "greeting": "¡Hola! Soy el asistente de Nicolás. Puedo contarte sobre sus servicios, proyectos y artículos. ¿En qué puedo ayudarte?",
+    "cta_whatsapp": "¿Querés hablar directamente? Escribime por WhatsApp",
+    "cta_email": "También podés contactarme por email",
+    "persona": "Sos un asistente profesional y amigable. Respondés en el idioma del usuario. Sos conciso pero completo. Si el usuario muestra interés en contratar, derivás cálidamente a WhatsApp o email sin presionar."
+  },
+
+  "branding": {
+    "primary_color": "#0F172A",
+    "accent_color": "#6366F1",
+    "font": "system-ui"
+  }
+}
