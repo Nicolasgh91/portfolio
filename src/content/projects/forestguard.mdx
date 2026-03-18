@@ -1,0 +1,27 @@
+---
+title: "ForestGuard"
+description: "Plataforma web full-stack para análisis y visualización de información ambiental sobre incendios en Argentina, basada en microservicios."
+descriptionEn: "Full-stack web platform for analysis and visualization of environmental information on wildfires in Argentina, based on microservices."
+url: "http://forestguard.freedynamicdns.org"
+githubUrl: "https://github.com/Nicolasgh91/forestguard"
+status: "live"
+tags: ["Python", "FastAPI", "PostGIS", "Docker", "React", "Redis", "Celery"]
+icon: "🌿"
+order: 1
+featured: true
+---
+
+ForestGuard centraliza y visualiza datos geoespaciales sobre incendios forestales en Argentina sobre una arquitectura de microservicios.
+
+## Arquitectura
+
+- **Backend**: FastAPI con procesamiento asíncrono mediante Celery + Redis
+- **Base de datos**: PostgreSQL con extensión PostGIS para consultas geoespaciales
+- **Frontend**: React con visualizaciones cartográficas interactivas
+- **Despliegue**: Docker sobre Oracle Cloud Infrastructure
+
+## Por qué microservicios
+
+En ForestGuard la carga de procesamiento geoespacial es intensa y variable. Separar la ingesta de datos, el procesamiento, la API pública y el frontend en servicios independientes permite escalar solo donde hay carga, aumentar la resiliencia ante fallos parciales, y elegir la tecnología más eficiente para cada componente.
+
+Esta arquitectura tiene más complejidad operativa, pero se justifica por el volumen de datos y los requisitos de procesamiento en tiempo casi real.

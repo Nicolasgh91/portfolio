@@ -1,11 +1,55 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import { getCollection } from 'astro:content';
+import CapabilityCard from '../components/CapabilityCard.astro';
 
-// Replace with your Google Drive direct download link
-// To get it: share the file → copy link → change /view to /export?format=pdf
 const GITHUB_URL = 'https://github.com/Nicolasgh91';
 const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
+
+// Obtener proyectos ordenados
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
+
+// Mapear estado a etiqueta visible
+function statusLabel(status: string, lang = 'es') {
+  const map: Record<string, { es: string; en: string }> = {
+    live: { es: 'En producción', en: 'Live' },
+    'in-progress': { es: 'En progreso', en: 'In progress' },
+    completed: { es: 'Completado', en: 'Completed' },
+  };
+  return map[status]?.[lang as 'es' | 'en'] ?? status;
+}
+
+const capabilities = [
+  {
+    title: "Arquitectura de agentes IA",
+    titleEn: "AI agent architecture",
+    description: "Diseño de sistemas multi-agente con memoria persistente, herramientas y planificación autónoma.",
+    descriptionEn: "Design of multi-agent systems with persistent memory, tools and autonomous planning.",
+    icon: "🤖",
+    level: 90,
+    tags: ["LangChain", "LlamaIndex", "Python"],
+  },
+  {
+    title: "Infraestructura y DevOps",
+    titleEn: "Infrastructure & DevOps",
+    description: "Despliegue de servicios en cloud y on-premise, CI/CD, contenedores y monitoreo de producción.",
+    descriptionEn: "Cloud and on-premise service deployment, CI/CD, containers and production monitoring.",
+    icon: "🗄️",
+    level: 85,
+    tags: ["Docker", "Oracle Cloud", "GitHub Actions"],
+  },
+  {
+    title: "Sistemas geoespaciales",
+    titleEn: "Geospatial systems",
+    description: "Análisis y visualización de datos geográficos integrados en plataformas de gestión operativa.",
+    descriptionEn: "Analysis and visualization of geographic data integrated into operational management platforms.",
+    icon: "🗺️",
+    level: 80,
+    tags: ["PostGIS", "FastAPI", "QGIS"],
+  },
+];
 ---
 
 <Layout
@@ -18,7 +62,7 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
   <main id="main-content">
     <div class="page-container">
 
-      <!-- ── Profile hero ──────────────────────────────────── -->
+      <!-- ── Perfil ──────────────────────────────────────────── -->
       <section class="profile-hero" aria-label="Perfil profesional">
         <div class="avatar" aria-label="Avatar de Nicolás Hruszczak">NH</div>
         <div class="profile-info">
@@ -46,28 +90,33 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
         </div>
       </section>
 
+      <!-- ── Capacidades técnicas (CapabilityCard) ─────────── -->
+      <section class="section" aria-labelledby="capabilities-heading">
+        <div class="section-header">
+          <span class="label" data-en="Capabilities" data-es="Capacidades">Capacidades</span>
+          <h2 id="capabilities-heading" data-en="Technical capabilities" data-es="Capacidades técnicas">Capacidades técnicas</h2>
+        </div>
+
+        <div class="grid-3">
+          {capabilities.map((cap) => (
+            <CapabilityCard capability={cap} />
+          ))}
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
       <!-- ── Roles ──────────────────────────────────────────── -->
       <section class="section" aria-labelledby="roles-heading">
         <div class="section-header">
-          <span
-            class="label"
-            data-en="Capabilities"
-            data-es="Capacidades"
-          >Capacidades</span>
-          <h2
-            id="roles-heading"
-            data-en="Roles &amp; experience"
-            data-es="Roles y experiencia"
-          >Roles y experiencia</h2>
+          <span class="label" data-en="Capabilities" data-es="Capacidades">Capacidades</span>
+          <h2 id="roles-heading" data-en="Roles &amp; experience" data-es="Roles y experiencia">Roles y experiencia</h2>
         </div>
 
         <div class="grid-3">
           <article class="card">
             <div class="card-icon" aria-hidden="true">📋</div>
-            <h3
-              data-en="Functional analyst"
-              data-es="Analista funcional"
-            >Analista funcional</h3>
+            <h3 data-en="Functional analyst" data-es="Analista funcional">Analista funcional</h3>
             <p
               data-en="Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
               data-es="Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
@@ -76,10 +125,7 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 
           <article class="card">
             <div class="card-icon" aria-hidden="true">⚙️</div>
-            <h3
-              data-en="Developer &amp; software architect"
-              data-es="Desarrollador y arquitecto de software"
-            >Desarrollador y arquitecto de software</h3>
+            <h3 data-en="Developer &amp; software architect" data-es="Desarrollador y arquitecto de software">Desarrollador y arquitecto de software</h3>
             <p
               data-en="Design and implementation of scalable architectures (ForestGuard), microservices creation with FastAPI, full stack development, and cloud deployment."
               data-es="Diseño e implementación de arquitecturas escalables (ForestGuard), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
@@ -88,12 +134,9 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 
           <article class="card">
             <div class="card-icon" aria-hidden="true">🎓</div>
-            <h3
-              data-en="Mentor &amp; technical facilitator"
-              data-es="Mentor y facilitador técnico"
-            >Mentor y facilitador técnico</h3>
+            <h3 data-en="Mentor &amp; technical facilitator" data-es="Mentor y facilitador técnico">Mentor y facilitador técnico</h3>
             <p
-              data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda, guiding students in their first steps in tech."
+              data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
               data-es="Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
             >Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos.</p>
           </article>
@@ -102,7 +145,7 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 
       <div class="divider"></div>
 
-      <!-- ── Stack & skills ─────────────────────────────────── -->
+      <!-- ── Stack ──────────────────────────────────────────── -->
       <section class="section" aria-labelledby="stack-heading">
         <div class="section-header">
           <span class="label">Tecnologías</span>
@@ -110,10 +153,7 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
         </div>
 
         <div class="skill-category">
-          <h4
-            data-en="Languages &amp; frameworks"
-            data-es="Lenguajes y frameworks"
-          >Lenguajes y frameworks</h4>
+          <h4 data-en="Languages &amp; frameworks" data-es="Lenguajes y frameworks">Lenguajes y frameworks</h4>
           <div class="skill-tags">
             <span class="skill-tag skill-tag-hl">Python (FastAPI)</span>
             <span class="skill-tag skill-tag-hl">React + TypeScript</span>
@@ -124,10 +164,7 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
         </div>
 
         <div class="skill-category">
-          <h4
-            data-en="Architecture &amp; data"
-            data-es="Arquitectura y datos"
-          >Arquitectura y datos</h4>
+          <h4 data-en="Architecture &amp; data" data-es="Arquitectura y datos">Arquitectura y datos</h4>
           <div class="skill-tags">
             <span class="skill-tag skill-tag-hl">PostgreSQL + PostGIS</span>
             <span class="skill-tag skill-tag-hl">Docker</span>
@@ -139,19 +176,12 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
         </div>
 
         <div class="skill-category">
-          <h4
-            data-en="Methodologies &amp; IA"
-            data-es="Metodologías e IA"
-          >Metodologías e IA</h4>
+          <h4 data-en="Methodologies &amp; AI" data-es="Metodologías e IA">Metodologías e IA</h4>
           <div class="skill-tags">
             <span class="skill-tag skill-tag-hl"
-              data-en="Context engineering"
-              data-es="Ingeniería de contexto"
+              data-en="Context engineering" data-es="Ingeniería de contexto"
             >Ingeniería de contexto</span>
-            <span class="skill-tag"
-              data-en="Scrum"
-              data-es="Scrum"
-            >Scrum</span>
+            <span class="skill-tag">Scrum</span>
             <span class="skill-tag">UML / BPMN</span>
             <span class="skill-tag">Design Thinking</span>
           </div>
@@ -160,184 +190,123 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 
       <div class="divider"></div>
 
-      <!-- ── Education ──────────────────────────────────────── -->
+      <!-- ── Formación ──────────────────────────────────────── -->
       <section class="section" aria-labelledby="edu-heading">
         <div class="section-header">
-          <span
-            class="label"
-            data-en="Education"
-            data-es="Formación"
-          >Formación</span>
-          <h2
-            id="edu-heading"
-            data-en="Academic background"
-            data-es="Estudios"
-          >Estudios</h2>
+          <span class="label" data-en="Education" data-es="Formación">Formación</span>
+          <h2 id="edu-heading" data-en="Academic background" data-es="Estudios">Estudios</h2>
         </div>
 
         <ul class="edu-list" role="list">
           <li class="edu-item" role="listitem">
             <div>
-              <div
-                class="edu-title"
+              <div class="edu-title"
                 data-en="Bachelor's degree in technology and information management"
                 data-es="Licenciatura en gestión de tecnología de la información"
               >Licenciatura en gestión de tecnología de la información</div>
-              <div
-                class="edu-sub"
+              <div class="edu-sub"
                 data-en="UADE · 2024–2028 (In progress)"
                 data-es="UADE · 2024–2028 (En curso)"
               >UADE · 2024–2028 (En curso)</div>
             </div>
-            <span class="tag"
-              data-en="University"
-              data-es="Universidad"
-            >Universidad</span>
+            <span class="tag" data-en="University" data-es="Universidad">Universidad</span>
           </li>
           <li class="edu-item" role="listitem">
             <div>
-              <div
-                class="edu-title"
+              <div class="edu-title"
                 data-en="Technician in Computer Programming"
                 data-es="Tecnicatura en Programación Informática"
               >Tecnicatura en Programación Informática</div>
-              <div
-                class="edu-sub"
+              <div class="edu-sub"
                 data-en="UTN · 2023–2024"
                 data-es="UTN · 2023–2024"
               >UTN · 2023–2024</div>
             </div>
-            <span class="tag"
-              data-en="Degree"
-              data-es="Terciario"
-            >Terciario</span>
+            <span class="tag" data-en="Degree" data-es="Terciario">Terciario</span>
           </li>
           <li class="edu-item" role="listitem">
             <div>
-              <div
-                class="edu-title"
+              <div class="edu-title"
                 data-en="Business Analysis Diploma"
                 data-es="Diplomatura en Análisis de Negocios"
               >Diplomatura en Análisis de Negocios</div>
-              <div
-                class="edu-sub"
+              <div class="edu-sub"
                 data-en="UTN FRBA · 2024"
                 data-es="UTN FRBA · 2024"
               >UTN FRBA · 2024</div>
             </div>
-            <span class="tag"
-              data-en="Specialization"
-              data-es="Diplomatura"
-            >Diplomatura</span>
+            <span class="tag" data-en="Specialization" data-es="Diplomatura">Diplomatura</span>
           </li>
         </ul>
       </section>
 
       <div class="divider"></div>
 
-      <!-- ── Engineering projects ───────────────────────────── -->
+      <!-- ── Proyectos técnicos (dinámico) ─────────────────── -->
       <section class="section" aria-labelledby="projects-heading">
         <div class="section-header">
-          <span
-            class="label"
-            data-en="Engineering"
-            data-es="Ingeniería"
-          >Ingeniería</span>
-          <h2
-            id="projects-heading"
-            data-en="Technical projects"
-            data-es="Proyectos técnicos"
-          >Proyectos técnicos</h2>
+          <span class="label" data-en="Engineering" data-es="Ingeniería">Ingeniería</span>
+          <h2 id="projects-heading" data-en="Technical projects" data-es="Proyectos técnicos">Proyectos técnicos</h2>
         </div>
 
         <div class="grid-2">
+          {sortedProjects.map((project) => (
+            <article class="project-card" id={project.slug}>
+              <div class="proj-header">
+                <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <span aria-hidden="true" style="font-size:20px">{project.data.icon}</span>
+                  {project.data.title}
+                </h3>
+                {project.data.url && (
+                  <a
+                    href={project.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="project-url"
+                    aria-label={`Ver sitio de ${project.data.title}`}
+                  >{project.data.url.replace('http://', '').replace('https://', '')}&nbsp;↗</a>
+                )}
+                {project.data.status === 'in-progress' && (
+                  <span class="tag tag-accent" style="font-size:10px"
+                    data-en="In progress" data-es="En progreso"
+                  >En progreso</span>
+                )}
+                {project.data.status === 'live' && (
+                  <span class="tag" style="font-size:10px; background: #1D9E7518; border-color: #1D9E7540; color: #1D9E75;"
+                    data-en="Live" data-es="En producción"
+                  >En producción</span>
+                )}
+              </div>
 
-          <!-- ForestGuard -->
-          <article class="project-card" id="huella">
-            <div class="proj-header">
-              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span aria-hidden="true" style="font-size:20px">🌿</span>
-                ForestGuard
-              </h3>
-              <a
-                href="http://forestguard.freedynamicdns.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-url"
-                aria-label="Ver sitio ForestGuard"
-              >forestguard.freedynamicdns.org&nbsp;↗</a>
-            </div>
+              <p
+                data-en={project.data.descriptionEn}
+                data-es={project.data.description}
+              >{project.data.description}</p>
 
-            <p
-              data-en="Full-stack application for analysis and visualization of environmental information on wildfires in Argentina, based on microservices."
-              data-es="Aplicación full-stack para el análisis y visualización de información ambiental sobre incendios en Argentina, basada en microservicios."
-            >Aplicación full-stack para el análisis y visualización de información ambiental sobre incendios en Argentina, basada en microservicios.</p>
+              <div class="code-snippet" aria-label={`Arquitectura ${project.data.title}`} style="text-align: left;">
+                {project.data.tags.map((tag, i) => (
+                  <span># {tag}{i < project.data.tags.length - 1 ? '\n' : ''}</span>
+                ))}
+              </div>
 
-            <div class="code-snippet" aria-label="Arquitectura ForestGuard" style="text-align: left;">
-# Microservicios: FastAPI (Backend) + React (Frontend)
-# Base de datos: PostgreSQL / PostGIS
-# Tareas asíncronas: Celery + Redis
-# Despliegue: Docker en Oracle Cloud Infrastructure
-            </div>
+              <div class="tags">
+                {project.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
 
-            <div class="tags">
-              <span class="tag">Python</span>
-              <span class="tag">PostGIS</span>
-              <span class="tag">Docker</span>
-              <span class="tag">React</span>
-            </div>
-
-            <a
-              href="https://github.com/Nicolasgh91/forestguard"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-secondary proj-btn"
-              data-en="View code →"
-              data-es="Ver código →"
-            >Ver código →</a>
-          </article>
-
-          <!-- Double Click -->
-          <article class="project-card" id="doubleclick">
-            <div class="proj-header">
-              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span aria-hidden="true" style="font-size:20px">⚡</span>
-                Double Click™
-              </h3>
-              <span class="tag tag-accent" style="font-size:10px"
-                data-en="In progress"
-                data-es="En progreso"
-              >En progreso</span>
-            </div>
-
-            <p
-              data-en="Ecosystem for Pilates studios that centralizes bookings, billing, and retention. Designed to eliminate expensive monthly SaaS subscriptions."
-              data-es="Ecosistema para estudios de Pilates que centraliza reservas, facturación y retención. Diseñado para eliminar costosas suscripciones SaaS mensuales."
-            >Ecosistema para estudios de Pilates que centraliza reservas, facturación y retención. Diseñado para eliminar costosas suscripciones SaaS mensuales.</p>
-
-            <div class="code-snippet" aria-label="Arquitectura Double Click" style="text-align: left;">
-# Stack: Next.js + Tailwind CSS
-# Backend: Python / FastAPI
-# Database: PostgreSQL
-# Integración: Pasarelas de pago locales
-            </div>
-
-            <div class="tags">
-              <span class="tag">Next.js</span>
-              <span class="tag">FastAPI</span>
-              <span class="tag">PostgreSQL</span>
-            </div>
-
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-secondary proj-btn"
-              data-en="View code →"
-              data-es="Ver código →"
-            >Ver código →</a>
-          </article>
-
+              {project.data.githubUrl && (
+                <a
+                  href={project.data.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-secondary proj-btn"
+                  data-en="View code →"
+                  data-es="Ver código →"
+                >Ver código →</a>
+              )}
+            </article>
+          ))}
         </div>
       </section>
 
@@ -347,12 +316,13 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
   <!-- Footer -->
   <footer class="site-footer">
     <div class="page-container footer-inner">
-      <a href="/" class="nav-logo" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-decoration:none">
+      <a href="/" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-decoration:none">
         nh<span style="color:var(--accent)">.</span>
       </a>
       <div style="display:flex;gap:var(--sp-md)">
         <a href="/servicios" style="font-size:var(--text-xs);color:var(--text-muted)"
           data-en="B2B Services" data-es="Servicios">Servicios</a>
+        <a href="/blog" style="font-size:var(--text-xs);color:var(--text-muted)">Blog</a>
         <a href={GITHUB_URL} target="_blank" rel="noopener"
           style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
         <a href="mailto:comercial@escalatunegocioconia.com"
@@ -363,163 +333,71 @@ const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 </Layout>
 
 <style>
-  /* ── Profile hero ────────────────────────────────────────── */
-  .profile-hero {
-    display: flex;
-    gap: var(--sp-lg);
-    align-items: flex-start;
-    padding: var(--sp-xl) 0 var(--sp-xl);
-  }
+  .profile-hero { display: flex; gap: var(--sp-lg); align-items: flex-start; padding: var(--sp-xl) 0; }
   .avatar {
-    width: 72px;
-    height: 72px;
-    min-width: 72px;
+    width: 72px; height: 72px; min-width: 72px;
     border-radius: var(--radius-md);
     background: var(--accent-bg);
     border: 0.5px solid var(--accent-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--accent);
   }
+  .profile-info { flex: 1; }
+  .profile-info h1 { text-align: left; font-size: calc(var(--text-2xl) * var(--font-scale)); margin-bottom: 4px; }
   .profile-hero h2 {
-    font-family: var(--font-body);
-    font-size: calc(var(--text-base) * var(--font-scale));
-    font-weight: 500;
-    letter-spacing: 0;
-    color: var(--accent-text);
-    margin-bottom: var(--sp-sm);
+    font-family: var(--font-body); font-size: calc(var(--text-base) * var(--font-scale));
+    font-weight: 500; letter-spacing: 0; color: var(--accent-text); margin-bottom: var(--sp-sm);
   }
-  .profile-hero p {
-    font-size: calc(var(--text-sm) * var(--font-scale));
-    max-width: 500px;
-  }
+  .profile-hero p { font-size: calc(var(--text-sm) * var(--font-scale)); max-width: 500px; }
   .profile-btns { display: flex; gap: var(--sp-sm); flex-wrap: wrap; margin-top: var(--sp-md); }
 
-  /* ── Skill tags ──────────────────────────────────────────── */
   .skill-category { margin-bottom: var(--sp-lg); }
   .skill-category h4 {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: var(--sp-sm);
+    font-family: var(--font-body); font-size: var(--text-xs);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-muted); font-weight: 500; margin-bottom: var(--sp-sm);
   }
   .skill-tags { display: flex; flex-wrap: wrap; gap: var(--sp-sm); }
   .skill-tag {
-    padding: 5px 12px;
-    background: var(--bg-tag);
+    padding: 5px 12px; background: var(--bg-tag);
     border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
+    border-radius: var(--radius-sm); font-size: var(--text-xs); color: var(--text-secondary);
   }
-  .skill-tag-hl {
-    background: var(--accent-bg);
-    border-color: var(--accent-border);
-    color: var(--accent-text);
-  }
+  .skill-tag-hl { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent-text); }
 
-  /* ── Education list ──────────────────────────────────────── */
   .edu-list { list-style: none; }
   .edu-item {
-    padding: var(--sp-md) 0;
-    border-bottom: 0.5px solid var(--border-subtle);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--sp-md);
+    padding: var(--sp-md) 0; border-bottom: 0.5px solid var(--border-subtle);
+    display: flex; justify-content: space-between; align-items: center; gap: var(--sp-md);
   }
   .edu-item:last-child { border-bottom: none; }
   .edu-title { font-size: calc(var(--text-sm) * var(--font-scale)); font-weight: 500; color: var(--text-primary); }
   .edu-sub { font-size: var(--text-xs); color: var(--text-secondary); margin-top: 3px; }
 
-  /* ── Project card snippet ────────────────────────────────────────── */
-  .code-snippet {
-    background: var(--bg-tertiary);
-    border: 0.5px dashed var(--border-normal);
-    border-radius: var(--radius-sm);
-    padding: var(--sp-md);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    margin: var(--sp-md) 0;
-    line-height: 1.7;
-  }
-
-  .profile-info { flex: 1; }
-  .profile-info h1 {
-    text-align: left;
-    font-size: calc(var(--text-2xl) * var(--font-scale));
-    margin-bottom: 4px;
-  }
-
   .project-card {
-    background: var(--bg-card);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg);
+    background: var(--bg-card); border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-lg); padding: var(--sp-lg);
     transition: border-color 0.15s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: var(--sp-sm);
-    align-items: center;
-    text-align: center;
+    display: flex; flex-direction: column; height: 100%; gap: var(--sp-sm);
+    align-items: center; text-align: center;
   }
   .project-card:hover { border-color: var(--border-normal); }
-  
-  .proj-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--sp-xs);
-    flex-wrap: wrap;
-  }
+  .proj-header { display: flex; flex-direction: column; align-items: center; gap: var(--sp-xs); flex-wrap: wrap; }
   .proj-header h3 { margin-bottom: 0; }
-  .project-url {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
+  .project-url { font-size: var(--text-xs); color: var(--text-muted); }
   .project-url:hover { color: var(--accent); }
-  
-  .project-card p { 
-    font-size: var(--text-sm); 
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .project-card .tags {
-    justify-content: center;
-    width: 100%;
+  .project-card p { font-size: var(--text-sm); flex: 1; display: flex; align-items: center; justify-content: center; }
+  .project-card .tags { justify-content: center; width: 100%; }
+
+  .code-snippet {
+    background: var(--bg-tertiary); border: 0.5px dashed var(--border-normal);
+    border-radius: var(--radius-sm); padding: var(--sp-md);
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+    white-space: pre-line; line-height: 1.7; width: 100%;
   }
 
-  .proj-btn {
-    margin-top: auto;
-    padding: 7px 14px;
-    font-size: var(--text-xs);
-    align-self: center;
-  }
+  .proj-btn { margin-top: auto; padding: 7px 14px; font-size: var(--text-xs); align-self: center; }
 
-  .site-footer {
-    border-top: 0.5px solid var(--border-subtle);
-    padding: var(--sp-lg) 0;
-    margin-top: var(--sp-2xl);
-  }
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--sp-md);
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+  .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }
 </style>

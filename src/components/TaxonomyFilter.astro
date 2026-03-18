@@ -1,0 +1,136 @@
+---
+// TaxonomyFilter.astro
+// Navegación por categorías y etiquetas del blog.
+// Uso: <TaxonomyFilter categories={cats} tags={tags} activeCategory="arquitectura" activeTag="Docker" />
+
+interface Props {
+  categories: string[];
+  tags: string[];
+  activeCategory?: string;
+  activeTag?: string;
+}
+
+const { categories, tags, activeCategory, activeTag } = Astro.props;
+---
+
+<nav class="taxonomy" aria-label="Filtros del blog">
+
+  <!-- Categorías -->
+  {categories.length > 0 && (
+    <div class="taxonomy__group">
+      <span class="taxonomy__label"
+        data-en="Categories"
+        data-es="Categorías"
+      >Categorías</span>
+      <div class="taxonomy__pills" role="list">
+        <a
+          href="/blog"
+          class={`taxonomy__pill ${!activeCategory && !activeTag ? 'taxonomy__pill--active' : ''}`}
+          role="listitem"
+          aria-current={!activeCategory && !activeTag ? 'page' : undefined}
+          data-en="All"
+          data-es="Todos"
+        >Todos</a>
+        {categories.map((cat) => (
+          <a
+            href={`/blog/categoria/${cat}`}
+            class={`taxonomy__pill ${activeCategory === cat ? 'taxonomy__pill--active' : ''}`}
+            role="listitem"
+            aria-current={activeCategory === cat ? 'page' : undefined}
+          >{cat}</a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Etiquetas -->
+  {tags.length > 0 && (
+    <div class="taxonomy__group">
+      <span class="taxonomy__label"
+        data-en="Tags"
+        data-es="Etiquetas"
+      >Etiquetas</span>
+      <div class="taxonomy__pills" role="list">
+        {tags.map((tag) => (
+          <a
+            href={`/blog/etiqueta/${tag}`}
+            class={`taxonomy__pill taxonomy__pill--tag ${activeTag === tag ? 'taxonomy__pill--active' : ''}`}
+            role="listitem"
+            aria-current={activeTag === tag ? 'page' : undefined}
+          >{tag}</a>
+        ))}
+      </div>
+    </div>
+  )}
+
+</nav>
+
+<style>
+  .taxonomy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+  }
+
+  .taxonomy__group {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-md);
+    flex-wrap: wrap;
+  }
+
+  .taxonomy__label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+
+  .taxonomy__pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .taxonomy__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: var(--bg-tag);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .taxonomy__pill:hover {
+    border-color: var(--accent-border);
+    color: var(--accent-text);
+    background: var(--accent-bg);
+    transform: translateY(-1px);
+  }
+
+  .taxonomy__pill--active {
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+
+  /* Las etiquetas tienen borde con # visual */
+  .taxonomy__pill--tag::before {
+    content: '#';
+    opacity: 0.5;
+    margin-right: 1px;
+  }
+</style>

@@ -1,6 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import { getCollection } from 'astro:content';
+
+// Obtener proyectos featured, ordenados
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Layout
@@ -60,7 +67,7 @@ import Nav from '../components/Nav.astro';
           >Años en desarrollo de soluciones de productos tecnológicos</div>
         </div>
         <div class="stat-item" role="listitem">
-          <div class="stat-num">2</div>
+          <div class="stat-num">{allProjects.length}</div>
           <div
             class="stat-label"
             data-en="Active engineering projects"
@@ -120,7 +127,7 @@ import Nav from '../components/Nav.astro';
 
       <div class="divider"></div>
 
-      <!-- ── Recent projects ───────────────────────────────── -->
+      <!-- ── Proyectos recientes (dinámico) ────────────────── -->
       <section class="section" aria-labelledby="projects-heading">
         <div class="section-header">
           <span
@@ -136,52 +143,49 @@ import Nav from '../components/Nav.astro';
         </div>
 
         <div class="grid-2">
-          <article class="project-card">
-            <div class="project-header">
-              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span aria-hidden="true" style="font-size:20px">🌿</span>
-                ForestGuard
-              </h3>
-              <a
-                href="http://forestguard.freedynamicdns.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-url"
-              >forestguard.freedynamicdns.org&nbsp;↗</a>
-            </div>
-            <p
-              data-en="Full-stack web platform for analysis and visualization of environmental information on wildfires in Argentina."
-              data-es="Plataforma web full-stack para análisis y visualización de información ambiental sobre incendios en Argentina."
-            >Plataforma web full-stack para análisis y visualización de información ambiental sobre incendios en Argentina.</p>
-            <div class="tags">
-              <a href="/talento#huella" class="tag tag-accent"
-                data-en="View project →"
-                data-es="Ver proyecto →"
-              >Ver proyecto →</a>
-            </div>
-          </article>
+          {featuredProjects.map((project) => (
+            <article class="project-card">
+              <div class="project-header">
+                <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <span aria-hidden="true" style="font-size:20px">{project.data.icon}</span>
+                  {project.data.title}
+                </h3>
+                {project.data.url && (
+                  <a
+                    href={project.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="project-url"
+                  >{project.data.url.replace('http://', '').replace('https://', '')}&nbsp;↗</a>
+                )}
+                {project.data.status === 'in-progress' && (
+                  <span class="tag tag-accent" style="font-size:10px">
+                    <span data-en="In progress" data-es="En progreso">En progreso</span>
+                  </span>
+                )}
+              </div>
 
-          <article class="project-card">
-            <div class="project-header">
-              <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span aria-hidden="true" style="font-size:20px">⚡</span>
-                Double Click™
-              </h3>
-              <span class="tag tag-accent" style="font-size:10px">
-                <span data-en="In progress" data-es="En progreso">En progreso</span>
-              </span>
-            </div>
-            <p
-              data-en="Custom management ecosystem for Pilates studios, centralizing bookings, billing, and automated client retention."
-              data-es="Ecosistema de gestión a medida para estudios de Pilates, centralizando reservas, facturación y retención automatizada de clientes."
-            >Ecosistema de gestión a medida para estudios de Pilates, centralizando reservas, facturación y retención automatizada de clientes.</p>
-            <div class="tags">
-              <a href="/talento#doubleclick" class="tag tag-accent"
-                data-en="View project →"
-                data-es="Ver proyecto →"
-              >Ver proyecto →</a>
-            </div>
-          </article>
+              <p
+                data-en={project.data.descriptionEn}
+                data-es={project.data.description}
+              >{project.data.description}</p>
+
+              <div class="tags">
+                <a href={`/talento#${project.slug}`} class="tag tag-accent"
+                  data-en="View project →"
+                  data-es="Ver proyecto →"
+                >Ver proyecto →</a>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- Enlace al blog técnico -->
+        <div style="text-align:center; margin-top: var(--sp-lg);">
+          <a href="/blog" class="btn-secondary"
+            data-en="Read technical articles →"
+            data-es="Leer artículos técnicos →"
+          >Leer artículos técnicos →</a>
         </div>
       </section>
 
@@ -197,6 +201,7 @@ import Nav from '../components/Nav.astro';
       <div style="display:flex;gap:var(--sp-md)">
         <a href="https://github.com/Nicolasgh91" target="_blank" rel="noopener noreferrer"
           aria-label="GitHub" style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
+        <a href="/blog" style="font-size:var(--text-xs);color:var(--text-muted)">Blog</a>
         <a href="mailto:comercial@escalatunegocioconia.com"
           aria-label="Contacto" style="font-size:var(--text-xs);color:var(--text-muted)">Contacto</a>
       </div>
@@ -213,7 +218,6 @@ import Nav from '../components/Nav.astro';
     text-align: center;
   }
 
-  /* ── Stats bar ───────────────────────────────────────────── */
   .stats-bar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -223,9 +227,7 @@ import Nav from '../components/Nav.astro';
     margin-bottom: var(--sp-xl);
   }
   @media (max-width: 480px) {
-    .stats-bar {
-      grid-template-columns: 1fr;
-    }
+    .stats-bar { grid-template-columns: 1fr; }
   }
   .stat-item {
     padding: var(--sp-lg);
@@ -234,10 +236,7 @@ import Nav from '../components/Nav.astro';
   }
   .stat-item:last-child { border-right: none; }
   @media (max-width: 480px) {
-    .stat-item {
-      border-right: none;
-      border-bottom: 0.5px solid var(--border-normal);
-    }
+    .stat-item { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
     .stat-item:last-child { border-bottom: none; }
   }
   .stat-num {
@@ -254,7 +253,6 @@ import Nav from '../components/Nav.astro';
     margin-top: 6px;
   }
 
-  /* ── Split CTA card (home page) ──────────────────────────── */
   .split-cta {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -262,11 +260,7 @@ import Nav from '../components/Nav.astro';
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
-  @media (max-width: 560px) {
-    .split-cta {
-      grid-template-columns: 1fr;
-    }
-  }
+  @media (max-width: 560px) { .split-cta { grid-template-columns: 1fr; } }
   .split-cta-col {
     padding: var(--sp-lg);
     cursor: pointer;
@@ -281,24 +275,12 @@ import Nav from '../components/Nav.astro';
   .split-cta-col:hover { background: var(--accent-bg); }
   .split-cta-col:first-child { border-right: 0.5px solid var(--border-normal); }
   @media (max-width: 560px) {
-    .split-cta-col:first-child {
-      border-right: none;
-      border-bottom: 0.5px solid var(--border-normal);
-    }
+    .split-cta-col:first-child { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
   }
   .split-cta-col h3 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); }
-  .split-cta-col p { 
-    font-size: var(--text-sm); 
-    line-height: 1.65; 
-    margin-bottom: var(--sp-md); 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-  }
+  .split-cta-col p { font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--sp-md); flex: 1; display: flex; align-items: center; justify-content: center; }
   .split-cta-arrow { font-size: var(--text-sm); color: var(--accent); margin-top: auto; }
 
-  /* ── Project card ────────────────────────────────────────── */
   .project-card {
     background: var(--bg-card);
     border: 0.5px solid var(--border-subtle);
@@ -312,7 +294,6 @@ import Nav from '../components/Nav.astro';
     text-align: center;
   }
   .project-card:hover { border-color: var(--border-normal); }
-
   .project-header {
     display: flex;
     flex-direction: column;
@@ -321,25 +302,10 @@ import Nav from '../components/Nav.astro';
     margin-bottom: var(--sp-sm);
   }
   .project-header h3 { margin-bottom: 0; }
-  .project-url {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
+  .project-url { font-size: var(--text-xs); color: var(--text-muted); }
   .project-url:hover { color: var(--accent); }
-  
-  .project-card p { 
-    font-size: var(--text-sm); 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    margin-bottom: var(--sp-sm);
-  }
-  .project-card .tags {
-    margin-top: auto;
-    justify-content: center;
-    width: 100%;
-  }
+  .project-card p { font-size: var(--text-sm); flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: var(--sp-sm); }
+  .project-card .tags { margin-top: auto; justify-content: center; width: 100%; }
 
   .site-footer {
     border-top: 0.5px solid var(--border-subtle);

@@ -1,6 +1,6 @@
 ---
 import '../styles/tokens.css';
-import Analytics from '@vercel/analytics/astro'
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -18,6 +18,7 @@ const {
 
 const canonical = Astro.url.href;
 const siteName = 'Nicolás Hruszczak';
+const siteUrl = 'https://escalatunegocioconia.com';
 ---
 
 <!doctype html>
@@ -30,12 +31,12 @@ const siteName = 'Nicolás Hruszczak';
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph -->
+    <!-- Open Graph base -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
     <meta property="og:image:width" content="1366" />
     <meta property="og:image:height" content="768" />
     <meta property="og:image:type" content="image/png" />
@@ -47,30 +48,29 @@ const siteName = 'Nicolás Hruszczak';
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-    <!-- Theme Color -->
     <meta name="theme-color" content="#FBBF24" />
 
-    <!-- Fonts (Preconnect and Preload) -->
+    <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" />
 
-    <!-- Alternate Languages (hreflang) -->
+    <!-- hreflang -->
     <link rel="alternate" hreflang="es" href={canonical} />
     <link rel="alternate" hreflang="en" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={canonical} />
 
-    <!-- Favicons — replace with actual assets -->
+    <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Sitemap -->
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <!-- JSON-LD: Person schema for recruiter SEO -->
+    <!-- JSON-LD global: Person -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -80,14 +80,13 @@ const siteName = 'Nicolás Hruszczak';
         "description": "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
         "url": "https://escalatunegocioconia.com",
         "sameAs": [
-          "https://github.com/Nicolasgh91",
-          "https://linkedin.com/in/tu-usuario"
+          "https://github.com/Nicolasgh91"
         ],
         "knowsAbout": ["Python", "Astro", "Next.js", "Inteligencia Artificial", "Agentes de IA", "Análisis de datos"]
       }
     </script>
 
-    <!-- JSON-LD: LocalBusiness schema for B2B GEO -->
+    <!-- JSON-LD global: ProfessionalService -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -106,9 +105,12 @@ const siteName = 'Nicolás Hruszczak';
       }
     </script>
 
+    <!-- SLOT: JSON-LD y meta adicional por página (artículos, etc.) -->
+    <slot name="head" />
+
     <title>{title}</title>
 
-    <!-- Inline theme init: prevents flash of wrong theme -->
+    <!-- Prevenir flash de tema incorrecto -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('nh-theme');
@@ -126,9 +128,9 @@ const siteName = 'Nicolás Hruszczak';
     <slot />
     <Analytics />
 
-    <!-- Global theme / lang / a11y controller -->
+    <!-- Controladores globales: tema, idioma, accesibilidad -->
     <script is:inline>
-      // ── Theme ──────────────────────────────────────────────
+      // ── Tema ───────────────────────────────────────────────
       window.nhTheme = {
         isDark: !document.documentElement.classList.contains('light'),
         toggle() {
@@ -140,7 +142,7 @@ const siteName = 'Nicolás Hruszczak';
         }
       };
 
-      // ── Language ───────────────────────────────────────────
+      // ── Idioma ─────────────────────────────────────────────
       window.nhLang = {
         isEN: false,
         toggle() {
@@ -160,12 +162,11 @@ const siteName = 'Nicolás Hruszczak';
               el.innerHTML = val;
             }
           });
-          // Update aria-label on lang button
           if (btn) btn.setAttribute('aria-label', this.isEN ? 'Cambiar a español' : 'Switch to English');
         }
       };
 
-      // ── Accessibility ──────────────────────────────────────
+      // ── Accesibilidad ──────────────────────────────────────
       window.nhA11y = {
         panelOpen: false,
         motionReduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -213,7 +214,7 @@ const siteName = 'Nicolás Hruszczak';
         }
       };
 
-      // Restore persisted a11y settings
+      // Restaurar preferencias persistidas
       const savedScale = localStorage.getItem('nh-font-scale');
       if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
       const savedHC = localStorage.getItem('nh-hc');

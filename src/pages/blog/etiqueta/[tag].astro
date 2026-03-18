@@ -1,0 +1,83 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Nav from '../../../components/Nav.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import TaxonomyFilter from '../../../components/TaxonomyFilter.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  // Extraer etiquetas únicas
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+
+// Para el filtro lateral
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allCategories = [...new Set(allPosts.map((p) => p.data.category))].sort();
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
+---
+
+<Layout
+  title={`#${tag} — Blog técnico · Nicolás Hruszczak`}
+  description={`Artículos etiquetados con ${tag}: arquitectura de software, IA aplicada y automatización para empresas.`}
+>
+  <Nav />
+
+  <main id="main-content">
+    <div class="page-container">
+
+      <section class="hero" aria-label={`Etiqueta: ${tag}`}>
+        <div class="badge"
+          data-en="Tag"
+          data-es="Etiqueta"
+        >Etiqueta</div>
+        <h1>#{tag}</h1>
+        <p class="hero-sub">{posts.length} artículo{posts.length !== 1 ? 's' : ''} con esta etiqueta.</p>
+      </section>
+
+      <TaxonomyFilter
+        categories={allCategories}
+        tags={allTags}
+        activeTag={tag}
+      />
+
+      <section class="section" aria-label="Artículos">
+        <div class="posts-grid">
+          {posts.map((post) => <BlogCard post={post} />)}
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-container footer-inner">
+      <a href="/" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-decoration:none">
+        nh<span style="color:var(--accent)">.</span>
+      </a>
+      <div style="display:flex;gap:var(--sp-md)">
+        <a href="/blog" style="font-size:var(--text-xs);color:var(--text-muted)">Blog</a>
+        <a href="/servicios" style="font-size:var(--text-xs);color:var(--text-muted)">Servicios</a>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--sp-md); }
+  .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }
+</style>

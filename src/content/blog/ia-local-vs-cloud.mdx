@@ -1,0 +1,39 @@
+---
+title: "IA local vs IA en la nube"
+titleEn: "Local AI vs cloud AI"
+description: "Cuándo tiene sentido desplegar un LLM en infraestructura propia y cuándo es mejor usar una API externa. Análisis de costos, privacidad y rendimiento."
+descriptionEn: "When it makes sense to deploy an LLM on your own infrastructure vs an external API. Cost, privacy and performance analysis."
+pubDate: 2025-03-10
+category: "infraestructura"
+tags: ["IA", "LLM", "infraestructura", "privacidad"]
+draft: false
+readingTime: 7
+---
+
+La pregunta no es si usar inteligencia artificial, sino dónde correrla. La elección entre un LLM en la nube y uno desplegado localmente determina costos, latencia, privacidad y control operativo.
+
+## La distinción fundamental
+
+Un LLM en la nube (OpenAI, Anthropic, Google) significa que cada consulta sale de tu infraestructura, viaja a un servidor externo y vuelve con la respuesta. Rápido de implementar, costoso a escala, sin garantías sobre qué pasa con tus datos.
+
+Un LLM local (Ollama, llama.cpp, vLLM) corre en tu propio hardware o en una VM que controlás. La latencia depende de tu infraestructura, el costo marginal por consulta es cero una vez instalado, y los datos nunca salen de tu red.
+
+## Cuándo usar la nube
+
+La nube gana cuando el volumen de consultas es bajo e impredecible, cuando necesitás los modelos más capaces disponibles, o cuando la velocidad de implementación importa más que el costo a largo plazo. También cuando los datos que se procesan no son sensibles.
+
+## Cuándo desplegar localmente
+
+Lo local gana cuando los datos son confidenciales por regulación o política interna: datos médicos, legales, financieros o de clientes que no pueden salir de la infraestructura. También cuando el volumen es alto y predecible, haciendo que el costo por token de la nube supere el de operar hardware propio.
+
+Los modelos de código abierto actuales (Llama 3, Mistral, Qwen) son competitivos para la mayoría de los casos de uso empresarial que no requieren razonamiento de vanguardia.
+
+## El análisis de costo real
+
+Una GPU A10G en AWS cuesta aproximadamente USD 1,50/hora. Con eso corrés un modelo de 13B parámetros con throughput de ~30 tokens/segundo. Si tu caso de uso genera 100.000 tokens diarios, estás hablando de menos de USD 2/día contra potencialmente USD 30–60/día en APIs externas.
+
+El break-even suele estar entre los 500.000 y 1.000.000 tokens mensuales. Por debajo de ese umbral, la nube es más económica. Por encima, lo local casi siempre gana.
+
+## Conclusión práctica
+
+Empezá en la nube para validar el caso de uso. Cuando el volumen justifique la inversión en infraestructura propia, migrá. La arquitectura debe facilitar ese cambio desde el primer día.

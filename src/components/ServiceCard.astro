@@ -1,0 +1,230 @@
+---
+// ServiceCard.astro
+// Tarjeta de catálogo de servicios B2B
+// Hover: barra lateral amber que crece + glow radial cálido
+// Uso: <ServiceCard service={service} />
+
+interface Props {
+  service: {
+    title: string;
+    titleEn?: string;
+    description: string;
+    descriptionEn?: string;
+    icon?: string;          // emoji o string SVG inline
+    href?: string;          // link opcional a página de detalle
+  };
+}
+
+const { service } = Astro.props;
+
+const El = service.href ? 'a' : 'div';
+---
+
+<El
+  class="service-card"
+  href={service.href ?? undefined}
+  aria-label={service.href ? service.title : undefined}
+>
+  <!-- Barra lateral (animada por CSS en hover) -->
+  <span class="service-card__bar" aria-hidden="true"></span>
+
+  <!-- Glow radial de fondo (animado por CSS en hover) -->
+  <span class="service-card__glow" aria-hidden="true"></span>
+
+  <!-- Ícono -->
+  {service.icon && (
+    <div class="service-card__icon" aria-hidden="true">
+      {service.icon}
+    </div>
+  )}
+
+  <!-- Título -->
+  <h3
+    class="service-card__title"
+    data-en={service.titleEn ?? service.title}
+    data-es={service.title}
+  >
+    {service.title}
+  </h3>
+
+  <!-- Descripción -->
+  <p
+    class="service-card__desc"
+    data-en={service.descriptionEn ?? service.description}
+    data-es={service.description}
+  >
+    {service.description}
+  </p>
+
+  <!-- CTA inline solo si tiene href -->
+  {service.href && (
+    <span class="service-card__cta" aria-hidden="true">
+      Ver más
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+      </svg>
+    </span>
+  )}
+</El>
+
+<style>
+  /* ─────────────────────────────────────────
+     BASE
+  ───────────────────────────────────────── */
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 20px 24px;
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;          /* por si es <a> */
+
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 300ms ease,
+      box-shadow 320ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     BARRA LATERAL
+     Crece desde el centro en vertical al hover
+  ───────────────────────────────────────── */
+  .service-card__bar {
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: #f59e0b;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ─────────────────────────────────────────
+     GLOW RADIAL
+     Ilumina desde la izquierda (donde nace la barra)
+  ───────────────────────────────────────── */
+  .service-card__glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: radial-gradient(
+      ellipse at 0% 50%,
+      rgba(245, 158, 11, 0.09) 0%,
+      transparent 65%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     ÍCONO
+  ───────────────────────────────────────── */
+  .service-card__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: rgba(245, 158, 11, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition:
+      background 280ms ease,
+      transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ─────────────────────────────────────────
+     TÍTULO
+  ───────────────────────────────────────── */
+  .service-card__title {
+    font-size: 0.875rem;      /* 14px */
+    font-weight: 700;
+    line-height: 1.35;
+    color: #f3f4f6;
+    transition: color 200ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     DESCRIPCIÓN
+  ───────────────────────────────────────── */
+  .service-card__desc {
+    font-size: 0.8125rem;     /* 13px */
+    color: #9ca3af;
+    line-height: 1.6;
+    flex: 1;
+    transition: color 200ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     CTA INLINE
+  ───────────────────────────────────────── */
+  .service-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #f59e0b;
+    margin-top: 2px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity 260ms ease 40ms,
+      transform 260ms ease 40ms;
+  }
+
+  /* ─────────────────────────────────────────
+     HOVER — todos los efectos juntos
+  ───────────────────────────────────────── */
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 158, 11, 0.35);
+    box-shadow:
+      0 16px 40px -8px rgba(245, 158, 11, 0.12),
+      0 0 0 1px rgba(245, 158, 11, 0.10);
+  }
+
+  .service-card:hover .service-card__bar {
+    transform: scaleY(1);
+  }
+
+  .service-card:hover .service-card__glow {
+    opacity: 1;
+  }
+
+  .service-card:hover .service-card__icon {
+    background: rgba(245, 158, 11, 0.2);
+    transform: scale(1.08);
+  }
+
+  .service-card:hover .service-card__title {
+    color: #ffffff;
+  }
+
+  .service-card:hover .service-card__desc {
+    color: #d1d5db;
+  }
+
+  .service-card:hover .service-card__cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─────────────────────────────────────────
+     FOCUS visible (accesibilidad teclado)
+  ───────────────────────────────────────── */
+  .service-card:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 3px;
+  }
+</style>

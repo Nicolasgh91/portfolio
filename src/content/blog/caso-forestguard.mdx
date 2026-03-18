@@ -1,0 +1,49 @@
+---
+title: "Caso de estudio: ForestGuard"
+titleEn: "Case study: ForestGuard"
+description: "Cómo se construyó una plataforma de análisis ambiental sobre microservicios con FastAPI, PostGIS y Docker en Oracle Cloud. Decisiones de arquitectura y lecciones aprendidas."
+descriptionEn: "How we built an environmental analysis platform on microservices with FastAPI, PostGIS and Docker on Oracle Cloud. Architecture decisions and lessons learned."
+coverImage: "/src/assets/blog/satellite.webp"
+coverAlt: "Mapa satelital de hotspots de incendios en ForestGuard"
+pubDate: 2025-01-15
+category: "arquitectura"
+tags: ["arquitectura", "FastAPI", "PostGIS", "Docker", "caso de estudio"]
+draft: false
+readingTime: 8
+---
+
+ForestGuard es una plataforma de análisis ambiental que centraliza y visualiza datos sobre incendios forestales en Argentina. Este artículo documenta las decisiones de arquitectura y las lecciones del proceso.
+
+## El problema
+
+Los datos sobre incendios forestales en Argentina estaban dispersos en múltiples fuentes: CONAE, INTA, Servicio Nacional de Manejo del Fuego y registros provinciales independientes. Sin una interfaz unificada, el análisis requería descarga manual, limpieza y cruce de datasets con formatos heterogéneos.
+
+## La decisión de microservicios
+
+Era claro desde el principio que el sistema iba a tener componentes con requisitos de carga muy distintos. El procesamiento geoespacial es intensivo en CPU y puede tardar minutos. La API pública necesita responder en milisegundos. El frontend tiene picos de tráfico impredecibles.
+
+Juntar todo en un monolito significaba que un proceso pesado de análisis podía degradar la experiencia de los usuarios consultando el mapa. La separación en microservicios resolvió eso: cada componente escala de forma independiente.
+
+## La arquitectura en detalle
+
+El sistema tiene cuatro servicios principales. El **ingester** descarga y normaliza datos desde las fuentes externas. El **processor** ejecuta los análisis geoespaciales usando PostGIS sobre PostgreSQL. La **API** expone los resultados a través de endpoints REST con FastAPI. El **frontend** en React consume la API y renderiza datos en mapas interactivos.
+
+Celery con Redis maneja las tareas asíncronas del procesamiento. Cuando llega un dataset nuevo, el ingester encola una tarea y responde inmediatamente. El processor la ejecuta en background sin bloquear nada.
+
+## PostGIS: la decisión correcta
+
+Para datos geoespaciales, PostGIS sobre PostgreSQL fue la elección correcta. La madurez del ecosistema, la calidad de la documentación, y la capacidad de ejecutar consultas espaciales complejas directamente en SQL sin exportar a herramientas externas.
+
+Una consulta que en Python requeriría iterar sobre miles de geometrías, en PostGIS se expresa como una sola sentencia SQL que corre en milisegundos.
+
+## Despliegue en Oracle Cloud
+
+Oracle Cloud tiene una capa gratuita que incluye dos instancias ARM con 4 vCPUs y 24 GB de RAM cada una. Para un proyecto sin financiamiento externo, eso fue determinante. Docker Compose orquesta los contenedores con Nginx como reverse proxy.
+
+## Lecciones aprendidas
+
+Los microservicios introducen complejidad operativa real desde el primer día: logs distribuidos, trazabilidad entre servicios, gestión de fallos parciales. En un monolito esos problemas no existen o son triviales.
+
+PostGIS tiene una curva de aprendizaje empinada pero el retorno es inmediato. Invertir tiempo en entender los índices espaciales y los tipos de geometría correctos evitó reescrituras costosas.
+
+Docker Compose es suficiente para empezar, pero la ausencia de orquestación más sofisticada se siente cuando necesitás actualizaciones sin downtime o escalado automático.

@@ -2,6 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { getCollection } from 'astro:content';
+import ServiceCard from '../components/ServiceCard.astro';
+
+
+// Obtener servicios ordenados desde la colección de contenido
+const allServices = await getCollection('services');
+const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Layout
@@ -72,7 +79,7 @@ import ContactForm from '../components/ContactForm.astro';
         </div>
       </div>
 
-      <!-- ── Services catalog ──────────────────────────────── -->
+      <!-- ── Catálogo de servicios (dinámico) ──────────────── -->
       <section class="section" aria-labelledby="services-heading">
         <div class="section-header">
           <span
@@ -92,62 +99,22 @@ import ContactForm from '../components/ContactForm.astro';
           >Cuatro ejes de intervención con impacto directo en la operación.</p>
         </div>
 
-        <div class="grid-4">
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🏗️</div>
-            <h3
-              data-en="Proprietary management systems"
-              data-es="Sistemas de gestión propietarios"
-            >Sistemas de gestión propietarios</h3>
-            <p
-              data-en="Custom applications to centralize operations and eliminate recurring license payments permanently."
-              data-es="Aplicaciones a medida para centralizar operaciones y eliminar el pago recurrente de licencias."
-            >Aplicaciones a medida para centralizar operaciones y eliminar el pago recurrente de licencias.</p>
-          </article>
-
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🤖</div>
-            <h3
-              data-en="Intelligent automation"
-              data-es="Automatización inteligente"
-            >Automatización inteligente</h3>
-            <p
-              data-en="AI agents to drastically reduce hours spent on manual, repetitive tasks."
-              data-es="Agentes de IA para reducir drásticamente las horas dedicadas a tareas manuales y repetitivas."
-            >Agentes de IA para reducir drásticamente las horas dedicadas a tareas manuales y repetitivas.</p>
-          </article>
-
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🔍</div>
-            <h3
-              data-en="Audit &amp; optimization"
-              data-es="Auditoría y optimización"
-            >Auditoría y optimización</h3>
-            <p
-              data-en="Workflow analysis to identify bottlenecks and capital leaks across your operation."
-              data-es="Análisis de flujos de trabajo para identificar cuellos de botella y fugas de capital en su operación."
-            >Análisis de flujos de trabajo para identificar cuellos de botella y fugas de capital en su operación.</p>
-          </article>
-
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">📈</div>
-            <h3
-              data-en="SEO/GEO positioning"
-              data-es="Posicionamiento SEO/GEO"
-            >Posicionamiento SEO/GEO</h3>
-            <p
-              data-en="Technical strategies to capture qualified demand and increase visibility in search engines and AI models."
-              data-es="Estrategias técnicas para capturar demanda calificada y aumentar la visibilidad en buscadores y modelos de IA."
-            >Estrategias técnicas para capturar demanda calificada y aumentar la visibilidad en buscadores y modelos de IA.</p>
-          </article>
-        </div>
+      <div class="grid-4">
+        {sortedServices.map((service) => (
+          <ServiceCard service={{
+            title: service.data.title,
+            titleEn: service.data.titleEn,
+            description: service.data.description,
+            descriptionEn: service.data.descriptionEn,
+            icon: service.data.icon,
+            href: service.data.href,
+          }} />
+        ))}
+      </div>
       </section>
 
       <!-- ── Case study ─────────────────────────────────────── -->
-      <section
-        class="section"
-        aria-labelledby="case-heading"
-      >
+      <section class="section" aria-labelledby="case-heading">
         <div class="section-header">
           <span
             class="label"
@@ -244,9 +211,9 @@ import ContactForm from '../components/ContactForm.astro';
             >¿Trabajás con empresas de cualquier tamaño?</summary>
             <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
               <p itemprop="text"
-                data-en="Yes. The approach is especially valuable for SMEs and growing teams that want to eliminate recurring SaaS costs and replace them with proprietary systems. Large companies also benefit from automation and process audits."
-                data-es="Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos."
-              >Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos.</p>
+                data-en="Yes. The approach is especially valuable for SMEs and growing teams that want to eliminate recurring SaaS costs and replace them with proprietary systems."
+                data-es="Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios."
+              >Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios.</p>
             </div>
           </details>
 
@@ -270,16 +237,16 @@ import ContactForm from '../components/ContactForm.astro';
             >¿Qué tecnologías utilizás?</summary>
             <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
               <p itemprop="text"
-                data-en="Python (FastAPI) for backends, React/Next.js or Astro for frontends, PostgreSQL for databases, Docker for deployment. For AI: context engineering, LLM agents, and process automation APIs. Every stack is chosen based on your specific needs."
-                data-es="Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas."
-              >Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas.</p>
+                data-en="Python (FastAPI) for backends, React/Next.js or Astro for frontends, PostgreSQL for databases, Docker for deployment."
+                data-es="Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue."
+              >Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue.</p>
             </div>
           </details>
 
         </div>
       </section>
 
-      <!-- ── Contact form ───────────────────────────────────── -->
+      <!-- ── Formulario de contacto ──────────────────────────── -->
       <section id="contacto" class="section" aria-labelledby="contact-heading">
         <div class="section-header">
           <span
@@ -308,6 +275,7 @@ import ContactForm from '../components/ContactForm.astro';
       <div style="display:flex;gap:var(--sp-md)">
         <a href="/talento" style="font-size:var(--text-xs);color:var(--text-muted)"
           data-en="Profile" data-es="Perfil">Perfil</a>
+        <a href="/blog" style="font-size:var(--text-xs);color:var(--text-muted)">Blog</a>
         <a href="https://github.com/Nicolasgh91" target="_blank" rel="noopener"
           style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
         <a href="mailto:comercial@escalatunegocioconia.com"
@@ -317,56 +285,8 @@ import ContactForm from '../components/ContactForm.astro';
   </footer>
 </Layout>
 
-<!-- JSON-LD: FAQPage schema for GEO/SEO -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "¿Cuánto tiempo lleva construir un sistema a medida?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Trabajás con empresas de cualquier tamaño?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios. Las empresas grandes también se benefician de la automatización y las auditorías de procesos."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿En qué consiste el diagnóstico gratuito?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Qué tecnologías utilizás?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue. Para IA: ingeniería de contexto, agentes LLM y APIs de automatización de procesos. Cada stack se elige según las necesidades específicas."
-        }
-      }
-    ]
-  }
-</script>
-
 <style>
-  /* ── FAQ ─────────────────────────────────────────────────── */
-  .faq-list {
-    margin-top: var(--sp-xl);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+  .faq-list { margin-top: var(--sp-xl); display: flex; flex-direction: column; gap: 2px; }
   .faq-item {
     background: var(--bg-secondary);
     border: 0.5px solid var(--border-subtle);
@@ -374,9 +294,7 @@ import ContactForm from '../components/ContactForm.astro';
     overflow: hidden;
     transition: border-color 0.15s ease;
   }
-  .faq-item[open] {
-    border-color: var(--accent-border);
-  }
+  .faq-item[open] { border-color: var(--accent-border); }
   .faq-q {
     list-style: none;
     display: flex;
@@ -392,26 +310,12 @@ import ContactForm from '../components/ContactForm.astro';
     transition: color 0.15s ease;
   }
   .faq-q::-webkit-details-marker { display: none; }
-  .faq-q::after {
-    content: '+';
-    font-size: 18px;
-    color: var(--accent);
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-  }
-  .faq-item[open] .faq-q::after {
-    transform: rotate(45deg);
-  }
+  .faq-q::after { content: '+'; font-size: 18px; color: var(--accent); flex-shrink: 0; transition: transform 0.2s ease; }
+  .faq-item[open] .faq-q::after { transform: rotate(45deg); }
   .faq-q:hover { color: var(--accent); }
-  .faq-a {
-    padding: 0 var(--sp-lg) var(--sp-md);
-  }
-  .faq-a p {
-    font-size: var(--text-sm);
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
-  /* ── Value banner (B2B) ──────────────────────────────────── */
+  .faq-a { padding: 0 var(--sp-lg) var(--sp-md); }
+  .faq-a p { font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.65; }
+
   .value-banner {
     display: flex;
     align-items: center;
@@ -423,23 +327,14 @@ import ContactForm from '../components/ContactForm.astro';
     margin: var(--sp-xl) 0;
   }
   @media (max-width: 640px) {
-    .value-banner {
-      flex-direction: column;
-      text-align: center;
-      gap: var(--sp-lg);
-    }
+    .value-banner { flex-direction: column; text-align: center; gap: var(--sp-lg); }
+    .value-banner-arrow { transform: rotate(90deg); }
   }
   .value-banner-col { flex: 1; }
   .value-banner-col h3 { margin-bottom: 6px; }
   .value-banner-col.accent h3 { color: var(--accent); }
   .value-banner-arrow { font-size: 28px; color: var(--accent); flex-shrink: 0; }
-  @media (max-width: 640px) {
-    .value-banner-arrow {
-      transform: rotate(90deg);
-    }
-  }
 
-  /* ── Case study block ────────────────────────────────────── */
   .case-block {
     background: var(--bg-card);
     border: 0.5px solid var(--border-subtle);
@@ -457,7 +352,6 @@ import ContactForm from '../components/ContactForm.astro';
     color: var(--text-muted);
     margin-bottom: var(--sp-md);
   }
-
   .case-header {
     display: flex;
     align-items: center;
@@ -465,23 +359,8 @@ import ContactForm from '../components/ContactForm.astro';
     flex-wrap: wrap;
     margin-bottom: var(--sp-sm);
   }
-  .case-header h2 {
-    font-size: calc(var(--text-xl) * var(--font-scale));
-    letter-spacing: -0.5px;
-  }
+  .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
 
-  .site-footer {
-    border-top: 0.5px solid var(--border-subtle);
-    padding: var(--sp-lg) 0;
-    margin-top: var(--sp-2xl);
-  }
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--sp-md);
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+  .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }
 </style>

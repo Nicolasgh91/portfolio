@@ -1,10 +1,8 @@
 /* ============================================================
    DESIGN TOKENS — src/styles/tokens.css
-   Edit this file to update the entire site's visual identity.
-   All colors, spacing, typography scale in one place.
    ============================================================ */
 
-/* ── Accent palette (HSL format) ──────────────────────────── */
+/* ── Accent palette ───────────────────────────────────────── */
 :root {
   --accent-h: 43;
   --accent-s: 96%;
@@ -20,14 +18,12 @@
   --color-accent-800: hsl(22, 82%, 26%);
   --color-accent-900: hsl(22, 79%, 20%);
 
-  /* ── Semantic accent shortcuts (dark mode) ── */
   --accent:           var(--color-accent-400);
   --accent-hover:     var(--color-accent-300);
   --accent-bg:        hsla(var(--accent-h), var(--accent-s), 56%, 0.07);
   --accent-border:    hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --accent-text:      var(--color-accent-400);
 
-  /* ── Surface & text (dark mode) ── */
   --bg-primary:       hsl(240, 10%, 6%);
   --bg-secondary:     hsl(240, 9%, 9%);
   --bg-tertiary:      hsl(240, 11%, 12%);
@@ -42,7 +38,6 @@
   --border-normal:    hsla(0, 0%, 100%, 0.11);
   --border-strong:    hsla(0, 0%, 100%, 0.19);
 
-  /* ── Nav-specific tokens ── */
   --nav-bg:                hsla(240, 10%, 6%, 0.7);
   --nav-logo-color:        hsl(240, 11%, 96%);
   --nav-text-idle:         hsl(240, 9%, 66%);
@@ -52,10 +47,9 @@
   --nav-btn-hover-border:  hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --nav-btn-hover-color:   hsl(var(--accent-h), var(--accent-s), 56%);
 
-  /* ── Typography scale ── */
-  --font-display:    'Outfit', system-ui, sans-serif;
-  --font-body:       'Inter', system-ui, sans-serif;
-  --font-mono:       'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
   --text-xs:    11px;
   --text-sm:    13px;
@@ -65,7 +59,6 @@
   --text-2xl:   32px;
   --text-3xl:   46px;
 
-  /* ── Spacing ── */
   --sp-xs:   4px;
   --sp-sm:   8px;
   --sp-md:   16px;
@@ -73,18 +66,16 @@
   --sp-xl:   48px;
   --sp-2xl:  80px;
 
-  /* ── Radius ── */
   --radius-sm:   6px;
   --radius-md:   10px;
   --radius-lg:   14px;
   --radius-xl:   20px;
   --radius-pill: 9999px;
 
-  /* ── Accessibility ── */
   --font-scale: 1;
 }
 
-/* ── Light mode overrides ─────────────────────────────────── */
+/* ── Light mode ───────────────────────────────────────────── */
 :root.light {
   --accent:           var(--color-accent-600);
   --accent-hover:     var(--color-accent-700);
@@ -116,7 +107,7 @@
   --nav-btn-hover-color:   hsl(22, 82%, 26%);
 }
 
-/* ── High contrast override ───────────────────────────────── */
+/* ── High contrast ────────────────────────────────────────── */
 :root.hc {
   --text-secondary: var(--text-primary);
   --text-muted:     var(--text-secondary);
@@ -124,7 +115,7 @@
   --nav-text-idle:  var(--nav-logo-color);
 }
 
-/* ── Base reset ───────────────────────────────────────────── */
+/* ── Reset ────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -134,11 +125,18 @@
 html {
   font-size: calc(var(--text-base) * var(--font-scale));
   -webkit-text-size-adjust: 100%;
+  /* FIX DELAY: scroll-behavior solo en anclas internas, nunca en navegación entre páginas */
+  scroll-behavior: auto;
+}
+
+/* Smooth solo para anclas dentro de la misma página */
+html:focus-within {
   scroll-behavior: smooth;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  html:focus-within { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -156,14 +154,12 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ── Focus visible (keyboard nav) ────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
 
-/* ── Skip link (screen readers / keyboard) ───────────────── */
 .skip-link {
   position: absolute;
   top: -60px;
@@ -181,7 +177,7 @@ body {
 }
 .skip-link:focus { top: var(--sp-md); }
 
-/* ── Typography base ─────────────────────────────────────── */
+/* ── Tipografía ───────────────────────────────────────────── */
 h1, h2, h3, h4 { font-family: var(--font-display); color: var(--text-primary); line-height: 1.1; }
 h1 { font-size: calc(var(--text-3xl) * var(--font-scale)); font-weight: 800; letter-spacing: -2px; }
 h2 { font-size: calc(var(--text-2xl) * var(--font-scale)); font-weight: 700; letter-spacing: -1px; }
@@ -191,10 +187,9 @@ h4 { font-size: calc(var(--text-sm)  * var(--font-scale)); font-weight: 500; let
 p { color: var(--text-secondary); line-height: 1.75; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hover); }
-
 em { font-style: normal; color: var(--accent); }
 
-/* ── Utility classes ─────────────────────────────────────── */
+/* ── Utilidades ───────────────────────────────────────────── */
 .label {
   display: block;
   font-size: var(--text-xs);
@@ -225,7 +220,7 @@ em { font-style: normal; color: var(--accent); }
   margin-bottom: var(--sp-lg);
 }
 
-/* ── Grid layouts ────────────────────────────────────────── */
+/* ── Grillas ──────────────────────────────────────────────── */
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-md); align-items: stretch; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-md); }
 .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
@@ -234,7 +229,7 @@ em { font-style: normal; color: var(--accent); }
   .grid-2, .grid-4 { grid-template-columns: 1fr; }
 }
 
-/* ── Card base ───────────────────────────────────────────── */
+/* ── Card ─────────────────────────────────────────────────── */
 .card {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
@@ -247,19 +242,16 @@ em { font-style: normal; color: var(--accent); }
 .card:hover { border-color: var(--border-normal); }
 
 .card-icon {
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   border-radius: var(--radius-sm);
   background: var(--accent-bg);
   border: 0.5px solid var(--accent-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   font-size: 16px;
   margin-bottom: var(--sp-md);
 }
 
-/* ── Tags ────────────────────────────────────────────────── */
+/* ── Tags ─────────────────────────────────────────────────── */
 .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: var(--sp-sm); }
 .tag {
   padding: 3px 10px;
@@ -280,48 +272,31 @@ em { font-style: normal; color: var(--accent); }
   color: #FBBF24;
 }
 
-/* ── Buttons ─────────────────────────────────────────────── */
+/* ── Botones ──────────────────────────────────────────────── */
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-sm);
   padding: 13px 24px;
-  background: var(--accent);
-  color: #0D0D10;
-  border: none;
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
+  background: var(--accent); color: #0D0D10;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600;
+  cursor: pointer; text-decoration: none;
   transition: background 0.15s ease;
 }
 .btn-primary:hover { background: var(--accent-hover); color: #0D0D10; }
 
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-sm);
   padding: 13px 24px;
-  background: transparent;
-  color: var(--text-primary);
-  border: 0.5px solid var(--border-normal);
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
+  background: transparent; color: var(--text-primary);
+  border: 0.5px solid var(--border-normal); border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500;
+  cursor: pointer; text-decoration: none;
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 .btn-secondary:hover { border-color: var(--accent-border); color: var(--accent-text); }
 
-/* ── Hero ────────────────────────────────────────────────── */
-.hero {
-  text-align: center;
-  padding: var(--sp-xl) 0 var(--sp-xl);
-}
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero { text-align: center; padding: var(--sp-xl) 0; }
 .hero h1 { margin-bottom: var(--sp-md); }
 .hero-sub {
   font-size: calc(var(--text-base) * var(--font-scale));
@@ -330,18 +305,11 @@ em { font-style: normal; color: var(--accent); }
   margin: 0 auto var(--sp-lg);
   line-height: 1.8;
 }
-.cta-row {
-  display: flex;
-  gap: var(--sp-sm);
-  justify-content: center;
-  flex-wrap: wrap;
-}
+.cta-row { display: flex; gap: var(--sp-sm); justify-content: center; flex-wrap: wrap; }
 
-/* ── Page container ──────────────────────────────────────── */
+/* ── Contenedor ───────────────────────────────────────────── */
 .page-container {
   max-width: 960px;
   margin: 0 auto;
   padding: var(--sp-xl) var(--sp-lg);
 }
-
-
