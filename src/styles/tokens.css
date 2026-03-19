@@ -1,3 +1,6 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/outfit';
+
 /* ============================================================
    DESIGN TOKENS — src/styles/tokens.css
    ============================================================ */
@@ -32,7 +35,7 @@
 
   --text-primary:     hsl(240, 11%, 96%);
   --text-secondary:   hsl(240, 9%, 60%);
-  --text-muted:       hsl(240, 6%, 35%);
+  --text-muted:       hsl(240, 6%, 55%);
 
   --border-subtle:    hsla(0, 0%, 100%, 0.06);
   --border-normal:    hsla(0, 0%, 100%, 0.11);
@@ -47,8 +50,8 @@
   --nav-btn-hover-border:  hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --nav-btn-hover-color:   hsl(var(--accent-h), var(--accent-s), 56%);
 
-  --font-display: 'Outfit', system-ui, sans-serif;
-  --font-body:    'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit Variable', system-ui, sans-serif;
+  --font-body:    'Inter Variable', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
   --text-xs:    11px;

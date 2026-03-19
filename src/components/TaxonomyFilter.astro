@@ -22,24 +22,24 @@ const { categories, tags, activeCategory, activeTag } = Astro.props;
         data-en="Categories"
         data-es="Categorías"
       >Categorías</span>
-      <div class="taxonomy__pills" role="list">
-        <a
+      <ul class="taxonomy__pills">
+        <li><a
           href="/blog"
           class={`taxonomy__pill ${!activeCategory && !activeTag ? 'taxonomy__pill--active' : ''}`}
-          role="listitem"
           aria-current={!activeCategory && !activeTag ? 'page' : undefined}
           data-en="All"
           data-es="Todos"
-        >Todos</a>
+        >Todos</a></li>
         {categories.map((cat) => (
-          <a
-            href={`/blog/categoria/${cat}`}
-            class={`taxonomy__pill ${activeCategory === cat ? 'taxonomy__pill--active' : ''}`}
-            role="listitem"
-            aria-current={activeCategory === cat ? 'page' : undefined}
-          >{cat}</a>
+          <li>
+            <a
+              href={`/blog/categoria/${cat}`}
+              class={`taxonomy__pill ${activeCategory === cat ? 'taxonomy__pill--active' : ''}`}
+              aria-current={activeCategory === cat ? 'page' : undefined}
+            >{cat}</a>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )}
 
@@ -50,16 +50,17 @@ const { categories, tags, activeCategory, activeTag } = Astro.props;
         data-en="Tags"
         data-es="Etiquetas"
       >Etiquetas</span>
-      <div class="taxonomy__pills" role="list">
+      <ul class="taxonomy__pills">
         {tags.map((tag) => (
-          <a
-            href={`/blog/etiqueta/${tag}`}
-            class={`taxonomy__pill taxonomy__pill--tag ${activeTag === tag ? 'taxonomy__pill--active' : ''}`}
-            role="listitem"
-            aria-current={activeTag === tag ? 'page' : undefined}
-          >{tag}</a>
+          <li>
+            <a
+              href={`/blog/etiqueta/${tag}`}
+              class={`taxonomy__pill taxonomy__pill--tag ${activeTag === tag ? 'taxonomy__pill--active' : ''}`}
+              aria-current={activeTag === tag ? 'page' : undefined}
+            >{tag}</a>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )}
 
@@ -94,6 +95,13 @@ const { categories, tags, activeCategory, activeTag } = Astro.props;
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .taxonomy__pills li {
+    display: contents; /* CRITICO: preserva layout flex; el <li> es invisible para layout */
   }
 
   .taxonomy__pill {

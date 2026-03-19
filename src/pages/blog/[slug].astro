@@ -21,10 +21,10 @@ const postUrl = `${siteUrl}/blog/${post.slug}`;
 const authorName = 'Nicolás Hruszczak';
 const pubDateISO = post.data.pubDate.toISOString();
 
-// JSON-LD: Article schema
-const articleJsonLd = {
+// JSON-LD: TechArticle (dateModified = pubDate hasta que exista updatedDate en Zod del blog)
+const jsonLdArticle = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': 'TechArticle',
   headline: post.data.title,
   description: post.data.description,
   datePublished: pubDateISO,
@@ -35,18 +35,19 @@ const articleJsonLd = {
     url: siteUrl,
   },
   publisher: {
-    '@type': 'Person',
-    name: authorName,
+    '@type': 'Organization',
+    name: 'escalatunegocioconia.com',
     url: siteUrl,
   },
-  mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': postUrl,
-  },
-  keywords: post.data.tags.join(', '),
-  articleSection: post.data.category,
-  inLanguage: 'es-AR',
   url: postUrl,
+  inLanguage: 'es-AR',
+  keywords: post.data.tags.join(', '),
+  ...(post.data.readingTime != null && {
+    timeRequired: `PT${post.data.readingTime}M`,
+  }),
+  ...(post.data.coverImage && {
+    image: `${siteUrl}${post.data.coverImage}`,
+  }),
 };
 
 // JSON-LD: BreadcrumbList schema
@@ -103,8 +104,8 @@ const related = allPosts
 >
   <!-- JSON-LD inyectado en el <head> via slot -->
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdArticle)} />
     <!-- Open Graph adicionales para artículos -->
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content={pubDateISO} />

@@ -54,7 +54,13 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
         activeCategory={category}
       />
 
-      <section class="section" aria-label="Artículos">
+      <section class="section" aria-labelledby="posts-heading">
+        <h2
+          id="posts-heading"
+          class="posts-section-title"
+          data-en={`Articles in ${category}`}
+          data-es={`Artículos en ${category}`}
+        >Artículos en {category}</h2>
         <div class="posts-grid">
           {posts.map((post) => <BlogCard post={post} />)}
         </div>
@@ -77,6 +83,12 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 </Layout>
 
 <style>
+  .posts-section-title {
+    font-size: calc(var(--text-xl) * var(--font-scale));
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: var(--sp-lg);
+  }
   .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--sp-md); }
   .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
   .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }

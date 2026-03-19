@@ -14,39 +14,35 @@ const { activePage = 'home' } = Astro.props;
     </a>
 
     <!-- Links centro (desktop) — siempre en el DOM para SEO -->
-    <div class="nav-tabs" role="list">
-      <a
+    <ul class="nav-tabs">
+      <li><a
         href="/"
         class={`nav-tab ${activePage === 'home' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'home' ? 'page' : undefined}
         data-en="Home" data-es="Inicio"
-      >Inicio</a>
+      >Inicio</a></li>
 
-      <a
+      <li><a
         href="/servicios"
         class={`nav-tab ${activePage === 'servicios' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'servicios' ? 'page' : undefined}
         data-en="B2B Services" data-es="Servicios B2B"
-      >Servicios B2B</a>
+      >Servicios B2B</a></li>
 
-      <a
+      <li><a
         href="/blog"
         class={`nav-tab ${activePage === 'blog' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'blog' ? 'page' : undefined}
         data-en="Blog" data-es="Blog"
-      >Blog</a>
+      >Blog</a></li>
 
-      <a
+      <li><a
         href="/talento"
         class={`nav-tab ${activePage === 'talento' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'talento' ? 'page' : undefined}
         data-en="Profile" data-es="Perfil profesional"
-      >Perfil profesional</a>
-    </div>
+      >Perfil profesional</a></li>
+    </ul>
 
     <!-- Derecha desktop: controles + CTA -->
     <div class="nav-right">
@@ -122,39 +118,35 @@ const { activePage = 'home' } = Astro.props;
     aria-label="Menú de navegación"
     aria-hidden="true"
   >
-    <div class="drawer-links" role="list">
-      <a
+    <ul class="drawer-links">
+      <li><a
         href="/"
         class={`drawer-link ${activePage === 'home' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'home' ? 'page' : undefined}
         data-en="Home" data-es="Inicio"
-      >Inicio</a>
+      >Inicio</a></li>
 
-      <a
+      <li><a
         href="/servicios"
         class={`drawer-link ${activePage === 'servicios' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'servicios' ? 'page' : undefined}
         data-en="B2B Services" data-es="Servicios B2B"
-      >Servicios B2B</a>
+      >Servicios B2B</a></li>
 
-      <a
+      <li><a
         href="/blog"
         class={`drawer-link ${activePage === 'blog' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'blog' ? 'page' : undefined}
         data-en="Blog" data-es="Blog"
-      >Blog</a>
+      >Blog</a></li>
 
-      <a
+      <li><a
         href="/talento"
         class={`drawer-link ${activePage === 'talento' ? 'active' : ''}`}
-        role="listitem"
         aria-current={activePage === 'talento' ? 'page' : undefined}
         data-en="Profile" data-es="Perfil profesional"
-      >Perfil profesional</a>
-    </div>
+      >Perfil profesional</a></li>
+    </ul>
 
     <!-- Controles dentro del drawer -->
     <div class="drawer-controls">
@@ -268,6 +260,13 @@ const { activePage = 'home' } = Astro.props;
     gap: 3px;
     flex: 1;
     min-width: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-tabs li {
+    display: contents; /* CRITICO: preserva layout flex; el <li> es invisible para layout */
   }
 
   .nav-tab {
@@ -471,6 +470,13 @@ const { activePage = 'home' } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .drawer-links li {
+    display: contents; /* CRITICO: preserva layout flex; el <li> es invisible para layout */
   }
 
   .drawer-link {
