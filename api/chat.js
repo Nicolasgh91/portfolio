@@ -48,14 +48,16 @@ export default async function handler(req) {
   if (req.method === 'OPTIONS') return json({});
   if (req.method !== 'POST')   return json({ error: 'Method not allowed' }, 405);
 
-// ── Capa 1: origin ────────────────────────────────────────────────
-  const isDev   = process.env.VERCEL_ENV !== 'production';
+  // ── Capa 1: origin ────────────────────────────────────────────────
   const origin  = req.headers.get('origin') || '';
   const referer = req.headers.get('referer') || '';
-  const allowed = isDev || ALLOWED_ORIGINS.some(o =>
-  origin.startsWith(o) || referer.startsWith(o)
-);
-if (!allowed) return json({ error: 'Forbidden' }, 403);
+  const isLocal = origin.includes('localhost') || origin.includes('127.0.0.1');
+  const isAllowedOrigin = ALLOWED_ORIGINS.some(o =>
+    origin.startsWith(o) || referer.startsWith(o)
+  );
+  if (!isLocal && !isAllowedOrigin) {
+    return json({ error: 'Forbidden' }, 403);
+  }
 
   // ── Capa 2: rate limit ────────────────────────────────────────────
   const ip    = getIP(req);
@@ -108,7 +110,7 @@ if (!allowed) return json({ error: 'Forbidden' }, 403);
 
   // ── Llamada a Gemini ──────────────────────────────────────────────
   const GEMINI_KEY   = process.env.GEMINI_API_KEY;
-  const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
   if (!GEMINI_KEY) return json({ error: 'Config error' }, 500);
 
