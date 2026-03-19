@@ -229,33 +229,40 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
       (function() {
         const iframe = document.createElement('iframe');
         iframe.src = '/chatbot/widget/index.html';
-        iframe.setAttribute('allowtransparency', 'true')
+        iframe.setAttribute('allowtransparency', 'true');
         iframe.setAttribute('title', 'Asistente virtual');
         iframe.setAttribute('aria-label', 'Chat de asistencia');
+
+        // Arranca reducido al tamaño del botón, sin bloquear nada detrás
         iframe.style.cssText = [
           'position:fixed',
           'bottom:0',
           'right:0',
-          'width:420px',
-          'height:680px',
+          'width:80px',
+          'height:80px',
           'border:none',
           'z-index:9999',
           'background:transparent',
-          'pointer-events:none',
         ].join(';');
         document.body.appendChild(iframe);
-    
-        // Habilitar pointer-events cuando el iframe cargue
-        iframe.addEventListener('load', () => {
-          iframe.style.pointerEvents = 'all';
+
+        // Escuchar open/close desde el widget
+        window.addEventListener('message', (e) => {
+          if (e.data?.chat === 'open') {
+            iframe.style.width = '420px';
+            iframe.style.height = '680px';
+          }
+          if (e.data?.chat === 'close') {
+            iframe.style.width = '80px';
+            iframe.style.height = '80px';
+          }
         });
 
-        // Cerrar el chat al hacer click fuera del iframe
+        // Click fuera del iframe cierra el chat
         document.addEventListener('click', () => {
           try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
         });
       })();
     </script>
-
   </body>
 </html>

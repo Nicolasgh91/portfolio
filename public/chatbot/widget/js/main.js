@@ -43,6 +43,7 @@ function openChat() {
   trigger.classList.add('open');
   chatWindow.classList.add('open');
   badge.style.opacity = '0';
+  window.parent.postMessage({ chat: 'open' }, '*');
   setTimeout(() => input.focus(), 300);
 }
 
@@ -50,6 +51,7 @@ function closeChat() {
   isOpen = false;
   trigger.classList.remove('open');
   chatWindow.classList.remove('open');
+  window.parent.postMessage({ chat: 'close' }, '*');
 }
 
 trigger.addEventListener('click', () => {
