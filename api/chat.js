@@ -4,6 +4,8 @@ export const config = { runtime: 'edge' };
 const ALLOWED_ORIGINS = [
   'https://www.escalatunegocioconia.com.ar',
   'https://escalatunegocioconia.com.ar',
+  'https://www.escalatunegocioconia.com',
+  'https://escalatunegocioconia.com',
 ];
 const RATE_LIMIT       = 8;
 const RATE_WINDOW_MS   = 60_000;
