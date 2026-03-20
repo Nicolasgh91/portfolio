@@ -2,6 +2,8 @@
 import '../styles/tokens.css';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from "@vercel/speed-insights/astro"
+import Footer from '../components/Footer.astro';
+import site from '../data/site.json';
 
 interface Props {
   title: string;
@@ -70,21 +72,17 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
     <!-- Sitemap -->
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <!-- JSON-LD global: Person -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Nicolás Hruszczak",
-        "jobTitle": "Analista Funcional y Desarrollador Full Stack",
-        "description": "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
-        "url": "https://escalatunegocioconia.com",
-        "sameAs": [
-          "https://github.com/Nicolasgh91"
-        ],
-        "knowsAbout": ["Python", "Astro", "Next.js", "Inteligencia Artificial", "Agentes de IA", "Análisis de datos"]
-      }
-    </script>
+    <!-- JSON-LD global: Person (FT-06: sameAs y knowsAbout desde site.json) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": site.author.name,
+      "jobTitle": "Analista Funcional y Desarrollador Full Stack",
+      "description": "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
+      "url": site.author.siteUrl,
+      "sameAs": Object.values(site.social),
+      "knowsAbout": site.stack
+    })} />
 
     <!-- JSON-LD global: ProfessionalService -->
     <script type="application/ld+json">
@@ -126,6 +124,7 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
     <slot />
+    <Footer />
     <Analytics />
 
     <!-- Controladores globales: tema, idioma, accesibilidad -->

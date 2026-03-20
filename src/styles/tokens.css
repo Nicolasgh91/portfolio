@@ -76,6 +76,12 @@
   --radius-pill: 9999px;
 
   --font-scale: 1;
+
+  /* ── Footer ───────────────────────────────────────────── */
+  --footer-bg:        var(--bg-primary);
+  --footer-card-bg:   var(--bg-secondary);
+  --footer-glow-size: 280px;
+  --footer-col-gap:   40px;
 }
 
 /* ── Light mode ───────────────────────────────────────────── */
