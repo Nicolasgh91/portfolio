@@ -322,3 +322,5 @@ em { font-style: normal; color: var(--accent); }
   margin: 0 auto;
   padding: var(--sp-xl) var(--sp-lg);
 }
+
+@tailwind utilities;
