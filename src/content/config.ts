@@ -23,9 +23,13 @@ const services = defineCollection({
     titleEn: z.string(),
     description: z.string(),
     descriptionEn: z.string(),
+    shortDescription: z.string().optional(),
+    shortDescriptionEn: z.string().optional(),
     icon: z.string(),
     order: z.number().default(99),
-    href: z.string().optional(),   // ← agregado: link a página de detalle
+    href: z.string().optional(),
+    featured: z.boolean().default(false),
+    imageKey: z.enum(['human-ai', 'cloud-servers', 'satellite']).optional(),
   }),
 });
 
