@@ -26,14 +26,15 @@ Sitio web personal de Nicolás Hruszczak. Portfolio profesional con chatbot IA i
 
 | Capa | Tecnología | Versión | Rol |
 |------|-----------|---------|-----|
-| Framework | Astro | 4.x | SSG — genera HTML estático en build time |
-| Estilos | CSS puro + tokens | — | Sistema de diseño con variables HSL |
-| Fuentes | Inter + Outfit + JetBrains Mono | — | Cargadas desde Google Fonts |
+| Framework | Astro | 4.x | SSG con rutas estáticas y dinámicas pre-renderizadas |
+| Estilos | Tailwind + tokens CSS | — | UI híbrida con utilidades Tailwind y `src/styles/tokens.css` |
+| Fuentes | Inter Variable + Outfit Variable + JetBrains Mono | — | Self-hosted con `@fontsource-variable` + fallback de sistema |
 | IA | Gemini API (Google) | 2.x | Modelo de lenguaje del chatbot |
 | Proxy | Vercel Edge Functions | — | Protege la API key en el servidor |
 | Analytics | Vercel Analytics + Speed Insights | — | Métricas de uso y performance |
 | Deploy | Vercel | — | CDN global, preview branches, env vars |
 | CI/CD | Git → Vercel (automático) | — | Push a main = deploy en producción |
+| Contenido | Astro Content + Zod | — | Colecciones `projects`, `services`, `blog` validadas en build |
 
 ---
 
@@ -68,32 +69,34 @@ portfolio/
 ├── src/
 │   ├── assets/                        ← Imágenes procesadas por Astro
 │   │
-│   ├── components/
-│   │   └── Nav.astro                  ← Barra de navegación global
-│   │       (logo nh., links, toggle
-│   │        dark/light, toggle idioma,
-│   │        panel de accesibilidad)
+│   ├── components/                    ← UI reutilizable
+│   │   ├── Nav.astro
+│   │   ├── BlogCard.astro
+│   │   ├── ServiceCard.astro
+│   │   ├── TaxonomyFilter.astro
+│   │   └── ContactForm.astro
 │   │
-│   ├── content/                       ← Colección de artículos del blog
-│   │   └── blog/
-│   │       └── *.md                   ← Artículos en Markdown
+│   ├── content/                       ← Datos de dominio (MDX) tipados con Zod
+│   │   ├── config.ts                  ← Schemas: projects/services/blog
+│   │   ├── blog/*.mdx
+│   │   ├── services/*.mdx
+│   │   └── projects/*.mdx
 │   │
 │   ├── layouts/
-│   │   └── Layout.astro               ← Layout base de todas las páginas
-│   │       (head, SEO, JSON-LD,
-│   │        fuentes, tema, idioma,
-│   │        accesibilidad, chatbot)
+│   │   └── Layout.astro               ← Head global, metadata base y scripts globales
 │   │
 │   ├── pages/
-│   │   ├── index.astro                ← Home / landing principal
-│   │   ├── servicios.astro            ← Página de servicios
-│   │   ├── talento.astro              ← Página de perfil / CV
-│   │   ├── blog/
-│   │   │   └── index.astro            ← Listado del blog
-│   │   └── sitemap.xml.ts             ← Sitemap dinámico
+│   │   ├── index.astro
+│   │   ├── servicios.astro
+│   │   ├── talento.astro
+│   │   ├── blog/index.astro
+│   │   ├── blog/[slug].astro
+│   │   ├── blog/categoria/[category].astro
+│   │   ├── blog/etiqueta/[tag].astro
+│   │   └── sitemap.xml.ts
 │   │
 │   ├── styles/
-│   │   └── tokens.css                 ← Sistema de tokens CSS (fuente de verdad)
+│   │   └── tokens.css                 ← Tokens de diseño + imports de fuentes self-hosted
 │   │
 │   └── env.d.ts                       ← Tipado de variables de entorno
 │
@@ -103,7 +106,7 @@ portfolio/
 ├── .gitignore
 ├── astro.config.mjs                   ← Configuración de Astro
 ├── package.json
-├── tailwind.config.mjs                ← Config de Tailwind (si aplica)
+├── tailwind.config.mjs                ← Config de Tailwind
 └── README.md                          ← Este archivo
 ```
 
@@ -301,8 +304,18 @@ educación y proyectos anteriores.
 
 ### `pages/blog/index.astro` — Blog
 
-Listado de artículos técnicos. Los artículos viven en `src/content/blog/`
-como archivos Markdown con frontmatter.
+Listado de artículos técnicos consumidos desde `getCollection('blog')`.
+Los artículos viven en `src/content/blog/*.mdx` y validan frontmatter con Zod.
+
+### `pages/blog/[slug].astro` — Detalle de artículo
+
+Renderiza cada post técnico con SEO específico por entrada (metadata dinámica y
+JSON-LD de tipo `TechArticle` + `BreadcrumbList`).
+
+### `pages/blog/categoria/[category].astro` y `pages/blog/etiqueta/[tag].astro`
+
+Rutas dinámicas para taxonomías del blog, generadas con `getStaticPaths`,
+orientadas a navegación temática y cobertura SEO long-tail.
 
 ### `components/Nav.astro` — Navegación
 
@@ -764,7 +777,7 @@ un deploy anterior → Promote to Production.
 
 ### JSON-LD estructurado
 
-`Layout.astro` incluye dos bloques JSON-LD en todas las páginas:
+`Layout.astro` incluye dos bloques JSON-LD globales en todas las páginas:
 
 **Person:**
 ```json
@@ -787,6 +800,11 @@ un deploy anterior → Promote to Production.
   "serviceType": ["Desarrollo de software", "Automatización con IA", "SEO/GEO"]
 }
 ```
+
+En `src/pages/blog/[slug].astro` se inyecta además JSON-LD específico por artículo:
+
+- `TechArticle` (headline, description, datePublished, tags, timeRequired opcional)
+- `BreadcrumbList` para reforzar contexto semántico de navegación
 
 ### Open Graph y Twitter Card
 
@@ -829,10 +847,28 @@ El sitio implementa WCAG 2.1 AA. Características:
 
 ### Agregar un artículo del blog
 
-1. Crear el archivo Markdown en `src/content/blog/nuevo-articulo.md`
-   con el frontmatter requerido
+1. Crear el archivo MDX en `src/content/blog/nuevo-articulo.mdx`
+   con frontmatter válido según `src/content/config.ts` (`blog` collection).
 2. Agregar la entrada al índice en `public/chatbot/data/articles.json`
+   (si aplica para recuperación contextual del chatbot).
 3. Hacer commit y push
+
+### Agregar o actualizar servicios/proyectos de contenido
+
+1. Editar o crear archivos en `src/content/services/*.mdx` o
+   `src/content/projects/*.mdx`.
+2. Validar que el frontmatter respete los schemas de `src/content/config.ts`.
+3. Hacer commit y push.
+
+---
+
+### Estado actual y deuda priorizada
+
+El estado arquitectónico vigente, brechas técnicas y roadmap corto (30-45 días)
+se mantiene en `backlog/documentacion-arquitectura-actual.md`.
+
+Este README resume operación y mantenimiento; para decisiones de evolución
+arquitectónica, usar ese documento como fuente primaria.
 
 ### Actualizar información de contacto
 
