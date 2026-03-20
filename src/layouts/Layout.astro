@@ -197,6 +197,7 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
 
         setReducedMotion(on) {
           this.motionReduced = on;
+          document.documentElement.classList.toggle('no-motion', on);
           let style = document.getElementById('nh-no-motion');
           if (on) {
             if (!style) {
