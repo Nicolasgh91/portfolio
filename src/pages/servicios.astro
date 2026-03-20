@@ -9,6 +9,26 @@ import ServiceCard from '../components/ServiceCard.astro';
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
+
+// Precios desde variables de entorno (actualizables sin tocar el código)
+const prices: Record<string, { price?: string; priceUnit?: string }> = {
+  'ia-agents': {
+    price: import.meta.env.PUBLIC_PRICE_IA_AGENTS,
+    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_IA_AGENTS,
+  },
+  'local-llms': {
+    price: import.meta.env.PUBLIC_PRICE_LOCAL_LLMS,
+    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_LOCAL_LLMS,
+  },
+  'ecommerce-platforms': {
+    price: import.meta.env.PUBLIC_PRICE_ECOMMERCE,
+    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_ECOMMERCE,
+  },
+  'workflow-automation': {
+    price: import.meta.env.PUBLIC_PRICE_AUTOMATION,
+    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_AUTOMATION,
+  },
+};
 ---
 
 <Layout
@@ -99,19 +119,23 @@ const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
           >Cuatro ejes de intervención con impacto directo en la operación.</p>
         </div>
 
-      <div class="grid-4">
-        {sortedServices.map((service) => (
-          <ServiceCard service={{
-            title: service.data.title,
-            titleEn: service.data.titleEn,
-            description: service.data.description,
-            descriptionEn: service.data.descriptionEn,
-            icon: service.data.icon,
-            href: service.data.href,
-            roiFocus: service.data.roiFocus,
-            priceFrom: service.data.priceFrom,
-          }} />
-        ))}
+      <div class="services-carousel" id="services-carousel">
+        {sortedServices.map((service) => {
+          const priceData = prices[service.slug] ?? {};
+          return (
+            <ServiceCard service={{
+              title: service.data.title,
+              titleEn: service.data.titleEn,
+              shortDescription: service.data.shortDescription ?? service.data.description,
+              shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+              imageKey: service.data.imageKey,
+              featured: service.data.featured,
+              href: service.data.href,
+              price: priceData.price,
+              priceUnit: priceData.priceUnit,
+            }} />
+          );
+        })}
       </div>
       </section>
 
@@ -268,6 +292,40 @@ const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
     </div>
   </main>
 
+  <!-- Script: drag-to-scroll para el carrusel de servicios -->
+  <script>
+    const carousel = document.getElementById('services-carousel');
+    if (carousel) {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      carousel.addEventListener('mousedown', (e) => {
+        isDown = true;
+        carousel.classList.add('is-dragging');
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.classList.remove('is-dragging');
+      });
+
+      carousel.addEventListener('mouseleave', () => {
+        isDown = false;
+        carousel.classList.remove('is-dragging');
+      });
+
+      carousel.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
+      });
+    }
+  </script>
+
   <!-- Footer -->
   <footer class="site-footer">
     <div class="page-container footer-inner">
@@ -364,4 +422,22 @@ const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 
   .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
   .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }
+
+  /* ── Carrusel de servicios ───────────────────────────────── */
+  .services-carousel {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    /* padding para que la sombra hover no quede cortada */
+    padding-bottom: 12px;
+    padding-top: 4px;
+    /* ocultar scrollbar visualmente */
+    scrollbar-width: none;
+  }
+  .services-carousel::-webkit-scrollbar { display: none; }
+  .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
 </style>

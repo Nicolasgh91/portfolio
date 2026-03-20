@@ -1,29 +1,44 @@
 ---
 // ServiceCard.astro
-// Tarjeta de catálogo de servicios B2B
-// Hover: barra lateral amber que crece + glow radial cálido
+// Tarjeta de catálogo de servicios B2B — rediseñada
+// Layout: imagen contextual + overlay gradiente + precio desde env + badge "Más elegido"
+// Hover: barra lateral amber que crece + glow radial + image scale + CTA reveal
 // Uso: <ServiceCard service={service} />
+
+import { Image } from 'astro:assets';
+import humanAi from '../assets/blog/human-ai.webp';
+import cloudServers from '../assets/blog/cloud-servers.webp';
+import satellite from '../assets/blog/satellite.webp';
 
 interface Props {
   service: {
     title: string;
     titleEn?: string;
-    description: string;
-    descriptionEn?: string;
-    icon?: string;
+    shortDescription: string;
+    shortDescriptionEn?: string;
     href?: string;
-    roiFocus?: string;
-    priceFrom?: string;
+    imageKey?: 'human-ai' | 'cloud-servers' | 'satellite';
+    featured?: boolean;
+    price?: string;
+    priceUnit?: string;
   };
 }
 
 const { service } = Astro.props;
 
+const imageMap = {
+  'human-ai': humanAi,
+  'cloud-servers': cloudServers,
+  'satellite': satellite,
+} as const;
+
+const imageSrc = service.imageKey ? imageMap[service.imageKey] : humanAi;
+
 const El = service.href ? 'a' : 'div';
 ---
 
 <El
-  class="group relative flex h-full cursor-pointer flex-col gap-3 overflow-hidden rounded-xl border border-white/10 bg-slate-800 px-5 py-6 text-left no-underline transition-all duration-300 ease-out hover:-translate-y-1 hover:border-orange-500/35 hover:shadow-[0_16px_40px_-8px_rgba(245,158,11,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500"
+  class:list={['service-card', service.featured && 'service-card--featured']}
   href={service.href ?? undefined}
   aria-label={service.href ? service.title : undefined}
 >
@@ -37,49 +52,326 @@ const El = service.href ? 'a' : 'div';
     aria-hidden="true"
   ></span>
 
-  {service.icon && (
-    <div class="relative z-[1] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-lg transition-all duration-300 group-hover:scale-105 group-hover:bg-orange-500/20" aria-hidden="true">
-      {service.icon}
-    </div>
-  )}
+  <!-- ZONA IMAGEN -->
+  <div class="service-card__media" aria-hidden="true">
+    <Image
+      src={imageSrc}
+      alt=""
+      width={560}
+      height={280}
+      loading="lazy"
+      class="service-card__img"
+    />
+    <!-- Gradiente que funde la imagen con el fondo de la tarjeta -->
+    <div class="service-card__media-fade"></div>
+    <!-- Badge "Más elegido" -->
+    {service.featured && (
+      <span
+        class="service-card__badge"
+        data-en="Most chosen"
+        data-es="Más elegido"
+        aria-label="Servicio más elegido"
+      >
+        Más elegido
+      </span>
+    )}
+  </div>
 
-  <h3
-    class="relative z-[1] text-sm font-bold leading-[1.35] text-slate-100 transition-colors duration-200 group-hover:text-white"
-    data-en={service.titleEn ?? service.title}
-    data-es={service.title}
-  >
-    {service.title}
-  </h3>
+  <!-- ZONA CONTENIDO -->
+  <div class="service-card__body">
 
-  <p
-    class="relative z-[1] flex-1 text-[13px] leading-relaxed text-slate-300"
-    data-en={service.descriptionEn ?? service.description}
-    data-es={service.description}
-  >
-    {service.description}
-  </p>
+    <!-- Título -->
+    <h3
+      class="service-card__title"
+      data-en={service.titleEn ?? service.title}
+      data-es={service.title}
+    >
+      {service.title}
+    </h3>
 
-  {service.roiFocus && (
-    <p class="relative z-[1] mt-1 border-l-2 border-orange-500 bg-orange-500/10 p-3 text-sm leading-relaxed text-slate-300">
-      {service.roiFocus}
+    <!-- Descripción corta (2 líneas) -->
+    <p
+      class="service-card__desc"
+      data-en={service.shortDescriptionEn ?? service.shortDescription}
+      data-es={service.shortDescription}
+    >
+      {service.shortDescription}
     </p>
-  )}
 
-  {(service.priceFrom || service.href) && (
-    <div class="relative z-[1] mt-2 flex items-center justify-between gap-3">
-      {service.priceFrom ? (
-        <span class="text-sm font-semibold text-orange-400">{service.priceFrom}</span>
-      ) : (
-        <span aria-hidden="true"></span>
-      )}
-      {service.href && (
-        <span class="inline-flex translate-x-[-4px] items-center gap-1 text-xs font-semibold text-orange-500 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" aria-hidden="true">
-          Ver más
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-          </svg>
-        </span>
-      )}
-    </div>
-  )}
+    <!-- Bloque de precio -->
+    {service.price && (
+      <div class="service-card__price-block">
+        <span
+          class="service-card__price-label"
+          data-en="From"
+          data-es="Desde"
+        >Desde</span>
+        <div class="service-card__price-row">
+          <span class="service-card__price-value">${service.price}</span>
+          {service.priceUnit && (
+            <span class="service-card__price-unit">{service.priceUnit}</span>
+          )}
+        </div>
+      </div>
+    )}
+
+    <!-- CTA inline solo si tiene href -->
+    {service.href && (
+      <span class="service-card__cta" aria-hidden="true">
+        <span data-en="See detail" data-es="Ver detalle">Ver detalle</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </span>
+    )}
+
+  </div>
 </El>
+
+<style>
+  /* ─────────────────────────────────────────
+     BASE
+  ───────────────────────────────────────── */
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+    max-width: 300px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 300ms ease,
+      box-shadow 320ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     BARRA LATERAL
+     Crece desde el centro en vertical al hover
+  ───────────────────────────────────────── */
+  .service-card__bar {
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: #f59e0b;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 2;
+  }
+
+  /* ─────────────────────────────────────────
+     GLOW RADIAL
+     Ilumina desde la izquierda
+  ───────────────────────────────────────── */
+  .service-card__glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: radial-gradient(
+      ellipse at 0% 50%,
+      rgba(245, 158, 11, 0.09) 0%,
+      transparent 65%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms ease;
+    z-index: 1;
+  }
+
+  /* ─────────────────────────────────────────
+     IMAGEN
+  ───────────────────────────────────────── */
+  .service-card__media {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .service-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Gradiente que funde imagen con fondo de la tarjeta */
+  .service-card__media-fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 30%,
+      rgba(31, 41, 55, 0.65) 65%,
+      #1f2937 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────
+     BADGE "Más elegido"
+  ───────────────────────────────────────── */
+  .service-card__badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f59e0b;
+    color: #111827;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    z-index: 3;
+  }
+
+  /* ─────────────────────────────────────────
+     BODY
+  ───────────────────────────────────────── */
+  .service-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 18px 20px;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─────────────────────────────────────────
+     TÍTULO — max 2 líneas
+  ───────────────────────────────────────── */
+  .service-card__title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #f3f4f6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 200ms ease;
+  }
+
+  /* ─────────────────────────────────────────
+     DESCRIPCIÓN — max 2 líneas
+  ───────────────────────────────────────── */
+  .service-card__desc {
+    font-size: 0.8125rem;
+    color: #9ca3af;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  /* ─────────────────────────────────────────
+     BLOQUE DE PRECIO
+  ───────────────────────────────────────── */
+  .service-card__price-block {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .service-card__price-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .service-card__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .service-card__price-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #f59e0b;
+  }
+
+  .service-card__price-unit {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  /* ─────────────────────────────────────────
+     CTA INLINE
+  ───────────────────────────────────────── */
+  .service-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #f59e0b;
+    margin-top: 2px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity 260ms ease 40ms,
+      transform 260ms ease 40ms;
+  }
+
+  /* ─────────────────────────────────────────
+     HOVER — todos los efectos juntos
+  ───────────────────────────────────────── */
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 158, 11, 0.35);
+    box-shadow:
+      0 16px 40px -8px rgba(245, 158, 11, 0.12),
+      0 0 0 1px rgba(245, 158, 11, 0.10);
+  }
+
+  .service-card:hover .service-card__bar {
+    transform: scaleY(1);
+  }
+
+  .service-card:hover .service-card__glow {
+    opacity: 1;
+  }
+
+  .service-card:hover .service-card__img {
+    transform: scale(1.06);
+  }
+
+  .service-card:hover .service-card__title {
+    color: #ffffff;
+  }
+
+  .service-card:hover .service-card__cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─────────────────────────────────────────
+     FOCUS visible (accesibilidad teclado)
+  ───────────────────────────────────────── */
+  .service-card:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 3px;
+  }
+</style>
