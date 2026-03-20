@@ -19,6 +19,7 @@ interface Props {
       pubDate: Date;
       category: string;
       tags: string[];
+      vertical?: 'alimentos' | 'inmobiliaria' | 'salud' | 'ecommerce' | 'transversal';
       readingTime?: number;
       coverImage?: string;
       coverAlt?: string;
@@ -177,8 +178,11 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     </p>
 
     <!-- Tags (máximo 3) -->
-    {post.data.tags.length > 0 && (
+    {(post.data.vertical || post.data.tags.length > 0) && (
       <div class="blog-card__tags">
+        {post.data.vertical && (
+          <span class="blog-card__vertical">{post.data.vertical}</span>
+        )}
         {post.data.tags.slice(0, 3).map((tag) => (
           <a
             href={`/blog/etiqueta/${tag}`}
@@ -368,6 +372,17 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     display: inline-flex;
     align-items: center;
     gap: 3px;
+  }
+
+  .blog-card__vertical {
+    font-size: 0.625rem;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.15);
+    color: #fdba74;
+    text-transform: lowercase;
+    line-height: 1.3;
   }
 
   /* ─────────────────────────────────────────

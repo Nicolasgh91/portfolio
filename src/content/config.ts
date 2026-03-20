@@ -26,6 +26,8 @@ const services = defineCollection({
     icon: z.string(),
     order: z.number().default(99),
     href: z.string().optional(),   // ← agregado: link a página de detalle
+    roiFocus: z.string().optional(),
+    priceFrom: z.string().optional(),
   }),
 });
 

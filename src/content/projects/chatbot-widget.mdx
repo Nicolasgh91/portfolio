@@ -1,0 +1,28 @@
+---
+title: "Chatbot widget serverless"
+description: "Caso de estudio de un motor de chatbot serverless con proxy inverso, control de cuota y resguardo de credenciales para uso en produccion."
+descriptionEn: "Case study of a serverless chatbot engine with reverse proxy, quota control, and credential hardening for production use."
+status: "completed"
+tags: ["FastAPI", "Vercel Edge", "Gemini", "Seguridad"]
+icon: "🛡️"
+order: 3
+featured: false
+---
+
+Este proyecto documenta una arquitectura orientada a produccion para exponer capacidades de IA sin comprometer seguridad, costos ni experiencia de usuario.
+
+## Proxy inverso para desacoplar proveedor
+
+El cliente web nunca llama al proveedor de IA de forma directa. Toda solicitud pasa por una capa intermedia que normaliza payloads, aplica politicas y encapsula la dependencia externa para evitar lock-in tecnico.
+
+## Rate limiting y manejo de 429
+
+Se aplica limitacion de tasa por ventana y origen para proteger costos y disponibilidad. Cuando se alcanza el umbral, la API responde `HTTP 429` con un mensaje util y el frontend activa un fallback elegante para no cortar el flujo comercial.
+
+## Seguridad de API keys
+
+Las claves viven solo en entorno de servidor y no se exponen al navegador. El proxy valida entrada, recorta superficie de ataque y centraliza auditoria de errores para detectar abuso o patrones anormales.
+
+## Resultado tecnico
+
+Una base estable para escalar asistentes conversacionales en entornos reales, con foco en confiabilidad operativa, control financiero y buenas practicas de seguridad.

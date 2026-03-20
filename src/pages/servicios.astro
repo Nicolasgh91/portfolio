@@ -108,6 +108,8 @@ const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
             descriptionEn: service.data.descriptionEn,
             icon: service.data.icon,
             href: service.data.href,
+            roiFocus: service.data.roiFocus,
+            priceFrom: service.data.priceFrom,
           }} />
         ))}
       </div>
@@ -284,7 +286,6 @@ const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
     </div>
   </footer>
 </Layout>
-
 <style>
   .faq-list { margin-top: var(--sp-xl); display: flex; flex-direction: column; gap: 2px; }
   .faq-item {
