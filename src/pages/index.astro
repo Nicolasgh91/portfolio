@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import HeroSection from '../components/HeroSection.astro';
 import { getCollection } from 'astro:content';
 
 // Obtener proyectos featured, ordenados
@@ -18,43 +19,8 @@ const featuredProjects = allProjects
   <Nav activePage="home" />
 
   <main id="main-content">
+    <HeroSection />
     <div class="page-container">
-
-      <!-- ── Hero ─────────────────────────────────────────── -->
-      <section class="hero" aria-label="Presentación">
-        <div
-          class="badge"
-          data-en="Development · Data · Artificial Intelligence"
-          data-es="Desarrollo · Datos · Inteligencia Artificial"
-        >Desarrollo · Datos · Inteligencia Artificial</div>
-
-        <h1
-          data-en='Software that <em>works</em><br>for your business.'
-          data-es='Software que <em>trabaja</em><br>para su empresa.'
-        >Software que <em>trabaja</em><br>para su empresa.</h1>
-
-        <p
-          class="hero-sub"
-          data-en="Automation, AI agents and tailor-made systems for teams seeking measurable results, not technology budgets."
-          data-es="Automatización, agentes de IA y sistemas a medida para equipos que buscan resultados medibles, no presupuestos en tecnología."
-        >Automatización, agentes de IA y sistemas a medida para equipos que buscan resultados medibles, no presupuestos en tecnología.</p>
-
-        <div class="cta-row">
-          <a
-            href="/servicios"
-            class="btn-primary"
-            data-en="Solutions for my business →"
-            data-es="Soluciones para mi empresa →"
-          >Soluciones para mi empresa →</a>
-
-          <a
-            href="/talento"
-            class="btn-secondary"
-            data-en="Talent / Recruitment →"
-            data-es="Talento / Reclutamiento →"
-          >Talento / Reclutamiento →</a>
-        </div>
-      </section>
 
       <!-- ── Stats bar ─────────────────────────────────────── -->
       <div class="stats-bar" role="list" aria-label="Estadísticas">
