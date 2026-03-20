@@ -1,7 +1,23 @@
+import { z } from 'zod';
+import { UploadSchema } from './upload';
+import { ProductSchema } from './product';
+import { OrderSchema } from './order';
+import { LeadSchema } from './lead';
+import { CustomerSchema } from './customer';
+import { BookingSchema } from './booking';
+import { EventSchema } from './event';
+
 export { UploadSchema, ALLOWED_MIME_TYPES, MAX_FILE_SIZE, MAGIC_BYTES, validateMagicBytes } from './upload';
+export type Upload = z.infer<typeof UploadSchema>;
 export { ProductSchema, ProductUpdateSchema, ProductAttributeSchema } from './product';
-export { OrderSchema, OrderItemSchema } from './order';
+export type Product = z.infer<typeof ProductSchema>;
+export { OrderSchema, OrderItemSchema, WhatsAppOrderSchema } from './order';
+export type Order = z.infer<typeof OrderSchema>;
 export { LeadSchema } from './lead';
+export type Lead = z.infer<typeof LeadSchema>;
 export { CustomerSchema, CustomerUpdateSchema } from './customer';
+export type Customer = z.infer<typeof CustomerSchema>;
 export { BookingSchema } from './booking';
+export type Booking = z.infer<typeof BookingSchema>;
 export { EventSchema } from './event';
+export type Event = z.infer<typeof EventSchema>;

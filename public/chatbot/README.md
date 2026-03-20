@@ -44,7 +44,6 @@ portfolio/
 │       │   ├── index.html        ← Estructura HTML pura (sin lógica)
 │       │   ├── chat.css          ← Todos los estilos del widget
 │       │   └── js/
-│       │       ├── theme.js      ← Sincronización dark/light con el sitio
 │       │       ├── session.js    ← Persistencia del historial
 │       │       ├── api.js        ← Carga de datos + system prompt + fetch
 │       │       ├── render.js     ← Todo lo que toca el DOM
@@ -124,8 +123,8 @@ GEMINI_MODEL=gemini-2.0-flash   # opcional, tiene fallback
 
 Solo estructura semántica. No contiene lógica ni estilos inline.
 Carga `chat.css` y los módulos JS como `type="module"`.
-El orden de los scripts importa: `theme.js` debe ejecutarse primero
-para que los tokens CSS estén disponibles antes de que el resto pinte.
+Los tokens CSS se resuelven con variables y lógica inline del propio `index.html`
+sin depender de un módulo `theme.js`.
 
 ---
 
@@ -133,10 +132,10 @@ para que los tokens CSS estén disponibles antes de que el resto pinte.
 
 Todos los estilos visuales del widget. Usa los design tokens del sitio
 (`--accent`, `--bg-primary`, `--text-primary`, `--radius-*`, etc.)
-inyectados dinámicamente por `theme.js`.
+resueltos por variables CSS del iframe.
 
-Contiene fallbacks HSL completos para cada token, por si `theme.js`
-falla (desarrollo sin iframe padre, cross-origin, etc.).
+Contiene fallbacks HSL completos para cada token por robustez
+(desarrollo sin iframe padre, cross-origin, etc.).
 
 Define 5 variables propias para el efecto glassmorphism:
 ```css
@@ -149,25 +148,6 @@ Define 5 variables propias para el efecto glassmorphism:
 
 Para cambiar colores del chatbot sin tocar el sistema de diseño del sitio,
 modificar solo estas 5 variables en `:root` y `:root.light`.
-
----
-
-### `public/chatbot/widget/js/theme.js` — Sincronización de tema
-
-Responsabilidades:
-1. Leer si el sitio padre está en modo `.light` y aplicarlo al iframe
-2. Inyectar todos los tokens CSS del padre directamente como `<style>` inline
-
-Esto elimina la dependencia de `tokens.css` como archivo externo,
-evitando el 404 en desarrollo y el flash de color incorrecto al cargar.
-
-Se ejecuta sincrónicamente antes de que el DOM pinte. También observa
-cambios en tiempo real via `MutationObserver`, por lo que el tema
-del chatbot responde instantáneamente cuando el usuario usa el toggle
-dark/light del sitio.
-
-**No requiere modificaciones salvo que cambies el nombre de las variables
-en `tokens.css` del sitio principal.**
 
 ---
 

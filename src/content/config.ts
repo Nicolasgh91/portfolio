@@ -43,6 +43,9 @@ const blog = defineCollection({
     readingTime: z.number().optional(),
     coverImage: z.string().optional(),
     coverAlt: z.string().optional(),
+    priority: z.number().min(0).max(1).default(0.5),
+    pillarSlug: z.string().optional(),
+    vertical: z.enum(['alimentos', 'inmobiliaria', 'salud', 'ecommerce', 'transversal']).default('transversal'),
   }),
 });
 

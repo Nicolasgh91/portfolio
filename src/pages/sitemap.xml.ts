@@ -15,7 +15,7 @@ export async function GET() {
 
   const blogPages = posts.map((post) => ({
     url:        `/blog/${post.slug}`,
-    priority:   '0.7',
+    priority:   String(post.data.priority ?? 0.7),
     changefreq: 'monthly',
     lastmod:    post.data.pubDate.toISOString().split('T')[0],
   }));
