@@ -34,7 +34,7 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
   title={`#${tag} — Blog técnico · Nicolás Hruszczak`}
   description={`Artículos etiquetados con ${tag}: arquitectura de software, IA aplicada y automatización para empresas.`}
 >
-  <Nav />
+  <Nav activePage="blog" />
 
   <main id="main-content">
     <div class="page-container">

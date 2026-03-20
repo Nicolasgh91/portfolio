@@ -395,6 +395,7 @@ const { activePage = 'home' } = Astro.props;
   }
 
   .nav-tab--dropdown {
+    position: relative; /* ancla el .services-menu independientemente del display del <li> padre */
     border: 0.5px solid var(--nav-idle-border);
     cursor: pointer;
     gap: 5px;
