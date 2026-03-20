@@ -27,6 +27,10 @@
   --accent-border:    hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --accent-text:      var(--color-accent-400);
 
+  /* Success — verde semántico para estados positivos y métricas */
+  --color-success: hsl(152, 43%, 55%);
+  --success-rgb: 76, 175, 125; /* para uso con rgba() en decorativos */
+
   --bg-primary:       hsl(240, 10%, 6%);
   --bg-secondary:     hsl(240, 9%, 9%);
   --bg-tertiary:      hsl(240, 11%, 12%);
@@ -91,6 +95,8 @@
   --accent-bg:        hsla(32, 94%, 44%, 0.06);
   --accent-border:    hsla(32, 94%, 44%, 0.25);
   --accent-text:      var(--color-accent-700);
+  --color-success: hsl(152, 50%, 38%);
+  --success-rgb: 76, 175, 125;
 
   --bg-primary:       hsl(60, 11%, 95%);
   --bg-secondary:     hsl(0, 0%, 100%);
@@ -322,3 +328,5 @@ em { font-style: normal; color: var(--accent); }
   margin: 0 auto;
   padding: var(--sp-xl) var(--sp-lg);
 }
+
+@tailwind utilities;

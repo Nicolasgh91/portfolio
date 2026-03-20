@@ -1,0 +1,223 @@
+---
+// Sin props requeridas. Los datos son estáticos en esta iteración.
+---
+<section
+  class="relative overflow-hidden"
+  aria-labelledby="hero-heading"
+>
+  <!-- Decorativos: aria-hidden, respetan prefers-reduced-motion vía CSS -->
+  <div
+    class="absolute inset-0 pointer-events-none z-0"
+    aria-hidden="true"
+    style="background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\");"
+  ></div>
+  <div
+    class="hero-glow absolute -top-28 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none z-0"
+    aria-hidden="true"
+    style="background: radial-gradient(ellipse, hsla(var(--accent-h), var(--accent-s), 56%, 0.08) 0%, transparent 70%);"
+  ></div>
+  <!-- Body principal -->
+  <div class="relative z-10 max-w-[960px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-6 pt-16 pb-14">
+    <!-- Columna izquierda -->
+    <div>
+      <!-- Pill de novedad -->
+      <div
+        class="inline-flex items-center gap-2 rounded-[20px] px-3 py-1.5 mb-6 border"
+        style="background: hsla(var(--accent-h), var(--accent-s), 56%, 0.08); border-color: hsla(var(--accent-h), var(--accent-s), 56%, 0.25);"
+      >
+        <span
+          class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-xl"
+          style="background: var(--color-accent-400); color: var(--bg-primary); font-family: var(--font-body);"
+        >
+          Nuevo
+        </span>
+        <span class="text-xs" style="color: var(--text-secondary);">
+          Agentes IA disponibles para tu negocio
+        </span>
+      </div>
+      <!-- H1 semántico: sin <br> forzados -->
+      <h1
+        id="hero-heading"
+        class="font-extrabold leading-[1.1] tracking-[-0.03em] mb-5 text-[32px] lg:text-[48px]"
+        style="font-family: var(--font-display); color: var(--text-primary);"
+      >
+        Software a medida para
+        <em class="not-italic" style="color: var(--color-accent-400);">multiplicar</em>
+        el ROI.
+      </h1>
+      <!-- Subtítulo -->
+      <p
+        class="text-base leading-relaxed mb-9 max-w-[420px]"
+        style="color: var(--text-secondary); font-family: var(--font-body);"
+      >
+        Reducimos costos operativos con automatización, IA y sistemas de gestión exclusivos.
+        Tu negocio deja de pagar por herramientas y empieza a cobrar por resultados.
+      </p>
+      <!-- CTAs: <a> para navegación, <button> para acción JS -->
+      <div class="flex flex-wrap items-center gap-4 mb-12">
+        <a
+          href="/contacto"
+          class="inline-block text-sm font-medium px-6 py-3 rounded-[10px] motion-safe:transition-opacity motion-safe:duration-150 hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          style="background: var(--color-accent-400); color: var(--bg-primary); font-family: var(--font-body); outline-color: var(--color-accent-400);"
+        >
+          Solicitar diagnóstico gratuito
+        </a>
+        <button
+          type="button"
+          aria-label="Ver demostración en video de cómo funciona el sistema"
+          class="inline-flex items-center gap-2 text-sm px-5 py-3 rounded-[10px] border motion-safe:transition-[border-color,color] motion-safe:duration-150 hover:border-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          style="color: var(--text-secondary); border-color: var(--border-subtle); font-family: var(--font-body); outline-color: var(--color-accent-400);"
+        >
+          <span
+            class="w-5 h-5 rounded-full flex items-center justify-center border"
+            style="background: var(--bg-tertiary); border-color: var(--border-normal);"
+            aria-hidden="true"
+          >
+            <svg width="8" height="9" viewBox="0 0 8 9" fill="none" aria-hidden="true">
+              <path d="M1 1l6 3.5L1 8V1z" fill="var(--color-accent-400)"/>
+            </svg>
+          </span>
+          Ver cómo funciona
+        </button>
+      </div>
+      <!-- Social proof -->
+      <div class="flex items-center gap-4">
+        <div class="flex" aria-hidden="true">
+          <div class="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center text-[10px] font-medium" style="background:#2a3020; color:#4caf7d; border-color: var(--bg-primary);">ML</div>
+          <div class="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center text-[10px] font-medium -ml-2" style="background:#2a2040; color:#9c7fe0; border-color: var(--bg-primary);">CR</div>
+          <div class="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center text-[10px] font-medium -ml-2" style="background:#302020; color:#e07f7f; border-color: var(--bg-primary);">PA</div>
+          <div class="w-[30px] h-[30px] rounded-full border-2 flex items-center justify-center text-[10px] font-medium -ml-2" style="background: var(--bg-tertiary); color: var(--text-muted); border-color: var(--bg-primary);">+8</div>
+        </div>
+        <p class="text-sm leading-snug" style="color: var(--text-muted); font-family: var(--font-body);">
+          <strong style="color: var(--text-secondary); font-weight: 500;">+11 empresas</strong>
+          ya redujeron sus costos<br>operativos con nuestros sistemas.
+        </p>
+      </div>
+    </div>
+    <!-- Columna derecha: visible solo en lg+ -->
+    <div class="hidden lg:block relative" aria-hidden="true">
+      <!-- Badge flotante -->
+      <div
+        class="absolute -top-3.5 -right-3.5 z-10 flex items-center gap-2 rounded-xl px-3 py-2.5 border"
+        style="background: var(--bg-secondary); border-color: var(--border-subtle);"
+      >
+        <div
+          class="w-7 h-7 rounded-lg flex items-center justify-center text-sm border"
+          style="background: rgba(var(--success-rgb, 76,175,125), 0.15); border-color: rgba(var(--success-rgb, 76,175,125), 0.25);"
+        >
+          ↑
+        </div>
+        <div class="leading-tight">
+          <div class="text-xs font-medium" style="color: var(--text-primary);">ROI este mes</div>
+          <div class="text-[10px]" style="color: var(--color-success);">+340% vs herramientas SaaS</div>
+        </div>
+      </div>
+      <!-- Dashboard mock -->
+      <div
+        class="rounded-[14px] overflow-hidden border"
+        style="background: var(--bg-secondary); border-color: var(--border-subtle);"
+      >
+        <!-- Topbar -->
+        <div
+          class="flex items-center gap-2.5 px-4 py-3 border-b"
+          style="background: var(--bg-primary); border-color: var(--border-subtle);"
+        >
+          <div class="flex gap-1.5">
+            <div class="w-2 h-2 rounded-full bg-[#ff5f56]"></div>
+            <div class="w-2 h-2 rounded-full bg-[#ffbd2e]"></div>
+            <div class="w-2 h-2 rounded-full bg-[#27c93f]"></div>
+          </div>
+          <span class="text-xs ml-1" style="color: var(--text-muted);">Panel operativo — Double Click™</span>
+        </div>
+        <!-- Cuerpo del dashboard -->
+        <div class="p-5 flex flex-col gap-4">
+          <!-- Métricas -->
+          <div class="grid grid-cols-3 gap-2.5">
+            <div class="rounded-[10px] p-3 border" style="background: var(--bg-tertiary); border-color: var(--border-subtle);">
+              <div class="text-[20px] font-bold leading-none mb-1" style="font-family: var(--font-display); color: var(--color-accent-400);">$847k</div>
+              <div class="text-[10px]" style="color: var(--text-muted);">Facturación mes</div>
+            </div>
+            <div class="rounded-[10px] p-3 border" style="background: var(--bg-tertiary); border-color: var(--border-subtle);">
+              <div class="text-[20px] font-bold leading-none mb-1" style="font-family: var(--font-display); color: var(--color-success);">+28%</div>
+              <div class="text-[10px]" style="color: var(--text-muted);">Retención clientes</div>
+            </div>
+            <div class="rounded-[10px] p-3 border" style="background: var(--bg-tertiary); border-color: var(--border-subtle);">
+              <div class="text-[20px] font-bold leading-none mb-1" style="font-family: var(--font-display); color: var(--text-primary);">142</div>
+              <div class="text-[10px]" style="color: var(--text-muted);">Reservas activas</div>
+            </div>
+          </div>
+          <!-- Gráfico de barras -->
+          <div class="rounded-[10px] p-4 border" style="background: var(--bg-tertiary); border-color: var(--border-subtle);">
+            <div class="flex justify-between items-center mb-3.5">
+              <span class="text-xs font-medium" style="color: var(--text-secondary);">Ingresos por semana</span>
+              <span
+                class="text-[10px] px-2 py-0.5 rounded-md border"
+                style="color: var(--color-success); background: rgba(76,175,125,0.1); border-color: rgba(76,175,125,0.25);"
+              >↑ 18% vs mes ant.</span>
+            </div>
+            <div class="flex items-end gap-1.5 h-[70px]">
+              {[
+                { h: '38%', type: 'semi' },
+                { h: '52%', type: 'semi' },
+                { h: '44%', type: 'semi' },
+                { h: '61%', type: 'semi' },
+                { h: '35%', type: 'base' },
+                { h: '48%', type: 'base' },
+                { h: '55%', type: 'base' },
+                { h: '82%', type: 'active' },
+              ].map((bar, i) => (
+                <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                  <div
+                    class="w-full rounded-t-[4px]"
+                    style={{
+                      height: bar.h,
+                      background: bar.type === 'active'
+                        ? 'var(--color-accent-400)'
+                        : bar.type === 'semi'
+                        ? 'hsla(var(--accent-h), var(--accent-s), 20%, 1)'
+                        : 'var(--bg-card)',
+                    }}
+                  ></div>
+                  <span class="text-[9px]" style="color: var(--text-muted);">S{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <!-- Fila inferior -->
+          <div class="flex gap-2.5">
+            <!-- Actividad reciente -->
+            <div class="flex-1 rounded-[10px] p-3 border" style="background: var(--bg-tertiary); border-color: var(--border-subtle);">
+              <div class="text-[11px] mb-2.5" style="color: var(--text-muted);">Actividad reciente</div>
+              {[
+                { color: 'var(--color-success)', text: 'Nueva reserva confirmada', time: '2m' },
+                { color: 'var(--color-accent-400)', text: 'Pago procesado $3.200', time: '8m' },
+                { color: 'var(--color-success)', text: 'Lead calificado por IA', time: '15m' },
+              ].map((item) => (
+                <div class="flex items-center gap-2 py-1.5 border-b last:border-b-0" style="border-color: var(--border-subtle);">
+                  <div class="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.color }}></div>
+                  <span class="text-[11px] flex-1" style="color: var(--text-secondary);">{item.text}</span>
+                  <span class="text-[10px]" style="color: var(--text-muted);">{item.time}</span>
+                </div>
+              ))}
+            </div>
+            <!-- IA activa -->
+            <div
+              class="w-[130px] flex-shrink-0 rounded-[10px] p-3 border flex flex-col gap-2"
+              style="background: hsla(var(--accent-h), var(--accent-s), 56%, 0.05); border-color: hsla(var(--accent-h), var(--accent-s), 56%, 0.15);"
+            >
+              <div class="text-[10px] uppercase tracking-widest" style="color: var(--color-accent-400);">IA activa</div>
+              <div class="text-[22px] font-bold" style="font-family: var(--font-display); color: var(--color-accent-400);">24/7</div>
+              <div class="text-[10px] leading-snug" style="color: var(--text-muted);">Respondiendo consultas sin intervención manual.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  /* Solo lo que Tailwind no puede expresar con utilidades estándar */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-glow { display: none; }
+  }
+</style>
