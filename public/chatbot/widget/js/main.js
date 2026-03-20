@@ -7,7 +7,7 @@
  *   - Coordina api.js + render.js + session.js
  */
 
-import { loadData, buildSystemPrompt, callChatAPI } from './api.js';
+import { loadData, callChatAPI } from './api.js';
 import {
   appendMessage,
   appendStreamingMessage,
@@ -70,23 +70,30 @@ window.addEventListener('message', e => {
 });
 
 // ── Enviar mensaje ─────────────────────────────────────────────────────────
+const MAX_INPUT = 2_000; // SEC-003: límite de caracteres por mensaje
+
 export async function sendMessage(text) {
-  const trimmed = text?.trim() || input.value.trim();
+  // SEC-003: truncar input del lado del cliente
+  const trimmed = (text?.trim() || input.value.trim()).slice(0, MAX_INPUT);
   if (!trimmed || isLoading) return;
 
   input.value = '';
   input.style.height = 'auto';
+
+  // SEC-008: inhabilitar input completo durante carga
   isLoading = true;
   sendBtn.disabled = true;
+  input.disabled = true;
+  input.placeholder = 'Esperando respuesta...';
 
   appendMessage('user', trimmed);
   showTyping();
 
   try {
-    const systemPrompt = buildSystemPrompt(appData);
+    // SEC-001: systemPrompt se construye server-side
     history.push({ role: 'user', parts: [{ text: trimmed }] });
 
-    const reply = await callChatAPI({ systemPrompt, history });
+    const reply = await callChatAPI({ history });
 
     history.push({ role: 'model', parts: [{ text: reply }] });
     saveSession(history);
@@ -102,10 +109,22 @@ export async function sendMessage(text) {
 
   } catch (err) {
     removeTyping();
-    appendMessage('bot', `Ups, hubo un error: ${err.message}. Intentá de nuevo.`);
+    // SEC-007: no exponer err.message al usuario
+    const isRateLimit = err.message?.includes('429') || err.message?.includes('Demasiadas');
+    const userMessage = isRateLimit
+      ? 'Estás enviando mensajes muy rápido. Esperá un momento e intentá de nuevo.'
+      : 'Nuestro asistente no está disponible en este momento. Podés contactarnos por WhatsApp.';
+
+    appendMessage('bot', userMessage, {
+      showContact: true,
+      config: appData.config,
+    });
   } finally {
+    // SEC-008: rehabilitar input
     isLoading = false;
     sendBtn.disabled = false;
+    input.disabled = false;
+    input.placeholder = 'Escribí tu mensaje...';
     input.focus();
   }
 }

@@ -42,44 +42,13 @@ export async function loadData() {
   }
 }
 
-// ── System prompt ──────────────────────────────────────────────────────────
-export function buildSystemPrompt({ config, services, articles }) {
-  const o = config.owner;
-  const c = config.chatbot;
-
-  return `${c.persona}
-
-## SOBRE ${o.name.toUpperCase()}
-${o.bio || ''}
-Ubicación: ${o.location || ''} | Idiomas: ${(o.languages || []).join(', ')} | ${o.availability || ''}
-
-## SERVICIOS
-${services.map(s => `### ${s.emoji || ''} ${s.title} — desde ${s.price_from}
-${s.description}
-Incluye: ${s.includes.join(', ')} | Stack: ${s.stack.join(', ')}
-Entrega: ${s.delivery} | Ideal para: ${s.ideal_for}`).join('\n\n')}
-
-## ARTÍCULOS DEL BLOG
-${articles.map(a => `- "${a.title}" (${a.reading_time}): ${a.summary} → ${a.url}`).join('\n')}
-
-## CONTACTO
-WhatsApp: ${o.contact?.whatsapp || ''} | Email: ${o.contact?.email || ''} | Web: ${o.contact?.website || ''}
-
-## INSTRUCCIONES
-- Respondé en el idioma del usuario
-- Sé concreto y útil, sin rodeos
-- Si preguntan precios, dá el precio base y aclará que depende del proyecto
-- Si hay interés en contratar, mencioná WhatsApp o email
-- No inventes información fuera de este contexto
-- Máximo 3-4 párrafos por respuesta`;
-}
-
 // ── Llamada a la Edge Function ─────────────────────────────────────────────
-export async function callChatAPI({ systemPrompt, history }) {
+// SEC-001: systemPrompt se construye server-side, ya no se envía desde el cliente
+export async function callChatAPI({ history }) {
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ systemPrompt, history }),
+    body: JSON.stringify({ history }),
   });
 
   if (!res.ok) {

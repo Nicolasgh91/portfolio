@@ -14,6 +14,14 @@
   <script>
     (function() {
       try {
+        // SEC-009: validar origen del padre antes de acceder a su DOM
+        var ALLOWED_PARENTS = [
+          'https://escalatunegocioconia.com', 'https://www.escalatunegocioconia.com',
+          'https://escalatunegocioconia.com.ar', 'https://www.escalatunegocioconia.com.ar',
+          'http://localhost:3000', 'http://localhost:4321'
+        ];
+        if (ALLOWED_PARENTS.indexOf(window.parent.origin) === -1) throw new Error('Origen no permitido');
+
         var parentHtml = window.parent.document.documentElement;
 
         // Sincronizar clase dark/light
@@ -63,6 +71,14 @@
   <script>
     (function() {
       try {
+        // SEC-009: validar origen del padre antes de observar su DOM
+        var ALLOWED_PARENTS = [
+          'https://escalatunegocioconia.com', 'https://www.escalatunegocioconia.com',
+          'https://escalatunegocioconia.com.ar', 'https://www.escalatunegocioconia.com.ar',
+          'http://localhost:3000', 'http://localhost:4321'
+        ];
+        if (ALLOWED_PARENTS.indexOf(window.parent.origin) === -1) throw new Error('Origen no permitido');
+
         new MutationObserver(function() {
           var parentHtml = window.parent.document.documentElement;
           document.documentElement.classList.toggle('light',
@@ -147,6 +163,7 @@
           id="chat-input"
           placeholder="Escribí tu mensaje..."
           rows="1"
+          maxlength="2000"
           aria-label="Mensaje"
         ></textarea>
         <button id="send-btn" aria-label="Enviar">

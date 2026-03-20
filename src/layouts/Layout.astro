@@ -54,6 +54,10 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
 
     <meta name="theme-color" content="#FBBF24" />
 
+    <!-- SEC-005: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://generativelanguage.googleapis.com https://va.vercel-scripts.com; frame-src 'self'; object-src 'none'; base-uri 'self';" />
+
     <!-- hreflang -->
     <link rel="alternate" hreflang="es" href={canonical} />
     <link rel="alternate" hreflang="en" href={canonical} />
