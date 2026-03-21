@@ -326,23 +326,6 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
     }
   </script>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="page-container footer-inner">
-      <a href="/" class="nav-logo" style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-decoration:none">
-        nh<span style="color:var(--accent)">.</span>
-      </a>
-      <div style="display:flex;gap:var(--sp-md)">
-        <a href="/talento" style="font-size:var(--text-xs);color:var(--text-muted)"
-          data-en="Profile" data-es="Perfil">Perfil</a>
-        <a href="/blog" style="font-size:var(--text-xs);color:var(--text-muted)">Blog</a>
-        <a href="https://github.com/Nicolasgh91" target="_blank" rel="noopener"
-          style="font-size:var(--text-xs);color:var(--text-muted)">GitHub</a>
-        <a href="mailto:comercial@escalatunegocioconia.com"
-          style="font-size:var(--text-xs);color:var(--text-muted)">Contacto</a>
-      </div>
-    </div>
-  </footer>
 </Layout>
 <style>
   .faq-list { margin-top: var(--sp-xl); display: flex; flex-direction: column; gap: 2px; }
@@ -419,9 +402,6 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
     margin-bottom: var(--sp-sm);
   }
   .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
-
-  .site-footer { border-top: 0.5px solid var(--border-subtle); padding: var(--sp-lg) 0; margin-top: var(--sp-2xl); }
-  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-md); padding-top: 0; padding-bottom: 0; }
 
   /* ── Carrusel de servicios ───────────────────────────────── */
   .services-carousel {
