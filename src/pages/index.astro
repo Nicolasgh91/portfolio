@@ -23,7 +23,7 @@ const featuredProjects = allProjects
     <div class="page-container">
 
       <!-- ── Stats bar ─────────────────────────────────────── -->
-      <div class="stats-bar" role="list" aria-label="Estadísticas">
+      <div class="stats-bar hidden" role="list" aria-label="Estadísticas">
         <div class="stat-item" role="listitem">
           <div class="stat-num">3+</div>
           <div
@@ -176,6 +176,10 @@ const featuredProjects = allProjects
     border-radius: var(--radius-lg);
     overflow: hidden;
     margin-bottom: var(--sp-xl);
+  }
+  /* Scoped `display:grid` beats global Tailwind `.hidden`. */
+  .stats-bar.hidden {
+    display: none;
   }
   @media (max-width: 480px) {
     .stats-bar { grid-template-columns: 1fr; }

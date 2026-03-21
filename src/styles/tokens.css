@@ -222,7 +222,6 @@ em { font-style: normal; color: var(--accent); }
 
 .divider {
   height: 0.5px;
-  background: var(--border-subtle);
   margin: var(--sp-xl) 0;
 }
 
