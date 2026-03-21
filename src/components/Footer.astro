@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import site from '../data/site.json';
 
-const { author, social, stack } = site;
+const { author, social } = site;
 const year = new Date().getFullYear();
 
 // Dynamic services — sorted by `order` field
@@ -77,13 +77,6 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
         <p style="font-size: var(--text-xs); color: var(--text-muted); margin-bottom: var(--sp-md); line-height: 1.6;">
           Analista funcional<br />y desarrollador full stack.
         </p>
-
-        <!-- Stack pills -->
-        <div class="tags" style="margin-bottom: var(--sp-md);">
-          {stack.map((tech) => (
-            <span class="tag">{tech}</span>
-          ))}
-        </div>
 
         <!-- Social icons -->
         <div style="display: flex; gap: var(--sp-sm); align-items: center;">

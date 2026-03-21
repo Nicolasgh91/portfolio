@@ -23,15 +23,23 @@ const { activePage = 'home' } = Astro.props;
       >Inicio</a></li>
 
       <li class="nav-tab-dropdown-wrapper">
+        <a
+          href="/servicios"
+          id="services-tab-link"
+          class={`nav-tab nav-tab--services-main ${activePage === 'servicios' ? 'active' : ''}`}
+          aria-current={activePage === 'servicios' ? 'page' : undefined}
+          data-en="B2B Services" data-es="Servicios B2B"
+        >Servicios B2B</a>
         <button
-          class={`nav-tab nav-tab--dropdown ${activePage === 'servicios' ? 'active' : ''}`}
-          id="services-btn"
+          type="button"
+          class={`nav-tab nav-tab--dropdown-chevron ${activePage === 'servicios' ? 'active' : ''}`}
+          id="services-menu-btn"
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="services-menu"
-          data-en="B2B Services" data-es="Servicios B2B"
-        >Servicios B2B <span class="dropdown-arrow" aria-hidden="true">▾</span></button>
-        <div id="services-menu" class="services-menu" role="menu" aria-labelledby="services-btn" hidden>
+          aria-label="Abrir submenú de servicios B2B"
+        ><span class="dropdown-arrow" aria-hidden="true">▾</span></button>
+        <div id="services-menu" class="services-menu" role="menu" aria-labelledby="services-tab-link" hidden>
           <a role="menuitem" href="/servicios#agentes-ia" class="services-item">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
             Agentes IA
@@ -148,9 +156,15 @@ const { activePage = 'home' } = Astro.props;
       >Inicio</a></li>
 
       <li><a
-        href="/servicios#agentes-ia"
-        class={`drawer-link drawer-link--sub ${activePage === 'servicios' ? 'active' : ''}`}
+        href="/servicios"
+        class={`drawer-link ${activePage === 'servicios' ? 'active' : ''}`}
         aria-current={activePage === 'servicios' ? 'page' : undefined}
+        data-en="B2B Services" data-es="Servicios B2B"
+      >Servicios B2B</a></li>
+
+      <li><a
+        href="/servicios#agentes-ia"
+        class="drawer-link drawer-link--sub"
         data-en="AI Agents" data-es="Agentes IA"
       >Agentes IA</a></li>
       <li><a
@@ -325,7 +339,7 @@ const { activePage = 'home' } = Astro.props;
     padding: 0;
   }
 
-  .nav-tabs li {
+  .nav-tabs li:not(.nav-tab-dropdown-wrapper) {
     display: contents; /* CRITICO: preserva layout flex; el <li> es invisible para layout */
   }
 
@@ -390,16 +404,31 @@ const { activePage = 'home' } = Astro.props;
   ───────────────────────────────────────── */
   li.nav-tab-dropdown-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0;
+    flex-shrink: 0;
   }
 
-  .nav-tab--dropdown {
-    border: 0.5px solid var(--nav-idle-border);
-    cursor: pointer;
-    gap: 5px;
+  .nav-tab--services-main {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    padding-right: 10px;
   }
-  .nav-tab--dropdown:hover {
+
+  .nav-tab--dropdown-chevron {
+    cursor: pointer;
+    padding: 0 9px;
+    min-width: 32px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -0.5px;
+  }
+  .nav-tab--dropdown-chevron::after {
+    display: none;
+  }
+  .nav-tab--dropdown-chevron:hover {
     color: var(--nav-logo-color);
     border-color: var(--nav-btn-hover-border);
     transform: translateY(-1px);
@@ -411,7 +440,7 @@ const { activePage = 'home' } = Astro.props;
     transition: transform 0.15s ease;
     line-height: 1;
   }
-  .nav-tab--dropdown[aria-expanded="true"] .dropdown-arrow {
+  #services-menu-btn[aria-expanded="true"] .dropdown-arrow {
     transform: rotate(180deg);
   }
 
@@ -798,29 +827,42 @@ const { activePage = 'home' } = Astro.props;
 
 <script>
   /* ── Dropdown de servicios ── */
-  const servicesBtn  = document.getElementById('services-btn') as HTMLButtonElement | null;
+  const servicesMenuBtn = document.getElementById('services-menu-btn') as HTMLButtonElement | null;
+  const servicesTabLink = document.getElementById('services-tab-link') as HTMLAnchorElement | null;
   const servicesMenu = document.getElementById('services-menu') as HTMLElement | null;
 
   function openServices() {
     servicesMenu?.removeAttribute('hidden');
-    servicesBtn?.setAttribute('aria-expanded', 'true');
-    (servicesMenu?.querySelector('[role="menuitem"]') as HTMLElement | null)?.focus();
+    servicesMenuBtn?.setAttribute('aria-expanded', 'true');
   }
   function closeServices() {
     servicesMenu?.setAttribute('hidden', '');
-    servicesBtn?.setAttribute('aria-expanded', 'false');
+    servicesMenuBtn?.setAttribute('aria-expanded', 'false');
   }
 
-  servicesBtn?.addEventListener('click', (e) => {
+  servicesMenuBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     servicesMenu?.hasAttribute('hidden') ? openServices() : closeServices();
   });
 
+  servicesTabLink?.addEventListener('click', () => {
+    closeServices();
+  });
+
   document.addEventListener('click', () => closeServices());
 
-  servicesBtn?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Escape') { closeServices(); servicesBtn.focus(); }
+  servicesMenuBtn?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') { closeServices(); servicesMenuBtn.focus(); }
     if (e.key === 'ArrowDown') { e.preventDefault(); openServices(); }
+  });
+
+  servicesTabLink?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); openServices(); }
+    if (e.key === 'Escape' && !servicesMenu?.hasAttribute('hidden')) {
+      e.preventDefault();
+      closeServices();
+      servicesMenuBtn?.focus();
+    }
   });
 
   servicesMenu?.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -830,7 +872,7 @@ const { activePage = 'home' } = Astro.props;
     const idx = items.indexOf(document.activeElement as HTMLElement);
     if (e.key === 'ArrowDown') { e.preventDefault(); items[(idx + 1) % items.length]?.focus(); }
     if (e.key === 'ArrowUp')   { e.preventDefault(); items[(idx - 1 + items.length) % items.length]?.focus(); }
-    if (e.key === 'Escape')    { closeServices(); servicesBtn?.focus(); }
+    if (e.key === 'Escape')    { closeServices(); servicesMenuBtn?.focus(); }
     if (e.key === 'Tab')       { closeServices(); }
   });
 
