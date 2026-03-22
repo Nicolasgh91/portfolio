@@ -8,6 +8,8 @@
 
 /* ── Fallbacks condicionales: solo aplican sin tokens del padre ── */
 :root:not(.tokens-ready) {
+  --accent-h:       43;
+  --accent-s:       96%;
   --accent:         hsl(43, 96%, 56%);
   --accent-hover:   hsl(46, 96%, 64%);
   --accent-bg:      hsla(43, 96%, 56%, 0.07);
@@ -30,6 +32,7 @@
   --sp-sm:          8px;
   --sp-md:          16px;
   --sp-lg:          24px;
+  --font-display:   'Outfit Variable', 'Outfit', system-ui, sans-serif;
   --font-body:      system-ui, sans-serif;
   --font-mono:      monospace;
   --text-xs:        11px;
@@ -62,32 +65,219 @@ body {
 /* ════════════════════════════════
    BOTÓN FLOTANTE
    ════════════════════════════════ */
+@keyframes chat-ring {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(1.06); }
+}
+@keyframes chat-typing {
+  0%, 60%, 100% { opacity: 0.4; transform: translateY(0); }
+  30%            { opacity: 1;   transform: translateY(-2px); }
+}
+
 #chat-trigger {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--accent); border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px var(--accent-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
   z-index: 9998;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  border: 1.5px solid hsla(var(--accent-h), var(--accent-s), 56%, 0.4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  /* Stops derivados del acento (conic-gradient no mapea 1:1 a --accent) */
+  --chat-trigger-g1: hsl(var(--accent-h), 42%, 10%);
+  --chat-trigger-g2: hsl(var(--accent-h), 14%, 6%);
+  --chat-trigger-g3: hsl(var(--accent-h), 48%, 12%);
+  --chat-trigger-open-g1: hsl(var(--accent-h), 50%, 14%);
+  --chat-trigger-open-g2: hsl(var(--accent-h), 38%, 10%);
+  --chat-trigger-open-g3: hsl(var(--accent-h), 45%, 16%);
+
+  background: conic-gradient(
+    from 210deg,
+    var(--chat-trigger-g1),
+    var(--chat-trigger-g2) 45%,
+    var(--chat-trigger-g3) 100%
+  );
 }
+
+#chat-trigger::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid hsla(var(--accent-h), var(--accent-s), 56%, 0.18);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #chat-trigger::before {
+    animation: chat-ring 2.6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #chat-trigger::before {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  #chat-trigger {
+    transition: border-color 0.2s ease;
+  }
+}
+
+#chat-trigger:focus {
+  outline: none;
+}
+
+#chat-trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsla(var(--accent-h), var(--accent-s), 56%, 0.9);
+}
+
 #chat-trigger:hover {
-  transform: scale(1.08);
-  box-shadow: 0 8px 28px var(--accent-border);
+  transform: scale(1.1);
+  border-color: hsla(var(--accent-h), var(--accent-s), 56%, 0.75);
 }
-#chat-trigger svg            { transition: opacity 0.2s, transform 0.2s; }
-#chat-trigger .icon-open     { position: absolute; }
-#chat-trigger .icon-close    { position: absolute; opacity: 0; transform: rotate(-90deg); }
-#chat-trigger.open .icon-open  { opacity: 0; transform: rotate(90deg); }
-#chat-trigger.open .icon-close { opacity: 1; transform: rotate(0deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  #chat-trigger:hover {
+    transform: none;
+  }
+}
+
+#chat-trigger .trigger-logo {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display, 'Outfit Variable', 'Outfit', system-ui, sans-serif);
+  font-size: 17px;
+  font-weight: 800;
+  color: hsl(48, 18%, 96%);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow:
+    0 1px 2px hsla(0, 0%, 0%, 0.85),
+    0 0 1px hsla(0, 0%, 0%, 0.9);
+}
+
+#chat-trigger .trigger-logo-dot {
+  color: hsl(var(--accent-h), var(--accent-s), 56%);
+}
+
+#chat-trigger .trigger-bubble {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 9px;
+  background: hsl(var(--accent-h), var(--accent-s), 51%);
+  border-radius: 4px 4px 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5px;
+  pointer-events: none;
+}
+
+#chat-trigger .trigger-bubble-dot {
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: hsl(var(--accent-h), 14%, 6%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #chat-trigger .trigger-bubble-dot {
+    animation: chat-typing 1.4s ease-in-out infinite;
+  }
+  #chat-trigger .trigger-bubble-dot:nth-child(2) { animation-delay: 0.2s; }
+  #chat-trigger .trigger-bubble-dot:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #chat-trigger .trigger-bubble-dot {
+    opacity: 0.65;
+  }
+}
+
+#chat-trigger .trigger-close {
+  display: none;
+  position: relative;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+#chat-trigger .trigger-close::before,
+#chat-trigger .trigger-close::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background: hsl(var(--accent-h), var(--accent-s), 56%);
+  border-radius: 1px;
+  top: 50%;
+  left: 50%;
+}
+
+#chat-trigger .trigger-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#chat-trigger .trigger-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#chat-trigger.open {
+  background: conic-gradient(
+    from 210deg,
+    var(--chat-trigger-open-g1),
+    var(--chat-trigger-open-g2) 45%,
+    var(--chat-trigger-open-g3) 100%
+  );
+  border-color: hsla(var(--accent-h), var(--accent-s), 56%, 0.7);
+}
+
+#chat-trigger.open .trigger-logo,
+#chat-trigger.open .trigger-bubble {
+  display: none;
+}
+
+#chat-trigger.open .trigger-close {
+  display: block;
+}
 
 #chat-badge {
-  position: absolute; top: -2px; right: -2px;
-  width: 17px; height: 17px;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  z-index: 3;
+  width: 17px;
+  height: 17px;
   background: hsl(0, 84%, 60%);
-  border-radius: 50%; border: 2px solid var(--bg-primary);
-  font-size: 9px; font-weight: 700; color: hsl(0, 0%, 100%);
-  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+  font-size: 9px;
+  font-weight: 700;
+  color: hsl(0, 0%, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: opacity 0.2s;
 }
 

@@ -1,0 +1,50 @@
+[
+  {
+    "order": 1,
+    "category": "proceso",
+    "question": "¿Cuánto tiempo lleva construir un sistema a medida?",
+    "questionEn": "How long does it take to build a custom system?",
+    "answer": "Depende del alcance, pero trabajamos en sprints de 2 a 4 semanas. Un sistema básico de automatización puede estar operativo en 3 semanas. Una plataforma de gestión completa suele tomar entre 6 y 10 semanas.",
+    "answerEn": "It depends on scope. We work in 2–4 week sprints. A basic automation system can be live in about 3 weeks. A full management platform usually takes 6–10 weeks."
+  },
+  {
+    "order": 2,
+    "category": "comercial",
+    "question": "¿Trabajás con empresas de cualquier tamaño?",
+    "questionEn": "Do you work with companies of any size?",
+    "answer": "Trabajamos con pymes y empresas medianas que ya tienen operación real pero están frenadas por procesos manuales o herramientas desconectadas. No hacemos proyectos para startups sin tracción ni para corporaciones que necesiten licitaciones.",
+    "answerEn": "We work with SMEs and mid-sized companies that already have real operations but are held back by manual processes or disconnected tools. We don't take on pre-traction startups or corporations that require tendering processes."
+  },
+  {
+    "order": 3,
+    "category": "comercial",
+    "question": "¿Y si ya tengo un sistema o herramientas funcionando?",
+    "questionEn": "What if I already have systems or tools in place?",
+    "answer": "Podemos integrarnos con lo que ya tenés, migrarte o construir algo nuevo según lo que tenga más sentido para tu operación. No forzamos un reemplazo total si no es necesario.",
+    "answerEn": "We can integrate with what you already use, migrate you, or build something new—whatever makes the most sense for your operation. We don't force a full replacement when it isn't necessary."
+  },
+  {
+    "order": 4,
+    "category": "proceso",
+    "question": "¿En qué consiste el diagnóstico gratuito?",
+    "questionEn": "What does the free diagnosis include?",
+    "answer": "Es una reunión de 30 minutos donde analizamos tu operación actual, identificamos los puntos de mayor pérdida y te mostramos qué tipo de sistema resolvería cada uno. Sin presentaciones genéricas, todo sobre tu negocio específico.",
+    "answerEn": "It's a 30-minute session where we review your current operation, identify the biggest sources of waste, and show what kind of system would address each one. No generic decks—everything is about your specific business."
+  },
+  {
+    "order": 5,
+    "category": "tecnico",
+    "question": "¿Qué tecnologías utilizan?",
+    "questionEn": "What technologies do you use?",
+    "answer": "Python, React, PostgreSQL y Node para el core. Para IA usamos modelos propios o APIs según el caso de uso. Priorizamos stacks estables, sin dependencias de plataformas que puedan cambiar precios o cerrar.",
+    "answerEn": "Python, React, PostgreSQL, and Node for the core. For AI we use in-house models or APIs depending on the use case. We prioritize stable stacks without reliance on platforms that might change pricing or shut down."
+  },
+  {
+    "order": 6,
+    "category": "soporte",
+    "question": "¿Qué pasa si el sistema falla después de entregar?",
+    "questionEn": "What happens if the system fails after delivery?",
+    "answer": "Todos los proyectos incluyen 30 días de soporte post-lanzamiento sin costo. Para después, ofrecemos planes de mantenimiento mensual o atención por ticket según el volumen que necesites.",
+    "answerEn": "Every project includes 30 days of post-launch support at no extra cost. After that, we offer monthly maintenance plans or per-ticket support depending on the volume you need."
+  }
+]

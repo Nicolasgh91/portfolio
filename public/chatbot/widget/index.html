@@ -38,7 +38,7 @@
           '--border-subtle','--border-normal','--border-strong',
           '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
           '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
-          '--font-body','--font-mono','--text-xs','--text-sm','--text-base'
+          '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base'
         ];
         var decls = tokens.map(function(t) {
           var v = computed.getPropertyValue(t).trim();
@@ -96,7 +96,7 @@
             '--border-subtle','--border-normal','--border-strong',
             '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
             '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
-            '--font-body','--font-mono','--text-xs','--text-sm','--text-base'
+            '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base'
           ];
           var decls = tokens.map(function(t) {
             var v = computed.getPropertyValue(t).trim();
@@ -117,16 +117,15 @@
 <body>
 
   <!-- ── Botón flotante ── -->
-  <button id="chat-trigger" aria-label="Abrir chat">
+  <button type="button" id="chat-trigger" aria-label="Abrir chat" aria-expanded="false" aria-controls="chat-window">
     <span id="chat-badge" style="opacity:0">1</span>
-    <svg class="icon-open" width="22" height="22" fill="none" viewBox="0 0 24 24">
-      <path d="M8 10h8M8 14h5M5 3h14a2 2 0 012 2v11a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2z"
-        stroke="hsl(240,10%,6%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <svg class="icon-close" width="20" height="20" fill="none" viewBox="0 0 24 24">
-      <path d="M18 6L6 18M6 6l12 12"
-        stroke="hsl(240,10%,6%)" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>
+    <span class="trigger-logo">nh<span class="trigger-logo-dot">.</span></span>
+    <span class="trigger-bubble" aria-hidden="true">
+      <span class="trigger-bubble-dot"></span>
+      <span class="trigger-bubble-dot"></span>
+      <span class="trigger-bubble-dot"></span>
+    </span>
+    <span class="trigger-close" aria-hidden="true"></span>
   </button>
 
   <!-- ── Ventana del chat ── -->

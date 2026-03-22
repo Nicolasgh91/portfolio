@@ -33,6 +33,24 @@ const services = defineCollection({
   }),
 });
 
+const faqEntrySchema = z.object({
+  order: z.number(),
+  category: z.enum(['proceso', 'comercial', 'tecnico', 'soporte']),
+  question: z.string(),
+  questionEn: z.string(),
+  answer: z.string(),
+  answerEn: z.string(),
+  highlight: z.string().optional(),
+  highlightEn: z.string().optional(),
+});
+
+// src/content/faq/: solo archivos de datos (p. ej. entries.json). No .md en esta carpeta:
+// Astro las trataría como `content` y fallaría con MixedContentDataCollectionError.
+const faq = defineCollection({
+  type: 'data',
+  schema: z.array(faqEntrySchema),
+});
+
 const blog = defineCollection({
   type: 'content',
   schema: z.object({
@@ -53,4 +71,4 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { projects, services, blog };
+export const collections = { projects, services, blog, faq };

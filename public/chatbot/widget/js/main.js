@@ -38,11 +38,17 @@ const CONTACT_KEYWORDS = /presupuesto|precio|costo|contratar|trabajar|proyecto|c
 // ── Abrir / cerrar ─────────────────────────────────────────────────────────
 // Cerrar (cruz): colapsa la ventana, el ícono queda visible
 // Click en ícono: restaura la ventana exactamente como estaba
+function syncTriggerA11y() {
+  trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  trigger.setAttribute('aria-label', isOpen ? 'Cerrar chat' : 'Abrir chat');
+}
+
 function openChat() {
   isOpen = true;
   trigger.classList.add('open');
   chatWindow.classList.add('open');
   badge.style.opacity = '0';
+  syncTriggerA11y();
   window.parent.postMessage({ chat: 'open' }, '*');
   setTimeout(() => input.focus(), 300);
 }
@@ -51,6 +57,7 @@ function closeChat() {
   isOpen = false;
   trigger.classList.remove('open');
   chatWindow.classList.remove('open');
+  syncTriggerA11y();
   window.parent.postMessage({ chat: 'close' }, '*');
 }
 

@@ -4,11 +4,17 @@ import Nav from '../components/Nav.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { getCollection } from 'astro:content';
 import ServiceCard from '../components/ServiceCard.astro';
-
+import FaqSection from '../components/FaqSection.astro';
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
+
+// FAQ: un archivo JSON = un ítem de colección; `data` es el array validado por Zod.
+const faqDocs = await getCollection('faq');
+const faqEntries = faqDocs
+  .flatMap((doc) => doc.data)
+  .sort((a, b) => a.order - b.order);
 
 // Precios desde variables de entorno (actualizables sin tocar el código)
 const prices: Record<string, { price?: string; priceUnit?: string }> = {
@@ -119,24 +125,43 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
           >Cuatro ejes de intervención con impacto directo en la operación.</p>
         </div>
 
-      <div class="services-carousel" id="services-carousel">
-        {sortedServices.map((service) => {
-          const priceData = prices[service.slug] ?? {};
-          return (
-            <ServiceCard service={{
-              title: service.data.title,
-              titleEn: service.data.titleEn,
-              shortDescription: service.data.shortDescription ?? service.data.description,
-              shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
-              imageKey: service.data.imageKey,
-              featured: service.data.featured,
-              href: service.data.href,
-              price: priceData.price,
-              priceUnit: priceData.priceUnit,
-            }} />
-          );
-        })}
-      </div>
+        <div class="services-carousel-shell" id="services-carousel-shell">
+          <p
+            id="services-carousel-hint"
+            class="services-carousel-hint"
+            hidden
+            data-en="Swipe or drag sideways to see all services."
+            data-es="Deslizá o arrastrá horizontalmente para ver todos los servicios."
+          >Deslizá o arrastrá horizontalmente para ver todos los servicios.</p>
+          <div class="services-carousel-viewport">
+            <div class="services-carousel-fade services-carousel-fade--left" aria-hidden="true"></div>
+            <div class="services-carousel-fade services-carousel-fade--right" aria-hidden="true"></div>
+            <div
+              class="services-carousel"
+              id="services-carousel"
+              role="region"
+              aria-labelledby="services-heading"
+              tabindex="0"
+            >
+              {sortedServices.map((service) => {
+                const priceData = prices[service.slug] ?? {};
+                return (
+                  <ServiceCard service={{
+                    title: service.data.title,
+                    titleEn: service.data.titleEn,
+                    shortDescription: service.data.shortDescription ?? service.data.description,
+                    shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+                    imageKey: service.data.imageKey,
+                    featured: service.data.featured,
+                    href: service.data.href,
+                    price: priceData.price,
+                    priceUnit: priceData.priceUnit,
+                  }} />
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ── Case study ─────────────────────────────────────── -->
@@ -202,74 +227,7 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
 
       <!-- ── FAQ ─────────────────────────────────────────────── -->
       <section class="section" aria-labelledby="faq-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="FAQ"
-            data-es="Preguntas frecuentes"
-          >Preguntas frecuentes</span>
-          <h2
-            id="faq-heading"
-            data-en="Common questions"
-            data-es="Consultas habituales"
-          >Consultas habituales</h2>
-        </div>
-
-        <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
-
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary class="faq-q" itemprop="name"
-              data-en="How long does it take to build a custom system?"
-              data-es="¿Cuánto tiempo lleva construir un sistema a medida?"
-            >¿Cuánto tiempo lleva construir un sistema a medida?</summary>
-            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text"
-                data-en="Depends on scope. A minimum viable product (MVP) is typically delivered in 4–8 weeks. A complete system integrating billing, bookings, and clients generally takes 3–4 months. The free diagnosis session defines the real timeline."
-                data-es="Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real."
-              >Depende del alcance. Un producto mínimo viable (MVP) se entrega en 4–8 semanas. Un sistema completo que integra facturación, reservas y clientes lleva generalmente 3–4 meses. La sesión de diagnóstico gratuito define el cronograma real.</p>
-            </div>
-          </details>
-
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary class="faq-q" itemprop="name"
-              data-en="Do you work with companies of any size?"
-              data-es="¿Trabajás con empresas de cualquier tamaño?"
-            >¿Trabajás con empresas de cualquier tamaño?</summary>
-            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text"
-                data-en="Yes. The approach is especially valuable for SMEs and growing teams that want to eliminate recurring SaaS costs and replace them with proprietary systems."
-                data-es="Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios."
-              >Sí. El enfoque es especialmente valioso para pymes y equipos en crecimiento que quieren eliminar costos recurrentes de SaaS y reemplazarlos por sistemas propios.</p>
-            </div>
-          </details>
-
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary class="faq-q" itemprop="name"
-              data-en="What does the free diagnosis consist of?"
-              data-es="¿En qué consiste el diagnóstico gratuito?"
-            >¿En qué consiste el diagnóstico gratuito?</summary>
-            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text"
-                data-en="A 45-minute virtual session to map your main operational pain points, identify immediate automation or optimization opportunities, and define a realistic action plan — with no obligation to hire."
-                data-es="Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación."
-              >Una sesión virtual de 45 minutos para mapear sus principales puntos de dolor operativos, identificar oportunidades de automatización u optimización inmediatas y definir un plan de acción realista, sin compromiso de contratación.</p>
-            </div>
-          </details>
-
-          <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <summary class="faq-q" itemprop="name"
-              data-en="What technologies do you use?"
-              data-es="¿Qué tecnologías utilizás?"
-            >¿Qué tecnologías utilizás?</summary>
-            <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-              <p itemprop="text"
-                data-en="Python (FastAPI) for backends, React/Next.js or Astro for frontends, PostgreSQL for databases, Docker for deployment."
-                data-es="Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue."
-              >Python (FastAPI) para backends, React/Next.js o Astro para frontends, PostgreSQL para bases de datos, Docker para despliegue.</p>
-            </div>
-          </details>
-
-        </div>
+        <FaqSection entries={faqEntries} ctaHref="#contacto" />
       </section>
 
       <!-- ── Formulario de contacto ──────────────────────────── -->
@@ -292,10 +250,48 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
     </div>
   </main>
 
-  <!-- Script: drag-to-scroll para el carrusel de servicios -->
+  <!-- Script: drag-to-scroll + estado overflow/fades del carrusel de servicios -->
   <script>
     const carousel = document.getElementById('services-carousel');
-    if (carousel) {
+    const shell = document.getElementById('services-carousel-shell');
+    const hint = document.getElementById('services-carousel-hint');
+
+    function updateCarouselState() {
+      if (!carousel || !shell) return;
+      const { scrollLeft, scrollWidth, clientWidth } = carousel;
+      const hasOverflow = scrollWidth > clientWidth + 1;
+      const atStart = scrollLeft <= 2;
+      const atEnd = scrollLeft + clientWidth >= scrollWidth - 2;
+
+      shell.classList.toggle('has-overflow', hasOverflow);
+      shell.classList.toggle('at-start', atStart);
+      shell.classList.toggle('at-end', atEnd);
+
+      if (hint) {
+        if (hasOverflow) hint.removeAttribute('hidden');
+        else hint.setAttribute('hidden', '');
+      }
+    }
+
+    if (carousel && shell) {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const ro = new ResizeObserver(() => updateCarouselState());
+      ro.observe(carousel);
+      carousel.addEventListener('scroll', updateCarouselState, { passive: true });
+      window.addEventListener('load', updateCarouselState);
+      requestAnimationFrame(updateCarouselState);
+
+      carousel.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        const delta = e.key === 'ArrowRight' ? 280 : -280;
+        carousel.scrollBy({
+          left: delta,
+          behavior: reducedMotion ? 'auto' : 'smooth',
+        });
+      });
+
       let isDown = false;
       let startX = 0;
       let scrollLeft = 0;
@@ -328,36 +324,6 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
 
 </Layout>
 <style>
-  .faq-list { margin-top: var(--sp-xl); display: flex; flex-direction: column; gap: 2px; }
-  .faq-item {
-    background: var(--bg-secondary);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    transition: border-color 0.15s ease;
-  }
-  .faq-item[open] { border-color: var(--accent-border); }
-  .faq-q {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--sp-md);
-    padding: var(--sp-md) var(--sp-lg);
-    font-size: calc(var(--text-sm) * var(--font-scale));
-    font-weight: 500;
-    color: var(--text-primary);
-    cursor: pointer;
-    user-select: none;
-    transition: color 0.15s ease;
-  }
-  .faq-q::-webkit-details-marker { display: none; }
-  .faq-q::after { content: '+'; font-size: 18px; color: var(--accent); flex-shrink: 0; transition: transform 0.2s ease; }
-  .faq-item[open] .faq-q::after { transform: rotate(45deg); }
-  .faq-q:hover { color: var(--accent); }
-  .faq-a { padding: 0 var(--sp-lg) var(--sp-md); }
-  .faq-a p { font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.65; }
-
   .value-banner {
     display: flex;
     align-items: center;
@@ -404,6 +370,42 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
   .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
 
   /* ── Carrusel de servicios ───────────────────────────────── */
+  .services-carousel-shell {
+    margin-top: var(--sp-sm);
+  }
+  .services-carousel-hint {
+    margin: 0 0 var(--sp-sm);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .services-carousel-viewport {
+    position: relative;
+  }
+  .services-carousel-fade {
+    position: absolute;
+    top: 0;
+    bottom: 12px;
+    width: 48px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .services-carousel-fade--left {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-primary), transparent);
+  }
+  .services-carousel-fade--right {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-primary), transparent);
+  }
+  .services-carousel-shell.has-overflow:not(.at-start) .services-carousel-fade--left {
+    opacity: 1;
+  }
+  .services-carousel-shell.has-overflow:not(.at-end) .services-carousel-fade--right {
+    opacity: 1;
+  }
   .services-carousel {
     display: flex;
     gap: 14px;
@@ -412,11 +414,16 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     cursor: grab;
+    outline: none;
     /* padding para que la sombra hover no quede cortada */
     padding-bottom: 12px;
     padding-top: 4px;
     /* ocultar scrollbar visualmente */
     scrollbar-width: none;
+  }
+  .services-carousel:focus-visible {
+    box-shadow: 0 0 0 2px var(--accent-border);
+    border-radius: var(--radius-sm);
   }
   .services-carousel::-webkit-scrollbar { display: none; }
   .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
