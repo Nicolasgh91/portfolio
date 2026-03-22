@@ -7,6 +7,9 @@ import { Image } from 'astro:assets';
 import humanAi from '../assets/blog/human-ai.webp';
 import satellite from '../assets/blog/satellite.webp';
 import cloudServers from '../assets/blog/cloud-servers.webp';
+import ogHuellaDelFuego from '../assets/open-graphs/og-huella-del-fuego.webp';
+
+type CoverImageKey = 'human-ai' | 'cloud-servers' | 'satellite' | 'huella-del-fuego';
 
 interface Props {
   post: {
@@ -21,13 +24,20 @@ interface Props {
       tags: string[];
       vertical?: 'alimentos' | 'inmobiliaria' | 'salud' | 'ecommerce' | 'transversal';
       readingTime?: number;
-      coverImage?: string;
+      coverImageKey?: CoverImageKey;
       coverAlt?: string;
     };
   };
 }
 
 const { post } = Astro.props;
+
+const coverByKey: Record<CoverImageKey, typeof humanAi> = {
+  'human-ai': humanAi,
+  satellite,
+  'cloud-servers': cloudServers,
+  'huella-del-fuego': ogHuellaDelFuego,
+};
 
 const categoryCover = {
   arquitectura: humanAi,
@@ -37,6 +47,10 @@ const categoryCover = {
 
 const fallbackCover =
   categoryCover[post.data.category as keyof typeof categoryCover] ?? humanAi;
+
+const coverSrc = post.data.coverImageKey
+  ? coverByKey[post.data.coverImageKey]
+  : fallbackCover;
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('es-AR', {
@@ -53,26 +67,14 @@ const readLabel = `Leer artículo: ${post.data.title}`;
 
   <!-- ── IMAGEN ── -->
   <div class="blog-card__cover">
-    {post.data.coverImage ? (
-      <img
-        src={post.data.coverImage}
-        alt={post.data.coverAlt ?? post.data.title}
-        width="640"
-        height="360"
-        loading="lazy"
-        decoding="async"
-        class="blog-card__img"
-      />
-    ) : (
-      <Image
-        src={fallbackCover}
-        alt={post.data.coverAlt ?? post.data.title}
-        width={640}
-        height={360}
-        loading="lazy"
-        class="blog-card__img"
-      />
-    )}
+    <Image
+      src={coverSrc}
+      alt={post.data.coverAlt ?? post.data.title}
+      width={640}
+      height={360}
+      loading="lazy"
+      class="blog-card__img"
+    />
   </div>
 
   <!-- ── OVERLAY (visible solo en hover) ── -->

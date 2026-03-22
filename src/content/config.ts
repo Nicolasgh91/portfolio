@@ -63,7 +63,9 @@ const blog = defineCollection({
     tags: z.array(z.string()),
     draft: z.boolean().default(false),
     readingTime: z.number().optional(),
-    coverImage: z.string().optional(),
+    coverImageKey: z
+      .enum(['human-ai', 'cloud-servers', 'satellite', 'huella-del-fuego'])
+      .optional(),
     coverAlt: z.string().optional(),
     priority: z.number().min(0).max(1).default(0.5),
     pillarSlug: z.string().optional(),

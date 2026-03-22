@@ -10,6 +10,10 @@ interface Props {
   description: string;
   lang?: 'es' | 'en';
   ogImage?: string;
+  /** MIME type for og:image (e.g. image/webp). If omitted, inferred from ogImage path extension. */
+  ogImageType?: string;
+  ogImageWidth?: string | number;
+  ogImageHeight?: string | number;
 }
 
 const {
@@ -17,12 +21,27 @@ const {
   description,
   lang = 'es',
   ogImage = '/og-desktop.png',
+  ogImageType: ogImageTypeProp,
+  ogImageWidth: ogImageWidthProp,
+  ogImageHeight: ogImageHeightProp,
 } = Astro.props;
 
 const canonical = Astro.url.href;
 const siteName = 'Nicolás Hruszczak';
 const siteUrl = 'https://escalatunegocioconia.com';
 const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
+
+function inferOgImageType(path: string): string {
+  const lower = path.split('?')[0].toLowerCase();
+  if (lower.endsWith('.webp')) return 'image/webp';
+  if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+  if (lower.endsWith('.gif')) return 'image/gif';
+  return 'image/png';
+}
+
+const ogImageType = ogImageTypeProp ?? inferOgImageType(ogImage);
+const ogImageWidth = ogImageWidthProp ?? 1366;
+const ogImageHeight = ogImageHeightProp ?? 768;
 ---
 
 <!doctype html>
@@ -41,9 +60,9 @@ const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${siteUrl}${ogImage}`} />
-    <meta property="og:image:width" content="1366" />
-    <meta property="og:image:height" content="768" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
+    <meta property="og:image:type" content={ogImageType} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:locale:alternate" content="en_US" />

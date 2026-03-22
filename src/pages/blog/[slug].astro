@@ -3,6 +3,20 @@ import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import TaxonomyFilter from '../../components/TaxonomyFilter.astro';
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import humanAi from '../../assets/blog/human-ai.webp';
+import satellite from '../../assets/blog/satellite.webp';
+import cloudServers from '../../assets/blog/cloud-servers.webp';
+import ogHuellaDelFuego from '../../assets/open-graphs/og-huella-del-fuego.webp';
+
+type CoverImageKey = 'human-ai' | 'cloud-servers' | 'satellite' | 'huella-del-fuego';
+
+const coverByKey: Record<CoverImageKey, typeof humanAi> = {
+  'human-ai': humanAi,
+  satellite,
+  'cloud-servers': cloudServers,
+  'huella-del-fuego': ogHuellaDelFuego,
+};
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -20,6 +34,27 @@ const siteUrl = 'https://escalatunegocioconia.com';
 const postUrl = `${siteUrl}/blog/${post.slug}`;
 const authorName = 'Nicolás Hruszczak';
 const pubDateISO = post.data.pubDate.toISOString();
+
+let ogImagePath = '/og-desktop.png';
+let articleImageAbsolute: string | undefined;
+let ogImageWidth: string | undefined;
+let ogImageHeight: string | undefined;
+let ogImageType: string | undefined;
+
+if (post.data.coverImageKey) {
+  const coverSrc = coverByKey[post.data.coverImageKey];
+  const optimized = await getImage({ src: coverSrc, width: 1200 });
+  ogImagePath = optimized.src;
+  articleImageAbsolute = new URL(optimized.src, siteUrl).href;
+  const w = optimized.attributes.width as number | undefined;
+  const h = optimized.attributes.height as number | undefined;
+  const fallbackH =
+    h ??
+    Math.round((coverSrc.height * 1200) / coverSrc.width);
+  ogImageWidth = String(w ?? 1200);
+  ogImageHeight = String(fallbackH);
+  ogImageType = 'image/webp';
+}
 
 // JSON-LD: TechArticle (dateModified = pubDate hasta que exista updatedDate en Zod del blog)
 const jsonLdArticle = {
@@ -45,8 +80,8 @@ const jsonLdArticle = {
   ...(post.data.readingTime != null && {
     timeRequired: `PT${post.data.readingTime}M`,
   }),
-  ...(post.data.coverImage && {
-    image: `${siteUrl}${post.data.coverImage}`,
+  ...(articleImageAbsolute && {
+    image: articleImageAbsolute,
   }),
 };
 
@@ -100,7 +135,10 @@ const related = allPosts
 <Layout
   title={`${post.data.title} — Nicolás Hruszczak`}
   description={post.data.description}
-  ogImage={post.data.coverImage ?? '/og-desktop.png'}
+  ogImage={ogImagePath}
+  ogImageType={ogImageType}
+  ogImageWidth={ogImageWidth}
+  ogImageHeight={ogImageHeight}
 >
   <!-- JSON-LD inyectado en el <head> via slot -->
   <Fragment slot="head">
