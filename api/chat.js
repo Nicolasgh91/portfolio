@@ -73,12 +73,21 @@ async function loadJSON(path) {
 function buildSystemPrompt({ config, services, articles }) {
   const o = config.owner;
   const c = config.chatbot;
+  const t = config.talento;
+
+  const talentoBlock = t
+    ? `## PERFIL TÉCNICO (${t.path || '/talento'})
+${t.summary || ''}
+${(t.projects || []).map((p) => `- ${p.title} (${p.slug}) — estado: ${p.status}`).join('\n')}`
+    : '';
 
   return `${c.persona}
 
 ## SOBRE ${o.name.toUpperCase()}
 ${o.bio || ''}
 Ubicación: ${o.location || ''} | Idiomas: ${(o.languages || []).join(', ')} | ${o.availability || ''}
+
+${talentoBlock}
 
 ## SERVICIOS
 ${services.map(s => `### ${s.emoji || ''} ${s.title} — desde ${s.price_from}

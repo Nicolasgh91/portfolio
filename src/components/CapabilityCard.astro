@@ -1,218 +1,65 @@
 ---
-// CapabilityCard.astro
-// Tarjeta de capacidades para página de talento/perfil
-// Hover: border glow violeta + progress bar + icon bounce
-// Uso: <CapabilityCard capability={capability} />
-
+// Tarjeta de capacidades — Tailwind + tokens de superficie; acento violeta (diferenciación técnica).
 interface Props {
   capability: {
     title: string;
     titleEn?: string;
     description: string;
     descriptionEn?: string;
-    icon?: string;          // emoji o string SVG inline
-    level?: number;         // 0–100, define el ancho de la barra en hover
-    tags?: string[];        // tecnologías o etiquetas opcionales
+    icon?: string;
+    level?: number;
+    tags?: string[];
   };
 }
 
 const { capability } = Astro.props;
-
-// La barra se anima via CSS; el nivel se pasa como custom property
 const level = Math.min(100, Math.max(0, capability.level ?? 80));
 ---
 
 <div
-  class="cap-card"
+  class="group relative flex flex-col gap-2.5 overflow-hidden rounded-xl border-[1.5px] border-transparent bg-[var(--bg-secondary)] p-5 pb-5 shadow-none transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-[color:rgba(124,58,237,0.45)] hover:shadow-[0_16px_40px_-8px_rgba(124,58,237,0.18)]"
   style={`--level: ${level}%`}
 >
-  <!-- Ícono -->
   {capability.icon && (
-    <div class="cap-card__icon" aria-hidden="true">
+    <div
+      class="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-violet-500/15 text-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[1.15] group-hover:-rotate-6 group-hover:bg-violet-500/30"
+      aria-hidden="true"
+    >
       {capability.icon}
     </div>
   )}
 
-  <!-- Título -->
   <h3
-    class="cap-card__title"
+    class="text-sm font-bold leading-snug text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--text-primary)]"
     data-en={capability.titleEn ?? capability.title}
     data-es={capability.title}
   >
     {capability.title}
   </h3>
 
-  <!-- Descripción -->
   <p
-    class="cap-card__desc"
+    class="flex-1 text-[0.8125rem] leading-relaxed text-[var(--text-secondary)] transition-colors duration-200 group-hover:text-[var(--text-primary)]"
     data-en={capability.descriptionEn ?? capability.description}
     data-es={capability.description}
   >
     {capability.description}
   </p>
 
-  <!-- Tags opcionales -->
   {capability.tags && capability.tags.length > 0 && (
-    <div class="cap-card__tags">
+    <div class="mt-0.5 flex flex-wrap gap-1.5">
       {capability.tags.slice(0, 4).map((tag) => (
-        <span class="cap-card__tag">{tag}</span>
+        <span
+          class="rounded-md border border-violet-400/35 bg-violet-950/40 px-1.5 py-0.5 text-[0.625rem] font-medium text-violet-100 transition-colors duration-200 group-hover:border-violet-300/55 group-hover:bg-violet-900/70 group-hover:text-white"
+        >
+          {tag}
+        </span>
       ))}
     </div>
   )}
 
-  <!-- Barra de progreso (visible en hover) -->
-  <div class="cap-card__track" aria-hidden="true">
-    <div class="cap-card__fill"></div>
+  <div class="mt-1 h-0.5 w-full overflow-hidden rounded-full bg-[color:rgba(255,255,255,0.07)]" aria-hidden="true">
+    <div
+      class="h-full w-0 rounded-full bg-gradient-to-r from-violet-600 to-violet-300 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-[var(--level)]"
+    ></div>
   </div>
 </div>
-
-<style>
-  /* ─────────────────────────────────────────
-     BASE
-  ───────────────────────────────────────── */
-  .cap-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 22px 20px 20px;
-    background: #1f2937;
-    border: 1.5px solid transparent;    /* reserva espacio para el border animado */
-    border-radius: 12px;
-    overflow: hidden;
-
-    transition:
-      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 280ms ease,
-      box-shadow 320ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     ÍCONO
-     Bounce + rotate al hover
-  ───────────────────────────────────────── */
-  .cap-card__icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 9px;
-    background: rgba(124, 58, 237, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    transition:
-      background 280ms ease,
-      transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);  /* spring suave */
-  }
-
-  /* ─────────────────────────────────────────
-     TÍTULO
-  ───────────────────────────────────────── */
-  .cap-card__title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: #f3f4f6;
-    transition: color 200ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     DESCRIPCIÓN
-  ───────────────────────────────────────── */
-  .cap-card__desc {
-    font-size: 0.8125rem;
-    color: #9ca3af;
-    line-height: 1.6;
-    flex: 1;
-    transition: color 200ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     TAGS
-  ───────────────────────────────────────── */
-  .cap-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 2px;
-  }
-
-  .cap-card__tag {
-    font-size: 0.625rem;      /* 10px */
-    padding: 3px 7px;
-    border-radius: 5px;
-    background: rgba(124, 58, 237, 0.12);
-    color: #a78bfa;
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    transition:
-      background 200ms ease,
-      color 200ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     BARRA DE PROGRESO
-     Aparece en hover, ancho definido por --level
-  ───────────────────────────────────────── */
-  .cap-card__track {
-    height: 2px;
-    background: rgba(255, 255, 255, 0.07);
-    border-radius: 1px;
-    overflow: hidden;
-    margin-top: 4px;
-  }
-
-  .cap-card__fill {
-    height: 100%;
-    width: 0;                           /* empieza en 0 */
-    background: linear-gradient(
-      90deg,
-      #7c3aed 0%,
-      #a78bfa 100%
-    );
-    border-radius: 1px;
-    transition: width 580ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  /* ─────────────────────────────────────────
-     HOVER — todos los efectos juntos
-  ───────────────────────────────────────── */
-  .cap-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(124, 58, 237, 0.45);
-    box-shadow:
-      0 16px 40px -8px rgba(124, 58, 237, 0.18),
-      0 0 0 1px rgba(124, 58, 237, 0.12);
-  }
-
-  .cap-card:hover .cap-card__icon {
-    background: rgba(124, 58, 237, 0.28);
-    transform: scale(1.15) rotate(-6deg);
-  }
-
-  .cap-card:hover .cap-card__title {
-    color: #ffffff;
-  }
-
-  .cap-card:hover .cap-card__desc {
-    color: #d1d5db;
-  }
-
-  .cap-card:hover .cap-card__tag {
-    background: rgba(124, 58, 237, 0.22);
-    color: #c4b5fd;
-  }
-
-  /* La barra llega al nivel definido por --level */
-  .cap-card:hover .cap-card__fill {
-    width: var(--level);
-  }
-
-  /* ─────────────────────────────────────────
-     FOCUS visible (accesibilidad teclado)
-  ───────────────────────────────────────── */
-  .cap-card:focus-visible {
-    outline: 2px solid #7c3aed;
-    outline-offset: 3px;
-  }
-</style>

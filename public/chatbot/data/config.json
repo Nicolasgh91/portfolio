@@ -10,7 +10,17 @@
       "email": "comercial@escalatunegocioconia.com",
       "website": "https://www.escalatunegocioconia.com.ar/"
     },
-    "availability": "Envia tu consulta y la cotizo en menos de 24 horas"
+    "availability": "Disponible para nuevas oportunidades; perfil técnico detallado en /talento."
+  },
+
+  "talento": {
+    "path": "/talento",
+    "summary": "Perfil profesional con capacidades técnicas (IA multi-agente, DevOps, geoespacial), trayectoria por rol, stack y proyectos de ingeniería. Cada proyecto tiene ancla en la misma página: /talento#huelladelfuego, /talento#double-click, /talento#chatbot-widget.",
+    "projects": [
+      { "slug": "huelladelfuego", "title": "Huella del fuego en Argentina", "status": "live" },
+      { "slug": "double-click", "title": "Double Click™", "status": "in-progress" },
+      { "slug": "chatbot-widget", "title": "Chatbot", "status": "live" }
+    ]
   },
 
   "chatbot": {

@@ -221,8 +221,12 @@ em { font-style: normal; color: var(--accent); }
 .section-header { margin-bottom: var(--sp-lg); }
 
 .divider {
+  display: block;
+  width: 100%;
   height: 0.5px;
   margin: var(--sp-xl) 0;
+  border: 0;
+  background-color: var(--border-subtle);
 }
 
 .badge {
