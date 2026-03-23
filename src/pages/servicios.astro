@@ -5,6 +5,8 @@ import ContactForm from '../components/ContactForm.astro';
 import { getCollection } from 'astro:content';
 import ServiceCard from '../components/ServiceCard.astro';
 import FaqSection from '../components/FaqSection.astro';
+import type { CollectionEntry } from 'astro:content';
+import pricing from '../data/pricing.json';
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
@@ -16,24 +18,86 @@ const faqEntries = faqDocs
   .flatMap((doc) => doc.data)
   .sort((a, b) => a.order - b.order);
 
-// Precios desde variables de entorno (actualizables sin tocar el código)
-const prices: Record<string, { price?: string; priceUnit?: string }> = {
-  'ia-agents': {
-    price: import.meta.env.PUBLIC_PRICE_IA_AGENTS,
-    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_IA_AGENTS,
-  },
-  'local-llms': {
-    price: import.meta.env.PUBLIC_PRICE_LOCAL_LLMS,
-    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_LOCAL_LLMS,
-  },
-  'ecommerce-platforms': {
-    price: import.meta.env.PUBLIC_PRICE_ECOMMERCE,
-    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_ECOMMERCE,
-  },
-  'workflow-automation': {
-    price: import.meta.env.PUBLIC_PRICE_AUTOMATION,
-    priceUnit: import.meta.env.PUBLIC_PRICE_UNIT_AUTOMATION,
-  },
+/** Anclas alineadas con Nav.astro (#agentes-ia, #landing, …). */
+function serviceAnchorId(slug: string): string {
+  const map: Record<string, string> = {
+    'chatbots-ia': 'agentes-ia',
+    'landing-page': 'landing',
+    'ecommerce-platforms': 'ecommerce',
+    'workflow-automation': 'automatizacion',
+    'local-llms': 'local-llms',
+  };
+  return map[slug] ?? `service-${slug}`;
+}
+
+type PricingEntry = { price: string; unit?: string; prefix?: string };
+
+type ServicePriceSlug =
+  | 'chatbots-ia'
+  | 'landing-page'
+  | 'local-llms'
+  | 'ecommerce-platforms'
+  | 'workflow-automation';
+
+const prices = pricing as Record<ServicePriceSlug, PricingEntry>;
+
+/** Sentinel que ServiceCard interpreta como CTA a contacto (no bloque numérico). */
+const PRICE_INQUIRE = 'Consultar';
+
+function parsePriceFromFrontmatter(
+  data: CollectionEntry<'services'>['data'],
+): { price: string; priceUnit?: string; pricePrefix: string } | null {
+  const raw = data.priceFrom?.trim();
+  if (!raw) return null;
+  const ars = raw.match(/^ARS\s+(.+)$/i);
+  if (ars) {
+    const price = ars[1].trim();
+    if (!price) return null;
+    return { price, priceUnit: 'ARS', pricePrefix: '' };
+  }
+  if (raw.startsWith('$')) {
+    const price = raw.slice(1).trim();
+    if (!price) return null;
+    return { price, priceUnit: undefined, pricePrefix: '$' };
+  }
+  return { price: raw, priceUnit: undefined, pricePrefix: '' };
+}
+
+function resolveServicePrice(
+  slug: string,
+  data: CollectionEntry<'services'>['data'],
+): { price?: string; priceUnit?: string; pricePrefix: string } {
+  const fromMatter = parsePriceFromFrontmatter(data);
+  if (fromMatter) return fromMatter;
+
+  const entry = prices[slug as ServicePriceSlug];
+  const numeric = entry?.price?.trim();
+  if (numeric) {
+    const unit = entry.unit?.trim();
+    return {
+      price: numeric,
+      priceUnit: unit || undefined,
+      pricePrefix: entry.prefix ?? '',
+    };
+  }
+
+  return { price: PRICE_INQUIRE, pricePrefix: '', priceUnit: undefined };
+}
+
+const siteUrl = 'https://escalatunegocioconia.com';
+const servicesJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': sortedServices.map((s) => ({
+    '@type': 'Service',
+    name: s.data.title,
+    description: s.data.shortDescription ?? s.data.description,
+    url: `${siteUrl}/servicios#${serviceAnchorId(s.slug)}`,
+    provider: {
+      '@type': 'Person',
+      name: 'Nicolás Hruszczak',
+      url: siteUrl,
+    },
+  })),
 };
 ---
 
@@ -42,6 +106,9 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
   description="Software a medida, automatización con IA y auditoría de procesos para empresas y pymes que buscan reducir costos y multiplicar resultados."
   ogImage="/og-desktop.png"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
+  </Fragment>
   <Nav activePage="servicios" />
 
   <main id="main-content">
@@ -144,19 +211,27 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
               tabindex="0"
             >
               {sortedServices.map((service) => {
-                const priceData = prices[service.slug] ?? {};
+                const resolved = resolveServicePrice(service.slug, service.data);
                 return (
-                  <ServiceCard service={{
-                    title: service.data.title,
-                    titleEn: service.data.titleEn,
-                    shortDescription: service.data.shortDescription ?? service.data.description,
-                    shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
-                    imageKey: service.data.imageKey,
-                    featured: service.data.featured,
-                    href: service.data.href,
-                    price: priceData.price,
-                    priceUnit: priceData.priceUnit,
-                  }} />
+                  <div
+                    id={serviceAnchorId(service.slug)}
+                    class="service-card-anchor"
+                  >
+                    <ServiceCard service={{
+                      title: service.data.title,
+                      titleEn: service.data.titleEn,
+                      shortDescription: service.data.shortDescription ?? service.data.description,
+                      shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+                      roiFocus: service.data.roiFocus,
+                      roiFocusEn: service.data.roiFocusEn,
+                      imageKey: service.data.imageKey,
+                      featured: service.data.featured,
+                      href: service.data.href,
+                      price: resolved.price,
+                      priceUnit: resolved.priceUnit,
+                      pricePrefix: resolved.pricePrefix,
+                    }} />
+                  </div>
                 );
               })}
             </div>
@@ -427,4 +502,12 @@ const prices: Record<string, { price?: string; priceUnit?: string }> = {
   }
   .services-carousel::-webkit-scrollbar { display: none; }
   .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
+
+  .service-card-anchor {
+    scroll-margin-top: 96px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    min-width: 260px;
+    max-width: 300px;
+  }
 </style>

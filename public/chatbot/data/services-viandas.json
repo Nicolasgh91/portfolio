@@ -1,0 +1,67 @@
+[
+  {
+    "id": "menu-semana",
+    "title": "Menú de la semana (lunes a viernes)",
+    "emoji": "📅",
+    "tagline": "Platos rotativos; consultá el día disponible en el chat",
+    "description": "Cada día hay dos opciones saladas y una opción vegetariana. Los precios son por porción individual.",
+    "includes": [
+      "Milanesa con puré o ensalada",
+      "Pollo al horno con verduras",
+      "Wok de vegetales con arroz (veg)",
+      "Postre opcional: flan o fruta"
+    ],
+    "stack": [],
+    "price_from": "ARS 3.200 por plato principal",
+    "delivery": "Entrega 12:00–14:00 y 19:00–21:00 (zona a confirmar)",
+    "ideal_for": "Quienes encargan vianda para el trabajo o el hogar"
+  },
+  {
+    "id": "combo-familiar",
+    "title": "Combo familiar (4 personas)",
+    "emoji": "👨‍👩‍👧",
+    "tagline": "Dos platos principales + guarnición + postre",
+    "description": "Pensado para familias. Incluye 4 porciones de dos platos a elección del menú del día y guarnición compartida.",
+    "includes": [
+      "4 porciones plato A",
+      "4 porciones plato B",
+      "Guarnición para compartir",
+      "Postre (flan o fruta)"
+    ],
+    "stack": [],
+    "price_from": "ARS 18.500",
+    "delivery": "Mismo horario que viandas sueltas",
+    "ideal_for": "Familias que cenan juntas"
+  },
+  {
+    "id": "ensalada-proteina",
+    "title": "Ensalada + proteína",
+    "emoji": "🥗",
+    "tagline": "Opción liviana con pollo, huevo o hummus",
+    "description": "Base de mix verde, tomate y zanahoria. Elegí proteína: pollo grillado, huevo duro o hummus (veg).",
+    "includes": [
+      "Mix de hojas verdes",
+      "Aderezo a elección (limón, yogurt o vinagreta)",
+      "1 proteína a elección"
+    ],
+    "stack": [],
+    "price_from": "ARS 4.100",
+    "delivery": "Ideal para retirar o delivery mediodía",
+    "ideal_for": "Quienes buscan algo más liviano"
+  },
+  {
+    "id": "alergenos",
+    "title": "Información de alérgenos",
+    "emoji": "⚠️",
+    "tagline": "Gluten, lácteos, huevo y frutos secos",
+    "description": "En cocina manipulamos gluten, lácteos, huevo y frutos secos. Si tenés restricción severa, indicálo al pedir y lo anotamos para la cocina (demo).",
+    "includes": [
+      "Aviso de trazas",
+      "Opción vegetariana sin carne (puede incluir lácteos/ huevo)"
+    ],
+    "stack": [],
+    "price_from": "Sin costo adicional",
+    "delivery": "—",
+    "ideal_for": "Personas con intolerancias o alergias"
+  }
+]

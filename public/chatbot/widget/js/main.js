@@ -100,10 +100,13 @@ export async function sendMessage(text) {
     // SEC-001: systemPrompt se construye server-side
     history.push({ role: 'user', parts: [{ text: trimmed }] });
 
-    const reply = await callChatAPI({ history });
+    const reply = await callChatAPI({
+      history,
+      profile: appData?.profile,
+    });
 
     history.push({ role: 'model', parts: [{ text: reply }] });
-    saveSession(history);
+    saveSession(history, appData?.profile || 'default');
 
     removeTyping();
     const bubbleWrap = await appendStreamingMessage(reply);
@@ -154,7 +157,7 @@ sendBtn.addEventListener('click', () => sendMessage());
 // ── Init ───────────────────────────────────────────────────────────────────
 async function init() {
   appData = await loadData();
-  history = loadSession();
+  history = loadSession(appData.profile || 'default');
 
   headerName.textContent = appData.config.owner?.name || 'Asistente';
 
@@ -177,13 +180,15 @@ async function init() {
   } else {
     // Primera visita: bienvenida con delay para sentirse natural
     setTimeout(() => {
+      const defaultQuick = [
+        '¿Qué servicios ofrecés?',
+        '¿Cuánto cuesta un chatbot?',
+        '¿Trabajás con IA?',
+        'Ver artículos del blog',
+      ];
+      const qr = appData.config.chatbot.quick_replies || defaultQuick;
       appendMessage('bot', appData.config.chatbot.greeting, {
-        quickReplies: [
-          '¿Qué servicios ofrecés?',
-          '¿Cuánto cuesta un chatbot?',
-          '¿Trabajás con IA?',
-          'Ver artículos del blog',
-        ],
+        quickReplies: qr,
         onQuickReply: sendMessage,
       });
       if (!isOpen) badge.style.opacity = '1';

@@ -7,6 +7,8 @@ const staticPages = [
   { url: '/servicios', priority: '0.9', changefreq: 'monthly' },
   { url: '/talento',   priority: '0.8', changefreq: 'monthly' },
   { url: '/blog',      priority: '0.8', changefreq: 'weekly'  },
+  { url: '/oferta/menu-digital', priority: '0.85', changefreq: 'monthly' },
+  { url: '/oferta/hub-creadores', priority: '0.75', changefreq: 'monthly' },
 ];
 
 export async function GET() {

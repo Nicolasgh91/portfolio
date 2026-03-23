@@ -334,4 +334,50 @@ em { font-style: normal; color: var(--accent); }
   padding: var(--sp-xl) var(--sp-lg);
 }
 
+/* ── Social icon links ───────────────────────────────────── */
+.social-icon-link {
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease;
+}
+
+.social-icon-link:hover,
+.social-icon-link:focus-visible {
+  color: var(--color-accent-400);
+}
+
+.social-icon-link:focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-icon-link { transition: none; }
+}
+
+.social-icon-link--brand-x:hover,
+.social-icon-link--brand-x:focus-visible,
+.social-icon-link--brand-gh:hover,
+.social-icon-link--brand-gh:focus-visible {
+  color: var(--text-primary);
+}
+
+.social-icon-link--brand-li:hover,
+.social-icon-link--brand-li:focus-visible {
+  color: #0A66C2;
+}
+
+.social-icon-link--brand-wa:hover,
+.social-icon-link--brand-wa:focus-visible {
+  color: #25D366;
+}
+
+.social-icon-link--brand-ig:hover,
+.social-icon-link--brand-ig:focus-visible {
+  color: #E1306C;
+}
+
 @tailwind utilities;

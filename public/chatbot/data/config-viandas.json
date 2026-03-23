@@ -1,0 +1,42 @@
+{
+  "owner": {
+    "name": "Viandas La Esquina (demo)",
+    "role": "Cocina casera y delivery de viandas",
+    "bio": "Elaboramos viandas frescas de lunes a viernes con menú semanal. Entregamos en zona CABA y alrededores en horario acordado. Todo el contenido de este chat es ficticio para demostrar un bot de toma de pedidos.",
+    "location": "Buenos Aires (demo)",
+    "languages": ["Español"],
+    "contact": {
+      "whatsapp": "+54 9 11 0000-0000",
+      "email": "demo-viandas@ejemplo.invalid",
+      "website": "https://escalatunegocioconia.com"
+    },
+    "availability": "Pedidos hasta 18 h para el día siguiente (demo)."
+  },
+
+  "talento": null,
+
+  "chatbot": {
+    "name": "Asistente de pedidos",
+    "greeting": "¡Hola! Soy el asistente de Viandas La Esquina (demo). Te ayudo a armar tu pedido: elegí platos, cantidades y te indico cómo confirmar por WhatsApp.",
+    "cta_whatsapp": "Para confirmar el pedido escribinos por WhatsApp",
+    "cta_email": "También podés escribirnos por email",
+    "persona": "Sos el asistente de un negocio de viandas (datos ficticios). Ayudás a elegir platos del menú, cantidades y aclarás alérgenos si el cliente pregunta. Sos breve y cordial. Si piden precios, usá solo los precios del menú provisto. Para cerrar el pedido, pedí nombre y dirección/zona y derivá a WhatsApp. No inventes platos fuera del menú.",
+    "quick_replies": [
+      "Ver menú del día",
+      "Opciones vegetarianas",
+      "¿Hacen delivery?",
+      "Armar pedido para mañana"
+    ]
+  },
+
+  "branding": {
+    "primary_color": "#14532d",
+    "accent_color": "#22c55e",
+    "font": "system-ui"
+  },
+
+  "demo": {
+    "profile": "viandas",
+    "disclaimer": "Contenido ficticio para demostración comercial."
+  }
+}

@@ -28,27 +28,52 @@ const FALLBACK_CONFIG = {
   branding: {}
 };
 
+// ── Perfil demo (debe coincidir con allowlist en api/chat.js) ─────────────
+function getDataProfile() {
+  try {
+    const q = new URLSearchParams(window.location.search);
+    return q.get('demo') === 'viandas' ? 'viandas' : 'default';
+  } catch {
+    return 'default';
+  }
+}
+
 // ── Carga de datos ─────────────────────────────────────────────────────────
 export async function loadData() {
+  const profile = getDataProfile();
+  const paths =
+    profile === 'viandas'
+      ? {
+          config: '/chatbot/data/config-viandas.json',
+          services: '/chatbot/data/services-viandas.json',
+          articles: '/chatbot/data/articles-viandas.json',
+        }
+      : {
+          config: '/chatbot/data/config.json',
+          services: '/chatbot/data/services.json',
+          articles: '/chatbot/data/articles.json',
+        };
+
   try {
     const [config, services, articles] = await Promise.all([
-      fetch('/chatbot/data/config.json').then(r => r.json()),
-      fetch('/chatbot/data/services.json').then(r => r.json()),
-      fetch('/chatbot/data/articles.json').then(r => r.json()),
+      fetch(paths.config).then((r) => r.json()),
+      fetch(paths.services).then((r) => r.json()),
+      fetch(paths.articles).then((r) => r.json()),
     ]);
-    return { config, services, articles };
+    return { config, services, articles, profile };
   } catch {
-    return { config: FALLBACK_CONFIG, services: [], articles: [] };
+    return { config: FALLBACK_CONFIG, services: [], articles: [], profile: 'default' };
   }
 }
 
 // ── Llamada a la Edge Function ─────────────────────────────────────────────
 // SEC-001: systemPrompt se construye server-side, ya no se envía desde el cliente
-export async function callChatAPI({ history }) {
+export async function callChatAPI({ history, profile }) {
+  const prof = profile === 'viandas' ? 'viandas' : undefined;
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ history }),
+    body: JSON.stringify(prof ? { history, profile: prof } : { history }),
   });
 
   if (!res.ok) {

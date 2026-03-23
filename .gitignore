@@ -24,3 +24,8 @@ Thumbs.db
 #Docs
 docs
 docs/
+
+# Local slide sources (heavy originals, not for git)
+content-sources/
+local-assets
+local-assets/

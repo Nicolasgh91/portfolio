@@ -1,0 +1,7 @@
+{
+  "chatbots-ia": { "price": "20.000", "unit": "ARS", "prefix": "" },
+  "landing-page": { "price": "20.000", "unit": "ARS", "prefix": "" },
+  "ecommerce-platforms": { "price": "50.000", "unit": "ARS", "prefix": "" },
+  "local-llms": { "price": "" },
+  "workflow-automation": { "price": "" }
+}

@@ -682,6 +682,11 @@ Settings → Environment Variables → Add → seleccionar entornos
 **Importante:** después de agregar o cambiar variables en Vercel,
 hacer un redeploy manual para que el Edge Function las tome.
 
+**Precios del sitio:** los importes mostrados en `/servicios` **no** se configuran
+con variables de entorno. La fuente es `src/data/pricing.json` (ver §12). Si en
+`.env.local` u otros archivos copiados desde Vercel quedaron claves obsoletas
+`PUBLIC_PRICE_*` o `PUBLIC_PRICE_UNIT_*`, podés eliminarlas: no tienen efecto en el build.
+
 ---
 
 ## 8. Desarrollo local
@@ -859,6 +864,20 @@ El sitio implementa WCAG 2.1 AA. Características:
    `src/content/projects/*.mdx`.
 2. Validar que el frontmatter respete los schemas de `src/content/config.ts`.
 3. Hacer commit y push.
+
+### Precios del catálogo (`/servicios`)
+
+1. **Archivo único para precios base:** editá `src/data/pricing.json`. Cada clave
+   es el slug del servicio (`chatbots-ia`, `landing-page`, etc.) con
+   `price`, `unit` y `prefix` (por ejemplo precios en ARS con `"prefix": ""`).
+   Usá `"price": ""` cuando quieras dejar explícito que no publicás monto en
+   esa tarjeta (se mostrará un CTA para consultar).
+2. **Prioridad respecto al MDX:** si el servicio tiene `priceFrom` en el
+   frontmatter de su MDX, **ese valor tiene prioridad sobre `pricing.json`**.
+   Para que un cambio solo en el JSON se refleje en la tarjeta, el MDX no debe
+   definir `priceFrom` (o debe vaciarse).
+3. Los precios **no** usan variables de entorno; no hace falta definir
+   `PUBLIC_PRICE_*` en Vercel ni en `.env.local`.
 
 ---
 

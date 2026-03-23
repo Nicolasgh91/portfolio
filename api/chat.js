@@ -22,8 +22,8 @@ const rateMap      = new Map();
 let   dailyCount   = 0;
 let   dailyResetAt = nextMidnight();
 
-// Cache del system prompt (se construye una vez por instancia)
-let cachedSystemPrompt = null;
+// Cache del system prompt por perfil (default | viandas)
+const systemPromptCache = new Map();
 
 function nextMidnight() {
   const d = new Date();
@@ -81,49 +81,95 @@ ${t.summary || ''}
 ${(t.projects || []).map((p) => `- ${p.title} (${p.slug}) — estado: ${p.status}`).join('\n')}`
     : '';
 
-  return `${c.persona}
+  const servicesBlock = (services || []).map((s) => {
+    const inc = (s.includes || []).join(', ') || '—';
+    const stk = (s.stack || []).join(', ') || '—';
+    return `### ${s.emoji || ''} ${s.title} — desde ${s.price_from || 'consultar'}
+${s.description || ''}
+Incluye: ${inc} | Stack: ${stk}
+Entrega: ${s.delivery || '—'} | Ideal para: ${s.ideal_for || '—'}`;
+  }).join('\n\n');
 
-## SOBRE ${o.name.toUpperCase()}
-${o.bio || ''}
-Ubicación: ${o.location || ''} | Idiomas: ${(o.languages || []).join(', ')} | ${o.availability || ''}
+  const articlesBlock =
+    articles && articles.length > 0
+      ? articles
+          .map((a) => `- "${a.title}" (${a.reading_time}): ${a.summary} → ${a.url}`)
+          .join('\n')
+      : 'No hay artículos indexados en este contexto.';
 
-${talentoBlock}
+  const isViandas = config.demo?.profile === 'viandas';
 
-## SERVICIOS
-${services.map(s => `### ${s.emoji || ''} ${s.title} — desde ${s.price_from}
-${s.description}
-Incluye: ${s.includes.join(', ')} | Stack: ${s.stack.join(', ')}
-Entrega: ${s.delivery} | Ideal para: ${s.ideal_for}`).join('\n\n')}
-
-## ARTÍCULOS DEL BLOG
-${articles.map(a => `- "${a.title}" (${a.reading_time}): ${a.summary} → ${a.url}`).join('\n')}
-
-## CONTACTO
-WhatsApp: ${o.contact?.whatsapp || ''} | Email: ${o.contact?.email || ''} | Web: ${o.contact?.website || ''}
-
-## INSTRUCCIONES
-- Respondé en el idioma del usuario
+  const instructions = isViandas
+    ? `- Respondé en el idioma del usuario
+- Ayudá a armar pedidos con cantidades y platos del menú únicamente
+- Si preguntan precios, usá solo los valores del menú
+- Para cerrar: pedí nombre, zona y ventana horaria; derivá a WhatsApp
+- No inventes platos, precios ni horarios fuera de este contexto
+- Máximo 3-4 párrafos por respuesta`
+    : `- Respondé en el idioma del usuario
 - Sé concreto y útil, sin rodeos
 - Si preguntan precios, dá el precio base y aclará que depende del proyecto
 - Si hay interés en contratar, mencioná WhatsApp o email
 - No inventes información fuera de este contexto
 - Máximo 3-4 párrafos por respuesta`;
+
+  return `${c.persona}
+
+## SOBRE ${(o.name || 'EL NEGOCIO').toUpperCase()}
+${o.bio || ''}
+Ubicación: ${o.location || ''} | Idiomas: ${(o.languages || []).join(', ')} | ${o.availability || ''}
+
+${talentoBlock}
+
+## MENÚ / SERVICIOS
+${servicesBlock}
+
+## ARTÍCULOS DEL BLOG
+${articlesBlock}
+
+## CONTACTO
+WhatsApp: ${o.contact?.whatsapp || ''} | Email: ${o.contact?.email || ''} | Web: ${o.contact?.website || ''}
+
+## INSTRUCCIONES
+${instructions}`;
 }
 
-async function getSystemPrompt() {
-  if (cachedSystemPrompt) return cachedSystemPrompt;
+/** Perfiles allowlist: solo datos estáticos en public/chatbot/data/ */
+function resolveDataProfile(raw) {
+  return raw === 'viandas' ? 'viandas' : 'default';
+}
+
+async function getSystemPrompt(profileKey) {
+  const profile = resolveDataProfile(profileKey);
+  if (systemPromptCache.has(profile)) return systemPromptCache.get(profile);
 
   try {
+    const paths =
+      profile === 'viandas'
+        ? {
+            config: '/chatbot/data/config-viandas.json',
+            services: '/chatbot/data/services-viandas.json',
+            articles: '/chatbot/data/articles-viandas.json',
+          }
+        : {
+            config: '/chatbot/data/config.json',
+            services: '/chatbot/data/services.json',
+            articles: '/chatbot/data/articles.json',
+          };
+
     const [cfg, services, articles] = await Promise.all([
-      loadJSON('/chatbot/data/config.json'),
-      loadJSON('/chatbot/data/services.json'),
-      loadJSON('/chatbot/data/articles.json'),
+      loadJSON(paths.config),
+      loadJSON(paths.services),
+      loadJSON(paths.articles),
     ]);
-    cachedSystemPrompt = buildSystemPrompt({ config: cfg, services, articles });
-    return cachedSystemPrompt;
+    const built = buildSystemPrompt({ config: cfg, services, articles });
+    systemPromptCache.set(profile, built);
+    return built;
   } catch (err) {
     console.error('[chat] Error loading prompt data:', err);
-    return 'Sos un asistente profesional y amigable. Respondé en el idioma del usuario.';
+    const fallback = 'Sos un asistente profesional y amigable. Respondé en el idioma del usuario.';
+    systemPromptCache.set(profile, fallback);
+    return fallback;
   }
 }
 
@@ -205,6 +251,8 @@ export default async function handler(req) {
     return json({ error: 'Formato inválido.' }, 400, origin);
   }
 
+  const dataProfile = resolveDataProfile(body.profile);
+
   // SEC-003: Truncar history a últimos N mensajes y sanitizar
   const history = body.history.slice(-MAX_HISTORY_LEN).map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
@@ -224,7 +272,7 @@ export default async function handler(req) {
   dailyCount++;
 
   // ── SEC-001: construir system prompt server-side ──────────────────
-  const systemPrompt = await getSystemPrompt();
+  const systemPrompt = await getSystemPrompt(dataProfile);
 
   // ── Llamada a Gemini ──────────────────────────────────────────────
   const GEMINI_KEY   = process.env.GEMINI_API_KEY;

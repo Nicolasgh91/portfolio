@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from "@vercel/speed-insights/astro"
 import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
 import site from '../data/site.json';
 
 interface Props {
@@ -143,6 +144,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
     <slot />
+    <BackToTop />
     <Footer />
     <Analytics />
 

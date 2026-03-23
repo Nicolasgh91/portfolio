@@ -25,6 +25,13 @@ const services = defineCollection({
     descriptionEn: z.string(),
     shortDescription: z.string().optional(),
     shortDescriptionEn: z.string().optional(),
+    /** Línea comercial / ROI para la tarjeta del catálogo (S1-T1, SVC-001). */
+    roiFocus: z.string().optional(),
+    roiFocusEn: z.string().optional(),
+    /** Precio desde (texto libre, ej. "ARS 20.000"); complementa o reemplaza env en UI. */
+    priceFrom: z.string().optional(),
+    /** Identificador de módulo para analytics / enlaces (opcional). */
+    module: z.string().max(64).optional(),
     icon: z.string(),
     order: z.number().default(99),
     href: z.string().optional(),
@@ -64,12 +71,20 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     readingTime: z.number().optional(),
     coverImageKey: z
-      .enum(['human-ai', 'cloud-servers', 'satellite', 'huella-del-fuego'])
+      .enum(['human-ai', 'cloud-servers', 'satellite', 'huella-del-fuego', 'arquitectura-gran-escala'])
       .optional(),
     coverAlt: z.string().optional(),
     priority: z.number().min(0).max(1).default(0.5),
     pillarSlug: z.string().optional(),
     vertical: z.enum(['alimentos', 'inmobiliaria', 'salud', 'ecommerce', 'transversal']).default('transversal'),
+    slides: z
+      .object({
+        src: z.string(),
+        alt: z.string(),
+        totalPages: z.number(),
+        sourceType: z.enum(['pdf', 'pptx']),
+      })
+      .optional(),
   }),
 });
 

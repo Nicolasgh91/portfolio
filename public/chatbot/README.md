@@ -50,9 +50,12 @@ portfolio/
 │       │       └── main.js       ← Estado, eventos, orquestación (entry point)
 │       │
 │       └── data/                 ← Contenido que "entrena" al bot
-│           ├── config.json       ← Identidad, contacto, branding
+│           ├── config.json       ← Identidad, contacto, branding (sitio)
 │           ├── services.json     ← Servicios ofrecidos
-│           └── articles.json     ← Índice del blog
+│           ├── articles.json     ← Índice del blog
+│           ├── config-viandas.json    ← Demo: viandas (ficticio)
+│           ├── services-viandas.json  ← Menú ficticio
+│           └── articles-viandas.json  ← [] (sin blog en demo)
 │
 └── src/
     └── layouts/
@@ -99,15 +102,40 @@ Usuario escribe
 
 ---
 
+## Demo viandas (toma de pedidos)
+
+Perfil **ficticio** para mostrar el widget orientado a viandas / menú. No reemplaza el chat del sitio principal.
+
+**Cómo probarlo**
+
+1. Abrí el widget con query:  
+   `/chatbot/widget/index.html?demo=viandas`  
+   (en local: `http://localhost:4321/chatbot/widget/index.html?demo=viandas` si el servidor sirve `public/`).
+
+2. El iframe carga `config-viandas.json`, `services-viandas.json` y `articles-viandas.json`.
+
+3. El cliente envía `POST /api/chat` con `{ history, profile: "viandas" }`. El servidor solo acepta ese valor extra en allowlist; cualquier otro se trata como perfil default.
+
+4. El historial en `sessionStorage` va en una clave distinta al chat principal (`nh_chat_history_viandas` vs `nh_chat_history_default`), así no se mezclan conversaciones.
+
+**Archivos**
+
+| Archivo | Rol |
+|--------|-----|
+| `data/config-viandas.json` | Dueño ficticio, persona del bot, `quick_replies`, `demo.profile: "viandas"` |
+| `data/services-viandas.json` | Ítems de menú / combos (misma forma general que `services.json` para el prompt) |
+| `data/articles-viandas.json` | Array vacío `[]` |
+
+---
+
 ## Descripción de cada archivo
 
 ### `api/chat.js` — Edge Function (servidor)
 
-**No modificar para cambios de contenido.**
-
 Proxy seguro entre el browser y Gemini. Responsabilidades:
 - Leer `GEMINI_API_KEY` y `GEMINI_MODEL` desde variables de entorno de Vercel
-- Recibir `{ systemPrompt, history }` del browser
+- Recibir `{ history }` del browser; opcionalmente `{ profile: "viandas" }` (allowlist)
+- Construir el system prompt en servidor leyendo los JSON de `public/chatbot/data/`
 - Llamar a la API de Gemini con esos datos
 - Devolver `{ reply }` al browser
 

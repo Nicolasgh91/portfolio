@@ -8,27 +8,31 @@
  * (compatible con la API de Gemini)
  */
 
-const SESSION_KEY = 'chat_history';
+const SESSION_PREFIX = 'nh_chat_history_';
 
-export function saveSession(history) {
+function sessionKey(profile) {
+  return SESSION_PREFIX + (profile === 'viandas' ? 'viandas' : 'default');
+}
+
+export function saveSession(history, profile = 'default') {
   try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(history));
+    sessionStorage.setItem(sessionKey(profile), JSON.stringify(history));
   } catch {
     // sessionStorage lleno o bloqueado: falla silenciosamente
   }
 }
 
-export function loadSession() {
+export function loadSession(profile = 'default') {
   try {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = sessionStorage.getItem(sessionKey(profile));
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
   }
 }
 
-export function clearSession() {
+export function clearSession(profile = 'default') {
   try {
-    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(sessionKey(profile));
   } catch {}
 }

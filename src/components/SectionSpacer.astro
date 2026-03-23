@@ -1,0 +1,16 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+}
+
+const { size = 'lg' } = Astro.props;
+
+const spacerClasses: Record<NonNullable<Props['size']>, string> = {
+  sm: 'my-4',
+  md: 'my-6',
+  lg: 'my-10',
+  xl: 'my-14',
+};
+---
+
+<div aria-hidden="true" class={spacerClasses[size]}></div>

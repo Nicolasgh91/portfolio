@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import ContactForm from '../../components/ContactForm.astro';
+
+const title = 'Menú digital y landing desde ARS 20.000 — escalatunegocioconia.com';
+const description =
+  'Landing page indexable, formulario de contacto y WhatsApp directo. Ideal para viandas, pymes y profesionales que venden hoy por Instagram o PDF.';
+---
+
+<Layout {title} {description} ogImage="/og-desktop.png">
+  <Nav activePage="servicios" />
+
+  <main id="main-content">
+    <div class="page-container py-12">
+      <article class="mx-auto max-w-2xl">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+          Oferta · Tier 0
+        </p>
+        <h1 class="mb-4 font-display text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-4xl">
+          Tu menú digital o landing profesional desde <span class="text-[var(--accent)]">ARS 20.000</span>
+        </h1>
+        <p class="mb-8 text-base leading-relaxed text-[var(--text-secondary)]">
+          Reemplazá el PDF estático por una web que Google puede indexar. Incluye estructura comercial clara,
+          formulario y llamados a WhatsApp. El asistente de la esquina inferior responde consultas 24/7 en este
+          sitio; el mismo enfoque se aplica a tu proyecto.
+        </p>
+
+        <ul class="mb-10 list-none space-y-3 text-sm text-[var(--text-secondary)]">
+          <li class="flex gap-2">
+            <span class="text-[var(--accent)]" aria-hidden="true">✓</span>
+            <span>Entrega en 1–2 semanas, deploy en Vercel.</span>
+          </li>
+          <li class="flex gap-2">
+            <span class="text-[var(--accent)]" aria-hidden="true">✓</span>
+            <span>Pensado para escalar después con chatbot, carrito o SEO mensual.</span>
+          </li>
+          <li class="flex gap-2">
+            <span class="text-[var(--accent)]" aria-hidden="true">✓</span>
+            <span>Diagnóstico inicial sin costo para alinear alcance.</span>
+          </li>
+        </ul>
+
+        <p class="mb-4 text-sm text-[var(--text-muted)]">
+          <a href="/servicios#landing" class="text-[var(--accent-text)] underline-offset-2 hover:underline">
+            Ver servicio completo en el catálogo
+          </a>
+          ·
+          <a href="/servicios#contacto" class="text-[var(--accent-text)] underline-offset-2 hover:underline">
+            Ir al formulario en Servicios
+          </a>
+        </p>
+      </article>
+
+      <section id="contacto" class="mx-auto mt-12 max-w-xl" aria-labelledby="oferta-contact-heading">
+        <h2 id="oferta-contact-heading" class="mb-4 font-display text-xl font-bold text-[var(--text-primary)]">
+          Solicitar esta oferta
+        </h2>
+        <ContactForm />
+      </section>
+    </div>
+  </main>
+</Layout>
