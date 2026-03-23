@@ -3,7 +3,7 @@ title: "Arquitectura de sistemas a gran escala: lecciones de 'Designing data-int
 titleEn: "Large-scale systems architecture: lessons from 'Designing data-intensive applications'"
 description: "Confiabilidad, escalabilidad y mantenibilidad como pilares de todo sistema moderno. Casos de uso comparativos, tablas de tecnologías y preguntas frecuentes para entender cómo diseñar sistemas que sobreviven al crecimiento."
 descriptionEn: "Reliability, scalability and maintainability as pillars of every modern system. Comparative use cases, technology tables and FAQs to understand how to design systems that survive growth."
-pubDate: 2026-04-10
+pubDate: 2026-03-23
 category: "arquitectura"
 tags: ["arquitectura", "sistemas distribuidos", "bases de datos", "escalabilidad", "CAP", "Kafka", "PostgreSQL"]
 draft: false
@@ -158,7 +158,7 @@ El costo es que las escrituras fila por fila son más lentas. Por eso el almacen
 
 No exactamente, pero tampoco es solo una cola de mensajes. Kafka es un **log de eventos distribuido y persistente**: los mensajes no se eliminan al ser consumidos sino que se retienen durante un período configurable. Esto permite que múltiples consumidores independientes los lean a su propio ritmo, que un consumidor nuevo pueda "rebobinar" y reprocesar el historial, y que el sistema funcione como fuente de verdad para derivar múltiples vistas de los datos.
 
-Esta característica —la inmutabilidad del log— es lo que lo convierte en la columna vertebral de arquitecturas event-driven como la que describe el roadmap de este proyecto.
+Esta característica —la inmutabilidad del log— es lo que lo convierte en la columna vertebral de arquitecturas event-driven.
 
 ---
 
