@@ -115,19 +115,8 @@ const readLabel = `Leer artículo: ${post.data.title}`;
   <!-- ── CUERPO ── -->
   <div class="blog-card__body">
 
-    <!-- Meta: categoría · fecha · tiempo de lectura -->
+    <!-- Meta: fecha · tiempo de lectura -->
     <div class="blog-card__meta">
-      <a
-        href={`/blog/categoria/${post.data.category}`}
-        class="blog-card__cat"
-        data-en={post.data.category}
-        data-es={post.data.category}
-      >
-        {post.data.category}
-      </a>
-
-      <span class="blog-card__sep" aria-hidden="true">&bull;</span>
-
       <time
         datetime={post.data.pubDate.toISOString()}
         class="blog-card__date"
@@ -180,23 +169,6 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     >
       {post.data.description}
     </p>
-
-    <!-- Tags (máximo 3) -->
-    {(post.data.vertical || post.data.tags.length > 0) && (
-      <div class="blog-card__tags">
-        {post.data.vertical && (
-          <span class="blog-card__vertical">{post.data.vertical}</span>
-        )}
-        {post.data.tags.slice(0, 3).map((tag) => (
-          <a
-            href={`/blog/etiqueta/${tag}`}
-            class="blog-card__tag"
-          >
-            {tag}
-          </a>
-        ))}
-      </div>
-    )}
 
   </div>
 </article>
@@ -342,22 +314,6 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     margin-bottom: 14px;
   }
 
-  .blog-card__cat {
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: #fbbf24;
-    text-decoration: none;
-    position: relative;
-    z-index: 4;
-    transition: color 200ms ease;
-  }
-
-  .blog-card__cat:hover {
-    color: #f59e0b;
-  }
-
   .blog-card__sep {
     color: #475569;
     font-size: 0.625rem;
@@ -376,17 +332,6 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     display: inline-flex;
     align-items: center;
     gap: 3px;
-  }
-
-  .blog-card__vertical {
-    font-size: 0.625rem;
-    padding: 2px 7px;
-    border-radius: 9999px;
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    background: rgba(245, 158, 11, 0.15);
-    color: #fdba74;
-    text-transform: lowercase;
-    line-height: 1.3;
   }
 
   /* ─────────────────────────────────────────
@@ -433,33 +378,4 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     flex: 1;
   }
 
-  /* ─────────────────────────────────────────
-     TAGS
-  ───────────────────────────────────────── */
-  .blog-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: auto;
-  }
-
-  .blog-card__tag {
-    font-size: 0.625rem;
-    padding: 3px 8px;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #94a3b8;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    text-decoration: none;
-    position: relative;
-    z-index: 4;
-    transition:
-      color 200ms ease,
-      background 200ms ease;
-  }
-
-  .blog-card__tag:hover {
-    color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.1);
-  }
 </style>

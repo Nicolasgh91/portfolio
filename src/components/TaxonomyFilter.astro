@@ -5,12 +5,12 @@
 
 interface Props {
   categories: string[];
-  tags: string[];
+  tags?: string[];
   activeCategory?: string;
   activeTag?: string;
 }
 
-const { categories, tags, activeCategory, activeTag } = Astro.props;
+const { categories, tags = [], activeCategory, activeTag } = Astro.props;
 ---
 
 <nav class="taxonomy" aria-label="Filtros del blog">
