@@ -9,8 +9,15 @@ import satellite from '../assets/blog/satellite.webp';
 import cloudServers from '../assets/blog/cloud-servers.webp';
 import ogHuellaDelFuego from '../assets/open-graphs/og-huella-del-fuego.webp';
 import thumbArquitecturaGranEscala from '../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp';
+import thumbMicroservicies from '../assets/blog/thumbnails/thumb-microservicies.webp';
 
-type CoverImageKey = 'human-ai' | 'cloud-servers' | 'satellite' | 'huella-del-fuego' | 'arquitectura-gran-escala';
+type CoverImageKey =
+  | 'human-ai'
+  | 'cloud-servers'
+  | 'satellite'
+  | 'huella-del-fuego'
+  | 'arquitectura-gran-escala'
+  | 'microservicios-urban-blueprint';
 
 interface Props {
   post: {
@@ -39,6 +46,7 @@ const coverByKey: Record<CoverImageKey, typeof humanAi> = {
   'cloud-servers': cloudServers,
   'huella-del-fuego': ogHuellaDelFuego,
   'arquitectura-gran-escala': thumbArquitecturaGranEscala,
+  'microservicios-urban-blueprint': thumbMicroservicies,
 };
 
 const categoryCover = {

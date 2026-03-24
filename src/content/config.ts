@@ -71,7 +71,14 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     readingTime: z.number().optional(),
     coverImageKey: z
-      .enum(['human-ai', 'cloud-servers', 'satellite', 'huella-del-fuego', 'arquitectura-gran-escala'])
+      .enum([
+        'human-ai',
+        'cloud-servers',
+        'satellite',
+        'huella-del-fuego',
+        'arquitectura-gran-escala',
+        'microservicios-urban-blueprint',
+      ])
       .optional(),
     coverAlt: z.string().optional(),
     priority: z.number().min(0).max(1).default(0.5),
