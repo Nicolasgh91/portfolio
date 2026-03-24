@@ -1,0 +1,16 @@
+
+> nh-portfolio@1.0.0 build
+> astro build
+
+03:54:04 [types] Generated 8.92s
+03:54:04 [build] output: "static"
+03:54:04 [build] directory: /mnt/c/Users/nicog/portfolio/dist/
+03:54:04 [build] Collecting build info...
+03:54:04 [build] ✓ Completed in 11.26s.
+03:54:07 [build] Building static entrypoints...
+03:54:17 [ERROR] [vite] x Build failed in 9.42s
+Could not resolve "../../utils/tagSlug" from "src/pages/blog/index.astro"
+file: /mnt/c/Users/nicog/portfolio/src/pages/blog/index.astro
+  Stack trace:
+    at getRollupError (file:///mnt/c/Users/nicog/portfolio/node_modules/rollup/dist/es/shared/parseAst.js:402:41)
+    at ModuleLoader.handleInvalidResolvedId (file:///mnt/c/Users/nicog/portfolio/node_modules/rollup/dist/es/shared/node-entry.js:21710:24)
