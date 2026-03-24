@@ -54,7 +54,7 @@ const { categories, tags = [], activeCategory, activeTag } = Astro.props;
         {tags.map((tag) => (
           <li>
             <a
-              href={`/blog/etiqueta/${tag}`}
+              href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
               class={`taxonomy__pill taxonomy__pill--tag ${activeTag === tag ? 'taxonomy__pill--active' : ''}`}
               aria-current={activeTag === tag ? 'page' : undefined}
             >{tag}</a>
