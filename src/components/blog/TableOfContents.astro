@@ -1,4 +1,6 @@
 ---
+import { randomUUID } from 'node:crypto';
+
 interface HeadingEntry {
   depth: number;
   slug: string;
@@ -11,67 +13,69 @@ interface Props {
 
 const { headings } = Astro.props;
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const tocRootId = `toc-root-${randomUUID()}`;
 ---
 
 {
   tocHeadings.length > 0 && (
-    <nav
-      class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 [scrollbar-width:thin] [scrollbar-color:var(--border-normal)_transparent]"
-      aria-label="Índice del artículo"
-      data-toc-root
-    >
-      <p class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">
-        En este articulo
-      </p>
+    <>
+      <nav
+        id={tocRootId}
+        class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 [scrollbar-width:thin] [scrollbar-color:var(--border-normal)_transparent]"
+        aria-label="Índice del artículo"
+        data-toc-root
+      >
+        <p class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+          En este articulo
+        </p>
 
-      <ul class="list-none space-y-1 text-[13px]">
-        {tocHeadings.map((heading) => (
-          <li class={heading.depth === 3 ? 'ml-4' : ''}>
-            <a
-              href={`#${heading.slug}`}
-              data-toc-link={heading.slug}
-              class="block rounded-md border border-transparent py-1.5 pl-2 text-[var(--text-secondary)] no-underline transition-colors duration-200 hover:border-[color:var(--border-subtle)] hover:text-[var(--color-accent-400)]"
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+        <ul class="list-none space-y-1 text-[13px]">
+          {tocHeadings.map((heading) => (
+            <li class={heading.depth === 3 ? 'ml-4' : ''}>
+              <a
+                href={`#${heading.slug}`}
+                data-toc-link={heading.slug}
+                class="block rounded-md border border-transparent py-1.5 pl-2 text-[var(--text-secondary)] no-underline transition-colors duration-200 hover:border-[color:var(--border-subtle)] hover:text-[var(--color-accent-400)]"
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <script define:vars={{ tocRootId }}>
+        const tocRoot = document.getElementById(tocRootId);
+        if (!tocRoot) return;
+
+        const links = Array.from(tocRoot.querySelectorAll('[data-toc-link]'));
+        if (links.length === 0) return;
+
+        const headingElements = Array.from(document.querySelectorAll('article h2[id], article h3[id]'));
+        if (headingElements.length === 0) return;
+
+        const applyState = (activeId) => {
+          links.forEach((link) => {
+            const isActive = link.getAttribute('data-toc-link') === activeId;
+            link.classList.toggle('text-[var(--color-accent-400)]', isActive);
+            link.classList.toggle('border-[color:var(--color-accent-400)]/35', isActive);
+            link.classList.toggle('font-medium', isActive);
+            link.classList.toggle('text-[var(--text-secondary)]', !isActive);
+            link.classList.toggle('border-transparent', !isActive);
+          });
+        };
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries.find((entry) => entry.isIntersecting);
+            if (!visible) return;
+            applyState(visible.target.id);
+          },
+          { rootMargin: '-80px 0px -70% 0px', threshold: 0 },
+        );
+
+        headingElements.forEach((heading) => observer.observe(heading));
+      </script>
+    </>
   )
 }
-
-<script>
-  (() => {
-    const tocRoot = document.currentScript?.previousElementSibling;
-    if (!(tocRoot instanceof HTMLElement)) return;
-
-    const links = Array.from(tocRoot.querySelectorAll('[data-toc-link]'));
-    if (links.length === 0) return;
-
-    const headingElements = Array.from(document.querySelectorAll('article h2[id], article h3[id]'));
-    if (headingElements.length === 0) return;
-
-    const applyState = (activeId) => {
-      links.forEach((link) => {
-        const isActive = link.getAttribute('data-toc-link') === activeId;
-        link.classList.toggle('text-[var(--color-accent-400)]', isActive);
-        link.classList.toggle('border-[color:var(--color-accent-400)]/35', isActive);
-        link.classList.toggle('font-medium', isActive);
-        link.classList.toggle('text-[var(--text-secondary)]', !isActive);
-        link.classList.toggle('border-transparent', !isActive);
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.find((entry) => entry.isIntersecting);
-        if (!visible) return;
-        applyState(visible.target.id);
-      },
-      { rootMargin: '-80px 0px -70% 0px', threshold: 0 },
-    );
-
-    headingElements.forEach((heading) => observer.observe(heading));
-  })();
-</script>

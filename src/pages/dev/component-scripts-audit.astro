@@ -1,0 +1,67 @@
+---
+/**
+ * Página de prueba (SV-07): dos instancias de ShareBar, TableOfContents y SlideViewer
+ * para validar init con define:vars + getElementById. No enlazar desde producción si no se desea indexar.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import SlideViewer from '../../components/SlideViewer.astro';
+import ShareBar from '../../components/blog/ShareBar.astro';
+import TableOfContents from '../../components/blog/TableOfContents.astro';
+
+const headingsFirst = [
+  { depth: 2, slug: 'intro', text: 'Introducción' },
+  { depth: 2, slug: 'detalle', text: 'Detalle' },
+];
+
+const headingsSecond = [
+  { depth: 2, slug: 'intro', text: 'Introducción' },
+  { depth: 2, slug: 'detalle', text: 'Detalle' },
+];
+---
+
+<Layout
+  title="Auditoría de scripts (dev) — Nicolás Hruszczak"
+  description="Página interna: dos instancias por componente para validar scripts empaquetados."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
+
+  <Nav activePage="blog" />
+
+  <main id="main-content" class="mx-auto max-w-6xl px-4 py-12 lg:px-6">
+    <h1 class="text-3xl font-extrabold text-[var(--text-primary)]">Component scripts audit</h1>
+    <p class="mt-2 text-sm text-[var(--text-muted)]">
+      Dos instancias de ShareBar, SlideViewer y TableOfContents (criterio de cierre SV-07).
+    </p>
+
+    <h2 class="mt-10 text-xl font-bold text-[var(--text-primary)]">ShareBar × 2</h2>
+    <ShareBar title="Post A" url="https://escalatunegocioconia.com/blog/a" />
+    <ShareBar title="Post B" url="https://escalatunegocioconia.com/blog/b" />
+
+    <h2 class="mt-10 text-xl font-bold text-[var(--text-primary)]">SlideViewer × 2</h2>
+    <SlideViewer src="microservices-urban-blueprint" alt="Presentación microservicios" class="my-6" />
+    <SlideViewer src="arquitectura-sistemas-gran-escala" alt="Presentación arquitectura" class="my-6" />
+
+    <h2 class="mt-10 text-xl font-bold text-[var(--text-primary)]">TableOfContents × 2</h2>
+    <div class="mt-4 grid gap-8 lg:grid-cols-2">
+      <div class="rounded-lg border border-[color:var(--border-subtle)] p-4">
+        <TableOfContents headings={headingsFirst} />
+      </div>
+      <div class="rounded-lg border border-[color:var(--border-subtle)] p-4">
+        <TableOfContents headings={headingsSecond} />
+      </div>
+    </div>
+
+    <article
+      class="prose mt-10 max-w-none text-[var(--text-secondary)] [&_h2]:text-[var(--text-primary)]"
+      aria-label="Contenido de prueba para el índice"
+    >
+      <h2 id="intro">Introducción</h2>
+      <p>Texto de relleno para el observador del índice.</p>
+      <h2 id="detalle">Detalle</h2>
+      <p>Más texto de relleno.</p>
+    </article>
+  </main>
+</Layout>

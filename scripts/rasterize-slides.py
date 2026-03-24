@@ -155,9 +155,9 @@ def print_frontmatter(slug: str, total_pages: int, source_type: str) -> None:
     print("slides:")
     print(f'  src: "{slug}"')
     print(f'  alt: "Presentacion {slug}"')
-    print(f"  totalPages: {total_pages}")
     print(f"  sourceType: {source_type}")
     print("---")
+    print(f"(Nota: {total_pages} paginas rasterizadas como slide-01.webp …)")
 
 
 def main() -> int:

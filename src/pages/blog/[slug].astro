@@ -219,12 +219,7 @@ const related = allPosts
           <ShareBar title={post.data.title} url={postUrl} />
 
           {post.data.slides && (
-            <SlideViewer
-              src={post.data.slides.src}
-              alt={post.data.slides.alt}
-              totalPages={post.data.slides.totalPages}
-              class="my-8"
-            />
+            <SlideViewer src={post.data.slides.src} alt={post.data.slides.alt} class="my-8" />
           )}
 
           <article

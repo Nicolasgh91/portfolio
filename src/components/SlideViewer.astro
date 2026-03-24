@@ -4,11 +4,10 @@ import { Image } from 'astro:assets';
 interface Props {
   src: string;
   alt: string;
-  totalPages: number;
   class?: string;
 }
 
-const { src, alt, totalPages, class: className } = Astro.props;
+const { src, alt, class: className } = Astro.props;
 
 const slideModules = import.meta.glob('../assets/slides/**/slide-*.webp', { eager: true });
 const folderNeedle = `/slides/${src}/`;
@@ -26,10 +25,10 @@ const orderedSlides = Object.entries(slideModules)
   .sort((a, b) => a.page - b.page);
 
 const renderedTotalPages = orderedSlides.length;
-const announcedTotalPages = totalPages > 0 ? totalPages : renderedTotalPages;
 const hasSlides = renderedTotalPages > 0;
 const hasMultipleSlides = renderedTotalPages > 1;
 const viewerId = `slide-viewer-${src.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
 ---
 
 {
@@ -37,164 +36,243 @@ const viewerId = `slide-viewer-${src.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
     <section
       id={viewerId}
       data-slide-viewer
-      data-total={renderedTotalPages}
       role="region"
-      aria-label={`Visor de presentacion: ${alt}`}
+      aria-label={`Visor de presentación: ${alt}`}
       tabindex="0"
-      class:list={[
-        'not-prose max-w-none overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)]',
-        className,
-      ]}
+      class:list={['not-prose max-w-none outline-none', className]}
     >
-      <div class="relative aspect-video w-full select-none">
-        {orderedSlides.map((slide, index) => (
-          <div
-            data-slide-frame
-            data-index={index}
-            class:list={[
-              'absolute inset-0 transition-opacity duration-200',
-              index === 0 ? 'opacity-100' : 'pointer-events-none opacity-0',
-            ]}
-            aria-hidden={index === 0 ? 'false' : 'true'}
-          >
-            <Image
-              src={slide.image}
-              alt={`${alt} - pagina ${index + 1} de ${announcedTotalPages}`}
-              loading={index === 0 ? 'eager' : 'lazy'}
-              class="h-full w-full object-contain"
-            />
-          </div>
-        ))}
-
-        {hasMultipleSlides && (
-          <>
-            <button
-              type="button"
-              data-slide-prev
-              aria-label="Pagina anterior"
-              class="absolute left-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
+      <div
+        class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)]"
+      >
+        <div class="relative aspect-video w-full select-none">
+          {orderedSlides.map((slide, index) => (
+            <div
+              data-slide-frame
+              data-slide
+              data-index={index}
+              class:list={[
+                'absolute inset-0 transition-opacity duration-200',
+                index === 0 ? 'opacity-100' : 'pointer-events-none opacity-0',
+              ]}
+              aria-hidden={index === 0 ? 'false' : 'true'}
             >
-              <span aria-hidden="true">‹</span>
-            </button>
+              <Image
+                src={slide.image}
+                alt={`${alt} - pagina ${index + 1} de ${renderedTotalPages}`}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                class="h-full w-full object-contain"
+              />
+            </div>
+          ))}
 
-            <button
-              type="button"
-              data-slide-next
-              aria-label="Pagina siguiente"
-              class="absolute right-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:right-4"
-            >
-              <span aria-hidden="true">›</span>
-            </button>
-          </>
-        )}
-
-        {hasMultipleSlides && (
-          <p
-            aria-live="polite"
-            data-slide-indicator
-            class="absolute bottom-3 right-3 z-10 rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-primary)]/75 px-3 py-1 text-sm text-[var(--text-secondary)] backdrop-blur-sm"
+          <button
+            type="button"
+            id={fullscreenBtnId}
+            data-slide-fullscreen
+            aria-label="Ver en pantalla completa"
+            class="absolute bottom-3 left-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
           >
-            1 / {announcedTotalPages}
-          </p>
-        )}
+            <span data-slide-fs-icon-expand class="block" aria-hidden="true">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                />
+              </svg>
+            </span>
+            <span data-slide-fs-icon-collapse class="hidden" aria-hidden="true">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                />
+              </svg>
+            </span>
+          </button>
+
+          {hasMultipleSlides && (
+            <>
+              <button
+                type="button"
+                data-slide-prev
+                aria-label="Página anterior"
+                class="absolute left-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
+              >
+                <span aria-hidden="true">‹</span>
+              </button>
+
+              <button
+                type="button"
+                data-slide-next
+                aria-label="Página siguiente"
+                class="absolute right-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:right-4"
+              >
+                <span aria-hidden="true">›</span>
+              </button>
+            </>
+          )}
+
+          {hasMultipleSlides && (
+            <p
+              aria-live="polite"
+              data-slide-indicator
+              class="absolute bottom-3 right-3 z-10 rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-primary)]/75 px-3 py-1 text-sm text-[var(--text-secondary)] backdrop-blur-sm"
+            >
+              1 / {renderedTotalPages}
+            </p>
+          )}
+        </div>
       </div>
 
-      <script>
-        (() => {
-          const viewer = document.currentScript?.closest('[data-slide-viewer]');
-          if (!viewer) return;
+      <script define:vars={{ viewerId, fullscreenBtnId }}>
+        const viewer = document.getElementById(viewerId);
+        if (!viewer) return;
 
-          const total = Number.parseInt(viewer.getAttribute('data-total') ?? '0', 10);
-          if (!Number.isFinite(total) || total <= 0) return;
+        const fsBtn = document.getElementById(fullscreenBtnId);
+        const iconExpand = viewer.querySelector('[data-slide-fs-icon-expand]');
+        const iconCollapse = viewer.querySelector('[data-slide-fs-icon-collapse]');
 
-          const frames = Array.from(viewer.querySelectorAll('[data-slide-frame]'));
-          const prevBtn = viewer.querySelector('[data-slide-prev]');
-          const nextBtn = viewer.querySelector('[data-slide-next]');
-          const indicator = viewer.querySelector('[data-slide-indicator]');
-          let current = 0;
-          let startX = 0;
-          let endX = 0;
-          const swipeThreshold = 40;
+        const total = viewer.querySelectorAll('[data-slide]').length;
+        if (!Number.isFinite(total) || total <= 0) return;
 
-          const render = () => {
-            frames.forEach((frame, index) => {
-              const active = index === current;
-              frame.classList.toggle('opacity-100', active);
-              frame.classList.toggle('opacity-0', !active);
-              frame.classList.toggle('pointer-events-none', !active);
-              frame.setAttribute('aria-hidden', active ? 'false' : 'true');
-            });
-            if (indicator) indicator.textContent = `${current + 1} / ${total}`;
-            if (prevBtn) {
-              const isFirst = current === 0;
-              prevBtn.toggleAttribute('disabled', isFirst);
-              prevBtn.classList.toggle('invisible', isFirst);
-            }
-            if (nextBtn) {
-              const isLast = current === total - 1;
-              nextBtn.toggleAttribute('disabled', isLast);
-              nextBtn.classList.toggle('invisible', isLast);
-            }
-          };
+        const frames = Array.from(viewer.querySelectorAll('[data-slide-frame]'));
+        const prevBtn = viewer.querySelector('[data-slide-prev]');
+        const nextBtn = viewer.querySelector('[data-slide-next]');
+        const indicator = viewer.querySelector('[data-slide-indicator]');
+        let current = 0;
+        let startX = 0;
+        let endX = 0;
+        const swipeThreshold = 40;
 
-          const goPrev = () => {
-            if (current === 0) return;
-            current -= 1;
-            render();
-          };
-
-          const goNext = () => {
-            if (current >= total - 1) return;
-            current += 1;
-            render();
-          };
-
-          prevBtn?.addEventListener('click', goPrev);
-          nextBtn?.addEventListener('click', goNext);
-
-          viewer.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowLeft') {
-              event.preventDefault();
-              goPrev();
-            }
-            if (event.key === 'ArrowRight') {
-              event.preventDefault();
-              goNext();
-            }
+        const render = () => {
+          frames.forEach((frame, index) => {
+            const active = index === current;
+            frame.classList.toggle('opacity-100', active);
+            frame.classList.toggle('opacity-0', !active);
+            frame.classList.toggle('pointer-events-none', !active);
+            frame.setAttribute('aria-hidden', active ? 'false' : 'true');
           });
+          if (indicator) indicator.textContent = `${current + 1} / ${total}`;
+          if (prevBtn) {
+            const isFirst = current === 0;
+            prevBtn.toggleAttribute('disabled', isFirst);
+            prevBtn.classList.toggle('invisible', isFirst);
+          }
+          if (nextBtn) {
+            const isLast = current === total - 1;
+            nextBtn.toggleAttribute('disabled', isLast);
+            nextBtn.classList.toggle('invisible', isLast);
+          }
+        };
 
-          viewer.addEventListener(
-            'touchstart',
-            (event) => {
-              startX = event.changedTouches[0]?.clientX ?? 0;
-              endX = startX;
-            },
-            { passive: true },
-          );
-
-          viewer.addEventListener(
-            'touchmove',
-            (event) => {
-              endX = event.changedTouches[0]?.clientX ?? startX;
-            },
-            { passive: true },
-          );
-
-          viewer.addEventListener('touchend', () => {
-            const delta = endX - startX;
-            if (Math.abs(delta) < swipeThreshold) return;
-            if (delta > 0) goPrev();
-            else goNext();
-          });
-
+        const goPrev = () => {
+          if (current === 0) return;
+          current -= 1;
           render();
-        })();
+        };
+
+        const goNext = () => {
+          if (current >= total - 1) return;
+          current += 1;
+          render();
+        };
+
+        const setFullscreenUi = (expanded) => {
+          if (fsBtn) {
+            fsBtn.setAttribute(
+              'aria-label',
+              expanded ? 'Salir de pantalla completa' : 'Ver en pantalla completa',
+            );
+          }
+          if (iconExpand instanceof HTMLElement) iconExpand.classList.toggle('hidden', expanded);
+          if (iconCollapse instanceof HTMLElement) iconCollapse.classList.toggle('hidden', !expanded);
+        };
+
+        const collapseFullscreen = () => {
+          if (!viewer.classList.contains('fixed')) return;
+          viewer.style.height = '';
+          viewer.classList.remove(
+            'fixed',
+            'inset-0',
+            'z-50',
+            'flex',
+            'items-center',
+            'justify-center',
+            'bg-black',
+          );
+          document.body.classList.remove('overflow-hidden');
+          setFullscreenUi(false);
+          fsBtn?.focus();
+        };
+
+        const expandFullscreen = () => {
+          viewer.style.height = '100dvh';
+          viewer.classList.add('fixed', 'inset-0', 'z-50', 'flex', 'items-center', 'justify-center', 'bg-black');
+          document.body.classList.add('overflow-hidden');
+          setFullscreenUi(true);
+          viewer.focus();
+        };
+
+        const toggleFullscreen = () => {
+          if (viewer.classList.contains('fixed')) collapseFullscreen();
+          else expandFullscreen();
+        };
+
+        fsBtn?.addEventListener('click', toggleFullscreen);
+
+        prevBtn?.addEventListener('click', goPrev);
+        nextBtn?.addEventListener('click', goNext);
+
+        viewer.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            goPrev();
+          }
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            goNext();
+          }
+        });
+
+        viewer.addEventListener(
+          'touchstart',
+          (event) => {
+            startX = event.changedTouches[0]?.clientX ?? 0;
+            endX = startX;
+          },
+          { passive: true },
+        );
+
+        viewer.addEventListener(
+          'touchmove',
+          (event) => {
+            endX = event.changedTouches[0]?.clientX ?? startX;
+          },
+          { passive: true },
+        );
+
+        viewer.addEventListener('touchend', () => {
+          const delta = endX - startX;
+          if (Math.abs(delta) < swipeThreshold) return;
+          if (delta > 0) goPrev();
+          else goNext();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && viewer.classList.contains('fixed')) {
+            collapseFullscreen();
+          }
+        });
+
+        render();
       </script>
     </section>
   ) : (
     <section
       role="region"
-      aria-label={`Visor de presentacion: ${alt}`}
+      aria-label={`Visor de presentación: ${alt}`}
       class:list={[
         'not-prose max-w-none rounded-[var(--radius-lg)] border border-dashed border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] p-4 text-sm text-[var(--text-secondary)]',
         className,

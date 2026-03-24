@@ -88,7 +88,6 @@ const blog = defineCollection({
       .object({
         src: z.string(),
         alt: z.string(),
-        totalPages: z.number(),
         sourceType: z.enum(['pdf', 'pptx']),
       })
       .optional(),
