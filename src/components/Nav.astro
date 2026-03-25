@@ -213,10 +213,52 @@ const { activePage = 'home' } = Astro.props;
       >EN</button>
 
       <button
+        id="drawer-a11y-toggle"
         class="ctrl-btn"
-        onclick="nhA11y.togglePanel()"
+        type="button"
         aria-label="Opciones de accesibilidad"
+        aria-expanded="false"
+        aria-controls="drawer-a11y-panel"
       >☰ Accesibilidad</button>
+
+      <div
+        id="drawer-a11y-panel"
+        class="drawer-a11y-panel"
+        role="region"
+        aria-label="Panel de accesibilidad del menú móvil"
+      >
+        <div class="drawer-a11y-group">
+          <span class="a11y-label" id="drawer-font-size-label">Tamaño de texto</span>
+          <div class="a11y-btns" role="group" aria-labelledby="drawer-font-size-label">
+            <button class="a11y-btn a11y-fs-btn on" data-scale="1"
+              onclick="nhA11y.setFontScale(1)" aria-pressed="true">A</button>
+            <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
+              onclick="nhA11y.setFontScale(1.15)" aria-pressed="false">A+</button>
+            <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
+              onclick="nhA11y.setFontScale(1.3)" aria-pressed="false">A++</button>
+          </div>
+        </div>
+
+        <div class="drawer-a11y-group">
+          <span class="a11y-label" id="drawer-contrast-label">Contraste</span>
+          <div class="a11y-btns" role="group" aria-labelledby="drawer-contrast-label">
+            <button class="a11y-btn on"
+              onclick="nhA11y.setHighContrast(false)" aria-pressed="false">Normal</button>
+            <button class="a11y-btn"
+              onclick="nhA11y.setHighContrast(true)" aria-pressed="false">Alto contraste</button>
+          </div>
+        </div>
+
+        <div class="drawer-a11y-group">
+          <span class="a11y-label" id="drawer-motion-label">Movimiento</span>
+          <div class="a11y-btns" role="group" aria-labelledby="drawer-motion-label">
+            <button class="a11y-btn on"
+              onclick="nhA11y.setReducedMotion(false)" aria-pressed="true">Activado</button>
+            <button class="a11y-btn"
+              onclick="nhA11y.setReducedMotion(true)" aria-pressed="false">Reducido</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <a
@@ -293,15 +335,6 @@ const { activePage = 'home' } = Astro.props;
 </header>
 
 <style>
-  /* ─── Variables locales — solo Nav.astro ─── */
-  :root {
-    --nav-tab-hover-bg: hsla(0, 0%, 100%, 0.06);
-    --nav-tab-active-bg: hsla(0, 0%, 100%, 0.08);
-  }
-  :root.light {
-    --nav-tab-hover-bg: hsla(0, 0%, 0%, 0.04);
-    --nav-tab-active-bg: hsla(0, 0%, 0%, 0.06);
-  }
 
   /* ─────────────────────────────────────────
      NAV BASE — split layout: logo | tabs | right
@@ -396,16 +429,12 @@ const { activePage = 'home' } = Astro.props;
 
   .nav-tab--services-main {
     padding-right: 10px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
   }
 
   .nav-tab--dropdown-chevron {
     cursor: pointer;
     padding: 0 9px;
     min-width: 32px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
   }
   .nav-tab--dropdown-chevron:hover {
     color: var(--nav-logo-color);
@@ -495,14 +524,12 @@ const { activePage = 'home' } = Astro.props;
     transition:
       color 0.12s ease,
       border-color 0.12s ease,
-      background 0.12s ease,
-      transform 0.12s ease;
+      background 0.12s ease;
   }
   .ctrl-btn:hover {
     border-color: var(--nav-btn-hover-border);
     color: var(--nav-btn-hover-color);
     background: var(--nav-btn-hover-bg);
-    transform: translateY(-1px);
   }
   .ctrl-btn.on {
     border-color: var(--accent-border);
@@ -612,27 +639,40 @@ const { activePage = 'home' } = Astro.props;
      DRAWER MOBILE
      Siempre en el DOM → todos los links
      son crawleables por Google sin JS
+     Fondo: alfa 0.92 en dark/light (H/S/L alineados a --nav-bg); no usa el token para
+     desacoplar del glass de .nav y mantener opacidad uniforme en el panel.
   ───────────────────────────────────────── */
   .nav-drawer {
-    display: none; /* ocultado visualmente, no removido del DOM */
+    display: flex;
     flex-direction: column;
     gap: 4px;
     padding: 12px 20px 16px;
-    background: var(--nav-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: hsla(240, 10%, 6%, 0.92);
     border-bottom: 0.5px solid var(--nav-border);
-    /* Animación de apertura */
-    transform: translateY(-8px);
+    /* Fuera del flujo — no empuja contenido cuando está oculto */
+    position: fixed;
+    top: 52px; /* altura del nav */
+    left: 0;
+    width: 100%;
+    z-index: 49;
+    /* Oculto pero animable (visibility + opacity) */
+    visibility: hidden;
+    pointer-events: none;
     opacity: 0;
+    transform: translateY(-8px);
     transition:
       opacity 0.2s ease,
-      transform 0.2s ease;
+      transform 0.2s ease,
+      visibility 0.2s ease;
   }
   .nav-drawer.open {
-    display: flex;
+    visibility: visible;
+    pointer-events: auto;
     opacity: 1;
     transform: translateY(0);
+  }
+  :root.light .nav-drawer {
+    background: hsla(0, 0%, 100%, 0.92);
   }
 
   .drawer-links {
@@ -681,6 +721,30 @@ const { activePage = 'home' } = Astro.props;
     padding-top: 8px;
     border-top: 0.5px solid var(--nav-border);
     margin-top: 4px;
+  }
+
+  .drawer-a11y-panel {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 0.5px solid var(--nav-border);
+    border-radius: var(--radius-md);
+    background: var(--nav-btn-hover-bg);
+  }
+  .drawer-a11y-panel.open {
+    display: flex;
+  }
+  .drawer-a11y-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .drawer-a11y-group .a11y-btns {
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   .drawer-cta {
@@ -774,7 +838,6 @@ const { activePage = 'home' } = Astro.props;
     color: var(--accent);
     background: var(--accent-bg);
   }
-  .a11y-btn:hover { transform: translateY(-1px); }
 
   /* ─────────────────────────────────────────
      RESPONSIVE
@@ -865,14 +928,23 @@ const { activePage = 'home' } = Astro.props;
   /* ── Drawer mobile ── */
   const burger  = document.getElementById('nav-burger');
   const drawer  = document.getElementById('nav-drawer');
+  const drawerA11yToggle = document.getElementById('drawer-a11y-toggle') as HTMLButtonElement | null;
+  const drawerA11yPanel = document.getElementById('drawer-a11y-panel') as HTMLElement | null;
+
+  function closeDrawer() {
+    if (!drawer?.classList.contains('open')) return;
+    drawer.classList.remove('open');
+    burger?.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    drawerA11yPanel?.classList.remove('open');
+    drawerA11yToggle?.setAttribute('aria-expanded', 'false');
+  }
 
   burger?.addEventListener('click', () => {
     const isOpen = drawer?.classList.contains('open');
 
     if (isOpen) {
-      drawer?.classList.remove('open');
-      burger.setAttribute('aria-expanded', 'false');
-      drawer?.setAttribute('aria-hidden', 'true');
+      closeDrawer();
     } else {
       drawer?.classList.add('open');
       burger.setAttribute('aria-expanded', 'true');
@@ -880,22 +952,28 @@ const { activePage = 'home' } = Astro.props;
     }
   });
 
+  drawerA11yToggle?.addEventListener('click', () => {
+    const isOpen = drawerA11yPanel?.classList.contains('open');
+    drawerA11yPanel?.classList.toggle('open', !isOpen);
+    drawerA11yToggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
   // Cerrar drawer al hacer click en cualquier link interno
   drawer?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-      drawer?.classList.remove('open');
-      burger?.setAttribute('aria-expanded', 'false');
-      drawer?.setAttribute('aria-hidden', 'true');
+      closeDrawer();
     });
   });
 
   // Cerrar drawer con Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer?.classList.contains('open')) {
-      drawer?.classList.remove('open');
-      burger?.setAttribute('aria-expanded', 'false');
-      drawer?.setAttribute('aria-hidden', 'true');
+      closeDrawer();
       burger?.focus();
     }
   });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10 && drawer?.classList.contains('open')) closeDrawer();
+  }, { passive: true });
 </script>

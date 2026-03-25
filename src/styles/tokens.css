@@ -55,6 +55,8 @@
   --nav-btn-hover-color:   hsl(var(--accent-h), var(--accent-s), 56%);
   --color-on-accent:       #0D0D10;
   --accent-glow:           hsla(var(--accent-h), var(--accent-s), 56%, 0.3);
+  --nav-tab-hover-bg:      hsla(0, 0%, 100%, 0.06);
+  --nav-tab-active-bg:     hsla(0, 0%, 100%, 0.08);
 
   --font-display: 'Outfit Variable', system-ui, sans-serif;
   --font-body:    'Inter Variable', system-ui, sans-serif;
@@ -122,6 +124,8 @@
   --nav-btn-hover-bg:      hsla(32, 94%, 44%, 0.07);
   --nav-btn-hover-border:  hsla(32, 94%, 44%, 0.38);
   --nav-btn-hover-color:   hsl(22, 82%, 26%);
+  --nav-tab-hover-bg:      hsla(0, 0%, 0%, 0.04);
+  --nav-tab-active-bg:     hsla(0, 0%, 0%, 0.06);
 }
 
 /* ── High contrast ────────────────────────────────────────── */
