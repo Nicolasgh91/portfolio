@@ -293,6 +293,16 @@ const { activePage = 'home' } = Astro.props;
 </header>
 
 <style>
+  /* ─── Variables locales — solo Nav.astro ─── */
+  :root {
+    --nav-tab-hover-bg: hsla(0, 0%, 100%, 0.06);
+    --nav-tab-active-bg: hsla(0, 0%, 100%, 0.08);
+  }
+  :root.light {
+    --nav-tab-hover-bg: hsla(0, 0%, 0%, 0.04);
+    --nav-tab-active-bg: hsla(0, 0%, 0%, 0.06);
+  }
+
   /* ─────────────────────────────────────────
      NAV BASE — split layout: logo | tabs | right
   ───────────────────────────────────────── */
@@ -331,7 +341,7 @@ const { activePage = 'home' } = Astro.props;
   ───────────────────────────────────────── */
   .nav-tabs {
     display: flex;
-    gap: 3px;
+    gap: 4px;
     flex: 1;
     min-width: 0;
     list-style: none;
@@ -348,9 +358,9 @@ const { activePage = 'home' } = Astro.props;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 13px;
-    border: 0.5px solid var(--nav-idle-border);
-    border-radius: var(--radius-md);
+    padding: 0 16px;
+    border: none;
+    border-radius: var(--radius-pill);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     color: var(--nav-text-idle);
@@ -359,44 +369,18 @@ const { activePage = 'home' } = Astro.props;
     white-space: nowrap;
     position: relative;
     transition:
-      color 0.12s ease,
-      border-color 0.12s ease,
-      background 0.12s ease,
-      transform 0.12s ease;
+      color 0.2s ease,
+      background 0.2s ease;
   }
 
-  /* Indicador de página activa: punto circular bajo el tab */
-  .nav-tab::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .nav-tab.active::after {
-    opacity: 1;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .nav-tab::after { transition: none; }
-  }
-  :root.no-motion .nav-tab::after {
-    transition: none !important;
-  }
   .nav-tab:hover {
     color: var(--nav-logo-color);
-    border-color: var(--nav-btn-hover-border);
-    transform: translateY(-1px);
+    background: var(--nav-tab-hover-bg);
   }
   .nav-tab.active {
     color: var(--accent);
-    border-color: var(--accent-border);
-    background: var(--accent-bg);
+    background: var(--nav-tab-active-bg);
+    font-weight: 500;
   }
 
   /* ─────────────────────────────────────────
@@ -411,10 +395,9 @@ const { activePage = 'home' } = Astro.props;
   }
 
   .nav-tab--services-main {
+    padding-right: 10px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-right: none;
-    padding-right: 10px;
   }
 
   .nav-tab--dropdown-chevron {
@@ -423,15 +406,10 @@ const { activePage = 'home' } = Astro.props;
     min-width: 32px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    margin-left: -0.5px;
-  }
-  .nav-tab--dropdown-chevron::after {
-    display: none;
   }
   .nav-tab--dropdown-chevron:hover {
     color: var(--nav-logo-color);
-    border-color: var(--nav-btn-hover-border);
-    transform: translateY(-1px);
+    background: var(--nav-tab-hover-bg);
   }
 
   .dropdown-arrow {
@@ -561,6 +539,14 @@ const { activePage = 'home' } = Astro.props;
   }
   .nav-cta:active {
     transform: translateY(0);
+  }
+
+  /* Glow premium — solo dark mode */
+  :root:not(.light) .nav-cta {
+    box-shadow: 0 0 15px hsla(var(--accent-h), var(--accent-s), 56%, 0.3);
+  }
+  :root:not(.light) .nav-cta:hover {
+    box-shadow: 0 0 20px hsla(var(--accent-h), var(--accent-s), 56%, 0.5);
   }
 
   /* ─────────────────────────────────────────
