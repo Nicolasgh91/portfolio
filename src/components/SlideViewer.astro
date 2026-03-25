@@ -42,89 +42,103 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
       tabindex="0"
       class:list={['not-prose max-w-none outline-none', className]}
     >
-      <div
-        class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)]"
-      >
-        <div class="relative aspect-video w-full select-none">
-          {orderedSlides.map((slide, index) => (
-            <div
-              data-slide-frame
-              data-slide
-              data-index={index}
-              class:list={[
-                'absolute inset-0 transition-opacity duration-200',
-                index === 0 ? 'opacity-100' : 'pointer-events-none opacity-0',
-              ]}
-              aria-hidden={index === 0 ? 'false' : 'true'}
-            >
-              <Image
-                src={slide.image}
-                alt={`${alt} - pagina ${index + 1} de ${renderedTotalPages}`}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                class="h-full w-full object-contain"
-              />
-            </div>
-          ))}
-
-          <button
-            type="button"
-            id={fullscreenBtnId}
-            data-slide-fullscreen
-            aria-label="Ver en pantalla completa"
-            class="absolute left-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4 sm:top-3"
-          >
-            <span data-slide-fs-icon-expand class="block" aria-hidden="true">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
-                />
-              </svg>
-            </span>
-            <span data-slide-fs-icon-collapse class="hidden" aria-hidden="true">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
-                />
-              </svg>
-            </span>
-          </button>
-
-          {hasMultipleSlides && (
-            <>
-              <button
-                type="button"
-                data-slide-prev
-                aria-label="Página anterior"
-                class="absolute left-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
+      <div data-slide-host>
+        <div
+          data-slide-surface
+          class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)]"
+        >
+          <div data-slide-media-wrapper class="relative aspect-video w-full select-none">
+            {orderedSlides.map((slide, index) => (
+              <div
+                data-slide-frame
+                data-slide
+                data-index={index}
+                class:list={[
+                  'absolute inset-0 transition-opacity duration-200',
+                  index === 0 ? 'opacity-100' : 'pointer-events-none opacity-0',
+                ]}
+                aria-hidden={index === 0 ? 'false' : 'true'}
               >
-                <span aria-hidden="true">‹</span>
-              </button>
+                <Image
+                  src={slide.image}
+                  alt={`${alt} - pagina ${index + 1} de ${renderedTotalPages}`}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  class="h-full w-full object-contain"
+                />
+              </div>
+            ))}
 
-              <button
-                type="button"
-                data-slide-next
-                aria-label="Página siguiente"
-                class="absolute right-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:right-4"
-              >
-                <span aria-hidden="true">›</span>
-              </button>
-            </>
-          )}
-
-          {hasMultipleSlides && (
-            <p
-              aria-live="polite"
-              data-slide-indicator
-              class="absolute bottom-3 right-3 z-10 rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-primary)]/75 px-3 py-1 text-sm text-[var(--text-secondary)] backdrop-blur-sm"
+            <button
+              type="button"
+              id={fullscreenBtnId}
+              data-slide-fullscreen
+              aria-label="Ver en pantalla completa"
+              class="absolute left-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4 sm:top-3"
             >
-              1 / {renderedTotalPages}
-            </p>
-          )}
+              <span data-slide-fs-icon-expand class="block" aria-hidden="true">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                  />
+                </svg>
+              </span>
+              <span data-slide-fs-icon-collapse class="hidden" aria-hidden="true">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                  />
+                </svg>
+              </span>
+            </button>
+
+            {hasMultipleSlides && (
+              <>
+                <button
+                  type="button"
+                  data-slide-prev
+                  aria-label="Página anterior"
+                  class="absolute left-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
+                >
+                  <span aria-hidden="true">‹</span>
+                </button>
+
+                <button
+                  type="button"
+                  data-slide-next
+                  aria-label="Página siguiente"
+                  class="absolute right-2 top-1/2 z-10 inline-flex min-h-11 min-w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:right-4"
+                >
+                  <span aria-hidden="true">›</span>
+                </button>
+              </>
+            )}
+
+            {hasMultipleSlides && (
+              <p
+                aria-live="polite"
+                data-slide-indicator
+                class="absolute bottom-3 right-3 z-10 rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-primary)]/75 px-3 py-1 text-sm text-[var(--text-secondary)] backdrop-blur-sm"
+              >
+                1 / {renderedTotalPages}
+              </p>
+            )}
+          </div>
         </div>
+      </div>
+
+      <div
+        data-slide-overlay
+        class="hidden fixed inset-0 z-50 w-screen bg-black overflow-hidden"
+        aria-hidden="true"
+      >
+        <div
+          data-slide-overlay-inner
+          class="flex h-full w-full items-center justify-center overflow-hidden p-2 box-border"
+        />
       </div>
 
       <script define:vars={{ viewerId, fullscreenBtnId }}>
@@ -142,6 +156,11 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         const prevBtn = viewer.querySelector('[data-slide-prev]');
         const nextBtn = viewer.querySelector('[data-slide-next]');
         const indicator = viewer.querySelector('[data-slide-indicator]');
+        const surface = viewer.querySelector('[data-slide-surface]');
+        const mediaWrapper = viewer.querySelector('[data-slide-media-wrapper]');
+        const surfaceHost = viewer.querySelector('[data-slide-host]');
+        const overlay = viewer.querySelector('[data-slide-overlay]');
+        const overlayInner = viewer.querySelector('[data-slide-overlay-inner]');
         let current = 0;
         let startX = 0;
         let endX = 0;
@@ -191,53 +210,79 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
           if (iconCollapse instanceof HTMLElement) iconCollapse.classList.toggle('hidden', !expanded);
         };
 
-        const fullscreenLayoutClasses = [
-          'w-full',
-          'max-w-full',
-          'min-w-0',
-          'overflow-x-hidden',
-          'box-border',
-          'p-2',
-        ];
+        const setFullscreenLayout = (expanded) => {
+          if (surface instanceof HTMLElement) {
+            // Evita alto 0 del wrapper cuando `aspect-video` se desactiva en fullscreen.
+            surface.classList.toggle('h-full', expanded);
+          }
+
+          if (!(mediaWrapper instanceof HTMLElement)) return;
+
+          // En fullscreen quitamos la restricción del ratio para que el wrapper pueda llenar la viewport.
+          // Esto permite que la imagen `object-contain` respete el tamaño disponible.
+          if (expanded) {
+            mediaWrapper.classList.remove('aspect-video');
+            mediaWrapper.classList.add('h-full');
+          } else {
+            mediaWrapper.classList.add('aspect-video');
+            mediaWrapper.classList.remove('h-full');
+          }
+        };
 
         const collapseFullscreen = () => {
-          if (!viewer.classList.contains('fixed')) return;
-          viewer.style.height = '';
-          viewer.classList.remove(
-            'fixed',
-            'inset-0',
-            'z-50',
-            'flex',
-            'items-center',
-            'justify-center',
-            'bg-black',
-            ...fullscreenLayoutClasses,
-          );
+          if (
+            !(overlay instanceof HTMLElement) ||
+            !(overlayInner instanceof HTMLElement) ||
+            !(surface instanceof HTMLElement)
+          )
+            return;
+          if (overlay.classList.contains('hidden')) return;
+
+          // Restaurar el árbol original.
+          if (surfaceHost instanceof HTMLElement) {
+            surfaceHost.appendChild(surface);
+          }
+          overlay.classList.add('hidden');
           document.body.classList.remove('overflow-hidden');
           setFullscreenUi(false);
+          setFullscreenLayout(false);
           fsBtn?.focus();
         };
 
         const expandFullscreen = () => {
-          viewer.style.height = '100dvh';
-          viewer.classList.add(
-            'fixed',
-            'inset-0',
-            'z-50',
-            'flex',
-            'items-center',
-            'justify-center',
-            'bg-black',
-            ...fullscreenLayoutClasses,
-          );
+          if (
+            !(overlay instanceof HTMLElement) ||
+            !(overlayInner instanceof HTMLElement) ||
+            !(surface instanceof HTMLElement)
+          )
+            return;
+
+          // Fallback de viewport units para Safari móvil.
+          let heightValue = '100vh';
+          if (CSS.supports('height: 100dvh')) heightValue = '100dvh';
+          else if (CSS.supports('height: 100svh')) heightValue = '100svh';
+
+          overlay.style.height = heightValue;
+          overlay.style.width = '100vw';
+          overlay.style.top = '0';
+          overlay.style.left = '0';
+          overlay.style.right = '0';
+          overlay.style.bottom = '0';
+
+          // Mover el contenedor visual al overlay dedicado.
+          overlayInner.appendChild(surface);
+
+          overlay.classList.remove('hidden');
           document.body.classList.add('overflow-hidden');
           setFullscreenUi(true);
+          setFullscreenLayout(true);
           viewer.focus();
         };
 
         const toggleFullscreen = () => {
-          if (viewer.classList.contains('fixed')) collapseFullscreen();
-          else expandFullscreen();
+          if (!(overlay instanceof HTMLElement)) return;
+          if (overlay.classList.contains('hidden')) expandFullscreen();
+          else collapseFullscreen();
         };
 
         fsBtn?.addEventListener('click', toggleFullscreen);
@@ -281,9 +326,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         });
 
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && viewer.classList.contains('fixed')) {
-            collapseFullscreen();
-          }
+          if (e.key === 'Escape') collapseFullscreen();
         });
 
         render();

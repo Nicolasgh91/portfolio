@@ -599,7 +599,7 @@ const capabilities = [
                   class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border-subtle)] pt-4"
                 >
                   <a
-                    href={`/talento#${project.slug}`}
+                    href={project.slug === 'huelladelfuego' ? '/blog/caso-huelladelfuego' : `/talento#${project.slug}`}
                     class="text-sm font-semibold text-[var(--accent-text)] underline-offset-2 transition-colors hover:text-[var(--accent-hover)]"
                     data-en="View case →"
                     data-es="Ver caso →"

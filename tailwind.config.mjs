@@ -10,6 +10,13 @@ export default {
     'flex',
     'items-center',
     'justify-center',
+    'w-full',
+    'max-w-full',
+    'min-w-0',
+    'overflow-x-hidden',
+    'box-border',
+    'p-2',
+    'h-full',
     'overflow-hidden',
   ],
   theme: {
