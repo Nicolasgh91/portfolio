@@ -235,52 +235,60 @@ const ogImageHeight = ogImageHeightProp ?? 768;
         }
       };
 
-      // Restaurar preferencias persistidas
-      const savedScale = localStorage.getItem('nh-font-scale');
-      if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
-      const savedHC = localStorage.getItem('nh-hc');
-      if (savedHC === 'true') nhA11y.setHighContrast(true);
-      if (nhA11y.motionReduced) nhA11y.setReducedMotion(true);
+      // Restaurar preferencias persistidas (deferred to reduce TBT)
+      requestAnimationFrame(function() {
+        var savedScale = localStorage.getItem('nh-font-scale');
+        if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
+        var savedHC = localStorage.getItem('nh-hc');
+        if (savedHC === 'true') nhA11y.setHighContrast(true);
+        if (nhA11y.motionReduced) nhA11y.setReducedMotion(true);
+      });
     </script>
 
     
     <script>
       (function() {
-        const iframe = document.createElement('iframe');
-        iframe.src = '/chatbot/widget/index.html';
-        iframe.setAttribute('allowtransparency', 'true');
-        iframe.setAttribute('title', 'Asistente virtual');
-        iframe.setAttribute('aria-label', 'Chat de asistencia');
+        function initChatWidget() {
+          const iframe = document.createElement('iframe');
+          iframe.src = '/chatbot/widget/index.html';
+          iframe.setAttribute('allowtransparency', 'true');
+          iframe.setAttribute('title', 'Asistente virtual');
+          iframe.setAttribute('aria-label', 'Chat de asistencia');
 
-        // Arranca reducido al tamaño del botón, sin bloquear nada detrás
-        iframe.style.cssText = [
-          'position:fixed',
-          'bottom:0',
-          'right:0',
-          'width:84px',
-          'height:84px',
-          'border:none',
-          'z-index:9999',
-          'background:transparent',
-        ].join(';');
-        document.body.appendChild(iframe);
+          iframe.style.cssText = [
+            'position:fixed',
+            'bottom:0',
+            'right:0',
+            'width:84px',
+            'height:84px',
+            'border:none',
+            'z-index:9999',
+            'background:transparent',
+          ].join(';');
+          document.body.appendChild(iframe);
 
-        // Escuchar open/close desde el widget
-        window.addEventListener('message', (e) => {
-          if (e.data?.chat === 'open') {
-            iframe.style.width = '420px';
-            iframe.style.height = '680px';
-          }
-          if (e.data?.chat === 'close') {
-            iframe.style.width = '84px';
-            iframe.style.height = '84px';
-          }
-        });
+          window.addEventListener('message', (e) => {
+            if (e.data?.chat === 'open') {
+              iframe.style.width = '420px';
+              iframe.style.height = '680px';
+            }
+            if (e.data?.chat === 'close') {
+              iframe.style.width = '84px';
+              iframe.style.height = '84px';
+            }
+          });
 
-        // Click fuera del iframe cierra el chat
-        document.addEventListener('click', () => {
-          try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
-        });
+          document.addEventListener('click', () => {
+            try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
+          });
+        }
+
+        // Defer chat widget until browser is idle to reduce TBT
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(initChatWidget, { timeout: 3500 });
+        } else {
+          setTimeout(initChatWidget, 3500);
+        }
       })();
     </script>
   </body>

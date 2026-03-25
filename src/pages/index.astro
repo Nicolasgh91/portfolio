@@ -53,13 +53,13 @@ const featuredProjects = allProjects
       <!-- ── Split CTA ──────────────────────────────────────── -->
       <nav class="split-cta" aria-label="Rutas de navegación">
         <a href="/servicios" class="split-cta-col">
-          <h3>
+          <h2>
             <span aria-hidden="true">📊</span>
             <span
               data-en="For businesses &amp; SMEs"
               data-es="Para empresas y pymes"
             >Para empresas y pymes</span>
-          </h3>
+          </h2>
           <p
             data-en="Diagnosis, proposal and execution. Fixed cost reduction, process automation, and proprietary management systems."
             data-es="Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios."
@@ -72,13 +72,13 @@ const featuredProjects = allProjects
         </a>
 
         <a href="/talento" class="split-cta-col">
-          <h3>
+          <h2>
             <span aria-hidden="true">💼</span>
             <span
               data-en="For recruiters"
               data-es="Para reclutadores"
             >Para reclutadores</span>
-          </h3>
+          </h2>
           <p
             data-en="Functional analyst, full stack developer and software architect. Updated stack, AI expertise and agile methodologies."
             data-es="Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles."
@@ -232,7 +232,7 @@ const featuredProjects = allProjects
   @media (max-width: 560px) {
     .split-cta-col:first-child { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
   }
-  .split-cta-col h3 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); }
+  .split-cta-col h2 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); font-size: calc(var(--text-lg) * var(--font-scale)); letter-spacing: -0.4px; }
   .split-cta-col p { font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--sp-md); flex: 1; display: flex; align-items: center; justify-content: center; }
   .split-cta-arrow { font-size: var(--text-sm); color: var(--accent); margin-top: auto; }
 
