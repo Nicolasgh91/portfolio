@@ -45,7 +45,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
       <div data-slide-host>
         <div
           data-slide-surface
-          class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)]"
+          class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[hsla(0,0%,100%,0.82)] dark:bg-[hsla(240,13%,10%,0.80)] backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]"
         >
           <div data-slide-media-wrapper class="relative aspect-video w-full select-none">
             {orderedSlides.map((slide, index) => (
@@ -132,7 +132,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
 
       <div
         data-slide-overlay
-        class="hidden fixed inset-0 z-50 w-screen bg-black overflow-hidden"
+        class="hidden fixed inset-0 z-50 w-screen overflow-hidden bg-[hsla(0,0%,100%,0.55)] dark:bg-[hsla(240,13%,10%,0.65)] backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]"
         aria-hidden="true"
       >
         <div
