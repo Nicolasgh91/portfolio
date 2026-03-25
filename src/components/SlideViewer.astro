@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { getSlideImageFromGlobModule } from '../lib/slides';
 
 interface Props {
   src: string;
@@ -19,7 +20,7 @@ const orderedSlides = Object.entries(slideModules)
     return {
       path,
       page: match ? Number.parseInt(match[1], 10) : Number.POSITIVE_INFINITY,
-      image: (mod as { default: ImageMetadata }).default,
+      image: getSlideImageFromGlobModule(mod),
     };
   })
   .sort((a, b) => a.page - b.page);
@@ -70,7 +71,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
             id={fullscreenBtnId}
             data-slide-fullscreen
             aria-label="Ver en pantalla completa"
-            class="absolute bottom-3 left-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4"
+            class="absolute left-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-black text-[var(--color-accent-400)] opacity-90 shadow-sm transition hover:border-[color:var(--border-normal)] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent-400)] sm:left-4 sm:top-3"
           >
             <span data-slide-fs-icon-expand class="block" aria-hidden="true">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -190,6 +191,15 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
           if (iconCollapse instanceof HTMLElement) iconCollapse.classList.toggle('hidden', !expanded);
         };
 
+        const fullscreenLayoutClasses = [
+          'w-full',
+          'max-w-full',
+          'min-w-0',
+          'overflow-x-hidden',
+          'box-border',
+          'p-2',
+        ];
+
         const collapseFullscreen = () => {
           if (!viewer.classList.contains('fixed')) return;
           viewer.style.height = '';
@@ -201,6 +211,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
             'items-center',
             'justify-center',
             'bg-black',
+            ...fullscreenLayoutClasses,
           );
           document.body.classList.remove('overflow-hidden');
           setFullscreenUi(false);
@@ -209,7 +220,16 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
 
         const expandFullscreen = () => {
           viewer.style.height = '100dvh';
-          viewer.classList.add('fixed', 'inset-0', 'z-50', 'flex', 'items-center', 'justify-center', 'bg-black');
+          viewer.classList.add(
+            'fixed',
+            'inset-0',
+            'z-50',
+            'flex',
+            'items-center',
+            'justify-center',
+            'bg-black',
+            ...fullscreenLayoutClasses,
+          );
           document.body.classList.add('overflow-hidden');
           setFullscreenUi(true);
           viewer.focus();

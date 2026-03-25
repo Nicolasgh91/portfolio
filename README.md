@@ -355,9 +355,7 @@ public/chatbot/
 ### `api/chat.js` — Edge Function (servidor)
 
 **Runtime:** `edge` (Vercel Edge Network — sin cold starts)
-
 **Endpoint:** `POST /api/chat`
-
 **Request body:**
 ```json
 {

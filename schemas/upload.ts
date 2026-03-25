@@ -12,9 +12,14 @@ export const UploadSchema = z.object({
   filename: z
     .string()
     .max(200)
-    .regex(/^[a-zA-Z0-9._-]+$/, 'Nombre de archivo inválido'),
-  mimeType: z.enum(ALLOWED_MIME_TYPES),
-  size: z.number().positive().max(MAX_FILE_SIZE),
+    .regex(/^[a-zA-Z0-9._-]+$/, 'Nombre de archivo inválido')
+    .describe('Nombre seguro del archivo (alfanumérico, punto, guiones).'),
+  mimeType: z.enum(ALLOWED_MIME_TYPES).describe('Tipo MIME declarado; debe coincidir con magic bytes.'),
+  size: z
+    .number()
+    .positive()
+    .max(MAX_FILE_SIZE)
+    .describe('Tamaño en bytes; no mayor que MAX_FILE_SIZE.'),
 });
 
 export const MAGIC_BYTES: Record<string, number[]> = {
