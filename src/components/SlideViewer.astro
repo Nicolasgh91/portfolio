@@ -134,6 +134,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         data-slide-overlay
         class="hidden fixed inset-0 z-50 w-screen overflow-hidden bg-[hsla(0,0%,100%,0.55)] dark:bg-[hsla(240,13%,10%,0.65)] backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]"
         aria-hidden="true"
+        inert
       >
         <div
           data-slide-overlay-inner
@@ -229,20 +230,34 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
           }
         };
 
-        const collapseFullscreen = () => {
+        const getFullscreenDom = () => {
           if (
             !(overlay instanceof HTMLElement) ||
             !(overlayInner instanceof HTMLElement) ||
             !(surface instanceof HTMLElement)
           )
-            return;
-          if (overlay.classList.contains('hidden')) return;
+            return null;
+
+          return { overlay, overlayInner, surface };
+        };
+
+        const setOverlayVisibility = (overlayEl, expanded) => {
+          overlayEl.classList.toggle('hidden', !expanded);
+          overlayEl.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+          overlayEl.toggleAttribute('inert', !expanded);
+        };
+
+        const collapseFullscreen = () => {
+          const fullscreenDom = getFullscreenDom();
+          if (!fullscreenDom) return;
+          const { overlay: overlayEl, surface: surfaceEl } = fullscreenDom;
+          if (overlayEl.classList.contains('hidden')) return;
 
           // Restaurar el árbol original.
           if (surfaceHost instanceof HTMLElement) {
-            surfaceHost.appendChild(surface);
+            surfaceHost.appendChild(surfaceEl);
           }
-          overlay.classList.add('hidden');
+          setOverlayVisibility(overlayEl, false);
           document.body.classList.remove('overflow-hidden');
           setFullscreenUi(false);
           setFullscreenLayout(false);
@@ -250,29 +265,21 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         };
 
         const expandFullscreen = () => {
-          if (
-            !(overlay instanceof HTMLElement) ||
-            !(overlayInner instanceof HTMLElement) ||
-            !(surface instanceof HTMLElement)
-          )
-            return;
+          const fullscreenDom = getFullscreenDom();
+          if (!fullscreenDom) return;
+          const { overlay: overlayEl, overlayInner: overlayInnerEl, surface: surfaceEl } = fullscreenDom;
 
           // Fallback de viewport units para Safari móvil.
           let heightValue = '100vh';
           if (CSS.supports('height: 100dvh')) heightValue = '100dvh';
           else if (CSS.supports('height: 100svh')) heightValue = '100svh';
 
-          overlay.style.height = heightValue;
-          overlay.style.width = '100vw';
-          overlay.style.top = '0';
-          overlay.style.left = '0';
-          overlay.style.right = '0';
-          overlay.style.bottom = '0';
+          overlayEl.style.height = heightValue;
 
           // Mover el contenedor visual al overlay dedicado.
-          overlayInner.appendChild(surface);
+          overlayInnerEl.appendChild(surfaceEl);
 
-          overlay.classList.remove('hidden');
+          setOverlayVisibility(overlayEl, true);
           document.body.classList.add('overflow-hidden');
           setFullscreenUi(true);
           setFullscreenLayout(true);
@@ -280,8 +287,9 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         };
 
         const toggleFullscreen = () => {
-          if (!(overlay instanceof HTMLElement)) return;
-          if (overlay.classList.contains('hidden')) expandFullscreen();
+          const fullscreenDom = getFullscreenDom();
+          if (!fullscreenDom) return;
+          if (fullscreenDom.overlay.classList.contains('hidden')) expandFullscreen();
           else collapseFullscreen();
         };
 
