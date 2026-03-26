@@ -856,20 +856,33 @@ const { activePage = 'home' } = Astro.props;
   }
 
   /* ─────────────────────────────────────────
-     CTA PULSE — solo cuando el usuario no prefiere movimiento reducido
+     CTA PULSE — GPU-compositable (opacity + transform)
+     Solo cuando el usuario no prefiere movimiento reducido
   ───────────────────────────────────────── */
   @media (prefers-reduced-motion: no-preference) {
-    @keyframes cta-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-      60%       { box-shadow: 0 0 0 7px transparent; }
-    }
     .nav-cta {
+      position: relative;
+    }
+    .nav-cta::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 0 0 7px var(--accent-glow);
+      opacity: 0;
+      pointer-events: none;
       animation: cta-pulse 2.8s ease-in-out infinite;
+      will-change: opacity, transform;
+    }
+    @keyframes cta-pulse {
+      0%, 100% { opacity: 0; transform: scale(1); }
+      30%      { opacity: 1; transform: scale(1); }
+      60%      { opacity: 0; transform: scale(1.04); }
     }
   }
 
   /* Clase expuesta por nhA11y.setReducedMotion(true) */
-  :root.no-motion .nav-cta {
+  :root.no-motion .nav-cta::after {
     animation: none !important;
   }
 </style>
