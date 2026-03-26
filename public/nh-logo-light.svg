@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&amp;display=swap');
+      .logo {
+        font-family: 'Outfit', sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .nh { fill: hsl(240, 10%, 6%); }
+      .dot { fill: hsl(32, 94%, 44%); }
+    </style>
+  </defs>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" class="logo nh">nh<tspan class="dot">.</tspan></text>
+</svg>
