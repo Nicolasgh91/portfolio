@@ -1,7 +1,7 @@
 # Roadmap — Sistema de landing templates replicables
 
 *Proyecto: escalatunegocioconia.com × remix-of-personal-blog*
-*Última actualización: 2026-03-26*
+*Última actualización: 2026-03-27*
 
 ---
 
@@ -9,11 +9,13 @@
 
 | Componente | Estado |
 |---|---|
-| `src/content/services/landing-page.mdx` | ✅ Existe, sin `href` |
-| `ServiceCard.astro` | ✅ Consume `roiFocus` y `priceFrom` — verificar `href` |
-| `src/pages/catalogo-de-landings.astro` | ❌ No existe |
-| `remix-of-personal-blog` (repo) | ✅ Público, sin deploy |
-| `demo.escalatunegocioconia.com` | ❌ No configurado |
+| `src/content/services/landing-page.mdx` | ✅ Existe y tiene `href: "/catalogo-de-landings"` |
+| `ServiceCard.astro` | ✅ Maneja `href` condicional (`<a>` vs `<div>`) |
+| `src/pages/catalogo-de-landings.astro` | ✅ Creada y conectada a datos |
+| `src/data/landing-templates.ts` | ✅ SSOT de templates (sin lógica de env en módulo) |
+| `src/pages/sitemap.xml.ts` | ✅ Incluye `/catalogo-de-landings` |
+| `remix-of-personal-blog` (repo) | ✅ Clonado, build validado y deployado |
+| `demo.escalatunegocioconia.com` | ✅ Configurado con HTTPS + alias operativo |
 
 ---
 
@@ -26,7 +28,11 @@
 | 0.3 | Crear `public/robots.txt` en el repo del template con `Disallow: /` | Dev | Archivo commiteado |
 | 0.4 | Agregar `<meta name="robots" content="noindex, nofollow">` en `index.html` del template | Dev | HTML actualizado |
 
-**Criterio de salida:** `npm run build` produce `/dist` sin warnings de chunk >500 KB ni errores de tipos.
+**Estado:** ✅ Completada.
+
+**Criterio de salida (ejecutable):**
+- `npm run build` produce `/dist` sin errores de tipos.
+- Si aparece warning de chunk >500 KB, ejecutar diagnóstico obligatorio del módulo causante con `npx vite-bundle-visualizer` (o build verbose) antes de continuar al deploy.
 
 ---
 
@@ -40,6 +46,12 @@
 | 1.4 | Crear página de catálogo | `src/pages/catalogo-de-landings.astro` | Ver spec en arquitectura. URL demo via variable de entorno |
 | 1.5 | Agregar variable de entorno local | `.env` / `.env.local` | `PUBLIC_DEMO_LANDING_URL=http://localhost:5173` |
 | 1.6 | Agregar variable en Vercel | Dashboard Vercel → env vars | `PUBLIC_DEMO_LANDING_URL=https://demo.escalatunegocioconia.com` |
+
+**Estado:** ✅ Completada.
+
+**Notas de implementación:**
+- La página `catalogo-de-landings.astro` no contiene array embebido; consume `src/data/landing-templates.ts`.
+- La resolución de `PUBLIC_DEMO_LANDING_URL` se hace en la página (no en el módulo de datos).
 
 **Criterio de salida:** navegar `/servicios` → click en tarjeta "Landing page" → llega a `/catalogo-de-landings` → el enlace a la demo funciona en local (localhost:5173).
 
@@ -55,6 +67,13 @@
 | 2.4 | Agregar CNAME en DNS | Panel DNS del registrador | `demo` → `cname.vercel-dns.com` |
 | 2.5 | Verificar SSL y propagación | Browser | `https://demo.escalatunegocioconia.com` sin warnings |
 
+**Estado:** ✅ Completada.
+
+**Validaciones registradas:**
+- `https://demo.escalatunegocioconia.com` operativo.
+- `robots.txt` de demo en `Disallow: /`.
+- HTML con `<meta name="robots" content="noindex, nofollow">`.
+
 **Criterio de salida:** el subdominio resuelve correctamente con HTTPS.
 
 ---
@@ -64,7 +83,16 @@
 | # | Tarea | Archivo | Detalle |
 |---|---|---|---|
 | 3.1 | Crear caso de talento PRJ-002 | `src/content/projects/menu-digital-viandas.mdx` | Según spec en `tareas-contenido.md`. Incluir link al deploy |
-| 3.2 | Actualizar `public/chatbot/data/articles.json` | `articles.json` | Agregar entrada del proyecto si el bot debe recomendarlo |
+| 3.2 | Actualizar `public/chatbot/data/articles.json` | `articles.json` | Ver decisión explícita debajo |
+
+**Estado:** 🟡 Parcial.
+- 3.1 ✅ completada.
+- 3.2 ❌ descartada por decisión arquitectónica (no corresponde mezclar tipos de contenido).
+
+### 3.2 — Actualizar `articles.json` del chatbot
+**Estado:** descartado.  
+**Razón:** `articles.json` alimenta recomendaciones de artículos de blog. Los templates son un tipo de dato distinto. Agregar un template en ese índice contaminaría la fuente de datos del chatbot con contenido heterogéneo.  
+**Sustituto futuro:** cuando el chatbot deba recomendar templates, crear `public/chatbot/data/templates.json` y actualizar `buildSystemPrompt()` en `api.js` para consumirlo. Registrar esa tarea en `docs/deuda-tecnica.md` cuando sea el momento.
 
 ---
 
