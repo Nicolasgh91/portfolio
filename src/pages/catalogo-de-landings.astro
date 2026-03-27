@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import { landingTemplates } from '../data/landing-templates';
+
+const baseUrl = import.meta.env.PUBLIC_DEMO_LANDING_URL;
+const templates = landingTemplates.map((template) => ({
+  ...template,
+  demoUrl: import.meta.env.DEV && baseUrl ? baseUrl : template.demoUrl,
+}));
+---
+
+<Layout
+  title="Catálogo de landings — escalatunegocioconia.com"
+  description="Templates de landing pages disponibles para tu negocio."
+>
+  <Nav activePage="servicios" />
+  <main id="main-content">
+    <div class="page-container">
+      <section class="hero" aria-label="Templates de landing pages">
+        <div
+          class="badge"
+          data-en="Available templates"
+          data-es="Templates disponibles"
+        >
+          Templates disponibles
+        </div>
+        <h1
+          data-en="Landing pages for your business"
+          data-es="Landing pages para tu negocio"
+        >
+          Landing pages para tu negocio
+        </h1>
+        <p
+          class="hero-sub"
+          data-en="Browse available templates. Each one is customized and deployed in less than a week."
+          data-es="Explorá los templates disponibles. Cada uno se personaliza y despliega en menos de una semana."
+        >
+          Explorá los templates disponibles. Cada uno se personaliza y despliega en menos de una semana.
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="templates-heading">
+        <div class="section-header">
+          <span
+            class="label"
+            data-en={`${templates.length} template${templates.length !== 1 ? 's' : ''}`}
+            data-es={`${templates.length} template${templates.length !== 1 ? 's' : ''}`}
+          >
+            {templates.length} template{templates.length !== 1 ? 's' : ''}
+          </span>
+          <h2 id="templates-heading" class="sr-only">Templates</h2>
+        </div>
+
+        {templates.length === 0 ? (
+          <p class="empty" data-en="Coming soon..." data-es="Próximamente...">Próximamente...</p>
+        ) : (
+          <div class="posts-grid">
+            {templates.map((t) => (
+              <a
+                href={t.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
+              >
+                <div class="flex flex-wrap gap-2">
+                  {t.tags.map((tag) => (
+                    <span
+                      class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)]"
+                      data-en={`#${tag}`}
+                      data-es={`#${tag}`}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+
+                <h2
+                  class="text-base font-semibold leading-6 text-[var(--text-primary)]"
+                  data-en={t.title}
+                  data-es={t.title}
+                >
+                  {t.title}
+                </h2>
+
+                <p
+                  class="text-sm leading-6 text-[var(--text-secondary)]"
+                  data-en={t.description}
+                  data-es={t.description}
+                >
+                  {t.description}
+                </p>
+
+                <span class="mt-auto text-xs text-[var(--color-accent-400)]" data-en="View demo →" data-es="Ver demo →">
+                  Ver demo →
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--sp-md);
+  }
+  .empty {
+    color: var(--text-muted);
+    text-align: center;
+    padding: var(--sp-xl) 0;
+  }
+</style>
