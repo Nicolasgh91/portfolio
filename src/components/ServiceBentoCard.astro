@@ -1,0 +1,228 @@
+---
+interface Props {
+  title: string;
+  titleEn?: string;
+  description: string;
+  descriptionEn?: string;
+  shortDescription?: string;
+  shortDescriptionEn?: string;
+  roiFocus?: string;
+  roiFocusEn?: string;
+  icon: string;
+  module?: string;
+  href?: string;
+  variant: 'wide-left' | 'narrow-top' | 'narrow-bottom' | 'wide-right' | 'default';
+}
+
+const {
+  title,
+  titleEn,
+  description,
+  descriptionEn,
+  shortDescription,
+  shortDescriptionEn,
+  roiFocus,
+  roiFocusEn,
+  icon,
+  module,
+  href,
+  variant,
+} = Astro.props;
+
+const displayDesc = shortDescription ?? description;
+const displayDescEn = shortDescriptionEn ?? descriptionEn;
+const ctaHref = href ?? '#contacto';
+const isWide = variant === 'wide-left' || variant === 'wide-right';
+---
+
+{/* ── wide-left: 8col, text left + visual right ─────────── */}
+{variant === 'wide-left' && (
+  <div class="group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-all duration-300 hover:border-[var(--border-normal)] md:flex-row"
+       style="background: var(--bg-card);">
+    <div class="flex flex-1 flex-col justify-center gap-4 p-8 md:p-12">
+      {module && (
+        <span class="inline-block w-fit rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--text-xs)] uppercase tracking-[0.1em]"
+              style="background: var(--bg-tertiary); color: var(--text-secondary);">
+          {module}
+        </span>
+      )}
+      <h3 class="font-extrabold tracking-tight" style="font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary);"
+          data-es={title} data-en={titleEn}>
+        {title}
+      </h3>
+      <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;"
+         data-es={displayDesc} data-en={displayDescEn}>
+        {displayDesc}
+      </p>
+      {roiFocus && (
+        <p class="italic" style="font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6;"
+           data-es={roiFocus} data-en={roiFocusEn}>
+          {roiFocus}
+        </p>
+      )}
+      <a href={ctaHref}
+         class="mt-2 inline-flex items-center gap-2 font-semibold transition-all duration-300"
+         style="font-size: var(--text-sm); color: var(--accent-text);"
+         data-es="Conocé más" data-en="Learn more"
+         aria-label={`${title} — más información`}>
+        <span data-es="Conocé más" data-en="Learn more">Conocé más</span>
+        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+      </a>
+    </div>
+    <div class="relative flex items-center justify-center overflow-hidden md:w-2/5"
+         style="background: var(--bg-tertiary); min-height: 200px;">
+      <div class="absolute inset-0" style="background: radial-gradient(circle, hsla(var(--accent-h), var(--accent-s), 56%, 0.1), transparent 70%);"></div>
+      <span class="relative text-7xl" aria-hidden="true">{icon}</span>
+    </div>
+  </div>
+)}
+
+{/* ── wide-right: 8col, text right + visual left (inverted) */}
+{variant === 'wide-right' && (
+  <div class="group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-all duration-300 hover:border-[var(--border-normal)] md:flex-row-reverse"
+       style="background: var(--bg-card);">
+    <div class="flex flex-1 flex-col justify-center gap-4 p-8 md:p-12">
+      {module && (
+        <span class="inline-block w-fit rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--text-xs)] uppercase tracking-[0.1em]"
+              style="background: var(--bg-tertiary); color: var(--text-secondary);">
+          {module}
+        </span>
+      )}
+      <h3 class="font-extrabold tracking-tight" style="font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary);"
+          data-es={title} data-en={titleEn}>
+        {title}
+      </h3>
+      <p style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;"
+         data-es={displayDesc} data-en={displayDescEn}>
+        {displayDesc}
+      </p>
+      {roiFocus && (
+        <p class="italic" style="font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6;"
+           data-es={roiFocus} data-en={roiFocusEn}>
+          {roiFocus}
+        </p>
+      )}
+      <a href={ctaHref}
+         class="mt-2 inline-flex items-center gap-2 font-semibold transition-all duration-300"
+         style="font-size: var(--text-sm); color: var(--accent-text);"
+         data-es="Conocé más" data-en="Learn more"
+         aria-label={`${title} — más información`}>
+        <span data-es="Conocé más" data-en="Learn more">Conocé más</span>
+        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+      </a>
+    </div>
+    <div class="relative flex items-center justify-center overflow-hidden md:w-2/5"
+         style="background: var(--bg-tertiary); min-height: 200px;">
+      <div class="absolute inset-0" style="background: radial-gradient(circle, hsla(var(--accent-h), var(--accent-s), 56%, 0.1), transparent 70%);"></div>
+      <span class="relative text-7xl" aria-hidden="true">{icon}</span>
+    </div>
+  </div>
+)}
+
+{/* ── narrow-top: 4col, visual top + text bottom ─────────── */}
+{variant === 'narrow-top' && (
+  <div class="group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-all duration-200 ease-out hover:scale-[1.02] hover:border-[var(--border-normal)]"
+       style="background: var(--bg-card);">
+    <div class="relative flex h-48 items-center justify-center overflow-hidden"
+         style="background: var(--bg-tertiary);">
+      <div class="absolute inset-0" style="background: radial-gradient(circle, hsla(var(--accent-h), var(--accent-s), 56%, 0.1), transparent 70%);"></div>
+      <span class="relative text-7xl" aria-hidden="true">{icon}</span>
+    </div>
+    <div class="flex flex-1 flex-col gap-3 p-8">
+      {module && (
+        <span class="inline-block w-fit rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--text-xs)] uppercase tracking-[0.1em]"
+              style="background: var(--bg-tertiary); color: var(--text-secondary);">
+          {module}
+        </span>
+      )}
+      <h3 class="font-bold tracking-tight" style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--text-primary);"
+          data-es={title} data-en={titleEn}>
+        {title}
+      </h3>
+      <p style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;"
+         data-es={displayDesc} data-en={displayDescEn}>
+        {displayDesc}
+      </p>
+      <a href={ctaHref}
+         class="mt-auto inline-flex items-center gap-2 pt-2 font-semibold transition-all duration-300"
+         style="font-size: var(--text-sm); color: var(--accent-text);"
+         data-es="Conocé más" data-en="Learn more"
+         aria-label={`${title} — más información`}>
+        <span data-es="Conocé más" data-en="Learn more">Conocé más</span>
+        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+      </a>
+    </div>
+  </div>
+)}
+
+{/* ── narrow-bottom: 4col, text top + visual bottom ──────── */}
+{variant === 'narrow-bottom' && (
+  <div class="group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-all duration-200 ease-out hover:scale-[1.02] hover:border-[var(--border-normal)]"
+       style="background: var(--bg-card);">
+    <div class="flex flex-1 flex-col gap-3 p-8">
+      {module && (
+        <span class="inline-block w-fit rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--text-xs)] uppercase tracking-[0.1em]"
+              style="background: var(--bg-tertiary); color: var(--text-secondary);">
+          {module}
+        </span>
+      )}
+      <h3 class="font-bold tracking-tight" style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--text-primary);"
+          data-es={title} data-en={titleEn}>
+        {title}
+      </h3>
+      <p style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;"
+         data-es={displayDesc} data-en={displayDescEn}>
+        {displayDesc}
+      </p>
+      <a href={ctaHref}
+         class="mt-auto inline-flex items-center gap-2 pt-2 font-semibold transition-all duration-300"
+         style="font-size: var(--text-sm); color: var(--accent-text);"
+         data-es="Conocé más" data-en="Learn more"
+         aria-label={`${title} — más información`}>
+        <span data-es="Conocé más" data-en="Learn more">Conocé más</span>
+        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+      </a>
+    </div>
+    <div class="relative flex h-48 items-center justify-center overflow-hidden"
+         style="background: var(--bg-tertiary);">
+      <div class="absolute inset-0" style="background: radial-gradient(circle, hsla(var(--accent-h), var(--accent-s), 56%, 0.1), transparent 70%);"></div>
+      <span class="relative text-7xl" aria-hidden="true">{icon}</span>
+    </div>
+  </div>
+)}
+
+{/* ── default: fallback, same as narrow-top ──────────────── */}
+{variant === 'default' && (
+  <div class="group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-all duration-200 ease-out hover:scale-[1.02] hover:border-[var(--border-normal)]"
+       style="background: var(--bg-card);">
+    <div class="relative flex h-48 items-center justify-center overflow-hidden"
+         style="background: var(--bg-tertiary);">
+      <div class="absolute inset-0" style="background: radial-gradient(circle, hsla(var(--accent-h), var(--accent-s), 56%, 0.1), transparent 70%);"></div>
+      <span class="relative text-7xl" aria-hidden="true">{icon}</span>
+    </div>
+    <div class="flex flex-1 flex-col gap-3 p-8">
+      {module && (
+        <span class="inline-block w-fit rounded-[var(--radius-pill)] px-3 py-1 text-[length:var(--text-xs)] uppercase tracking-[0.1em]"
+              style="background: var(--bg-tertiary); color: var(--text-secondary);">
+          {module}
+        </span>
+      )}
+      <h3 class="font-bold tracking-tight" style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--text-primary);"
+          data-es={title} data-en={titleEn}>
+        {title}
+      </h3>
+      <p style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6;"
+         data-es={displayDesc} data-en={displayDescEn}>
+        {displayDesc}
+      </p>
+      <a href={ctaHref}
+         class="mt-auto inline-flex items-center gap-2 pt-2 font-semibold transition-all duration-300"
+         style="font-size: var(--text-sm); color: var(--accent-text);"
+         data-es="Conocé más" data-en="Learn more"
+         aria-label={`${title} — más información`}>
+        <span data-es="Conocé más" data-en="Learn more">Conocé más</span>
+        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+      </a>
+    </div>
+  </div>
+)}

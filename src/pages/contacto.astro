@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout
+  title="Contacto — Nicolás Hruszczak"
+  description="Completá el formulario y te respondemos en menos de 24 horas. Diagnóstico gratuito para tu negocio."
+  ogImage="/og-desktop.png"
+>
+  <Nav activePage="servicios" />
+
+  <main id="main-content">
+    <div class="page-container">
+
+      <section class="hero" aria-labelledby="contact-heading">
+        <h1
+          id="contact-heading"
+          data-es="Evaluemos tu desafío"
+          data-en="Let's evaluate your challenge"
+        >Evaluemos tu desafío</h1>
+        <p
+          class="hero-sub"
+          data-es="Completá el formulario y te respondemos en menos de 24 horas. Sin compromiso."
+          data-en="Fill out the form and we'll respond within 24 hours. No commitment."
+        >Completá el formulario y te respondemos en menos de 24 horas. Sin compromiso.</p>
+      </section>
+
+      <section id="contacto" aria-label="Formulario de contacto">
+        <ContactForm />
+      </section>
+
+    </div>
+  </main>
+</Layout>

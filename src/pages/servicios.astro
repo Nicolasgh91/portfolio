@@ -1,22 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
-import ContactForm from '../components/ContactForm.astro';
+import ServiceBentoCard from '../components/ServiceBentoCard.astro';
 import { getCollection } from 'astro:content';
-import ServiceCard from '../components/ServiceCard.astro';
-import FaqSection from '../components/FaqSection.astro';
-import type { CollectionEntry } from 'astro:content';
-import pricing from '../data/pricing.json';
 
-// Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
-
-// FAQ: un archivo JSON = un ítem de colección; `data` es el array validado por Zod.
-const faqDocs = await getCollection('faq');
-const faqEntries = faqDocs
-  .flatMap((doc) => doc.data)
-  .sort((a, b) => a.order - b.order);
 
 /** Anclas alineadas con Nav.astro (#agentes-ia, #landing, …). */
 function serviceAnchorId(slug: string): string {
@@ -26,63 +15,15 @@ function serviceAnchorId(slug: string): string {
     'ecommerce-platforms': 'ecommerce',
     'workflow-automation': 'automatizacion',
     'local-llms': 'local-llms',
+    'seo-geo': 'seo-geo',
   };
   return map[slug] ?? `service-${slug}`;
 }
 
-type PricingEntry = { price: string; unit?: string; prefix?: string };
+type BentoVariant = 'wide-left' | 'narrow-top' | 'narrow-bottom' | 'wide-right' | 'default';
 
-type ServicePriceSlug =
-  | 'chatbots-ia'
-  | 'landing-page'
-  | 'local-llms'
-  | 'ecommerce-platforms'
-  | 'workflow-automation';
-
-const prices = pricing as Record<ServicePriceSlug, PricingEntry>;
-
-/** Sentinel que ServiceCard interpreta como CTA a contacto (no bloque numérico). */
-const PRICE_INQUIRE = 'Consultar';
-
-function parsePriceFromFrontmatter(
-  data: CollectionEntry<'services'>['data'],
-): { price: string; priceUnit?: string; pricePrefix: string } | null {
-  const raw = data.priceFrom?.trim();
-  if (!raw) return null;
-  const ars = raw.match(/^ARS\s+(.+)$/i);
-  if (ars) {
-    const price = ars[1].trim();
-    if (!price) return null;
-    return { price, priceUnit: 'ARS', pricePrefix: '' };
-  }
-  if (raw.startsWith('$')) {
-    const price = raw.slice(1).trim();
-    if (!price) return null;
-    return { price, priceUnit: undefined, pricePrefix: '$' };
-  }
-  return { price: raw, priceUnit: undefined, pricePrefix: '' };
-}
-
-function resolveServicePrice(
-  slug: string,
-  data: CollectionEntry<'services'>['data'],
-): { price?: string; priceUnit?: string; pricePrefix: string } {
-  const fromMatter = parsePriceFromFrontmatter(data);
-  if (fromMatter) return fromMatter;
-
-  const entry = prices[slug as ServicePriceSlug];
-  const numeric = entry?.price?.trim();
-  if (numeric) {
-    const unit = entry.unit?.trim();
-    return {
-      price: numeric,
-      priceUnit: unit || undefined,
-      pricePrefix: entry.prefix ?? '',
-    };
-  }
-
-  return { price: PRICE_INQUIRE, pricePrefix: '', priceUnit: undefined };
-}
+const variantByIndex: BentoVariant[] = ['wide-left', 'narrow-top', 'narrow-bottom', 'wide-right'];
+const colSpanByIndex = ['md:col-span-8', 'md:col-span-4', 'md:col-span-4', 'md:col-span-8'];
 
 const siteUrl = 'https://escalatunegocioconia.com';
 const servicesJsonLd = {
@@ -102,8 +43,8 @@ const servicesJsonLd = {
 ---
 
 <Layout
-  title="Servicios B2B — Nicolás Hruszczak"
-  description="Software a medida, automatización con IA y auditoría de procesos para empresas y pymes que buscan reducir costos y multiplicar resultados."
+  title="Servicios de desarrollo web y automatización con IA | Nicolás Hruszczak"
+  description="Soluciones digitales para tu negocio: landing pages, chatbots con IA, SEO local, e-commerce y automatización. Resultados medibles, entrega rápida."
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
@@ -112,402 +53,183 @@ const servicesJsonLd = {
   <Nav activePage="servicios" />
 
   <main id="main-content">
-    <div class="page-container">
 
-      <!-- ── Hero ─────────────────────────────────────────── -->
-      <section class="hero" aria-label="Propuesta de valor B2B">
-        <div
-          class="badge"
-          data-en="B2B Services · Free diagnosis"
-          data-es="Servicios para empresas · Diagnóstico gratuito"
-        >Servicios para empresas · Diagnóstico gratuito</div>
-
-        <h1
-          data-en='Custom software to<br><em>multiply ROI</em><br>for your business.'
-          data-es='Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.'
-        >Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.</h1>
-
-        <p
-          class="hero-sub"
-          data-en="Fixed cost reduction and operational optimization through automation, artificial intelligence, and exclusive management systems."
-          data-es="Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos."
-        >Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos.</p>
-
-        <div class="cta-row">
-          <a
-            href="#contacto"
-            class="btn-primary"
-            data-en="Request free diagnosis"
-            data-es="Solicitar diagnóstico gratuito"
-          >Solicitar diagnóstico gratuito</a>
+    <!-- ── Hero editorial ──────────────────────────────────── -->
+    <header class="mx-auto max-w-7xl px-6 pb-24 pt-12">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div class="max-w-2xl">
+          <span
+            class="label mb-4 block uppercase tracking-[0.1em]"
+            style="color: var(--text-secondary); font-size: var(--text-xs);"
+            data-es="Nuestros servicios"
+            data-en="Our services"
+          >Nuestros servicios</span>
+          <h1
+            class="font-extrabold tracking-tighter"
+            style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, var(--text-3xl)); line-height: 1.1; color: var(--text-primary);"
+            data-es='Soluciones digitales<br/><span class="gradient-text">para tu negocio.</span>'
+            data-en='Digital solutions<br/><span class="gradient-text">for your business.</span>'
+          >Soluciones digitales<br/><span class="inline-block bg-gradient-to-r bg-clip-text text-transparent" style="--tw-gradient-from: var(--color-accent-600); --tw-gradient-to: var(--color-accent-400);">para tu negocio.</span></h1>
         </div>
-      </section>
-
-      <!-- ── Value banner ──────────────────────────────────── -->
-      <div
-        class="value-banner"
-        role="region"
-        aria-label="Propuesta de valor: de gasto a inversión"
-      >
-        <div class="value-banner-col">
-          <h3
-            data-en="Software as expense"
-            data-es="Software como gasto"
-          >Software como gasto</h3>
+        <div class="max-w-sm">
           <p
-            data-en="Recurring licenses, disconnected tools, manual processes that consume hours and capital month after month."
-            data-es="Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes."
-          >Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes.</p>
-        </div>
-        <div class="value-banner-arrow" aria-hidden="true">→</div>
-        <div class="value-banner-col accent">
-          <h3
-            data-en="Software as investment"
-            data-es="Software como inversión"
-          >Software como inversión</h3>
-          <p
-            data-en="Proprietary systems, measurable automation and concrete return on every peso invested."
-            data-es="Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido."
-          >Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido.</p>
+            class="pb-2 leading-relaxed"
+            style="font-family: var(--font-body); font-size: var(--text-base); color: var(--text-secondary);"
+            data-es="Tecnología que trabaja por vos. Desde landing pages hasta chatbots con IA, cada solución está diseñada para generar resultados medibles."
+            data-en="Technology that works for you. From landing pages to AI chatbots, every solution is designed to deliver measurable results."
+          >Tecnología que trabaja por vos. Desde landing pages hasta chatbots con IA, cada solución está diseñada para generar resultados medibles.</p>
         </div>
       </div>
+    </header>
 
-      <!-- ── Catálogo de servicios (dinámico) ──────────────── -->
-      <section class="section" aria-labelledby="services-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Catalog"
-            data-es="Catálogo"
-          >Catálogo</span>
-          <h2
-            id="services-heading"
-            data-en="Services"
-            data-es="Servicios"
-          >Servicios</h2>
-          <p
-            style="margin-top:6px;font-size:var(--text-sm)"
-            data-en="Four intervention axes with direct operational impact."
-            data-es="Cuatro ejes de intervención con impacto directo en la operación."
-          >Cuatro ejes de intervención con impacto directo en la operación.</p>
-        </div>
-
-        <div class="services-carousel-shell" id="services-carousel-shell">
-          <p
-            id="services-carousel-hint"
-            class="services-carousel-hint"
-            hidden
-            data-en="Swipe or drag sideways to see all services."
-            data-es="Deslizá o arrastrá horizontalmente para ver todos los servicios."
-          >Deslizá o arrastrá horizontalmente para ver todos los servicios.</p>
-          <div class="services-carousel-viewport">
-            <div class="services-carousel-fade services-carousel-fade--left" aria-hidden="true"></div>
-            <div class="services-carousel-fade services-carousel-fade--right" aria-hidden="true"></div>
+    <!-- ── Bento grid ──────────────────────────────────────── -->
+    <section class="mx-auto max-w-7xl space-y-8 px-6" aria-labelledby="services-heading">
+      <h2 class="sr-only" id="services-heading"
+          data-es="Servicios" data-en="Services">Servicios</h2>
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+        {sortedServices.map((service, i) => {
+          const variant = variantByIndex[i] ?? 'default';
+          const colSpan = colSpanByIndex[i] ?? 'md:col-span-4';
+          return (
             <div
-              class="services-carousel"
-              id="services-carousel"
-              role="region"
-              aria-labelledby="services-heading"
-              tabindex="0"
+              id={serviceAnchorId(service.slug)}
+              class={`col-span-1 scroll-mt-24 ${colSpan}`}
             >
-              {sortedServices.map((service) => {
-                const resolved = resolveServicePrice(service.slug, service.data);
-                return (
-                  <div
-                    id={serviceAnchorId(service.slug)}
-                    class="service-card-anchor"
-                  >
-                    <ServiceCard service={{
-                      title: service.data.title,
-                      titleEn: service.data.titleEn,
-                      shortDescription: service.data.shortDescription ?? service.data.description,
-                      shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
-                      roiFocus: service.data.roiFocus,
-                      roiFocusEn: service.data.roiFocusEn,
-                      imageKey: service.data.imageKey,
-                      featured: service.data.featured,
-                      href: service.data.href,
-                      price: resolved.price,
-                      priceUnit: resolved.priceUnit,
-                      pricePrefix: resolved.pricePrefix,
-                    }} />
-                  </div>
-                );
-              })}
+              <ServiceBentoCard
+                title={service.data.title}
+                titleEn={service.data.titleEn}
+                description={service.data.description}
+                descriptionEn={service.data.descriptionEn}
+                shortDescription={service.data.shortDescription}
+                shortDescriptionEn={service.data.shortDescriptionEn}
+                roiFocus={service.data.roiFocus}
+                roiFocusEn={service.data.roiFocusEn}
+                icon={service.data.icon}
+                module={service.data.module}
+                href={service.data.href}
+                variant={variant}
+              />
             </div>
-          </div>
-        </div>
-      </section>
+          );
+        })}
+      </div>
+    </section>
 
-      <!-- ── Case study ─────────────────────────────────────── -->
-      <section class="section" aria-labelledby="case-heading">
-        <div class="section-header">
+    <!-- ── Diferenciadores ─────────────────────────────────── -->
+    <section class="mt-32 py-32" style="background: var(--bg-secondary);" aria-labelledby="diff-heading">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mb-20 text-center">
           <span
-            class="label"
-            data-en="Use case"
-            data-es="Caso de uso"
-          >Caso de uso</span>
-        </div>
-
-        <div class="case-block">
-          <div class="case-header">
-            <h2
-              id="case-heading"
-              data-en="Success story: comprehensive sports management (Double Click™)"
-              data-es="Caso de éxito: gestión integral deportiva (Double Click™)"
-            >Caso de éxito: gestión integral deportiva (Double Click™)</h2>
-            <span class="tag tag-warn" aria-label="Proyecto en curso">⚠ En curso</span>
-          </div>
-
-          <p
-            style="margin:var(--sp-sm) 0 var(--sp-lg);font-size:var(--text-sm)"
-            data-en="A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating the need for three separate paid software tools."
-            data-es="Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual."
-          >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</p>
-
-          <div class="grid-2">
-            <div
-              class="mock-placeholder"
-              role="img"
-              aria-label="Espacio reservado para captura del dashboard de gestión"
-            >
-              [ Dashboard mockup ]<br><br>
-              Panel de reservas · Métricas · Clientes
-            </div>
-
-            <div class="card" style="align-self:start">
-              <h3
-                style="font-size:var(--text-base);margin-bottom:var(--sp-sm)"
-                data-en="Result"
-                data-es="Resultado"
-              >Resultado</h3>
-              <p
-                style="font-size:var(--text-sm)"
-                data-en="Elimination of 3 monthly subscriptions. Significant reduction in administrative management time. Unified client retention metrics panel."
-                data-es="Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes."
-              >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes.</p>
-              <div class="tags">
-                <span class="tag">Python</span>
-                <span class="tag">Next.js</span>
-                <span class="tag">PostgreSQL</span>
-                <a href="#contacto" class="tag tag-accent"
-                  data-en="Request similar solution →"
-                  data-es="Solicitar solución similar →"
-                >Solicitar solución similar →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── FAQ ─────────────────────────────────────────────── -->
-      <section class="section" aria-labelledby="faq-heading">
-        <FaqSection entries={faqEntries} ctaHref="#contacto" />
-      </section>
-
-      <!-- ── Formulario de contacto ──────────────────────────── -->
-      <section id="contacto" class="section" aria-labelledby="contact-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Contact"
-            data-es="Contacto"
-          >Contacto</span>
+            class="label mb-4 block uppercase tracking-[0.1em]"
+            style="color: var(--text-secondary); font-size: var(--text-xs);"
+            data-es="Por qué elegirnos"
+            data-en="Why choose us"
+          >Por qué elegirnos</span>
           <h2
-            id="contact-heading"
-            data-en="Let's evaluate your challenge"
-            data-es="Evaluemos su desafío"
-          >Evaluemos su desafío</h2>
+            id="diff-heading"
+            class="font-extrabold tracking-tight"
+            style="font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary);"
+            data-es="Tecnología accesible, resultados concretos."
+            data-en="Accessible technology, concrete results."
+          >Tecnología accesible, resultados concretos.</h2>
         </div>
-        <ContactForm />
-      </section>
+        <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
 
-    </div>
+          <!-- Diferenciador 1 -->
+          <div class="rounded-[var(--radius-lg)] border p-8"
+               style="background: var(--bg-card); border-color: var(--border-subtle);">
+            <span class="mb-4 block text-4xl" aria-hidden="true">⚡</span>
+            <h4
+              class="mb-2 font-bold"
+              style="font-family: var(--font-display); font-size: var(--text-lg); color: var(--text-primary);"
+              data-es="Entrega rápida"
+              data-en="Fast delivery"
+            >Entrega rápida</h4>
+            <p
+              style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7;"
+              data-es="Tu solución funcionando en 1 a 3 semanas. Sin meses de espera ni reuniones interminables."
+              data-en="Your solution running in 1 to 3 weeks. No months of waiting or endless meetings."
+            >Tu solución funcionando en 1 a 3 semanas. Sin meses de espera ni reuniones interminables.</p>
+          </div>
+
+          <!-- Diferenciador 2 -->
+          <div class="rounded-[var(--radius-lg)] border p-8"
+               style="background: var(--bg-card); border-color: var(--border-subtle);">
+            <span class="mb-4 block text-4xl" aria-hidden="true">🌐</span>
+            <h4
+              class="mb-2 font-bold"
+              style="font-family: var(--font-display); font-size: var(--text-lg); color: var(--text-primary);"
+              data-es="Hosting sin costo"
+              data-en="Free hosting"
+            >Hosting sin costo</h4>
+            <p
+              style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7;"
+              data-es="Deploy en Vercel con CDN global. Cero gastos de infraestructura para tu negocio."
+              data-en="Deployed on Vercel with global CDN. Zero infrastructure costs for your business."
+            >Deploy en Vercel con CDN global. Cero gastos de infraestructura para tu negocio.</p>
+          </div>
+
+          <!-- Diferenciador 3 -->
+          <div class="rounded-[var(--radius-lg)] border p-8"
+               style="background: var(--bg-card); border-color: var(--border-subtle);">
+            <span class="mb-4 block text-4xl" aria-hidden="true">🛡️</span>
+            <h4
+              class="mb-2 font-bold"
+              style="font-family: var(--font-display); font-size: var(--text-lg); color: var(--text-primary);"
+              data-es="Soporte incluido"
+              data-en="Support included"
+            >Soporte incluido</h4>
+            <p
+              style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7;"
+              data-es="30 días de soporte post-lanzamiento. No te dejamos solo después de la entrega."
+              data-en="30 days of post-launch support. We don't leave you alone after delivery."
+            >30 días de soporte post-lanzamiento. No te dejamos solo después de la entrega.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA final ───────────────────────────────────────── -->
+    <section id="contacto" class="mx-auto mt-32 max-w-4xl px-6 pb-32 text-center" aria-labelledby="cta-heading">
+      <div class="relative overflow-hidden rounded-[var(--radius-xl)] p-12 md:p-16"
+           style="background: var(--bg-secondary);">
+        <div class="absolute right-0 top-0 -mr-16 -mt-16 h-64 w-64 rounded-full blur-3xl"
+             style="background: var(--color-accent-400); opacity: 0.1;" aria-hidden="true"></div>
+        <div class="absolute bottom-0 left-0 -mb-16 -ml-16 h-64 w-64 rounded-full blur-3xl"
+             style="background: var(--color-accent-600); opacity: 0.05;" aria-hidden="true"></div>
+
+        <h2
+          id="cta-heading"
+          class="relative z-10 mb-4 font-extrabold tracking-tight"
+          style="font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary);"
+          data-es="¿Listo para escalar tu negocio?"
+          data-en="Ready to scale your business?"
+        >¿Listo para escalar tu negocio?</h2>
+        <p
+          class="relative z-10 mx-auto mb-8 max-w-md"
+          style="font-size: var(--text-base); color: var(--text-secondary); line-height: 1.7;"
+          data-es="Contanos tu desafío y te proponemos la solución más eficiente."
+          data-en="Tell us your challenge and we'll propose the most efficient solution."
+        >Contanos tu desafío y te proponemos la solución más eficiente.</p>
+
+        <div class="relative z-10 flex flex-col justify-center gap-4 sm:flex-row">
+          <a
+            href="mailto:comercial@escalatunegocioconia.com"
+            class="btn-primary inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] px-6 py-3 font-bold transition-transform hover:scale-105"
+            data-es="Escribinos por email"
+            data-en="Send us an email"
+          >Escribinos por email</a>
+          <a
+            href="/contacto"
+            class="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] border px-6 py-3 font-bold transition-colors"
+            style="border-color: var(--border-normal); color: var(--text-primary);"
+            data-es="Completar formulario"
+            data-en="Fill out form"
+          >Completar formulario</a>
+        </div>
+      </div>
+    </section>
+
   </main>
-
-  <!-- Script: drag-to-scroll + estado overflow/fades del carrusel de servicios -->
-  <script>
-    const carousel = document.getElementById('services-carousel');
-    const shell = document.getElementById('services-carousel-shell');
-    const hint = document.getElementById('services-carousel-hint');
-
-    function updateCarouselState() {
-      if (!carousel || !shell) return;
-      const { scrollLeft, scrollWidth, clientWidth } = carousel;
-      const hasOverflow = scrollWidth > clientWidth + 1;
-      const atStart = scrollLeft <= 2;
-      const atEnd = scrollLeft + clientWidth >= scrollWidth - 2;
-
-      shell.classList.toggle('has-overflow', hasOverflow);
-      shell.classList.toggle('at-start', atStart);
-      shell.classList.toggle('at-end', atEnd);
-
-      if (hint) {
-        if (hasOverflow) hint.removeAttribute('hidden');
-        else hint.setAttribute('hidden', '');
-      }
-    }
-
-    if (carousel && shell) {
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      const ro = new ResizeObserver(() => updateCarouselState());
-      ro.observe(carousel);
-      carousel.addEventListener('scroll', updateCarouselState, { passive: true });
-      window.addEventListener('load', updateCarouselState);
-      requestAnimationFrame(updateCarouselState);
-
-      carousel.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-        e.preventDefault();
-        const delta = e.key === 'ArrowRight' ? 280 : -280;
-        carousel.scrollBy({
-          left: delta,
-          behavior: reducedMotion ? 'auto' : 'smooth',
-        });
-      });
-
-      let isDown = false;
-      let startX = 0;
-      let scrollLeft = 0;
-
-      carousel.addEventListener('mousedown', (e) => {
-        isDown = true;
-        carousel.classList.add('is-dragging');
-        startX = e.pageX - carousel.offsetLeft;
-        scrollLeft = carousel.scrollLeft;
-      });
-
-      document.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mouseleave', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - carousel.offsetLeft;
-        carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
-      });
-    }
-  </script>
-
 </Layout>
-<style>
-  .value-banner {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-xl);
-    background: var(--bg-tertiary);
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg) var(--sp-xl);
-    margin: var(--sp-xl) 0;
-  }
-  @media (max-width: 640px) {
-    .value-banner { flex-direction: column; text-align: center; gap: var(--sp-lg); }
-    .value-banner-arrow { transform: rotate(90deg); }
-  }
-  .value-banner-col { flex: 1; }
-  .value-banner-col h3 { margin-bottom: 6px; }
-  .value-banner-col.accent h3 { color: var(--accent); }
-  .value-banner-arrow { font-size: 28px; color: var(--accent); flex-shrink: 0; }
-
-  .case-block {
-    background: var(--bg-card);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg);
-    margin: var(--sp-xl) 0;
-  }
-  .mock-placeholder {
-    background: var(--bg-tertiary);
-    border: 0.5px dashed var(--border-normal);
-    border-radius: var(--radius-md);
-    padding: 40px var(--sp-lg);
-    text-align: center;
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-bottom: var(--sp-md);
-  }
-  .case-header {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-sm);
-    flex-wrap: wrap;
-    margin-bottom: var(--sp-sm);
-  }
-  .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
-
-  /* ── Carrusel de servicios ───────────────────────────────── */
-  .services-carousel-shell {
-    margin-top: var(--sp-sm);
-  }
-  .services-carousel-hint {
-    margin: 0 0 var(--sp-sm);
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  .services-carousel-viewport {
-    position: relative;
-  }
-  .services-carousel-fade {
-    position: absolute;
-    top: 0;
-    bottom: 12px;
-    width: 48px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .services-carousel-fade--left {
-    left: 0;
-    background: linear-gradient(to right, var(--bg-primary), transparent);
-  }
-  .services-carousel-fade--right {
-    right: 0;
-    background: linear-gradient(to left, var(--bg-primary), transparent);
-  }
-  .services-carousel-shell.has-overflow:not(.at-start) .services-carousel-fade--left {
-    opacity: 1;
-  }
-  .services-carousel-shell.has-overflow:not(.at-end) .services-carousel-fade--right {
-    opacity: 1;
-  }
-  .services-carousel {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    cursor: grab;
-    outline: none;
-    /* padding para que la sombra hover no quede cortada */
-    padding-bottom: 12px;
-    padding-top: 4px;
-    /* ocultar scrollbar visualmente */
-    scrollbar-width: none;
-  }
-  .services-carousel:focus-visible {
-    box-shadow: 0 0 0 2px var(--accent-border);
-    border-radius: var(--radius-sm);
-  }
-  .services-carousel::-webkit-scrollbar { display: none; }
-  .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
-
-  .service-card-anchor {
-    scroll-margin-top: 96px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    min-width: 260px;
-    max-width: 300px;
-  }
-</style>

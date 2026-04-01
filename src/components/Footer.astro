@@ -12,6 +12,7 @@ function serviceAnchorId(slug: string): string {
     'ecommerce-platforms': 'ecommerce',
     'workflow-automation': 'automatizacion',
     'local-llms': 'local-llms',
+    'seo-geo': 'seo-geo',
   };
   return map[slug] ?? `service-${slug}`;
 }
@@ -35,14 +36,14 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
     "Diagnóstico gratuito",
     ...blogPosts.map(p => p.data.title),
     "Email",
-    "Agendar reunión"
+    "Evaluar propuesta"
   ],
   "url": [
     ...services.map(s => `${author.siteUrl}/servicios#${serviceAnchorId(s.slug)}`),
-    `${author.siteUrl}/servicios#contacto`,
+    `${author.siteUrl}/contacto`,
     ...blogPosts.map(p => `${author.siteUrl}/blog/${p.slug}`),
     `mailto:${author.email}`,
-    `${author.siteUrl}/servicios#contacto`
+    `${author.siteUrl}/contacto`
   ]
 })} />
 
@@ -69,10 +70,10 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
           30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.
         </p>
         <a
-          href="/servicios#contacto"
+          href="/contacto"
           class="btn-primary"
         >
-          Agenda una reunión →
+          Evaluar propuesta →
         </a>
       </div>
     </div>
@@ -160,7 +161,7 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
           ))}
           <li>
             <a
-              href="/servicios#contacto"
+              href="/contacto"
               class="footer-link"
               style="display: inline-flex; align-items: center; gap: var(--sp-xs);"
             >
@@ -222,10 +223,10 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
           )}
           <li>
             <a
-              href="/servicios#contacto"
+              href="/contacto"
               class="footer-link"
             >
-              Agendar reunión
+              Evaluar propuesta
             </a>
           </li>
           <li>
