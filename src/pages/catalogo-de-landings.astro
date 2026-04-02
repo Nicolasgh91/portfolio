@@ -1,12 +1,36 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
-import { landingTemplates } from '../data/landing-templates';
+import {
+  landingTemplates,
+  type LandingTemplate,
+} from '../data/landing-templates';
 
-const baseUrl = import.meta.env.PUBLIC_DEMO_LANDING_URL;
+const menuDigitalDemoBase = import.meta.env.PUBLIC_DEMO_LANDING_URL;
+const templatePymeBase =
+  import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
+  'https://template-pyme.escalatunegocioconia.com';
+
+function resolveDemoUrl(template: LandingTemplate): string {
+  const { demoUrl, slug } = template;
+
+  if (demoUrl.startsWith('/')) {
+    const base = templatePymeBase.endsWith('/')
+      ? templatePymeBase
+      : `${templatePymeBase}/`;
+    return new URL(demoUrl.replace(/^\//, ''), base).href;
+  }
+
+  if (import.meta.env.DEV && menuDigitalDemoBase && slug === 'menu-digital-viandas') {
+    return menuDigitalDemoBase;
+  }
+
+  return demoUrl;
+}
+
 const templates = landingTemplates.map((template) => ({
   ...template,
-  demoUrl: import.meta.env.DEV && baseUrl ? baseUrl : template.demoUrl,
+  demoUrl: resolveDemoUrl(template),
 }));
 ---
 

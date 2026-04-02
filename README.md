@@ -1,6 +1,6 @@
-# escalatunegocioconia.com — Sitio Web de Software as a Service
+# escalatunegocioconia.com — Software as a Service
 
-Sitio web personal de Nicolás Hruszczak. Portfolio profesional con chatbot IA integrado, construido sobre Astro con deploy en Vercel. Costo operativo mensual: $0.
+Portfolio profesional para integración de software como servicio.
 
 ---
 
@@ -17,8 +17,7 @@ Sitio web personal de Nicolás Hruszczak. Portfolio profesional con chatbot IA i
 9. [Deploy](#9-deploy)
 10. [SEO y metadatos](#10-seo-y-metadatos)
 11. [Accesibilidad](#11-accesibilidad)
-12. [Cómo actualizar contenido](#12-cómo-actualizar-contenido)
-13. [Replicar el chatbot para un cliente](#13-replicar-el-chatbot-para-un-cliente)
+
 
 ---
 
@@ -26,9 +25,9 @@ Sitio web personal de Nicolás Hruszczak. Portfolio profesional con chatbot IA i
 
 | Capa | Tecnología | Versión | Rol |
 |------|-----------|---------|-----|
-| Framework | Astro | 4.x | SSG con rutas estáticas y dinámicas pre-renderizadas |
+| Framework | Astro | 5.x | SSG con rutas estáticas y dinámicas pre-renderizadas |
 | Estilos | Tailwind + tokens CSS | — | UI híbrida con utilidades Tailwind y `src/styles/tokens.css` |
-| Fuentes | Inter Variable + Outfit Variable + JetBrains Mono | — | Self-hosted con `@fontsource-variable` + fallback de sistema |
+| Fuentes | Inter Variable + Outfit Variable; mono: JetBrains/Fira si el SO las tiene | — | Self-hosted: `@fontsource-variable/inter` y `outfit`; mono sin paquete npm |
 | IA | Gemini API (Google) | 2.x | Modelo de lenguaje del chatbot |
 | Proxy | Vercel Edge Functions | — | Protege la API key en el servidor |
 | Analytics | Vercel Analytics + Speed Insights | — | Métricas de uso y performance |
@@ -42,6 +41,8 @@ Sitio web personal de Nicolás Hruszczak. Portfolio profesional con chatbot IA i
 
 ```
 portfolio/
+│
+├── docs/                              ← Documentación del repo (índice: docs/README.md)
 │
 ├── api/
 │   └── chat.js                        ← Vercel Edge Function
@@ -89,6 +90,10 @@ portfolio/
 │   │   ├── index.astro
 │   │   ├── servicios.astro
 │   │   ├── talento.astro
+│   │   ├── catalogo-de-landings.astro
+│   │   ├── oferta/menu-digital.astro
+│   │   ├── oferta/hub-creadores.astro
+│   │   ├── dev/component-scripts-audit.astro
 │   │   ├── blog/index.astro
 │   │   ├── blog/[slug].astro
 │   │   ├── blog/categoria/[category].astro
@@ -198,6 +203,7 @@ en las DevTools ni en ningún archivo de `public/`.
 
 Todos los valores visuales del sitio viven en `src/styles/tokens.css`.
 Es la única fuente de verdad para colores, tipografía, espaciado y radios.
+Identidad y reglas de marca (URL canónica, tono, chatbot): [docs/subsistemas/manual-marca.md](docs/subsistemas/manual-marca.md).
 
 ### Paleta de colores (HSL)
 
@@ -217,7 +223,7 @@ Es la única fuente de verdad para colores, tipografía, espaciado y radios.
 /* Textos dark mode */
 --text-primary:   hsl(240, 11%, 96%);    /* títulos, body */
 --text-secondary: hsl(240,  9%, 60%);    /* subtítulos */
---text-muted:     hsl(240,  6%, 35%);    /* placeholders, meta */
+--text-muted:     hsl(240,  6%, 55%);    /* placeholders, meta */
 
 /* Bordes dark mode */
 --border-subtle: hsla(0, 0%, 100%, 0.06);
@@ -228,9 +234,9 @@ Es la única fuente de verdad para colores, tipografía, espaciado y radios.
 ### Tipografía
 
 ```css
---font-display: 'Outfit', system-ui;     /* títulos H1–H4 */
---font-body:    'Inter', system-ui;      /* párrafos, UI */
---font-mono:    'JetBrains Mono';        /* código */
+--font-display: 'Outfit Variable', system-ui, sans-serif;  /* títulos H1–H4 */
+--font-body:    'Inter Variable', system-ui, sans-serif;   /* párrafos, UI */
+--font-mono:    'JetBrains Mono', 'Fira Code', monospace;   /* código (sin npm) */
 
 --text-xs:   11px   --text-sm:  13px
 --text-base: 15px   --text-lg:  18px
@@ -281,6 +287,8 @@ Esto garantiza cero flash de color al cargar o navegar entre páginas.
 
 ## 5. Páginas y secciones
 
+Listado exhaustivo de rutas, `Nav` y componentes: [docs/inventario-rutas.md](docs/inventario-rutas.md).
+
 ### `pages/index.astro` — Home
 
 Página principal del portfolio. Secciones:
@@ -316,6 +324,11 @@ JSON-LD de tipo `TechArticle` + `BreadcrumbList`).
 
 Rutas dinámicas para taxonomías del blog, generadas con `getStaticPaths`,
 orientadas a navegación temática y cobertura SEO long-tail.
+
+### Otras rutas estáticas
+
+- **`catalogo-de-landings.astro`** — catálogo de plantillas de landing.
+- **`oferta/menu-digital.astro`** y **`oferta/hub-creadores.astro`** — páginas comerciales / demo de producto.
 
 ### `components/Nav.astro` — Navegación
 

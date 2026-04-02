@@ -8,7 +8,7 @@
     "contact": {
       "whatsapp": "+54 9 11 3061-1776",
       "email": "comercial@escalatunegocioconia.com",
-      "website": "https://www.escalatunegocioconia.com.ar/"
+      "website": "https://escalatunegocioconia.com/"
     },
     "availability": "Disponible para nuevas oportunidades; perfil técnico detallado en /talento."
   },
@@ -32,8 +32,8 @@
   },
 
   "branding": {
-    "primary_color": "#0F172A",
-    "accent_color": "#6366F1",
-    "font": "system-ui"
+    "primary_color": "#0E0E12",
+    "accent_color": "#F4D03A",
+    "font": "'Outfit Variable', 'Inter Variable', system-ui, sans-serif"
   }
 }

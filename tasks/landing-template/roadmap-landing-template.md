@@ -1,7 +1,7 @@
 # Roadmap — Sistema de landing templates replicables
 
 *Proyecto: escalatunegocioconia.com × remix-of-personal-blog*
-*Última actualización: 2026-03-27*
+*Última actualización: 2026-04-02*
 
 ---
 
@@ -16,6 +16,8 @@
 | `src/pages/sitemap.xml.ts` | ✅ Incluye `/catalogo-de-landings` |
 | `remix-of-personal-blog` (repo) | ✅ Clonado, build validado y deployado |
 | `demo.escalatunegocioconia.com` | ✅ Configurado con HTTPS + alias operativo |
+
+Este sitio (Astro) actúa como **vitrina**: el catálogo enlaza demos en otros repos o subdominios. La **demo con UI completa** del template PYME (secciones reales, temas `/servicios` y `/productos`, datos de ejemplo) se implementa y versiona en el **repo Vite `template-pyme`**, según las fases **A–D** de `tareas-tecnicas-template-pymes.md` en ese repo; el **deploy** es la fase **E**. No confundir el estado del catálogo local con el alcance de un stub intermedio en el template.
 
 ---
 

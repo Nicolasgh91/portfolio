@@ -98,6 +98,8 @@ Aplicación Vite + React independiente. Stack completo:
 
 Límites del template: es una SPA client-side. No hay SSR ni SSG. No aporta beneficio SEO propio — ver sección de SEO más abajo.
 
+**Template PYME** (`template-pyme`, Vite + React en repo aparte): la **demo con UI completa** (rutas `/servicios` y `/productos`, temas y datos de ejemplo) sigue las fases **A–D** de `tareas-tecnicas-template-pymes.md` en ese repo; este proyecto Astro solo enlaza la demo vía `PUBLIC_TEMPLATE_PYME_URL` en el catálogo.
+
 ---
 
 ## Variables de personalización por cliente
