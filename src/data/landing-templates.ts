@@ -88,7 +88,7 @@ const rawLandingTemplates = [
     status: 'available' as const,
     features: ['Bloques modulares', 'Newsletter', 'Redes enlazadas'],
     cardBackground: 'dark',
-    demoUrl: '/blog',
+    demoUrl: 'https://creador-contenido.escalatunegocioconia.com/',
     priceGroup: 'plantilla' as const,
     priceLabel: 'Desde ARS 35.000',
     priority: 0.88,
