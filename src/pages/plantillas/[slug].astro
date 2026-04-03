@@ -1,0 +1,132 @@
+---
+import { Fragment } from 'astro/jsx-runtime';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import { landingTemplates, VERTICAL_LABELS } from '../../data/landing-templates';
+import { resolveTemplateDemoUrl } from '../../lib/resolve-template-demo-url';
+import site from '../../data/site.json';
+
+export const getStaticPaths = () =>
+  landingTemplates.map((t) => ({ params: { slug: t.slug } }));
+
+const { slug } = Astro.params;
+if (!slug) {
+  return Astro.redirect('/plantillas');
+}
+
+const template = landingTemplates.find((t) => t.slug === slug);
+if (!template) {
+  return Astro.redirect('/plantillas');
+}
+
+const templatePymeBase =
+  import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
+  'https://template-pyme.escalatunegocioconia.com';
+
+const resolvedDemoUrl = resolveTemplateDemoUrl(template, templatePymeBase);
+
+const siteUrl = site.author.siteUrl ?? 'https://escalatunegocioconia.com';
+const canonicalUrl = `${siteUrl}/plantillas/${template.slug}`;
+
+const vertical = VERTICAL_LABELS[template.vertical];
+
+const pageTitle = `${template.title} | Plantilla`;
+const pageDescription = template.description;
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: template.title,
+  description: template.description,
+  url: canonicalUrl,
+};
+---
+
+<Layout title={pageTitle} description={pageDescription} ogImage="/og-desktop.png">
+  <Fragment slot="head">
+    <link rel="canonical" href={canonicalUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
+  </Fragment>
+  <Nav activePage="servicios" />
+  <main id="main-content" class="page-container pb-[var(--sp-xl)]">
+    <article class="mt-[var(--sp-lg)] max-w-3xl">
+      <p class="text-sm text-[var(--text-muted)]">
+        <a
+          href="/plantillas"
+          class="font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 hover:underline"
+          data-es="← Volver al catálogo"
+          data-en="← Back to catalog"
+        >
+          ← Volver al catálogo
+        </a>
+      </p>
+      <h1
+        class="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] md:text-4xl"
+        data-es={template.title}
+        data-en={template.titleEn ?? template.title}
+      >
+        {template.title}
+      </h1>
+      <p class="mt-2 text-sm text-[var(--text-secondary)]">
+        <span
+          class="inline-flex rounded-full border border-[color:var(--border-subtle)] px-3 py-0.5"
+          data-es={vertical.es}
+          data-en={vertical.en}
+        >
+          {vertical.es}
+        </span>
+      </p>
+      <p
+        class="mt-6 text-[length:var(--text-lg)] leading-relaxed text-[var(--text-secondary)]"
+        data-es={template.description}
+        data-en={template.descriptionEn ?? template.description}
+      >
+        {template.description}
+      </p>
+
+      <h2 class="mt-10 text-xl font-semibold text-[var(--text-primary)]" data-es="Incluye" data-en="Includes">
+        Incluye
+      </h2>
+      <ul class="mt-4 list-disc space-y-2 pl-6 text-[var(--text-secondary)]" role="list">
+        {template.features.map((f) => (
+          <li data-es={f} data-en={f}>
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-10 flex flex-wrap gap-4">
+        {
+          resolvedDemoUrl ? (
+            <a
+              href={resolvedDemoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex rounded-[var(--radius-lg)] bg-[hsl(var(--accent-h),var(--accent-s),56%)] px-5 py-2.5 text-sm font-semibold text-[hsl(var(--accent-h),var(--accent-s),12%)] transition hover:brightness-110"
+              data-es="Ver demo"
+              data-en="View demo"
+            >
+              Ver demo
+            </a>
+          ) : (
+            <span
+              class="inline-flex rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] px-5 py-2.5 text-sm font-medium text-[var(--text-muted)]"
+              data-es="Próximamente"
+              data-en="Coming soon"
+            >
+              Próximamente
+            </span>
+          )
+        }
+        <a
+          href="/servicios#contacto"
+          class="inline-flex rounded-[var(--radius-lg)] border border-[color:var(--accent-border)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[color:var(--accent-border)]"
+          data-es="Consultar"
+          data-en="Inquire"
+        >
+          Consultar
+        </a>
+      </div>
+    </article>
+  </main>
+</Layout>

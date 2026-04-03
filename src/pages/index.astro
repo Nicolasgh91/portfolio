@@ -52,7 +52,7 @@ const featuredProjects = allProjects
 
       <!-- ── Split CTA ──────────────────────────────────────── -->
       <nav class="split-cta" aria-label="Rutas de navegación">
-        <a href="/servicios" class="split-cta-col">
+        <a href="/servicios" class="btn-tertiary split-cta__cell p-0">
           <h2>
             <span aria-hidden="true">📊</span>
             <span
@@ -71,7 +71,7 @@ const featuredProjects = allProjects
           >Explorar servicios →</span>
         </a>
 
-        <a href="/talento" class="split-cta-col">
+        <a href="/talento" class="btn-tertiary split-cta__cell p-0">
           <h2>
             <span aria-hidden="true">💼</span>
             <span
@@ -216,24 +216,27 @@ const featuredProjects = allProjects
     overflow: hidden;
   }
   @media (max-width: 560px) { .split-cta { grid-template-columns: 1fr; } }
-  .split-cta-col {
+  .split-cta__cell {
     padding: var(--sp-lg);
     cursor: pointer;
-    transition: background 0.15s ease;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     height: 100%;
     align-items: center;
     text-align: center;
+    width: 100%;
+    transition: background 0.15s ease;
   }
-  .split-cta-col:hover { background: var(--accent-bg); }
-  .split-cta-col:first-child { border-right: 0.5px solid var(--border-normal); }
+  .split-cta__cell:hover {
+    background: var(--accent-bg);
+  }
+  .split-cta__cell:first-child { border-right: 0.5px solid var(--border-normal); }
   @media (max-width: 560px) {
-    .split-cta-col:first-child { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
+    .split-cta__cell:first-child { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
   }
-  .split-cta-col h2 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); font-size: calc(var(--text-lg) * var(--font-scale)); letter-spacing: -0.4px; }
-  .split-cta-col p { font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--sp-md); flex: 1; display: flex; align-items: center; justify-content: center; }
+  .split-cta__cell h2 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); font-size: calc(var(--text-lg) * var(--font-scale)); letter-spacing: -0.4px; color: var(--text-primary); font-family: var(--font-display); }
+  .split-cta__cell p { font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--sp-md); flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
   .split-cta-arrow { font-size: var(--text-sm); color: var(--accent); margin-top: auto; }
 
   .project-card {

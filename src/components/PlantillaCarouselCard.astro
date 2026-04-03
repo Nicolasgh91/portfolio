@@ -1,0 +1,152 @@
+---
+import type { LandingTemplate } from '../schemas';
+import { VERTICAL_LABELS } from '../data/landing-templates';
+
+interface Props {
+  template: LandingTemplate;
+  resolvedDemoUrl: string | null;
+}
+
+const { template, resolvedDemoUrl } = Astro.props;
+
+const titleEs = template.title;
+const titleEn = template.titleEn ?? template.title;
+const descEs = template.description;
+const descEn = template.descriptionEn ?? template.description;
+
+const hasDemo = Boolean(resolvedDemoUrl);
+const isComingSoon = template.status === 'coming_soon';
+
+const bgClass =
+  template.cardBackground === 'light'
+    ? 'bg-[hsl(0,0%,96%)] shadow-[0_1px_0_hsla(0,0%,0%,0.06)]'
+    : template.cardBackground === 'warm'
+      ? 'bg-[hsl(20,30%,10%)] shadow-[inset_0_0_0_1px_hsla(0,0%,100%,0.06)]'
+      : 'bg-[hsl(240,10%,6%)] shadow-[inset_0_0_0_1px_hsla(0,0%,100%,0.06)]';
+
+const badgeClass =
+  template.cardBackground === 'light'
+    ? 'border-[color:hsla(240,10%,6%,0.12)] bg-[hsla(240,10%,6%,0.06)] text-[hsl(240,10%,12%)]'
+    : template.cardBackground === 'warm'
+      ? 'border-[color:hsla(30,80%,90%,0.2)] bg-[hsla(30,50%,20%,0.4)] text-[hsl(30,80%,92%)]'
+      : 'border-[color:hsla(0,0%,100%,0.08)] bg-[hsla(0,0%,100%,0.06)] text-[hsl(240,9%,70%)]';
+
+const titleClass =
+  template.cardBackground === 'light'
+    ? 'text-[hsl(240,10%,6%)]'
+    : template.cardBackground === 'warm'
+      ? 'text-[hsl(30,80%,90%)]'
+      : 'text-[hsl(240,11%,96%)]';
+
+const descClass =
+  template.cardBackground === 'light'
+    ? 'text-[hsl(240,10%,35%)]'
+    : template.cardBackground === 'warm'
+      ? 'text-[hsl(30,45%,82%)]'
+      : 'text-[hsl(240,9%,60%)]';
+
+const v = VERTICAL_LABELS[template.vertical];
+---
+
+<article
+  class:list={[
+    'plantilla-card group relative flex w-[78vw] shrink-0 snap-start rounded-[var(--radius-lg)] sm:w-[60vw] md:w-[340px] lg:w-[360px]',
+    'transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-orange-500/10',
+    bgClass,
+  ]}
+  data-vertical={template.vertical}
+  data-filtered="false"
+  data-demo-available={hasDemo ? 'true' : 'false'}
+  data-status={template.status}
+>
+  <div class="flex w-full flex-col overflow-hidden rounded-[var(--radius-lg)]">
+    <div
+      class="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-t-[var(--radius-lg)] bg-gradient-to-br from-[hsla(var(--accent-h),var(--accent-s),56%,0.15)] to-[hsla(240,20%,8%,0.9)]"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 120 68"
+        class="h-16 w-auto opacity-[0.35]"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect x="4" y="4" width="112" height="60" rx="8" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
+        <path d="M14 52h32l10-14 8 10 12-16 18 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[hsl(var(--accent-h),var(--accent-s),56%)]" />
+        <circle cx="38" cy="26" r="6" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
+      </svg>
+    </div>
+    <div
+      class:list={[
+        'relative flex flex-col gap-3 p-5',
+        isComingSoon && 'opacity-75',
+      ]}
+    >
+      {
+        isComingSoon && (
+          <div
+            class="pointer-events-none absolute inset-0 rounded-b-[var(--radius-lg)] bg-[hsla(0,0%,0%,0.06)]"
+            aria-hidden="true"
+          />
+        )
+      }
+      <span
+        class:list={['relative inline-flex w-fit rounded-full border px-3 py-1 text-xs font-medium', badgeClass]}
+        data-es={v.es}
+        data-en={v.en}
+      >
+        {v.es}
+      </span>
+      <h3
+        class:list={[
+          'relative font-[family-name:var(--font-display)] text-lg font-semibold leading-snug tracking-tight',
+          titleClass,
+        ]}
+        data-es={titleEs}
+        data-en={titleEn}
+      >
+        {titleEs}
+      </h3>
+      <p
+        class:list={['relative line-clamp-2 text-sm leading-relaxed', descClass]}
+        data-es={descEs}
+        data-en={descEn}
+      >
+        {descEs}
+      </p>
+      <div class="relative flex flex-wrap items-center justify-end gap-3 pt-1">
+        {
+          isComingSoon ? (
+            <span
+              class="text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] opacity-60"
+              data-es="Próximamente"
+              data-en="Coming soon"
+            >
+              Próximamente
+            </span>
+          ) : hasDemo ? (
+            <a
+              href={resolvedDemoUrl!}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
+              data-es="Ver demo →"
+              data-en="View demo →"
+            >
+              Ver demo →
+            </a>
+          ) : (
+            <a
+              href={`/plantillas/${template.slug}`}
+              class="text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
+              data-es="Ver ficha →"
+              data-en="View details →"
+            >
+              Ver ficha →
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</article>

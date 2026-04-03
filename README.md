@@ -90,7 +90,7 @@ portfolio/
 │   │   ├── index.astro
 │   │   ├── servicios.astro
 │   │   ├── talento.astro
-│   │   ├── catalogo-de-landings.astro
+│   │   ├── plantillas.astro
 │   │   ├── oferta/menu-digital.astro
 │   │   ├── oferta/hub-creadores.astro
 │   │   ├── dev/component-scripts-audit.astro
@@ -203,6 +203,7 @@ en las DevTools ni en ningún archivo de `public/`.
 
 Todos los valores visuales del sitio viven en `src/styles/tokens.css`.
 Es la única fuente de verdad para colores, tipografía, espaciado y radios.
+**Botones de acción** (`.btn-primary` / `.btn-secondary` / `.btn-tertiary`, tamaños, glow del nav, estados): [docs/subsistemas/botones.md](docs/subsistemas/botones.md).
 Identidad y reglas de marca (URL canónica, tono, chatbot): [docs/subsistemas/manual-marca.md](docs/subsistemas/manual-marca.md).
 
 ### Paleta de colores (HSL)
@@ -327,7 +328,7 @@ orientadas a navegación temática y cobertura SEO long-tail.
 
 ### Otras rutas estáticas
 
-- **`catalogo-de-landings.astro`** — catálogo de plantillas de landing.
+- **`plantillas.astro`** — catálogo de plantillas de landing.
 - **`oferta/menu-digital.astro`** y **`oferta/hub-creadores.astro`** — páginas comerciales / demo de producto.
 
 ### `components/Nav.astro` — Navegación

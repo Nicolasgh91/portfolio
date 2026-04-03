@@ -33,12 +33,15 @@
         var tokens = [
           '--accent-h','--accent-s',
           '--accent','--accent-hover','--accent-bg','--accent-border','--accent-text',
+          '--color-on-accent',
+          '--btn-primary-bg','--btn-primary-bg-hover','--btn-primary-text',
+          '--btn-disabled-opacity',
           '--bg-primary','--bg-secondary','--bg-tertiary','--bg-card',
           '--text-primary','--text-secondary','--text-muted',
           '--border-subtle','--border-normal','--border-strong',
           '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
           '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
-          '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base'
+          '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base','--text-lg'
         ];
         var decls = tokens.map(function(t) {
           var v = computed.getPropertyValue(t).trim();
@@ -91,12 +94,15 @@
           var tokens = [
             '--accent-h','--accent-s',
             '--accent','--accent-hover','--accent-bg','--accent-border','--accent-text',
+            '--color-on-accent',
+            '--btn-primary-bg','--btn-primary-bg-hover','--btn-primary-text',
+            '--btn-disabled-opacity',
             '--bg-primary','--bg-secondary','--bg-tertiary','--bg-card',
             '--text-primary','--text-secondary','--text-muted',
             '--border-subtle','--border-normal','--border-strong',
             '--radius-sm','--radius-md','--radius-lg','--radius-xl','--radius-pill',
             '--sp-xs','--sp-sm','--sp-md','--sp-lg','--sp-xl',
-            '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base'
+            '--font-body','--font-display','--font-mono','--text-xs','--text-sm','--text-base','--text-lg'
           ];
           var decls = tokens.map(function(t) {
             var v = computed.getPropertyValue(t).trim();

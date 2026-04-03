@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { landingTemplates } from '../data/landing-templates';
 
 const site = 'https://escalatunegocioconia.com';
 
@@ -7,14 +8,19 @@ const staticPages = [
   { url: '/servicios', priority: '0.9', changefreq: 'monthly' },
   { url: '/talento',   priority: '0.8', changefreq: 'monthly' },
   { url: '/blog',      priority: '0.8', changefreq: 'weekly'  },
-  { url: '/catalogo-de-landings', priority: '0.75', changefreq: 'monthly' },
+  { url: '/plantillas', priority: '0.8', changefreq: 'weekly' },
   { url: '/oferta/menu-digital', priority: '0.85', changefreq: 'monthly' },
   { url: '/oferta/hub-creadores', priority: '0.75', changefreq: 'monthly' },
 ];
 
+const plantillaDetailPages = landingTemplates.map((t) => ({
+  url: `/plantillas/${t.slug}`,
+  priority: '0.72',
+  changefreq: 'weekly',
+}));
+
 export async function GET() {
   const posts    = await getCollection('blog', ({ data }) => !data.draft);
-  const projects = await getCollection('projects');
 
   const blogPages = posts.map((post) => ({
     url:        `/blog/${post.slug}`,
@@ -37,7 +43,13 @@ export async function GET() {
     changefreq: 'weekly',
   }));
 
-  const allPages = [...staticPages, ...blogPages, ...categoryPages, ...tagPages];
+  const allPages = [
+    ...staticPages,
+    ...plantillaDetailPages,
+    ...blogPages,
+    ...categoryPages,
+    ...tagPages,
+  ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

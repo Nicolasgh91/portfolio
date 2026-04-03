@@ -1,0 +1,127 @@
+---
+import type { PricingPlan } from '../schemas';
+
+interface Props {
+  plan: PricingPlan;
+  /** Para ordenar en grid (p. ej. destacado al centro en desktop) */
+  orderClass?: string;
+}
+
+const { plan, orderClass = '' } = Astro.props;
+
+const nameEs = plan.name;
+const nameEn = plan.nameEn ?? plan.name;
+const subEs = plan.subtitle;
+const subEn = plan.subtitleEn ?? plan.subtitle;
+const featuresEn = plan.featuresEn ?? plan.features;
+
+const isRecommended = plan.recommended;
+
+const badgeEs = plan.recommendedLabel ?? 'Recomendado';
+const badgeEn = plan.recommendedLabelEn ?? 'Recommended';
+
+const ctaEs = plan.ctaText;
+const ctaEn = plan.ctaTextEn ?? plan.ctaText;
+const ctaHref = plan.ctaHref;
+
+const priceDisplay =
+  typeof plan.price === 'number'
+    ? `$${plan.price.toLocaleString('es-AR')}`
+    : plan.price;
+---
+
+<div
+  class:list={[
+    'relative flex h-full flex-col rounded-[var(--radius-lg)] p-6',
+    orderClass,
+    isRecommended
+      ? 'border border-[var(--accent-border)] bg-[var(--accent-bg)] scale-[1.02] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5'
+      : 'border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-white/12 hover:-translate-y-0.5',
+  ]}
+>
+  {
+    isRecommended && (
+      <span
+        class="absolute -top-3 left-1/2 z-[1] -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-1 text-[11px] font-bold uppercase tracking-[1px] text-[var(--color-on-accent)]"
+        data-es={badgeEs}
+        data-en={badgeEn}
+      >
+        {badgeEs}
+      </span>
+    )
+  }
+  <div class:list={['mb-4', isRecommended && 'mt-2']}>
+    <h3
+      class="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--text-primary)]"
+      data-es={nameEs}
+      data-en={nameEn}
+    >
+      {nameEs}
+    </h3>
+    <p class="mt-1 text-sm text-[var(--text-secondary)]" data-es={subEs} data-en={subEn}>
+      {subEs}
+    </p>
+    <p class="mt-4 flex flex-wrap items-baseline gap-2">
+      <span
+        class="text-2xl font-bold text-[var(--text-primary)]"
+        data-es={priceDisplay}
+        data-en={priceDisplay}
+      >
+        {priceDisplay}
+      </span>
+      {
+        plan.priceDetail && (
+          <span
+            class="text-sm text-[var(--text-muted)]"
+            data-es={plan.priceDetail}
+            data-en={plan.priceDetail}
+          >
+            {plan.priceDetail}
+          </span>
+        )
+      }
+    </p>
+  </div>
+  <div class="h-px bg-white/[0.07] my-7" aria-hidden="true" />
+  <ul class="mb-6 flex flex-1 flex-col gap-0 text-sm text-[var(--text-secondary)]" role="list">
+    {
+      plan.features.map((f, i) => (
+        <li class="flex items-start gap-2.5 py-1.5 font-light">
+          <span
+            class="mt-0.5 flex h-4 w-4 min-w-[1rem] shrink-0 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)]"
+            aria-hidden="true"
+          >
+            <svg
+              width="10"
+              height="8"
+              viewBox="0 0 10 8"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-[var(--accent)]"
+              aria-hidden="true"
+            >
+              <path
+                d="M1 3.5L3.8 6.5L9 1"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span data-es={f} data-en={featuresEn[i] ?? f}>
+            {f}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <a
+    href={ctaHref}
+    class="btn-primary mt-auto w-full font-semibold"
+    data-es={ctaEs}
+    data-en={ctaEn}
+  >
+    {ctaEs}
+  </a>
+</div>

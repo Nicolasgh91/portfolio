@@ -1,0 +1,474 @@
+---
+import { Fragment } from 'astro/jsx-runtime';
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import PlantillaCarouselCard from '../components/PlantillaCarouselCard.astro';
+import PricingCard from '../components/PricingCard.astro';
+import FaqSection from '../components/FaqSection.astro';
+import type { FaqItem } from '../components/FaqSection.astro';
+import {
+  landingTemplates,
+  VERTICAL_LABELS,
+  VERTICAL_ORDER,
+} from '../data/landing-templates';
+import { pricingPlans } from '../data/pricing-plans';
+import { resolveTemplateDemoUrl } from '../lib/resolve-template-demo-url';
+import site from '../data/site.json';
+const templatePymeBase =
+  import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
+  'https://template-pyme.escalatunegocioconia.com';
+
+const sortedTemplates = [...landingTemplates].sort((a, b) => {
+  if (b.priority !== a.priority) return b.priority - a.priority;
+  return a.title.localeCompare(b.title, 'es');
+});
+
+const presentVerticals = [
+  ...new Set(sortedTemplates.map((t) => t.vertical)),
+].sort(
+  (a, b) =>
+    VERTICAL_ORDER.indexOf(a as (typeof VERTICAL_ORDER)[number]) -
+    VERTICAL_ORDER.indexOf(b as (typeof VERTICAL_ORDER)[number]),
+);
+
+const templatesWithDemo = sortedTemplates.map((template) => ({
+  ...template,
+  resolvedDemoUrl: resolveTemplateDemoUrl(template, templatePymeBase),
+}));
+
+const siteUrl = site.author.siteUrl ?? 'https://escalatunegocioconia.com';
+
+const catalogJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: templatesWithDemo
+    .filter((t) => t.status === 'available')
+    .map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.title,
+      description: t.description,
+      url: `${siteUrl}/plantillas/${t.slug}`,
+    })),
+};
+
+const plansOrdered = ['basico', 'plantilla', 'full'] as const;
+const plansById = Object.fromEntries(pricingPlans.map((p) => [p.id, p])) as Record<
+  (typeof plansOrdered)[number],
+  (typeof pricingPlans)[0]
+>;
+const orderedPricing = plansOrdered.map((id) => plansById[id]);
+
+const planOrderClass: Record<(typeof plansOrdered)[number], string> = {
+  basico: 'md:order-1',
+  plantilla: 'md:order-2',
+  full: 'md:order-3',
+};
+
+const catalogFaqEntries: FaqItem[] = [
+  {
+    order: 1,
+    category: 'comercial',
+    question: '¿Qué diferencia hay entre los planes?',
+    questionEn: 'What is the difference between plans?',
+    answer:
+      'El plan básico es una landing one-page con contacto y SEO esencial. El plan plantilla disponible incluye diseño listo para personalizar con catálogo visual, chatbot IA y datos estructurados, más el primer mes de mantenimiento. El plan full es un sitio a medida con mantenimiento mensual, carga de contenido, mejoras continuas y soporte prioritario.',
+    answerEn:
+      'The basic plan is a one-page landing with contact and essential SEO. The available template plan includes a ready-to-customize design with visual catalog, AI chatbot and structured data, plus the first month of maintenance included. The full plan is a custom site with monthly maintenance, content loading, ongoing improvements and priority support.',
+  },
+  {
+    order: 2,
+    category: 'proceso',
+    question: '¿Cuánto tarda la entrega?',
+    questionEn: 'How long does delivery take?',
+    answer:
+      'En la mayoría de los casos entre 1 y 2 semanas desde el kickoff, según contenidos y revisiones acordadas.',
+    answerEn:
+      'In most cases between 1 and 2 weeks from kickoff, depending on content and review rounds.',
+  },
+  {
+    order: 3,
+    category: 'soporte',
+    question: '¿Puedo cambiar el contenido después?',
+    questionEn: 'Can I change the content later?',
+    answer:
+      'Sí. Las plantillas están pensadas para que puedas actualizar textos e imágenes; el alcance de soporte y mantenimiento depende del plan (básico, plantilla disponible o full).',
+    answerEn:
+      'Yes. Templates are designed so you can update copy and images; support and maintenance scope depends on your plan (basic, available template or full).',
+  },
+  {
+    order: 4,
+    category: 'tecnico',
+    question: '¿Necesito contratar hosting aparte?',
+    questionEn: 'Do I need separate hosting?',
+    answer:
+      'No para el deploy en Vercel incluido en los planes listados; dominio y correo pueden gestionarse aparte si lo preferís.',
+    answerEn:
+      'Not for the Vercel deploy included in these plans; domain and email can be handled separately if you prefer.',
+  },
+];
+
+const pageTitle = 'Plantillas de landing page para pymes | Escalá tu negocio con IA';
+const pageDescription =
+  'Catálogo de plantillas profesionales optimizadas para SEO. Menú digital, portfolio, hub de contenido.';
+---
+
+<Layout title={pageTitle} description={pageDescription} ogImage="/og-desktop.png">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(catalogJsonLd)} />
+  </Fragment>
+  <Nav activePage="servicios" />
+  <main id="main-content">
+    <div class="page-container pb-[var(--sp-xl)]">
+      <section class="hero" aria-label="Catálogo de plantillas">
+        <h1
+          class="max-w-3xl font-[family-name:var(--font-display)] text-[clamp(36px,5.5vw,68px)] font-extrabold leading-[1.1] tracking-[-2px] text-[var(--text-primary)]"
+          data-es="Comenzá tu emprendimiento con un sitio y posicionamiento estratégico"
+          data-en="Start your business with a website and strategic positioning"
+        >
+          Comenzá tu emprendimiento con un sitio<br />
+          y <em>posicionamiento estratégico</em>
+        </h1>
+        <p
+          class="hero-sub mt-4 max-w-2xl text-lg font-light text-[var(--text-muted)]"
+          data-es="Plantillas profesionales optimizadas para SEO y diseñadas para convertir."
+          data-en="Professional templates optimized for SEO and designed to convert."
+        >
+          Plantillas profesionales optimizadas para SEO y diseñadas para convertir.
+        </p>
+      </section>
+
+      <section class="section mt-[var(--sp-xl)] scroll-mt-24" aria-labelledby="plantillas-heading" id="plantillas">
+        <p
+          class="mb-2 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+          data-es="Plantillas"
+          data-en="Templates"
+        >
+          Plantillas
+        </p>
+        <h2
+          id="plantillas-heading"
+          class="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--text-primary)] md:text-3xl"
+          data-es="Elegí la plantilla que más se adecue a tu negocio"
+          data-en="Choose the template that best fits your business"
+        >
+          Elegí la plantilla que más se adecue a tu negocio
+        </h2>
+        <p
+          class="mt-2 max-w-2xl text-[var(--text-secondary)]"
+          data-es="Cada plantilla fue diseñada para un rubro y objetivo específico."
+          data-en="Each template was designed for a specific industry and goal."
+        >
+          Cada plantilla fue diseñada para un rubro y objetivo específico.
+        </p>
+
+        <nav
+          id="catalog-filters"
+          class="taxonomy mt-6"
+          aria-label="Filtro por vertical"
+        >
+          <ul class="taxonomy__pills">
+            <li>
+              <button
+                type="button"
+                data-filter="todos"
+                data-selected="true"
+                aria-pressed="true"
+                class="taxonomy__pill taxonomy__pill--active"
+                data-es="Todos"
+                data-en="All"
+              >
+                Todos
+              </button>
+            </li>
+            {
+              presentVerticals.map((v) => (
+                <li>
+                  <button
+                    type="button"
+                    data-filter={v}
+                    data-selected="false"
+                    aria-pressed="false"
+                    class="taxonomy__pill"
+                    data-es={VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].es}
+                    data-en={VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].en}
+                  >
+                    {VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].es}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        {
+          templatesWithDemo.length === 0 ? (
+            <p
+              class="mt-10 py-[var(--sp-xl)] text-center text-[var(--text-muted)]"
+              data-en="Coming soon..."
+              data-es="Próximamente..."
+            >
+              Próximamente...
+            </p>
+          ) : (
+            <Fragment>
+              <div class="relative mt-8">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 z-[1] w-10 bg-gradient-to-r from-[var(--bg-primary)] to-transparent md:w-14"
+                  aria-hidden="true"
+                />
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 z-[1] w-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent md:w-14"
+                  aria-hidden="true"
+                />
+                <div
+                  id="catalog-carousel"
+                  class="relative z-0 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] md:gap-6 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
+                >
+                  {templatesWithDemo.map((t) => (
+                    <PlantillaCarouselCard template={t} resolvedDemoUrl={t.resolvedDemoUrl} />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  id="btn-prev"
+                  class="btn-secondary btn-secondary--sm catalog-carousel__nav absolute left-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
+                  aria-label="Anterior"
+                  data-es-label="Anterior"
+                  data-en-label="Previous"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  id="btn-next"
+                  class="btn-secondary btn-secondary--sm catalog-carousel__nav absolute right-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
+                  aria-label="Siguiente"
+                  data-es-label="Siguiente"
+                  data-en-label="Next"
+                >
+                  ›
+                </button>
+              </div>
+              <div class="mt-4 flex justify-center gap-3 md:hidden">
+                <button
+                  type="button"
+                  id="btn-prev-mobile"
+                  class="btn-secondary btn-secondary--sm catalog-carousel__nav flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
+                  aria-label="Anterior"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  id="btn-next-mobile"
+                  class="btn-secondary btn-secondary--sm catalog-carousel__nav flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
+                  aria-label="Siguiente"
+                >
+                  ›
+                </button>
+              </div>
+            </Fragment>
+          )
+        }
+      </section>
+
+      <section class="section mt-[var(--sp-xl)] rounded-[var(--radius-lg)] bg-[var(--bg-tertiary)] px-6 py-10" aria-labelledby="social-heading">
+        <h2 id="social-heading" class="sr-only" data-es="Métricas" data-en="Metrics">
+          Métricas
+        </h2>
+        <div class="grid gap-8 md:grid-cols-3 md:gap-6">
+          <div class="text-center md:text-left">
+            <p class="text-sm text-[var(--text-secondary)]" data-es="Plantillas entregadas" data-en="Templates delivered">
+              Plantillas entregadas
+            </p>
+            <p class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]" data-es="50+" data-en="50+">
+              50+
+            </p>
+          </div>
+          <div class="text-center md:text-left">
+            <p class="text-sm text-[var(--text-secondary)]" data-es="Tiempo de entrega" data-en="Delivery time">
+              Tiempo de entrega
+            </p>
+            <p
+              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
+              data-es="1–2 semanas"
+              data-en="1–2 weeks"
+            >
+              1–2 semanas
+            </p>
+          </div>
+          <div class="text-center md:text-left">
+            <p class="text-sm text-[var(--text-secondary)]" data-es="Visibilidad en buscadores" data-en="Search visibility">
+              Visibilidad en buscadores
+            </p>
+            <p
+              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
+              data-es="Optimizado para Google"
+              data-en="Optimized for Google"
+            >
+              Optimizado para Google
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section mt-[var(--sp-xl)] scroll-mt-24" id="planes" aria-labelledby="planes-heading">
+        <div class="mx-auto max-w-3xl text-center">
+          <p
+            class="mb-2 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+            data-es="Planes"
+            data-en="Plans"
+          >
+            Planes
+          </p>
+          <h2
+            id="planes-heading"
+            class="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--text-primary)] md:text-3xl"
+            data-es="Elegí el punto de partida para tu negocio"
+            data-en="Choose the starting point for your business"
+          >
+            Elegí el punto de partida para tu negocio
+          </h2>
+          <p
+            class="mt-2 text-[var(--text-secondary)]"
+            data-es="Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos."
+            data-en="Each plan includes what you need to get started. No surprises or hidden costs."
+          >
+            Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos.
+          </p>
+        </div>
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {
+            orderedPricing.map((plan) => (
+              <PricingCard plan={plan} orderClass={planOrderClass[plan.id]} />
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section mx-auto mt-[var(--sp-xl)] max-w-4xl" aria-labelledby="faq-heading">
+        <FaqSection
+          class="!mt-0"
+          entries={catalogFaqEntries}
+          showSidebarCta={false}
+          accordionStyle="animated"
+          faqAnimatedRootId="faq-plantillas"
+          headingEs="Dudas sobre plantillas y planes"
+          headingEn="Questions about templates and plans"
+          introEs="Resolvemos lo más habitual antes de contratar. Si tu caso es particular, lo vemos en una reunión."
+          introEn="We cover the most common questions before you hire. If your case is specific, we can discuss it in a call."
+        />
+      </section>
+
+      <section class="section relative isolate mt-[var(--sp-xl)]" aria-labelledby="plantillas-cta-heading">
+        <div
+          class="relative overflow-hidden rounded-[24px] border border-white/[0.07] bg-[var(--bg-tertiary)]/80 px-8 py-[60px] text-center shadow-[0_0_40px_-10px_hsla(var(--accent-h),var(--accent-s),56%,0.2)] backdrop-blur-xl md:px-[60px] md:py-20"
+        >
+          <div
+            class="pointer-events-none absolute bottom-[-100px] left-1/2 h-[300px] w-[500px] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(232,160,32,0.10)_0%,transparent_65%)]"
+            aria-hidden="true"
+          />
+          <p
+            class="relative mb-3 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+            data-es="Listo para empezar"
+            data-en="Ready to start"
+          >
+            Listo para empezar
+          </p>
+          <h2
+            id="plantillas-cta-heading"
+            class="relative mx-auto max-w-2xl font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--text-primary)] md:text-3xl"
+            data-es="Convertí tu operación en una ventaja competitiva."
+            data-en="Turn your operation into a competitive advantage."
+          >
+            Convertí tu operación en una ventaja competitiva.
+          </h2>
+          <p
+            class="relative mx-auto mt-4 max-w-xl text-[var(--text-secondary)]"
+            data-es="30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla."
+            data-en="30 minutes. No strings attached. We show you exactly where you're losing value and how to fix it."
+          >
+            30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.
+          </p>
+          <a
+            href="/servicios#contacto"
+            class="relative mt-8 inline-flex items-center justify-center rounded-[var(--radius-lg)] bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            data-es="Agendar reunión →"
+            data-en="Book a call →"
+          >
+            Agendar reunión →
+          </a>
+          <p
+            class="relative mt-4 text-sm text-[var(--text-muted)]"
+            data-es="Sin tarjeta de crédito · Primera consulta gratuita"
+            data-en="No credit card · First consultation free"
+          >
+            Sin tarjeta de crédito · Primera consulta gratuita
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script is:inline>
+  (function () {
+    const carousel = document.getElementById('catalog-carousel');
+
+    function initFilters() {
+      if (!carousel) return;
+      const cards = carousel.querySelectorAll('.plantilla-card');
+      const chips = document.querySelectorAll('#catalog-filters [data-filter]');
+
+      function applyFilter(filter) {
+        chips.forEach(function (chip) {
+          var active = chip.getAttribute('data-filter') === filter;
+          chip.setAttribute('data-selected', active ? 'true' : 'false');
+          chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+          chip.classList.toggle('taxonomy__pill--active', active);
+        });
+        cards.forEach(function (card) {
+          var v = card.getAttribute('data-vertical');
+          var show = filter === 'todos' || v === filter;
+          card.setAttribute('data-filtered', show ? 'false' : 'true');
+        });
+      }
+
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          applyFilter(chip.getAttribute('data-filter') || 'todos');
+        });
+      });
+    }
+
+    function initCarouselNav() {
+      if (!carousel) return;
+      function step() {
+        return Math.min(carousel.clientWidth * 0.85, 420);
+      }
+      function scrollPrev() {
+        carousel.scrollBy({ left: -step(), behavior: 'smooth' });
+      }
+      function scrollNext() {
+        carousel.scrollBy({ left: step(), behavior: 'smooth' });
+      }
+      ['btn-prev', 'btn-prev-mobile'].forEach(function (id) {
+        document.getElementById(id)?.addEventListener('click', scrollPrev);
+      });
+      ['btn-next', 'btn-next-mobile'].forEach(function (id) {
+        document.getElementById(id)?.addEventListener('click', scrollNext);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        initFilters();
+        initCarouselNav();
+      });
+    } else {
+      initFilters();
+      initCarouselNav();
+    }
+  })();
+</script>

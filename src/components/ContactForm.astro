@@ -106,7 +106,7 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
 
     <button
       type="submit"
-      class="btn-primary submit-btn"
+      class="btn-primary btn-primary--lg w-full"
       id="submit-btn"
       data-en="Evaluate my company's potential"
       data-es="Evaluar el potencial de mi empresa"
@@ -188,16 +188,9 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     min-height: 16px;
   }
 
-  .submit-btn {
-    width: 100%;
+  #submit-btn {
     justify-content: center;
     margin-top: var(--sp-md);
-    padding: 14px;
-    font-size: var(--text-base);
-  }
-  .submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 
   /* ── Snackbar ─────────────────────────────────────────────── */

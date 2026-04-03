@@ -91,49 +91,7 @@ const { categories, tags = [], activeCategory, activeTag } = Astro.props;
     min-width: 80px;
   }
 
-  .taxonomy__pills {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .taxonomy__pills li {
-    display: contents; /* CRITICO: preserva layout flex; el <li> es invisible para layout */
-  }
-
-  .taxonomy__pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 12px;
-    background: var(--bg-tag);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-pill);
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition:
-      background 0.15s ease,
-      border-color 0.15s ease,
-      color 0.15s ease,
-      transform 0.15s ease;
-  }
-
-  .taxonomy__pill:hover {
-    border-color: var(--accent-border);
-    color: var(--accent-text);
-    background: var(--accent-bg);
-    transform: translateY(-1px);
-  }
-
-  .taxonomy__pill--active {
-    background: var(--accent-bg);
-    border-color: var(--accent-border);
-    color: var(--accent-text);
-    font-weight: 600;
-  }
+  /* .taxonomy__pills y .taxonomy__pill en tokens.css (compartidos con catálogo). */
 
   /* Las etiquetas tienen borde con # visual */
   .taxonomy__pill--tag::before {

@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/catalogo-de-landings",
+      "destination": "/plantillas",
+      "permanent": true
+    }
+  ]
+}
