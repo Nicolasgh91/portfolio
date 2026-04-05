@@ -48,21 +48,31 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
         <p class="hero-sub">{posts.length} artículo{posts.length !== 1 ? 's' : ''} en esta categoría.</p>
       </section>
 
-      <TaxonomyFilter
-        categories={allCategories}
-        tags={allTags}
-        activeCategory={category}
-      />
+      <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
+        <TaxonomyFilter
+          categories={allCategories}
+          tags={allTags}
+          activeCategory={category}
+        />
+      </div>
 
       <section class="section" aria-labelledby="posts-heading">
         <h2
           id="posts-heading"
-          class="posts-section-title"
+          class="posts-section-title reveal reveal--scale"
+          style="--reveal-delay: 0ms"
           data-en={`Articles in ${category}`}
           data-es={`Artículos en ${category}`}
         >Artículos en {category}</h2>
         <div class="posts-grid">
-          {posts.map((post) => <BlogCard post={post} />)}
+          {posts.map((post, i) => (
+            <div
+              class="reveal reveal--scale"
+              style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
+            >
+              <BlogCard post={post} />
+            </div>
+          ))}
         </div>
       </section>
 

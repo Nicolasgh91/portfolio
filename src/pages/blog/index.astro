@@ -40,10 +40,12 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
         >Perspectiva práctica sobre software, inteligencia artificial y optimización de procesos. Sin teoría vacía.</p>
       </section>
 
-      <TaxonomyFilter {categories} />
+      <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
+        <TaxonomyFilter {categories} />
+      </div>
 
       <section class="section" aria-labelledby="posts-heading">
-        <div class="section-header">
+        <div class="section-header reveal reveal--scale" style="--reveal-delay: 0ms">
           <span class="label">{posts.length} artículo{posts.length !== 1 ? 's' : ''}</span>
           <h2 id="posts-heading" class="sr-only">Artículos</h2>
         </div>
@@ -52,13 +54,20 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           <p class="empty">Próximamente...</p>
         ) : (
           <div class="posts-grid">
-            {posts.map((post) => <BlogCard post={post} />)}
+            {posts.map((post, i) => (
+              <div
+                class="reveal reveal--scale"
+                style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
+              >
+                <BlogCard post={post} />
+              </div>
+            ))}
           </div>
         )}
       </section>
 
       {tags.length > 0 && (
-        <section class="section" aria-labelledby="blog-tags-heading">
+        <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="blog-tags-heading">
           <div class="section-header">
             <h2 id="blog-tags-heading" class="label">Etiquetas</h2>
           </div>

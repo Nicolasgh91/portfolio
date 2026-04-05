@@ -782,6 +782,38 @@ html.light .catalog-carousel__nav {
   .faq-item--animated.open .faq-icon {
     @apply rotate-45;
   }
+
+  /* ── Scroll reveal (IntersectionObserver + .is-visible en Layout.astro) ─ */
+  .reveal {
+    opacity: 0;
+    transition:
+      opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal--scale {
+    transform: scale(0.92);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* Sin JS: el contenido no puede depender de .is-visible (SEO / crawlers) */
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
 }
 
 /*

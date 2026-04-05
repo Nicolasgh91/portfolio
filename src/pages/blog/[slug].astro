@@ -216,23 +216,31 @@ const related = allPosts
             </p>
           </header>
 
-          <ShareBar title={post.data.title} url={postUrl} />
+          <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
+            <ShareBar title={post.data.title} url={postUrl} />
+          </div>
 
           {post.data.slides && (
-            <SlideViewer src={post.data.slides.src} alt={post.data.slides.alt} class="my-8" />
+            <div class="reveal reveal--scale" style="--reveal-delay: 100ms">
+              <SlideViewer src={post.data.slides.src} alt={post.data.slides.alt} class="my-8" />
+            </div>
           )}
 
-          <article
-            class="prose max-w-none text-[var(--text-secondary)] [&_a]:text-[var(--color-accent-400)] [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-6 [&_h2]:mt-16 [&_h2]:text-[var(--text-primary)] [&_h3]:mb-4 [&_h3]:mt-10 [&_h3]:text-[var(--text-primary)] [&_p]:mb-7 [&_strong]:text-[var(--text-primary)] [&_table_th]:border-b [&_table_th]:border-[color:var(--border-normal)] [&_table_th]:bg-[var(--bg-tertiary)]/50 [&_table_th]:px-4 [&_table_th]:py-3 [&_table_th]:text-xs [&_table_th]:font-semibold [&_table_th]:uppercase [&_table_th]:tracking-wider [&_table_th]:text-[var(--text-muted)] [&_table_td]:border-b [&_table_td]:border-[color:var(--border-subtle)] [&_table_td]:px-4 [&_table_td]:py-3 [&_table_td]:text-[var(--text-secondary)] [&_tbody_tr:nth-child(even)]:bg-white/[0.02] [&_tbody_tr:hover]:bg-white/[0.03]"
-            aria-label={`Contenido: ${post.data.title}`}
-          >
-            <Content components={{ table: TableWrapper }} />
-          </article>
+          <div class="reveal reveal--scale" style="--reveal-delay: 200ms">
+            <article
+              class="prose max-w-none text-[var(--text-secondary)] [&_a]:text-[var(--color-accent-400)] [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-6 [&_h2]:mt-16 [&_h2]:text-[var(--text-primary)] [&_h3]:mb-4 [&_h3]:mt-10 [&_h3]:text-[var(--text-primary)] [&_p]:mb-7 [&_strong]:text-[var(--text-primary)] [&_table_th]:border-b [&_table_th]:border-[color:var(--border-normal)] [&_table_th]:bg-[var(--bg-tertiary)]/50 [&_table_th]:px-4 [&_table_th]:py-3 [&_table_th]:text-xs [&_table_th]:font-semibold [&_table_th]:uppercase [&_table_th]:tracking-wider [&_table_th]:text-[var(--text-muted)] [&_table_td]:border-b [&_table_td]:border-[color:var(--border-subtle)] [&_table_td]:px-4 [&_table_td]:py-3 [&_table_td]:text-[var(--text-secondary)] [&_tbody_tr:nth-child(even)]:bg-white/[0.02] [&_tbody_tr:hover]:bg-white/[0.03]"
+              aria-label={`Contenido: ${post.data.title}`}
+            >
+              <Content components={{ table: TableWrapper }} />
+            </article>
+          </div>
 
-          <ArticleFooter tags={post.data.tags} category={post.data.category} />
+          <div class="reveal reveal--scale" style="--reveal-delay: 300ms">
+            <ArticleFooter tags={post.data.tags} category={post.data.category} />
+          </div>
           <SectionSpacer size="xl" />
 
-          <footer class="flex flex-wrap items-center justify-between gap-6">
+          <footer class="reveal reveal--scale flex flex-wrap items-center justify-between gap-6" style="--reveal-delay: 350ms">
             <div class="flex items-center gap-3">
               <div
                 class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] font-semibold text-[var(--accent-text)]"
@@ -262,7 +270,11 @@ const related = allPosts
           </footer>
 
           {related.length > 0 && (
-            <section class="mt-12" aria-labelledby="related-heading">
+            <section
+              class="mt-12 reveal reveal--scale"
+              style="--reveal-delay: 400ms"
+              aria-labelledby="related-heading"
+            >
               <h2
                 id="related-heading"
                 class="mb-6 text-xl font-semibold text-[var(--text-primary)]"
@@ -275,7 +287,7 @@ const related = allPosts
                 {related.map((r) => (
                   <a
                     href={`/blog/${r.slug}`}
-                    class="group flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
+                    class="group flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
                   >
                     <span class="text-xs font-semibold uppercase tracking-wide text-[var(--accent-text)]">{r.data.category}</span>
                     <h3 class="text-base font-semibold leading-6 text-[var(--text-primary)]" data-en={r.data.titleEn ?? r.data.title} data-es={r.data.title}>
