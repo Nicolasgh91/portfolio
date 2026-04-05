@@ -18,11 +18,11 @@ const faqEntries = faqDocs
   .flatMap((doc) => doc.data)
   .sort((a, b) => a.order - b.order);
 
-/** Anclas alineadas con Nav.astro (#agentes-ia, #landing, …). */
+/** Anclas alineadas con Nav.astro (#agentes-ia, #sitios-web, …). */
 function serviceAnchorId(slug: string): string {
   const map: Record<string, string> = {
     'chatbots-ia': 'agentes-ia',
-    'landing-page': 'landing',
+    'landing-page': 'sitios-web',
     'ecommerce-platforms': 'ecommerce',
     'workflow-automation': 'automatizacion',
     'local-llms': 'local-llms',
