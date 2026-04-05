@@ -6,6 +6,7 @@ import PlantillaCarouselCard from '../components/PlantillaCarouselCard.astro';
 import PricingCard from '../components/PricingCard.astro';
 import FaqSection from '../components/FaqSection.astro';
 import type { FaqItem } from '../components/FaqSection.astro';
+import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
 import {
   landingTemplates,
   VERTICAL_LABELS,
@@ -115,11 +116,14 @@ const catalogFaqEntries: FaqItem[] = [
 const pageTitle = 'Plantillas de landing page para pymes | Escalá tu negocio con IA';
 const pageDescription =
   'Catálogo de plantillas profesionales optimizadas para SEO. Menú digital, portfolio, hub de contenido.';
+
+const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
 ---
 
 <Layout title={pageTitle} description={pageDescription} ogImage="/og-desktop.png">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(catalogJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(catalogFaqJsonLd)} />
   </Fragment>
   <Nav activePage="servicios" />
   <main id="main-content">

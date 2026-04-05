@@ -1,0 +1,149 @@
+---
+/**
+ * FAQ con `<details>` nativo, sin microdata. El JSON-LD FAQPage debe inyectarse en la página vía `slot="head"`.
+ */
+import type { FaqItem } from './FaqSection.astro';
+
+interface Props {
+  entries: FaqItem[];
+  ctaHref?: string;
+  showSidebarCta?: boolean;
+  eyebrowEs?: string;
+  eyebrowEn?: string;
+  headingEs?: string;
+  headingEn?: string;
+  introEs?: string;
+  introEn?: string;
+  class?: string;
+}
+
+const {
+  entries,
+  ctaHref = '#contacto',
+  showSidebarCta = true,
+  eyebrowEs = 'Preguntas frecuentes',
+  eyebrowEn = 'FAQ',
+  headingEs = 'Todo lo que necesitás saber antes de arrancar',
+  headingEn = 'Everything you need to know before you get started',
+  introEs =
+    'Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.',
+  introEn =
+    "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
+  class: rootClass = '',
+} = Astro.props;
+
+const FAQ_TAG_THRESHOLD = 8;
+const showTags = entries.length > FAQ_TAG_THRESHOLD;
+
+const categoryLabel = {
+  proceso: { es: 'Proceso', en: 'Process' },
+  comercial: { es: 'Comercial', en: 'Commercial' },
+  tecnico: { es: 'Técnico', en: 'Technical' },
+  soporte: { es: 'Soporte', en: 'Support' },
+} as const;
+
+const categoryTagClass: Record<FaqItem['category'], string> = {
+  proceso:
+    'border-[var(--accent-border)] bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] text-[var(--accent)]',
+  comercial:
+    'border-[hsla(152,43%,55%,0.25)] bg-[hsla(152,43%,55%,0.1)] text-[var(--color-success)]',
+  tecnico: 'border-[hsla(258,60%,70%,0.25)] bg-[hsla(258,60%,70%,0.1)] text-[hsl(258,55%,72%)]',
+  soporte: 'border-[hsla(199,70%,60%,0.25)] bg-[hsla(199,70%,60%,0.1)] text-[hsl(199,75%,68%)]',
+};
+---
+
+<div
+  class:list={[
+    'mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10',
+    rootClass,
+  ]}
+>
+  <div
+    class:list={[
+      'mb-10 grid gap-10 md:items-start',
+      showSidebarCta ? 'md:grid-cols-2' : 'md:grid-cols-1',
+    ]}
+  >
+    <header>
+      <p class="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
+        <span data-es>{eyebrowEs}</span>
+        <span data-en class="hidden">{eyebrowEn}</span>
+      </p>
+      <h2 id="faq-heading" class="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-3xl">
+        <span data-es>{headingEs}</span>
+        <span data-en class="hidden">{headingEn}</span>
+      </h2>
+      <p class="mt-4 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)]">
+        <span data-es>{introEs}</span>
+        <span data-en class="hidden">{introEn}</span>
+      </p>
+    </header>
+    {
+      showSidebarCta && (
+        <div class="flex flex-col justify-between gap-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-tertiary)] p-6 md:max-w-sm md:justify-self-end">
+          <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
+            <span data-es>
+              Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido
+              trabajar juntos.
+            </span>
+            <span data-en class="hidden">
+              Book a free 30-minute diagnosis. We review your operations and tell you if it makes sense to work
+              together.
+            </span>
+          </p>
+          <a href={ctaHref} class="btn-primary w-fit font-medium" data-en="Book free diagnosis →" data-es="Agendar diagnóstico gratis →">
+            Agendar diagnóstico gratis →
+          </a>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="flex flex-col gap-0.5">
+    {
+      entries.map((item, index) => (
+        <details
+          class="faq-item faq-item--native group overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-tertiary)] open:border-[var(--accent-border)] open:bg-[var(--bg-secondary)]"
+          {...(index === 0 ? { open: true } : {})}
+        >
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-5 text-left">
+            <span class="flex min-w-0 flex-1 items-start gap-3.5">
+              {showTags && (
+                <span
+                  class:list={[
+                    'inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium md:inline-flex',
+                    categoryTagClass[item.category],
+                  ]}
+                  data-en={categoryLabel[item.category].en}
+                  data-es={categoryLabel[item.category].es}
+                >
+                  {categoryLabel[item.category].es}
+                </span>
+              )}
+              <h3 class="text-[15px] font-medium leading-snug text-[var(--text-secondary)] group-open:text-[var(--accent)]">
+                <span data-en={item.questionEn} data-es={item.question}>
+                  {item.question}
+                </span>
+              </h3>
+            </span>
+            <span
+              class="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border border-[var(--border-normal)] bg-[var(--bg-secondary)] text-base leading-none text-[var(--accent)] transition-transform duration-200 group-open:rotate-45 group-open:border-[var(--accent)] group-open:bg-[var(--accent)] group-open:text-[var(--color-on-accent)]"
+              aria-hidden="true"
+            >
+              +
+            </span>
+          </summary>
+          <div class="px-5 pb-5 pt-0 md:pl-5">
+            <p
+              class="m-0 text-sm leading-relaxed text-[var(--text-secondary)]"
+              data-en={item.answerEn}
+              data-es={item.answer}
+            >
+              {item.answer}
+            </p>
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</div>

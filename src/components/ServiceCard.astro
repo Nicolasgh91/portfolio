@@ -6,6 +6,7 @@
 // Uso: <ServiceCard service={service} />
 
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import humanAi from '../assets/blog/human-ai.webp';
 import cloudServers from '../assets/blog/cloud-servers.webp';
 import satellite from '../assets/blog/satellite.webp';
@@ -20,6 +21,7 @@ interface Props {
     roiFocus?: string;
     roiFocusEn?: string;
     href?: string;
+    coverImage?: ImageMetadata;
     imageKey?: 'human-ai' | 'cloud-servers' | 'satellite';
     featured?: boolean;
     /** Valor principal del precio (sin prefijo monetario si usás pricePrefix). El literal "Consultar" activa CTA a contacto. */
@@ -41,7 +43,7 @@ const imageMap = {
   'satellite': satellite,
 } as const;
 
-const imageSrc = service.imageKey ? imageMap[service.imageKey] : humanAi;
+const imageSrc = service.coverImage ?? (service.imageKey ? imageMap[service.imageKey] : humanAi);
 
 const El = service.href && !inquire ? 'a' : 'div';
 ---

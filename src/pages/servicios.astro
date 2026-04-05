@@ -1,12 +1,17 @@
 ---
+import { Fragment } from 'astro/jsx-runtime';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import ContactForm from '../components/ContactForm.astro';
+import SectionWrapper from '../components/SectionWrapper.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTAButton from '../components/CTAButton.astro';
 import { getCollection } from 'astro:content';
 import ServiceCard from '../components/ServiceCard.astro';
-import FaqSection from '../components/FaqSection.astro';
 import type { CollectionEntry } from 'astro:content';
 import pricing from '../data/pricing.json';
+import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
@@ -84,6 +89,25 @@ function resolveServicePrice(
   return { price: PRICE_INQUIRE, pricePrefix: '', priceUnit: undefined };
 }
 
+function serviceCardPayload(service: CollectionEntry<'services'>) {
+  const resolved = resolveServicePrice(service.slug, service.data);
+  return {
+    title: service.data.title,
+    titleEn: service.data.titleEn,
+    shortDescription: service.data.shortDescription ?? service.data.description,
+    shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+    roiFocus: service.data.roiFocus,
+    roiFocusEn: service.data.roiFocusEn,
+    coverImage: service.data.coverImage,
+    imageKey: service.data.imageKey,
+    featured: service.data.featured,
+    href: service.data.href,
+    price: resolved.price,
+    priceUnit: resolved.priceUnit,
+    pricePrefix: resolved.pricePrefix,
+  };
+}
+
 const siteUrl = 'https://escalatunegocioconia.com';
 const servicesJsonLd = {
   '@context': 'https://schema.org',
@@ -99,6 +123,11 @@ const servicesJsonLd = {
     },
   })),
 };
+
+const faqJsonLd = buildFaqPageJsonLd(faqEntries);
+
+const servicesRow1 = sortedServices.slice(0, 3);
+const servicesRow2 = sortedServices.slice(3);
 ---
 
 <Layout
@@ -108,407 +137,296 @@ const servicesJsonLd = {
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   </Fragment>
   <Nav activePage="servicios" />
 
   <main id="main-content">
-    <div class="page-container">
-
-      <!-- ── Hero ─────────────────────────────────────────── -->
-      <section class="hero" aria-label="Propuesta de valor B2B">
-        <div
-          class="badge"
-          data-en="B2B Services · Free diagnosis"
-          data-es="Servicios para empresas · Diagnóstico gratuito"
-        >Servicios para empresas · Diagnóstico gratuito</div>
-
-        <h1
-          data-en='Custom software to<br><em>multiply ROI</em><br>for your business.'
-          data-es='Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.'
-        >Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.</h1>
-
-        <p
-          class="hero-sub"
-          data-en="Fixed cost reduction and operational optimization through automation, artificial intelligence, and exclusive management systems."
-          data-es="Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos."
-        >Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos.</p>
-
-        <div class="cta-row">
-          <a
-            href="#contacto"
-            class="btn-primary"
-            data-en="Request free diagnosis"
-            data-es="Solicitar diagnóstico gratuito"
-          >Solicitar diagnóstico gratuito</a>
-        </div>
-      </section>
-
-      <!-- ── Value banner ──────────────────────────────────── -->
+    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32">
       <div
-        class="value-banner reveal reveal--scale"
-        style="--reveal-delay: 0ms"
+        class="flex flex-col gap-10 md:flex-row md:items-end md:justify-between"
+        aria-label="Propuesta de valor B2B"
+      >
+        <div class="min-w-0 max-w-3xl">
+          <SectionLabel
+            text="Servicios para empresas · Diagnóstico gratuito"
+            textEn="B2B Services · Free diagnosis"
+          />
+          <h1
+            class="mt-3 font-display font-extrabold tracking-tight text-slate-900"
+            style="font-size: var(--text-5xl);"
+          >
+            <span data-es
+              >Software a medida para <em class="not-italic text-orange-600">multiplicar el ROI</em> de su negocio.</span
+            >
+            <span data-en class="hidden"
+              >Custom software to <em class="not-italic text-orange-600">multiply ROI</em> for your business.</span
+            >
+          </h1>
+        </div>
+        <p class="max-w-md text-base leading-relaxed text-slate-600 md:max-w-sm md:text-right">
+          <span data-es
+            >Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y
+            sistemas de gestión exclusivos.</span
+          >
+          <span data-en class="hidden"
+            >Fixed cost reduction and operational optimization through automation, artificial intelligence, and
+            exclusive management systems.</span
+          >
+        </p>
+      </div>
+    </SectionWrapper>
+
+    <SectionWrapper bg="bg-slate-50" tone="default" padding="py-16 md:py-20" revealAlt>
+      <div
+        class="flex flex-col gap-8 rounded-2xl border border-slate-200/80 bg-white p-8 md:flex-row md:items-center md:gap-12 md:p-10"
         role="region"
         aria-label="Propuesta de valor: de gasto a inversión"
       >
-        <div class="value-banner-col">
-          <h3
-            data-en="Software as expense"
-            data-es="Software como gasto"
-          >Software como gasto</h3>
-          <p
-            data-en="Recurring licenses, disconnected tools, manual processes that consume hours and capital month after month."
-            data-es="Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes."
-          >Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes.</p>
+        <div class="min-w-0 flex-1">
+          <h3 class="mb-2 font-display text-lg font-bold text-slate-900">
+            <span data-es>Software como gasto</span>
+            <span data-en class="hidden">Software as expense</span>
+          </h3>
+          <p class="text-sm leading-relaxed text-slate-600">
+            <span data-es
+              >Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a
+              mes.</span
+            >
+            <span data-en class="hidden"
+              >Recurring licenses, disconnected tools, manual processes that consume hours and capital month after
+              month.</span
+            >
+          </p>
         </div>
-        <div class="value-banner-arrow" aria-hidden="true">→</div>
-        <div class="value-banner-col accent">
-          <h3
-            data-en="Software as investment"
-            data-es="Software como inversión"
-          >Software como inversión</h3>
-          <p
-            data-en="Proprietary systems, measurable automation and concrete return on every peso invested."
-            data-es="Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido."
-          >Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido.</p>
+        <div class="flex shrink-0 justify-center text-3xl text-orange-500 md:text-4xl" aria-hidden="true">→</div>
+        <div class="min-w-0 flex-1">
+          <h3 class="mb-2 font-display text-lg font-bold text-orange-600">
+            <span data-es>Software como inversión</span>
+            <span data-en class="hidden">Software as investment</span>
+          </h3>
+          <p class="text-sm leading-relaxed text-slate-600">
+            <span data-es
+              >Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido.</span
+            >
+            <span data-en class="hidden"
+              >Proprietary systems, measurable automation and concrete return on every peso invested.</span
+            >
+          </p>
         </div>
       </div>
+    </SectionWrapper>
 
-      <!-- ── Catálogo de servicios (dinámico) ──────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="services-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Catalog"
-            data-es="Catálogo"
-          >Catálogo</span>
-          <h2
-            id="services-heading"
-            data-en="Services"
-            data-es="Servicios"
-          >Servicios</h2>
-          <p
-            style="margin-top:6px;font-size:var(--text-sm)"
-            data-en="Four intervention axes with direct operational impact."
-            data-es="Cuatro ejes de intervención con impacto directo en la operación."
-          >Cuatro ejes de intervención con impacto directo en la operación.</p>
-        </div>
+    <SectionWrapper bg="bg-white" tone="default" padding="pb-8 pt-4 md:py-24" revealAlt>
+      <header class="mb-8 md:mb-12" aria-labelledby="services-heading">
+        <SectionLabel text="Catálogo" textEn="Catalog" />
+        <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+          <span data-es>Servicios</span>
+          <span data-en class="hidden">Services</span>
+        </h2>
+        <p class="mt-2 max-w-2xl text-sm text-slate-600">
+          <span data-es>Cuatro ejes de intervención con impacto directo en la operación.</span>
+          <span data-en class="hidden">Four intervention axes with direct operational impact.</span>
+        </p>
+      </header>
 
-        <div class="services-carousel-shell" id="services-carousel-shell">
-          <p
-            id="services-carousel-hint"
-            class="services-carousel-hint"
-            hidden
-            data-en="Swipe or drag sideways to see all services."
-            data-es="Deslizá o arrastrá horizontalmente para ver todos los servicios."
-          >Deslizá o arrastrá horizontalmente para ver todos los servicios.</p>
-          <div class="services-carousel-viewport">
-            <div class="services-carousel-fade services-carousel-fade--left" aria-hidden="true"></div>
-            <div class="services-carousel-fade services-carousel-fade--right" aria-hidden="true"></div>
-            <div
-              class="services-carousel"
-              id="services-carousel"
-              role="region"
-              aria-labelledby="services-heading"
-              tabindex="0"
-            >
-              {sortedServices.map((service) => {
-                const resolved = resolveServicePrice(service.slug, service.data);
-                return (
-                  <div
-                    id={serviceAnchorId(service.slug)}
-                    class="service-card-anchor"
-                  >
-                    <ServiceCard service={{
-                      title: service.data.title,
-                      titleEn: service.data.titleEn,
-                      shortDescription: service.data.shortDescription ?? service.data.description,
-                      shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
-                      roiFocus: service.data.roiFocus,
-                      roiFocusEn: service.data.roiFocusEn,
-                      imageKey: service.data.imageKey,
-                      featured: service.data.featured,
-                      href: service.data.href,
-                      price: resolved.price,
-                      priceUnit: resolved.priceUnit,
-                      pricePrefix: resolved.pricePrefix,
-                    }} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
+      <p class="mb-3 text-sm text-slate-500 md:hidden">
+        <span data-es>Deslizá horizontalmente para ver todos los servicios.</span>
+        <span data-en class="hidden">Swipe sideways to see all services.</span>
+      </p>
 
-      <!-- ── Case study ─────────────────────────────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="case-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Use case"
-            data-es="Caso de uso"
-          >Caso de uso</span>
-        </div>
-
-        <div class="case-block">
-          <div class="case-header">
-            <h2
-              id="case-heading"
-              data-en="Success story: comprehensive sports management (Double Click™)"
-              data-es="Caso de éxito: gestión integral deportiva (Double Click™)"
-            >Caso de éxito: gestión integral deportiva (Double Click™)</h2>
-            <span class="tag tag-warn" aria-label="Proyecto en curso">⚠ En curso</span>
-          </div>
-
-          <p
-            style="margin:var(--sp-sm) 0 var(--sp-lg);font-size:var(--text-sm)"
-            data-en="A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating the need for three separate paid software tools."
-            data-es="Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual."
-          >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</p>
-
-          <div class="grid-2">
-            <div
-              class="mock-placeholder"
-              role="img"
-              aria-label="Espacio reservado para captura del dashboard de gestión"
-            >
-              [ Dashboard mockup ]<br><br>
-              Panel de reservas · Métricas · Clientes
-            </div>
-
-            <div class="card" style="align-self:start">
-              <h3
-                style="font-size:var(--text-base);margin-bottom:var(--sp-sm)"
-                data-en="Result"
-                data-es="Resultado"
-              >Resultado</h3>
-              <p
-                style="font-size:var(--text-sm)"
-                data-en="Elimination of 3 monthly subscriptions. Significant reduction in administrative management time. Unified client retention metrics panel."
-                data-es="Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes."
-              >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes.</p>
-              <div class="tags">
-                <span class="tag">Python</span>
-                <span class="tag">Next.js</span>
-                <span class="tag">PostgreSQL</span>
-                <a href="#contacto" class="tag tag-accent"
-                  data-en="Request similar solution →"
-                  data-es="Solicitar solución similar →"
-                >Solicitar solución similar →</a>
+      <div
+        class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:w-full md:snap-none md:flex-col md:gap-0 md:overflow-visible [&::-webkit-scrollbar]:hidden"
+        role="region"
+        aria-labelledby="services-heading"
+        tabindex="0"
+      >
+        <div class="flex gap-4 md:grid md:w-full md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+          {
+            servicesRow1.map((service) => (
+              <div
+                id={serviceAnchorId(service.slug)}
+                class="service-card-anchor w-[min(300px,86vw)] shrink-0 snap-start md:w-auto"
+              >
+                <ServiceCard service={serviceCardPayload(service)} />
               </div>
+            ))
+          }
+        </div>
+        {
+          servicesRow2.length > 0 && (
+            <div class="flex gap-4 bg-slate-50 px-1 py-2 md:mt-16 md:grid md:w-full md:grid-cols-2 md:gap-8 md:px-0 md:py-0 lg:grid-cols-3">
+              {servicesRow2.map((service) => (
+                <div
+                  id={serviceAnchorId(service.slug)}
+                  class="service-card-anchor w-[min(300px,86vw)] shrink-0 snap-start md:w-auto"
+                >
+                  <ServiceCard service={serviceCardPayload(service)} />
+                </div>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </SectionWrapper>
+
+    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32" revealAlt>
+      <SectionLabel text="Caso de uso" textEn="Use case" />
+      <div class="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-6 md:p-8">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <h2
+            id="case-heading"
+            class="font-display text-xl font-bold tracking-tight text-slate-900 md:text-2xl"
+          >
+            <span data-es>Caso de éxito: gestión integral deportiva (Double Click™)</span>
+            <span data-en class="hidden">Success story: comprehensive sports management (Double Click™)</span>
+          </h2>
+          <span class="tag tag-warn text-xs" aria-label="Proyecto en curso">⚠ En curso</span>
+        </div>
+        <p class="mb-8 text-sm leading-relaxed text-slate-600">
+          <span data-es
+            >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de
+            Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</span
+          >
+          <span data-en class="hidden"
+            >A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating
+            the need for three separate paid software tools.</span
+          >
+        </p>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div
+            class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500"
+            role="img"
+            aria-label="Espacio reservado para captura del dashboard de gestión"
+          >
+            [ Dashboard mockup ]<br /><br />
+            Panel de reservas · Métricas · Clientes
+          </div>
+          <div class="card self-start">
+            <h3 class="mb-2 font-display text-base font-bold text-slate-900">
+              <span data-es>Resultado</span>
+              <span data-en class="hidden">Result</span>
+            </h3>
+            <p class="text-sm leading-relaxed text-slate-600">
+              <span data-es
+                >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa.
+                Panel unificado de métricas de retención de clientes.</span
+              >
+              <span data-en class="hidden"
+                >Elimination of 3 monthly subscriptions. Significant reduction in administrative management time.
+                Unified client retention metrics panel.</span
+              >
+            </p>
+            <div class="tags mt-4">
+              <span class="tag">Python</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">PostgreSQL</span>
+              <a href="#contacto" class="tag tag-accent" data-en="Request similar solution →" data-es="Solicitar solución similar →">
+                Solicitar solución similar →
+              </a>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </SectionWrapper>
 
-      <!-- ── FAQ ─────────────────────────────────────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="faq-heading">
-        <FaqSection entries={faqEntries} ctaHref="#contacto" />
-      </section>
-
-      <!-- ── Formulario de contacto ──────────────────────────── -->
-      <section id="contacto" class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="contact-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Contact"
-            data-es="Contacto"
-          >Contacto</span>
-          <h2
-            id="contact-heading"
-            data-en="Let's evaluate your challenge"
-            data-es="Evaluemos su desafío"
-          >Evaluemos su desafío</h2>
+    <SectionWrapper bg="bg-slate-950" tone="dark" padding="py-24 md:py-32" revealAlt>
+      <h2 class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl">
+        <span data-es>Cómo trabajamos</span>
+        <span data-en class="hidden">How we work</span>
+      </h2>
+      <div class="grid gap-12 md:grid-cols-3">
+        <div class="relative">
+          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">01</p>
+          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+            <span data-es>Diagnóstico</span>
+            <span data-en class="hidden">Discovery</span>
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            <span data-es>Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras.</span
+            >
+            <span data-en class="hidden"
+              >We map processes, bottlenecks and automation opportunities with clear metrics.</span
+            >
+          </p>
         </div>
-        <ContactForm />
-      </section>
+        <div class="relative">
+          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">02</p>
+          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+            <span data-es>Propuesta y entrega</span>
+            <span data-en class="hidden">Proposal &amp; delivery</span>
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            <span data-es>Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles.</span>
+            <span data-en class="hidden">We prioritize impact, define scope and ship in visible iterations.</span>
+          </p>
+        </div>
+        <div class="relative">
+          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">03</p>
+          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+            <span data-es>Evolución</span>
+            <span data-en class="hidden">Evolution</span>
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            <span data-es>Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo.</span>
+            <span data-en class="hidden">Measurement, improvements and support so the system keeps paying for itself.</span>
+          </p>
+        </div>
+      </div>
+    </SectionWrapper>
 
+    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32" revealAlt>
+      <FAQAccordion entries={faqEntries} ctaHref="#contacto" class="!mt-0 border-0 bg-transparent p-0" />
+    </SectionWrapper>
+
+    <div class="px-6 pb-16 md:pb-24">
+      <SectionWrapper
+        bg="bg-orange-600"
+        tone="accent"
+        padding="py-14 md:py-16"
+        maxWidth="max-w-4xl"
+        class="rounded-3xl"
+        innerClass="text-center"
+        revealAlt
+      >
+        <h2 class="font-display text-2xl font-bold text-white md:text-3xl">
+          <span data-es>¿Listo para el siguiente paso?</span>
+          <span data-en class="hidden">Ready for the next step?</span>
+        </h2>
+        <p class="mx-auto mt-3 max-w-lg text-sm text-white/90">
+          <span data-es>Solicitá diagnóstico gratuito o escribinos por el formulario.</span>
+          <span data-en class="hidden">Request a free diagnosis or reach us via the form.</span>
+        </p>
+        <div class="mt-6 flex justify-center">
+          <CTAButton
+            href="#contacto"
+            label="Ir a contacto"
+            labelEn="Go to contact"
+            variant="inverse"
+          />
+        </div>
+      </SectionWrapper>
     </div>
+
+    <SectionWrapper bg="bg-slate-50" tone="default" padding="py-24 md:py-32" id="contacto" revealAlt>
+      <div class="section-header mb-10">
+        <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
+        <h2
+          id="contact-heading"
+          class="font-display text-2xl font-bold text-slate-900 md:text-3xl"
+          data-en="Let's evaluate your challenge"
+          data-es="Evaluemos su desafío"
+        >
+          Evaluemos su desafío
+        </h2>
+      </div>
+      <ContactForm />
+    </SectionWrapper>
   </main>
-
-  <!-- Script: drag-to-scroll + estado overflow/fades del carrusel de servicios -->
-  <script>
-    const carousel = document.getElementById('services-carousel');
-    const shell = document.getElementById('services-carousel-shell');
-    const hint = document.getElementById('services-carousel-hint');
-
-    function updateCarouselState() {
-      if (!carousel || !shell) return;
-      const { scrollLeft, scrollWidth, clientWidth } = carousel;
-      const hasOverflow = scrollWidth > clientWidth + 1;
-      const atStart = scrollLeft <= 2;
-      const atEnd = scrollLeft + clientWidth >= scrollWidth - 2;
-
-      shell.classList.toggle('has-overflow', hasOverflow);
-      shell.classList.toggle('at-start', atStart);
-      shell.classList.toggle('at-end', atEnd);
-
-      if (hint) {
-        if (hasOverflow) hint.removeAttribute('hidden');
-        else hint.setAttribute('hidden', '');
-      }
-    }
-
-    if (carousel && shell) {
-      const reducedMotion = window.nhA11y.motionReduced;
-
-      const ro = new ResizeObserver(() => updateCarouselState());
-      ro.observe(carousel);
-      carousel.addEventListener('scroll', updateCarouselState, { passive: true });
-      window.addEventListener('load', updateCarouselState);
-      requestAnimationFrame(updateCarouselState);
-
-      carousel.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-        e.preventDefault();
-        const delta = e.key === 'ArrowRight' ? 280 : -280;
-        carousel.scrollBy({
-          left: delta,
-          behavior: reducedMotion ? 'auto' : 'smooth',
-        });
-      });
-
-      let isDown = false;
-      let startX = 0;
-      let scrollLeft = 0;
-
-      carousel.addEventListener('mousedown', (e) => {
-        isDown = true;
-        carousel.classList.add('is-dragging');
-        startX = e.pageX - carousel.offsetLeft;
-        scrollLeft = carousel.scrollLeft;
-      });
-
-      document.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mouseleave', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - carousel.offsetLeft;
-        carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
-      });
-    }
-  </script>
 
 </Layout>
 <style>
-  .value-banner {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-xl);
-    background: var(--bg-tertiary);
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg) var(--sp-xl);
-    margin: var(--sp-xl) 0;
-  }
-  @media (max-width: 640px) {
-    .value-banner { flex-direction: column; text-align: center; gap: var(--sp-lg); }
-    .value-banner-arrow { transform: rotate(90deg); }
-  }
-  .value-banner-col { flex: 1; }
-  .value-banner-col h3 { margin-bottom: 6px; }
-  .value-banner-col.accent h3 { color: var(--accent); }
-  .value-banner-arrow { font-size: 28px; color: var(--accent); flex-shrink: 0; }
-
-  .case-block {
-    background: var(--bg-card);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg);
-    margin: var(--sp-xl) 0;
-  }
-  .mock-placeholder {
-    background: var(--bg-tertiary);
-    border: 0.5px dashed var(--border-normal);
-    border-radius: var(--radius-md);
-    padding: 40px var(--sp-lg);
-    text-align: center;
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-bottom: var(--sp-md);
-  }
-  .case-header {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-sm);
-    flex-wrap: wrap;
-    margin-bottom: var(--sp-sm);
-  }
-  .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
-
-  /* ── Carrusel de servicios ───────────────────────────────── */
-  .services-carousel-shell {
-    margin-top: var(--sp-sm);
-  }
-  .services-carousel-hint {
-    margin: 0 0 var(--sp-sm);
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  .services-carousel-viewport {
-    position: relative;
-  }
-  .services-carousel-fade {
-    position: absolute;
-    top: 0;
-    bottom: 12px;
-    width: 48px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .services-carousel-fade--left {
-    left: 0;
-    background: linear-gradient(to right, var(--bg-primary), transparent);
-  }
-  .services-carousel-fade--right {
-    right: 0;
-    background: linear-gradient(to left, var(--bg-primary), transparent);
-  }
-  .services-carousel-shell.has-overflow:not(.at-start) .services-carousel-fade--left {
-    opacity: 1;
-  }
-  .services-carousel-shell.has-overflow:not(.at-end) .services-carousel-fade--right {
-    opacity: 1;
-  }
-  .services-carousel {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    cursor: grab;
-    outline: none;
-    /* padding para que la sombra hover no quede cortada */
-    padding-bottom: 12px;
-    padding-top: 4px;
-    /* ocultar scrollbar visualmente */
-    scrollbar-width: none;
-  }
-  .services-carousel:focus-visible {
-    box-shadow: 0 0 0 2px var(--accent-border);
-    border-radius: var(--radius-sm);
-  }
-  .services-carousel::-webkit-scrollbar { display: none; }
-  .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
-
   .service-card-anchor {
-    scroll-margin-top: 96px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    min-width: 260px;
-    max-width: 300px;
+    scroll-margin-top: 7rem;
   }
 </style>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  value: string;
+  label: string;
+  labelEn: string;
+  valueColorClass?: string;
+}
+
+const { value, label, labelEn, valueColorClass = 'text-orange-500' } = Astro.props;
+---
+
+<div class="text-center">
+  <p
+    class:list={['font-display font-black leading-none tracking-tighter', valueColorClass]}
+    style="font-size: var(--text-metric);"
+  >
+    {value}
+  </p>
+  <p
+    class="mt-2 text-sm font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400"
+  >
+    <span data-es>{label}</span>
+    <span data-en class="hidden">{labelEn}</span>
+  </p>
+</div>
