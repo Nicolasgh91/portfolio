@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import type { LandingTemplate } from '../schemas';
 import { VERTICAL_LABELS } from '../data/landing-templates';
+import { getTemplateCarouselImage } from '../data/template-carousel-images';
 
 interface Props {
   template: LandingTemplate;
@@ -46,6 +48,8 @@ const descClass =
       : 'text-[hsl(240,9%,60%)]';
 
 const v = VERTICAL_LABELS[template.vertical];
+
+const coverSrc = getTemplateCarouselImage(template.slug);
 ---
 
 <article
@@ -61,20 +65,35 @@ const v = VERTICAL_LABELS[template.vertical];
 >
   <div class="flex w-full flex-col overflow-hidden rounded-[var(--radius-lg)]">
     <div
-      class="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-t-[var(--radius-lg)] bg-gradient-to-br from-[hsla(var(--accent-h),var(--accent-s),56%,0.15)] to-[hsla(240,20%,8%,0.9)]"
+      class="relative aspect-video w-full overflow-hidden rounded-t-[var(--radius-lg)] bg-gradient-to-br from-[hsla(var(--accent-h),var(--accent-s),56%,0.15)] to-[hsla(240,20%,8%,0.9)]"
       aria-hidden="true"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 120 68"
-        class="h-16 w-auto opacity-[0.35]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect x="4" y="4" width="112" height="60" rx="8" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
-        <path d="M14 52h32l10-14 8 10 12-16 18 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[hsl(var(--accent-h),var(--accent-s),56%)]" />
-        <circle cx="38" cy="26" r="6" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
-      </svg>
+      {
+        coverSrc ? (
+          <Image
+            src={coverSrc}
+            alt=""
+            width={800}
+            height={450}
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <div class="flex h-full w-full items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 120 68"
+              class="h-16 w-auto opacity-[0.35]"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect x="4" y="4" width="112" height="60" rx="8" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
+              <path d="M14 52h32l10-14 8 10 12-16 18 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[hsl(var(--accent-h),var(--accent-s),56%)]" />
+              <circle cx="38" cy="26" r="6" stroke="currentColor" stroke-width="2" class="text-[hsl(240,9%,70%)]" />
+            </svg>
+          </div>
+        )
+      }
     </div>
     <div
       class:list={[

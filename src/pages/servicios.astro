@@ -350,7 +350,7 @@ const servicesJsonLd = {
     }
 
     if (carousel && shell) {
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reducedMotion = window.nhA11y.motionReduced;
 
       const ro = new ResizeObserver(() => updateCarouselState());
       ro.observe(carousel);

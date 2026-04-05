@@ -128,7 +128,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
 
     <title>{title}</title>
 
-    <!-- Prevenir flash de tema incorrecto -->
+    <!-- Tema + strip no-js + no-motion antes del primer paint (nh-reduced-motion / SO) -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('nh-theme');
@@ -136,11 +136,16 @@ const ogImageHeight = ogImageHeightProp ?? 768;
         const isDark = stored ? stored === 'dark' : prefersDark;
         document.documentElement.classList.toggle('light', !isDark);
         if (isDark) document.documentElement.classList.remove('light');
+
+        document.documentElement.classList.remove('no-js');
+
+        var motionStored = localStorage.getItem('nh-reduced-motion');
+        var reduceMotion =
+          motionStored !== null
+            ? motionStored === 'true'
+            : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) document.documentElement.classList.add('no-motion');
       })();
-    </script>
-    <!-- Quitar no-js lo antes posible si hay JS (fallback .no-js .reveal en tokens.css) -->
-    <script is:inline>
-      document.documentElement.classList.remove('no-js');
     </script>
   </head>
 
@@ -191,9 +196,16 @@ const ogImageHeight = ogImageHeightProp ?? 768;
       };
 
       // ── Accesibilidad ──────────────────────────────────────
+      function nhInitialMotionReduced() {
+        var s = localStorage.getItem('nh-reduced-motion');
+        if (s === 'true') return true;
+        if (s === 'false') return false;
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      }
+
       window.nhA11y = {
         panelOpen: false,
-        motionReduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        motionReduced: nhInitialMotionReduced(),
 
         togglePanel() {
           this.panelOpen = !this.panelOpen;
@@ -220,7 +232,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           document.getElementById('hc-on')?.classList.toggle('on', on);
         },
 
-        setReducedMotion(on) {
+        setReducedMotion(on, persist) {
           this.motionReduced = on;
           document.documentElement.classList.toggle('no-motion', on);
           let style = document.getElementById('nh-no-motion');
@@ -236,8 +248,11 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           }
           document.getElementById('mot-on')?.classList.toggle('on', !on);
           document.getElementById('mot-off')?.classList.toggle('on', on);
+          if (persist) localStorage.setItem('nh-reduced-motion', String(on));
         }
       };
+
+      window.nhA11y.setReducedMotion(window.nhA11y.motionReduced);
 
       // Restaurar preferencias persistidas (deferred to reduce TBT)
       requestAnimationFrame(function() {
@@ -245,13 +260,12 @@ const ogImageHeight = ogImageHeightProp ?? 768;
         if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
         var savedHC = localStorage.getItem('nh-hc');
         if (savedHC === 'true') nhA11y.setHighContrast(true);
-        if (nhA11y.motionReduced) nhA11y.setReducedMotion(true);
       });
     </script>
 
     <!--
       Scroll reveal: después del bloque nhA11y (window.nhA11y).
-      DOMContentLoaded + requestAnimationFrame: evita carrera con el rAF de nhA11y que aplica no-motion.
+      DOMContentLoaded + requestAnimationFrame: alineación con init síncrono de nhA11y / clase no-motion (head + setReducedMotion).
     -->
     <script is:inline>
       (function () {

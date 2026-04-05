@@ -18,30 +18,34 @@ const templatePymeBase =
   import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
   'https://template-pyme.escalatunegocioconia.com';
 
-const sortedTemplates = [...landingTemplates].sort((a, b) => {
-  if (b.priority !== a.priority) return b.priority - a.priority;
-  return a.title.localeCompare(b.title, 'es');
-});
+/** Una sola lista ordenada para carrusel y JSON-LD ItemList (position 1-indexed = orden visual). */
+const sortedTemplatesWithDemo = [...landingTemplates]
+  .map((template) => ({
+    ...template,
+    resolvedDemoUrl: resolveTemplateDemoUrl(template, templatePymeBase),
+  }))
+  .sort((a, b) => {
+    const demoA = Boolean(a.resolvedDemoUrl);
+    const demoB = Boolean(b.resolvedDemoUrl);
+    if (demoA !== demoB) return demoA ? -1 : 1;
+    if (b.priority !== a.priority) return b.priority - a.priority;
+    return a.title.localeCompare(b.title, 'es');
+  });
 
 const presentVerticals = [
-  ...new Set(sortedTemplates.map((t) => t.vertical)),
+  ...new Set(sortedTemplatesWithDemo.map((t) => t.vertical)),
 ].sort(
   (a, b) =>
     VERTICAL_ORDER.indexOf(a as (typeof VERTICAL_ORDER)[number]) -
     VERTICAL_ORDER.indexOf(b as (typeof VERTICAL_ORDER)[number]),
 );
 
-const templatesWithDemo = sortedTemplates.map((template) => ({
-  ...template,
-  resolvedDemoUrl: resolveTemplateDemoUrl(template, templatePymeBase),
-}));
-
 const siteUrl = site.author.siteUrl ?? 'https://escalatunegocioconia.com';
 
 const catalogJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  itemListElement: templatesWithDemo
+  itemListElement: sortedTemplatesWithDemo
     .filter((t) => t.status === 'available')
     .map((t, i) => ({
       '@type': 'ListItem',
@@ -207,7 +211,7 @@ const pageDescription =
         </nav>
 
         {
-          templatesWithDemo.length === 0 ? (
+          sortedTemplatesWithDemo.length === 0 ? (
             <p
               class="mt-10 py-[var(--sp-xl)] text-center text-[var(--text-muted)]"
               data-en="Coming soon..."
@@ -230,14 +234,14 @@ const pageDescription =
                   id="catalog-carousel"
                   class="relative z-0 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] md:gap-6 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
                 >
-                  {templatesWithDemo.map((t) => (
+                  {sortedTemplatesWithDemo.map((t) => (
                     <PlantillaCarouselCard template={t} resolvedDemoUrl={t.resolvedDemoUrl} />
                   ))}
                 </div>
                 <button
                   type="button"
                   id="btn-prev"
-                  class="btn-secondary btn-secondary--sm catalog-carousel__nav absolute left-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
+                  class="btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0 absolute left-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
                   aria-label="Anterior"
                   data-es-label="Anterior"
                   data-en-label="Previous"
@@ -247,7 +251,7 @@ const pageDescription =
                 <button
                   type="button"
                   id="btn-next"
-                  class="btn-secondary btn-secondary--sm catalog-carousel__nav absolute right-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
+                  class="btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0 absolute right-0 top-1/2 z-[2] hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm md:flex"
                   aria-label="Siguiente"
                   data-es-label="Siguiente"
                   data-en-label="Next"
@@ -259,7 +263,7 @@ const pageDescription =
                 <button
                   type="button"
                   id="btn-prev-mobile"
-                  class="btn-secondary btn-secondary--sm catalog-carousel__nav flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
+                  class="btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0 flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
                   aria-label="Anterior"
                 >
                   ‹
@@ -267,7 +271,7 @@ const pageDescription =
                 <button
                   type="button"
                   id="btn-next-mobile"
-                  class="btn-secondary btn-secondary--sm catalog-carousel__nav flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
+                  class="btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0 flex h-11 w-11 items-center justify-center text-lg text-[var(--text-primary)] shadow-sm"
                   aria-label="Siguiente"
                 >
                   ›

@@ -25,7 +25,7 @@ export const landingTemplateSchema = z.object({
     .string()
     .optional()
     .describe(
-      'Ruta relativa a imagen en /public/images/templates/ o URL absoluta. Placeholder si ausente.'
+      'Opcional: ruta bajo /public o URL absoluta (p. ej. OG o listados que no usen astro:assets). La miniatura del carrusel en /plantillas se resuelve con imports estáticos en src/data/template-carousel-images.ts → src/assets/templates/ (convención {slug}.webp o mapa explícito), no duplicar aquí.'
     ),
   cardBackground: z
     .enum(['dark', 'light', 'warm'])

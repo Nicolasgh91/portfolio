@@ -472,9 +472,8 @@ em { font-style: normal; color: var(--accent); }
     margin 200ms ease;
 }
 
-/* Flechas carrusel plantillas: glass sobre .btn-secondary--sm */
+/* Flechas carrusel plantillas: glass (border-radius vía .btn-secondary--icon-only en la página) */
 .catalog-carousel__nav {
-  border-radius: var(--radius-pill);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   background-color: hsla(0, 0%, 0%, 0.3);
@@ -777,10 +776,21 @@ html.light .catalog-carousel__nav {
     grid-template-rows: 1fr;
   }
   .faq-icon {
-    @apply flex h-7 w-7 min-w-[1.75rem] items-center justify-center rounded-full border border-white/[0.07] text-lg text-[var(--accent)] transition-transform duration-300;
+    @apply flex h-7 w-7 min-w-[1.75rem] items-center justify-center rounded-full border border-white/[0.07] text-lg text-[var(--accent)];
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
   .faq-item--animated.open .faq-icon {
-    @apply rotate-45;
+    @apply rotate-45 border-[var(--accent)] bg-[var(--accent)] text-[var(--color-on-accent)];
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-icon {
+      transition: none;
+    }
   }
 
   /* ── Scroll reveal (IntersectionObserver + .is-visible en Layout.astro) ─ */

@@ -41,13 +41,15 @@ const priceDisplay =
 >
   {
     isRecommended && (
-      <span
-        class="absolute -top-3 left-1/2 z-[1] -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-1 text-[11px] font-bold uppercase tracking-[1px] text-[var(--color-on-accent)]"
-        data-es={badgeEs}
-        data-en={badgeEn}
-      >
-        {badgeEs}
-      </span>
+      <div class="pointer-events-none absolute -top-3 left-0 right-0 z-[1] flex justify-center">
+        <span
+          class="whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-1 text-[11px] font-bold uppercase tracking-[1px] text-[var(--color-on-accent)]"
+          data-es={badgeEs}
+          data-en={badgeEn}
+        >
+          {badgeEs}
+        </span>
+      </div>
     )
   }
   <div class:list={['mb-4', isRecommended && 'mt-2']}>
