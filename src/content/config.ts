@@ -2,54 +2,66 @@ import { defineCollection, z } from 'astro:content';
 
 const projects = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string().describe('Título del proyecto en español.'),
-    description: z.string().describe('Descripción corta en español para listados y tarjetas.'),
-    descriptionEn: z.string().describe('Misma descripción en inglés.'),
-    url: z.string().url().optional().describe('URL del sitio o demo en producción, si aplica.'),
-    status: z
-      .enum(['live', 'in-progress', 'completed'])
-      .describe('Estado de madurez: en vivo, en curso o completado.'),
-    tags: z.array(z.string()).describe('Etiquetas libres para filtrar o agrupar en UI.'),
-    icon: z.string().describe('Emoji o carácter mostrado como icono del proyecto.'),
-    githubUrl: z.string().url().optional().describe('Repositorio público en GitHub, si existe.'),
-    order: z.number().default(99).describe('Orden ascendente en listas (menor = primero).'),
-    featured: z.boolean().default(false).describe('Si debe destacarse en la home u otras secciones.'),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().describe('Título del proyecto en español.'),
+      description: z.string().describe('Descripción corta en español para listados y tarjetas.'),
+      descriptionEn: z.string().describe('Misma descripción en inglés.'),
+      url: z.string().url().optional().describe('URL del sitio o demo en producción, si aplica.'),
+      status: z
+        .enum(['live', 'in-progress', 'completed'])
+        .describe('Estado de madurez: en vivo, en curso o completado.'),
+      tags: z.array(z.string()).describe('Etiquetas libres para filtrar o agrupar en UI.'),
+      icon: z.string().optional().describe('Opcional; la UI prioriza coverImage sobre emoji decorativo.'),
+      githubUrl: z.string().url().optional().describe('Repositorio público en GitHub, si existe.'),
+      order: z.number().default(99).describe('Orden ascendente en listas (menor = primero).'),
+      featured: z.boolean().default(false).describe('Si debe destacarse en la home u otras secciones.'),
+      coverImage: image()
+        .optional()
+        .describe(
+          'Portada para ProjectCard; ruta relativa al MDX (p. ej. ../../assets/blog/nombre.webp o ./cover.webp).',
+        ),
+    }),
 });
 
 const services = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string().describe('Nombre del servicio en español.'),
-    titleEn: z.string().describe('Nombre del servicio en inglés.'),
-    description: z.string().describe('Descripción larga en español (página de detalle).'),
-    descriptionEn: z.string().describe('Descripción larga en inglés.'),
-    shortDescription: z.string().optional().describe('Resumen para tarjetas del catálogo.'),
-    shortDescriptionEn: z.string().optional().describe('Resumen en inglés para tarjetas.'),
-    roiFocus: z
-      .string()
-      .optional()
-      .describe('Línea comercial / ROI en la tarjeta (p. ej. beneficio medible).'),
-    roiFocusEn: z.string().optional().describe('Versión en inglés de roiFocus.'),
-    priceFrom: z
-      .string()
-      .optional()
-      .describe('Precio “desde” en texto libre (ej. ARS 20.000); UI puede combinarlo con pricePrefix en ServiceCard.'),
-    module: z
-      .string()
-      .max(64)
-      .optional()
-      .describe('Identificador estable para analytics o deep links al ancla del servicio.'),
-    icon: z.string().describe('Emoji o icono textual del servicio.'),
-    order: z.number().default(99).describe('Orden en la página /servicios (menor = primero).'),
-    href: z.string().optional().describe('URL interna o externa si la tarjeta enlaza fuera del ancla por defecto.'),
-    featured: z.boolean().default(false).describe('Marca el servicio como destacado en el catálogo.'),
-    imageKey: z
-      .enum(['human-ai', 'cloud-servers', 'satellite'])
-      .optional()
-      .describe('Clave de imagen optimizada en ServiceCard (human-ai, cloud-servers, satellite).'),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().describe('Nombre del servicio en español.'),
+      titleEn: z.string().describe('Nombre del servicio en inglés.'),
+      description: z.string().describe('Descripción larga en español (página de detalle).'),
+      descriptionEn: z.string().describe('Descripción larga en inglés.'),
+      shortDescription: z.string().optional().describe('Resumen para tarjetas del catálogo.'),
+      shortDescriptionEn: z.string().optional().describe('Resumen en inglés para tarjetas.'),
+      roiFocus: z
+        .string()
+        .optional()
+        .describe('Línea comercial / ROI en la tarjeta (p. ej. beneficio medible).'),
+      roiFocusEn: z.string().optional().describe('Versión en inglés de roiFocus.'),
+      priceFrom: z
+        .string()
+        .optional()
+        .describe('Precio “desde” en texto libre (ej. ARS 20.000); UI puede combinarlo con pricePrefix en ServiceCard.'),
+      module: z
+        .string()
+        .max(64)
+        .optional()
+        .describe('Identificador estable para analytics o deep links al ancla del servicio.'),
+      icon: z.string().optional().describe('Opcional; la tarjeta puede usar solo coverImage.'),
+      order: z.number().default(99).describe('Orden en la página /servicios (menor = primero).'),
+      href: z.string().optional().describe('URL interna o externa si la tarjeta enlaza fuera del ancla por defecto.'),
+      featured: z.boolean().default(false).describe('Marca el servicio como destacado en el catálogo.'),
+      imageKey: z
+        .enum(['human-ai', 'cloud-servers', 'satellite'])
+        .optional()
+        .describe('Respaldo si no hay coverImage: clave de imagen en ServiceCard.'),
+      coverImage: image()
+        .optional()
+        .describe(
+          'Imagen de tarjeta; ruta relativa al MDX (p. ej. ../../assets/blog/nombre.webp). Tiene prioridad sobre imageKey.',
+        ),
+    }),
 });
 
 const faqEntrySchema = z.object({

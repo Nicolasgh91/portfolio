@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  title: string;
+  titleEn: string;
+  description: string;
+  descriptionEn: string;
+  image?: ImageMetadata;
+  href: string;
+  badge?: string;
+  badgeEn?: string;
+  span?: 1 | 2;
+  external?: boolean;
+}
+
+const {
+  title,
+  titleEn,
+  description,
+  descriptionEn,
+  image,
+  href,
+  badge,
+  badgeEn,
+  span = 1,
+  external = false,
+} = Astro.props;
+
+const spanClass = span === 2 ? 'md:col-span-2' : '';
+const linkAttrs = external
+  ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
+  : {};
+---
+
+<article
+  class:list={[
+    'group relative min-h-[min(22rem,70vw)] overflow-hidden rounded-2xl md:min-h-[20rem]',
+    spanClass,
+  ]}
+>
+  {image ? (
+    <Image
+      src={image}
+      alt=""
+      width={1200}
+      height={800}
+      loading="lazy"
+      decoding="async"
+      class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  ) : (
+    <div
+      class="section-dark absolute inset-0 flex items-center justify-center bg-slate-800 px-6"
+      aria-hidden="true"
+    >
+      <p
+        class="text-center font-display font-bold leading-tight text-white"
+        style="font-size: var(--text-4xl);"
+      >
+        {title}
+      </p>
+    </div>
+  )}
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent transition-opacity duration-500 group-hover:from-slate-950/80"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="relative flex h-full min-h-[min(22rem,70vw)] flex-col justify-end p-6 md:min-h-[20rem] md:p-8">
+    {badge && (
+      <span
+        class="mb-3 inline-flex w-fit rounded-full bg-orange-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+      >
+        <span data-es>{badge}</span>
+        <span data-en class="hidden">{badgeEn ?? badge}</span>
+      </span>
+    )}
+    <h3 class="font-display text-xl font-bold text-white md:text-2xl">
+      <span data-es>{title}</span>
+      <span data-en class="hidden">{titleEn}</span>
+    </h3>
+    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-200">
+      <span data-es>{description}</span>
+      <span data-en class="hidden">{descriptionEn}</span>
+    </p>
+  </div>
+  <a
+    href={href}
+    class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+    aria-label={`${title} — ver proyecto`}
+    {...linkAttrs}
+  >
+  </a>
+</article>

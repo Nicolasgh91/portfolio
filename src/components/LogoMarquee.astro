@@ -1,0 +1,61 @@
+---
+/**
+ * Carrusel de marcas/stack; SVG vía `?raw` + `set:html`, color vía `currentColor` en el root del SVG.
+ * Pausa en hover. Sin `<Image>` (raster); ver docs/componentes/LogoMarquee.md.
+ */
+import astroSvg from '../assets/marquee/astro.svg?raw';
+import reactSvg from '../assets/marquee/react.svg?raw';
+import typescriptSvg from '../assets/marquee/typescript.svg?raw';
+import tailwindSvg from '../assets/marquee/tailwind.svg?raw';
+import vercelSvg from '../assets/marquee/vercel.svg?raw';
+import pythonSvg from '../assets/marquee/python.svg?raw';
+import nodejsSvg from '../assets/marquee/nodejs.svg?raw';
+import postgresqlSvg from '../assets/marquee/postgresql.svg?raw';
+
+const logoSvgs = [
+  astroSvg,
+  reactSvg,
+  typescriptSvg,
+  tailwindSvg,
+  vercelSvg,
+  pythonSvg,
+  nodejsSvg,
+  postgresqlSvg,
+] as const;
+
+const logoSlotClass =
+  'inline-flex h-10 shrink-0 items-center text-white/75 [&>svg]:block [&>svg]:h-8 [&>svg]:max-h-8 [&>svg]:w-auto';
+---
+
+<div class="section-dark overflow-hidden bg-slate-950 py-14 md:py-16">
+  <p class="mb-8 text-center text-xs font-bold uppercase tracking-widest text-slate-500">
+    <span data-es>Stack y herramientas</span>
+    <span data-en class="hidden">Stack &amp; tools</span>
+  </p>
+
+  <ul
+    class="hidden list-none flex-wrap items-center justify-center gap-x-12 gap-y-8 px-4 motion-reduce:flex"
+    aria-label="Stack y herramientas"
+  >
+    {
+      logoSvgs.map((svg) => (
+        <li class={logoSlotClass} set:html={svg} />
+      ))
+    }
+  </ul>
+
+  <div
+    class="flex w-max max-w-full animate-scroll hover:[animation-play-state:paused] motion-reduce:hidden"
+    aria-hidden="true"
+  >
+    {
+      [0, 1].map((copy) => (
+        <div class="flex shrink-0 items-center gap-12 pr-12 md:gap-16 md:pr-16">
+          {logoSvgs.map((svg) => (
+            <span class={logoSlotClass} set:html={svg} />
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>

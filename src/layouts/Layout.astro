@@ -302,6 +302,35 @@ const ogImageHeight = ogImageHeightProp ?? 768;
             nodes.forEach(function (el) {
               observer.observe(el);
             });
+
+            function initAltReveal() {
+              var path = window.location.pathname.replace(/\/$/, '') || '/';
+              if (path !== '/' && path !== '/servicios' && path !== '/talento') return;
+              var altNodes = document.querySelectorAll('[data-alt-reveal]');
+              if (altNodes.length === 0) return;
+              if (reduceMotionActive()) {
+                altNodes.forEach(function (el) {
+                  el.classList.remove('opacity-0', 'translate-y-4');
+                  el.classList.add('opacity-100', 'translate-y-0');
+                });
+                return;
+              }
+              var observerAlt = new IntersectionObserver(
+                function (entries) {
+                  entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    observerAlt.unobserve(entry.target);
+                  });
+                },
+                { threshold: 0, rootMargin: '0px 0px -50px 0px' }
+              );
+              altNodes.forEach(function (el) {
+                observerAlt.observe(el);
+              });
+            }
+            initAltReveal();
           });
         }
 

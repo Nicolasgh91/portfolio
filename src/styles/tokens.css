@@ -108,6 +108,11 @@
   --text-xl:    24px;
   --text-2xl:   32px;
   --text-3xl:   46px;
+  /* Display / métricas: escala con --font-scale (panel a11y) */
+  --text-4xl:   calc(clamp(2.5rem, 3.2vw + 1rem, 3.5rem) * var(--font-scale));
+  --text-5xl:   calc(clamp(3rem, 4.2vw + 1rem, 4.5rem) * var(--font-scale));
+  --text-6xl:   calc(clamp(3.25rem, 5.5vw + 1rem, 6rem) * var(--font-scale));
+  --text-metric: var(--text-6xl);
 
   --sp-xs:   4px;
   --sp-sm:   8px;
@@ -115,6 +120,8 @@
   --sp-lg:   24px;
   --sp-xl:   48px;
   --sp-2xl:  80px;
+  --sp-3xl:  128px;
+  --sp-4xl:  160px;
 
   --radius-sm:   6px;
   --radius-md:   10px;
@@ -536,6 +543,36 @@ html.light .catalog-carousel__nav {
 @tailwind components;
 
 @layer components {
+  /*
+   * Bloques de color fijo (color blocking): no heredan inversión de html.dark / :root.light.
+   * Usar junto con bg-slate-950 / bg-orange-600 (Tailwind) en el mismo elemento o wrapper.
+   */
+  .section-dark {
+    color: hsl(240, 11%, 96%);
+  }
+  .section-dark h1,
+  .section-dark h2,
+  .section-dark h3,
+  .section-dark h4 {
+    color: hsl(240, 11%, 96%);
+  }
+  .section-dark p {
+    color: hsl(215, 20%, 75%);
+  }
+
+  .section-accent {
+    color: #ffffff;
+  }
+  .section-accent h1,
+  .section-accent h2,
+  .section-accent h3,
+  .section-accent h4 {
+    color: #ffffff;
+  }
+  .section-accent p {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
   /* ── Sistema de botones (variantes + modificadores) ─────── */
   .btn-primary,
   .btn-secondary,
@@ -824,6 +861,11 @@ html.light .catalog-carousel__nav {
 .no-js .reveal {
   opacity: 1;
   transform: none;
+}
+
+.no-js [data-alt-reveal] {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 /*
