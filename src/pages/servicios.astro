@@ -378,21 +378,21 @@ const altRevealDelays: Record<string, number> = {};
       />
     </SectionWrapper>
 
-    <div class="px-6 pb-16 md:pb-24">
+    <div class="mt-12 mb-16 md:mt-16 md:mb-24">
       <SectionWrapper
-        bg="bg-orange-600"
+        bg="bg-[var(--accent)]"
         tone="accent"
         padding="py-16 md:py-24"
-        maxWidth="max-w-3xl"
-        class="rounded-3xl"
-        innerClass="text-center"
+        maxWidth="max-w-none"
+        class="rounded-none"
+        innerClass="text-center px-0"
         revealAlt
       >
-        <h2 class="font-display text-2xl font-bold text-white md:text-3xl">
+        <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
           <span data-es>¿Listo para el siguiente paso?</span>
           <span data-en class="hidden">Ready for the next step?</span>
         </h2>
-        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-white/90">
+        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
           <span data-es
             >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar
             juntos. También podés escribirnos por el formulario de abajo cuando quieras.</span
@@ -403,7 +403,10 @@ const altRevealDelays: Record<string, number> = {};
           >
         </p>
         <p class="mt-8">
-          <a href="#contacto" class="btn-secondary btn-bounce">
+          <a
+            href="#contacto"
+            class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
+          >
             <span data-es>Contactar</span>
             <span data-en class="hidden">Contact</span>
             <span class="arrow" aria-hidden="true">→</span>
