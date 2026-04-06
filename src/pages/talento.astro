@@ -557,7 +557,7 @@ const softSkills = [
 
       <div class="mb-16 md:mb-24">
         <SectionWrapper
-          bg="bg-orange-600"
+          bg="bg-[var(--accent)]"
           tone="accent"
           padding="py-16 md:py-24"
           maxWidth="max-w-3xl"
@@ -565,11 +565,11 @@ const softSkills = [
           innerClass="text-center"
           revealAlt
         >
-          <h2 class="font-display text-2xl font-bold text-white md:text-3xl">
+          <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
             <span data-es>¿Hablamos?</span>
             <span data-en class="hidden">Let&apos;s talk</span>
           </h2>
-          <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-white/90">
+          <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
             <span data-es
               >Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría,
               el pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado.</span
@@ -580,7 +580,10 @@ const softSkills = [
             >
           </p>
           <p class="mt-8">
-            <a href="/servicios#contacto" class="btn-secondary btn-bounce">
+            <a
+              href="/servicios#contacto"
+              class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
+            >
               <span data-es>Contactar</span>
               <span data-en class="hidden">Contact</span>
               <span class="arrow" aria-hidden="true">→</span>
