@@ -10,24 +10,25 @@ import tailwindSvg from '../assets/marquee/tailwind.svg?raw';
 import vercelSvg from '../assets/marquee/vercel.svg?raw';
 import pythonSvg from '../assets/marquee/python.svg?raw';
 import nodejsSvg from '../assets/marquee/nodejs.svg?raw';
-import postgresqlSvg from '../assets/marquee/postgresql.svg?raw';
+import supabaseSvg from '../assets/marquee/supabase.svg?raw';
 
+/** Orden alineado a roadmap RD-3.3 (monocromo + filtro tipo SquareBlack). */
 const logoSvgs = [
   astroSvg,
   reactSvg,
   typescriptSvg,
   tailwindSvg,
   vercelSvg,
+  supabaseSvg,
   pythonSvg,
   nodejsSvg,
-  postgresqlSvg,
 ] as const;
 
 const logoSlotClass =
-  'inline-flex h-10 shrink-0 items-center text-white/75 [&>svg]:block [&>svg]:h-8 [&>svg]:max-h-8 [&>svg]:w-auto';
+  'inline-flex h-10 shrink-0 items-center text-white/80 grayscale brightness-[2] contrast-125 [&>svg]:block [&>svg]:h-8 [&>svg]:max-h-8 [&>svg]:w-auto';
 ---
 
-<div class="section-dark overflow-hidden bg-slate-950 py-14 md:py-16">
+<div class="section-dark overflow-hidden bg-slate-950 py-16">
   <p class="mb-8 text-center text-xs font-bold uppercase tracking-widest text-slate-500">
     <span data-es>Stack y herramientas</span>
     <span data-en class="hidden">Stack &amp; tools</span>
@@ -45,7 +46,7 @@ const logoSlotClass =
   </ul>
 
   <div
-    class="flex w-max max-w-full animate-scroll hover:[animation-play-state:paused] motion-reduce:hidden"
+    class="flex w-max max-w-full animate-marqueeScroll hover:[animation-play-state:paused] motion-reduce:hidden"
     aria-hidden="true"
   >
     {

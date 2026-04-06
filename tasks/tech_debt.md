@@ -1,5 +1,9 @@
 # Technical Debt
 
+## talento.astro — scroll reveal
+
+- [ ] **P1 — `transition-all` en reveals:** varias secciones usan `opacity-0 translate-y-4 transition-all duration-700`; al togglear `:root.light` puede animarse el cambio de color de fondo de forma no deseada. Mismo criterio que home iteración 3: `transition-[opacity,transform]` (o equivalente acotado) en contenedores que solo deben revelar, no animar tema.
+
 ## Nav.astro
 
 - [ ] **CSS scoped (~517 líneas):** migrar a Tailwind atómico. Excepción documentada 2026-03-25 — el componente mezcla pseudo-elementos, keyframes y media queries que hacen inviable la migración parcial.

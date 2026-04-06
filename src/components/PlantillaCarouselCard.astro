@@ -148,20 +148,20 @@ const coverSrc = getTemplateCarouselImage(template.slug);
               href={resolvedDemoUrl!}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
-              data-es="Ver demo →"
-              data-en="View demo →"
+              class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              Ver demo →
+              <span data-es>Ver demo</span>
+              <span data-en class="hidden">View demo</span>
+              <span class="arrow" aria-hidden="true">→</span>
             </a>
           ) : (
             <a
               href={`/plantillas/${template.slug}`}
-              class="text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
-              data-es="Ver ficha →"
-              data-en="View details →"
+              class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              Ver ficha →
+              <span data-es>Ver ficha</span>
+              <span data-en class="hidden">View details</span>
+              <span class="arrow" aria-hidden="true">→</span>
             </a>
           )
         }

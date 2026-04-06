@@ -4,10 +4,11 @@ import Nav from '../components/Nav.astro';
 import SectionWrapper from '../components/SectionWrapper.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import LogoMarquee from '../components/LogoMarquee.astro';
-import CTAButton from '../components/CTAButton.astro';
 import { getCollection } from 'astro:content';
+import site from '../data/site.json';
 
 const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
+const contactEmail = site.author.email;
 
 const allProjects = await getCollection('projects');
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
@@ -47,14 +48,6 @@ const capabilities = [
       'Analysis and visualization of geographic data integrated into operational management platforms.',
   },
 ];
-
-const skillPills: { es: string; en: string }[] = [
-  { es: 'Análisis funcional', en: 'Functional analysis' },
-  { es: 'Full-stack', en: 'Full-stack' },
-  { es: 'Arquitectura de software', en: 'Software architecture' },
-  { es: 'Agentes IA', en: 'AI agents' },
-  { es: 'PostGIS / datos geo', en: 'PostGIS / geo data' },
-];
 ---
 
 <Layout
@@ -67,50 +60,45 @@ const skillPills: { es: string; en: string }[] = [
   <main id="main-content">
     <div class="page-container">
       <section
-        class="relative mb-16 min-h-[60vh] overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-orange-950/30 to-slate-900 px-6 py-16 md:mb-24 md:px-10 md:py-24"
+        class="relative mb-16 min-h-[60vh] overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-orange-900/10 to-slate-900 px-6 py-16 md:mb-24 md:px-10 md:py-24"
         aria-label="Perfil profesional"
       >
-        <div class="relative mx-auto max-w-4xl text-center md:text-left">
-          <h1
-            class="font-display font-extrabold leading-tight tracking-tight text-white"
-            style="font-size: var(--text-5xl);"
-          >
-            Nicolás Hruszczak
-          </h1>
-          <p class="mt-4 max-w-2xl font-body text-xl font-medium text-orange-300 md:mx-0 mx-auto">
-            <span data-es>Analista funcional · Desarrollador full-stack · Arquitecto de software</span>
-            <span data-en class="hidden">Functional analyst · Full-stack developer · Software architect</span>
-          </p>
-          <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-300 md:mx-0 mx-auto">
-            <span data-es
-              >Gestión de la tecnología, arquitectura de software e implementación de IA para soluciones escalables.</span
-            >
-            <span data-en class="hidden"
-              >Technology management, software architecture and AI implementation for scalable solutions.</span
-            >
-          </p>
-          <div class="mt-8 flex flex-wrap justify-center gap-2 md:justify-start">
-            {
-              skillPills.map((pill) => (
-                <span class="rounded-full border border-slate-600 bg-slate-800/80 px-4 py-1.5 text-sm font-medium text-slate-200">
-                  <span data-es>{pill.es}</span>
-                  <span data-en class="hidden">{pill.en}</span>
-                </span>
-              ))
-            }
-          </div>
-          <div class="mt-10 flex flex-wrap justify-center gap-3 md:justify-start">
-            <a
-              href={GITHUB_REPOS_URL}
-              class="btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Ver repositorios en GitHub"
-              data-en="GitHub repositories"
-              data-es="Repositorios en GitHub"
-            >
-              Repositorios en GitHub
-            </a>
+        <div class="relative mx-auto max-w-4xl">
+          <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between md:gap-10">
+            <div class="min-w-0 flex-1 text-center md:text-left">
+              <h1
+                class="font-display text-5xl font-extrabold leading-tight tracking-tight text-white md:text-6xl"
+              >
+                Nicolás Hruszczak
+              </h1>
+              <p class="mx-auto mt-4 max-w-2xl font-body text-xl font-normal text-orange-300 md:mx-0">
+                <span data-es>Analista funcional · Desarrollador full-stack · Arquitecto de software</span>
+                <span data-en class="hidden">Functional analyst · Full-stack developer · Software architect</span>
+              </p>
+              <p class="mx-auto mt-4 max-w-2xl text-base font-normal leading-relaxed text-slate-300 md:mx-0">
+                <span data-es
+                  >Liderazgo técnico en equipos chicos, comunicación clara con negocio y stakeholders, mentoría a perfiles
+                  en formación y criterio de producto para priorizar entregas con impacto.</span
+                >
+                <span data-en class="hidden"
+                  >Technical leadership in small teams, clear communication with business and stakeholders, mentoring for
+                  early-career profiles, and product judgment to prioritize high-impact delivery.</span
+                >
+              </p>
+            </div>
+            <div class="flex shrink-0 justify-center md:justify-end md:pb-0.5">
+              <a
+                href={GITHUB_REPOS_URL}
+                class="btn-secondary border-white/20 bg-white/5 text-white hover:border-white/35 hover:bg-white/10"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver repositorios en GitHub"
+                data-en="GitHub repositories"
+                data-es="Repositorios en GitHub"
+              >
+                Repositorios en GitHub
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -133,15 +121,15 @@ const skillPills: { es: string; en: string }[] = [
             <span data-en class="hidden">Technical capabilities</span>
           </h2>
         </header>
-        <div class="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
+        <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
           {
             capabilities.map((cap) => (
-              <div>
-                <h3 class="font-display text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              <div class="border-l-2 border-orange-500 pl-6">
+                <h3 class="font-display text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
                   <span data-es>{cap.title}</span>
                   <span data-en class="hidden">{cap.titleEn}</span>
                 </h3>
-                <p class="mt-3 text-base leading-relaxed text-slate-500 dark:text-slate-400">
+                <p class="mt-3 text-base font-normal leading-relaxed text-slate-600 dark:text-slate-300">
                   <span data-es>{cap.description}</span>
                   <span data-en class="hidden">{cap.descriptionEn}</span>
                 </p>
@@ -181,7 +169,7 @@ const skillPills: { es: string; en: string }[] = [
 
         <div class="grid gap-6 sm:grid-cols-2">
           <article
-            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 md:p-10"
+            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 sm:col-span-2 md:p-10"
           >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
@@ -196,7 +184,7 @@ const skillPills: { es: string; en: string }[] = [
                 Desarrollador y arquitecto de software
               </h3>
               <p
-                class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
+                class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:text-base"
                 data-en="Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
                 data-es="Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
               >
@@ -221,7 +209,7 @@ const skillPills: { es: string; en: string }[] = [
                 Analista funcional
               </h3>
               <p
-                class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
+                class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:text-base"
                 data-en="Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
                 data-es="Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
               >
@@ -246,7 +234,7 @@ const skillPills: { es: string; en: string }[] = [
                 Analista de contenido
               </h3>
               <p
-                class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
+                class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:text-base"
                 data-en="Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
                 data-es="Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
               >
@@ -271,7 +259,7 @@ const skillPills: { es: string; en: string }[] = [
                 Mentor y facilitador técnico
               </h3>
               <p
-                class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
+                class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:text-base"
                 data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
                 data-es="Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
               >
@@ -323,19 +311,27 @@ const skillPills: { es: string; en: string }[] = [
             role="listitem"
           >
             <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Bachelor's degree in technology and information management"
-                data-es="Licenciatura en gestión de tecnología de la información"
-              >
-                Licenciatura en gestión de tecnología de la información
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="inline-flex rounded-md border border-slate-600 bg-slate-700 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-300"
+                  data-en="In progress"
+                  data-es="En curso"
+                  >En curso</span
+                >
+                <span
+                  class="text-sm font-medium text-[var(--text-primary)]"
+                  data-en="Bachelor's degree in technology and information management"
+                  data-es="Licenciatura en gestión de tecnología de la información"
+                >
+                  Licenciatura en gestión de tecnología de la información
+                </span>
               </div>
               <div
-                class="mt-1 text-xs text-[var(--text-secondary)]"
-                data-en="UADE · 2024–2028 (In progress)"
-                data-es="UADE · 2024–2028 (En curso)"
+                class="mt-1 text-xs text-slate-600 dark:text-slate-300"
+                data-en="UADE · 2024–2028"
+                data-es="UADE · 2024–2028"
               >
-                UADE · 2024–2028 (En curso)
+                UADE · 2024–2028
               </div>
             </div>
             <span class="tag shrink-0 self-start sm:self-center" data-en="University" data-es="Universidad"
@@ -347,14 +343,22 @@ const skillPills: { es: string; en: string }[] = [
             role="listitem"
           >
             <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Technician in Computer Programming"
-                data-es="Tecnicatura en Programación Informática"
-              >
-                Tecnicatura en Programación Informática
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="inline-flex rounded-md border border-orange-500/20 bg-orange-500/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-orange-400"
+                  data-en="Completed"
+                  data-es="Completado"
+                  >Completado</span
+                >
+                <span
+                  class="text-sm font-medium text-[var(--text-primary)]"
+                  data-en="Technician in Computer Programming"
+                  data-es="Tecnicatura en Programación Informática"
+                >
+                  Tecnicatura en Programación Informática
+                </span>
               </div>
-              <div class="mt-1 text-xs text-[var(--text-secondary)]" data-en="UTN · 2023–2024" data-es="UTN · 2023–2024">
+              <div class="mt-1 text-xs text-slate-600 dark:text-slate-300" data-en="UTN · 2023–2024" data-es="UTN · 2023–2024">
                 UTN · 2023–2024
               </div>
             </div>
@@ -362,14 +366,22 @@ const skillPills: { es: string; en: string }[] = [
           </li>
           <li class="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between" role="listitem">
             <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Business Analysis Diploma"
-                data-es="Diplomatura en Análisis de Negocios"
-              >
-                Diplomatura en Análisis de Negocios
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="inline-flex rounded-md border border-orange-500/20 bg-orange-500/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-orange-400"
+                  data-en="Completed"
+                  data-es="Completado"
+                  >Completado</span
+                >
+                <span
+                  class="text-sm font-medium text-[var(--text-primary)]"
+                  data-en="Business Analysis Diploma"
+                  data-es="Diplomatura en Análisis de Negocios"
+                >
+                  Diplomatura en Análisis de Negocios
+                </span>
               </div>
-              <div class="mt-1 text-xs text-[var(--text-secondary)]" data-en="UTN FRBA · 2024" data-es="UTN FRBA · 2024">
+              <div class="mt-1 text-xs text-slate-600 dark:text-slate-300" data-en="UTN FRBA · 2024" data-es="UTN FRBA · 2024">
                 UTN FRBA · 2024
               </div>
             </div>
@@ -402,15 +414,18 @@ const skillPills: { es: string; en: string }[] = [
           </h2>
         </header>
 
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+        <div class="flex flex-col gap-6 md:gap-8">
           {
-            sortedProjects.map((project) => (
+            sortedProjects.map((project, i) => (
               <div id={project.slug}>
                 <ProjectCard
+                  headingId={`project-card-${project.slug}`}
+                  direction={i % 2 === 0 ? 'left' : 'right'}
                   title={project.data.title}
                   titleEn={project.data.title}
                   description={project.data.description}
                   descriptionEn={project.data.descriptionEn}
+                  coverPosition={project.data.coverPosition}
                   image={project.data.coverImage}
                   href={
                     project.data.url
@@ -420,16 +435,16 @@ const skillPills: { es: string; en: string }[] = [
                         : `/talento#${project.slug}`
                   }
                   badge={
-                    project.data.status === 'in-progress'
+                    project.data.status === 'live' || project.data.status === 'in-progress'
                       ? statusLabel(project.data.status, 'es')
                       : undefined
                   }
                   badgeEn={
-                    project.data.status === 'in-progress'
+                    project.data.status === 'live' || project.data.status === 'in-progress'
                       ? statusLabel(project.data.status, 'en')
                       : undefined
                   }
-                  span={project.slug === 'huelladelfuego' ? 2 : 1}
+                  badgeVariant={project.data.status === 'live' ? 'live' : 'in-progress'}
                   external={Boolean(project.data.url)}
                 />
               </div>
@@ -442,7 +457,7 @@ const skillPills: { es: string; en: string }[] = [
         <SectionWrapper
           bg="bg-orange-600"
           tone="accent"
-          padding="py-14 md:py-16"
+          padding="py-16 md:py-24"
           maxWidth="max-w-3xl"
           class="rounded-3xl"
           innerClass="text-center"
@@ -452,18 +467,24 @@ const skillPills: { es: string; en: string }[] = [
             <span data-es>¿Hablamos?</span>
             <span data-en class="hidden">Let&apos;s talk</span>
           </h2>
-          <p class="mx-auto mt-3 max-w-md text-sm text-white/90">
-            <span data-es>Contacto directo o diagnóstico gratuito desde la página de servicios.</span>
-            <span data-en class="hidden">Reach out directly or start with a free diagnosis on the services page.</span>
+          <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-white/90">
+            <span data-es
+              >Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría,
+              escribime. El pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado.</span
+            >
+            <span data-en class="hidden"
+              >If you have questions about my background, want to check references, or explore a consulting engagement,
+              email me. The site footer includes the contact form if you prefer a structured message.</span
+            >
           </p>
-          <div class="mt-6 flex flex-wrap justify-center gap-4">
-            <CTAButton
-              href="/servicios#contacto"
-              label="Contactar"
-              labelEn="Contact"
-              variant="inverse"
-            />
-          </div>
+          <p class="mt-6">
+            <a
+              class="text-base font-semibold text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white"
+              href={`mailto:${contactEmail}`}
+            >
+              {contactEmail}
+            </a>
+          </p>
         </SectionWrapper>
       </div>
     </div>

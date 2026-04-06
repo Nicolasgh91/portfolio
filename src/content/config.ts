@@ -21,6 +21,12 @@ const projects = defineCollection({
         .describe(
           'Portada para ProjectCard; ruta relativa al MDX (p. ej. ../../assets/blog/nombre.webp o ./cover.webp).',
         ),
+      coverPosition: z
+        .enum(['top', 'center', 'bottom'])
+        .default('top')
+        .describe(
+          'Anclaje vertical de la portada en ProjectCard (object-position): top para screenshots con cabecera reconocible; center/bottom para fotos u otros focos.',
+        ),
     }),
 });
 

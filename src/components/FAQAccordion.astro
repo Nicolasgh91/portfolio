@@ -91,8 +91,10 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
               together.
             </span>
           </p>
-          <a href={ctaHref} class="btn-primary w-fit font-medium" data-en="Book free diagnosis →" data-es="Agendar diagnóstico gratis →">
-            Agendar diagnóstico gratis →
+          <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
+            <span data-es>Agendar diagnóstico gratis</span>
+            <span data-en class="hidden">Book free diagnosis</span>
+            <span class="arrow" aria-hidden="true">→</span>
           </a>
         </div>
       )

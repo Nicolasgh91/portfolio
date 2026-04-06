@@ -1,8 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import CTAButton from './CTAButton.astro';
-/** Fondo atmosférico del hero (LCP); compartido con catálogo blog hasta dedicar asset propio. */
-import heroBackdrop from '../assets/blog/cloud-servers.webp';
+/** Fondo atmosférico del hero (LCP); asset dedicado home. */
+import heroBackdrop from '../assets/home/hero-banner.webp';
 ---
 
 <section
@@ -13,18 +12,23 @@ import heroBackdrop from '../assets/blog/cloud-servers.webp';
     <Image
       src={heroBackdrop}
       alt=""
-      width={1920}
-      height={1080}
-      widths={[640, 960, 1280, 1920]}
+      width={1536}
+      height={1024}
+      widths={[640, 768, 1024, 1280, 1536]}
       sizes="100vw"
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      class="h-full min-h-full w-full object-cover opacity-[0.32]"
+      class="h-full min-h-full w-full object-cover opacity-[0.28]"
     />
   </div>
   <div
-    class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/88 via-slate-950/78 to-slate-950"
+    class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/90 via-slate-950/82 to-slate-950"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[58%] bg-gradient-to-t from-slate-950 from-35% via-slate-950/92 to-transparent"
     aria-hidden="true"
   >
   </div>
@@ -42,9 +46,9 @@ import heroBackdrop from '../assets/blog/cloud-servers.webp';
   </div>
 
   <div
-    class="relative z-10 mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-24"
+    class="relative z-10 mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-10 px-6 py-16 lg:grid-cols-2 lg:gap-16 lg:py-24"
   >
-    <div class="min-w-0">
+    <div class="min-w-0 max-w-2xl">
       <h1
         id="hero-heading"
         class="font-display font-bold leading-[1.08] tracking-tight text-white"
@@ -67,14 +71,6 @@ import heroBackdrop from '../assets/blog/cloud-servers.webp';
           paying for tools and starts earning from outcomes.</span
         >
       </p>
-      <div class="mt-10">
-        <CTAButton
-          href="/servicios#contacto"
-          label="Diagnóstico gratis"
-          labelEn="Free diagnosis"
-          variant="primary"
-        />
-      </div>
     </div>
 
     <div class="relative w-full max-w-xl justify-self-center lg:max-w-none lg:justify-self-end" aria-hidden="true">

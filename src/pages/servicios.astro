@@ -128,6 +128,23 @@ const faqJsonLd = buildFaqPageJsonLd(faqEntries);
 
 const servicesRow1 = sortedServices.slice(0, 3);
 const servicesRow2 = sortedServices.slice(3);
+
+/** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` según secciones visibles */
+const altRevealDelays: Record<string, number> = {};
+{
+  const keys = [
+    'catalog1',
+    ...(servicesRow2.length > 0 ? ['catalog2'] : []),
+    'caseStudy',
+    'how',
+    'faq',
+    'ctaOrange',
+    'contact',
+  ];
+  keys.forEach((key, i) => {
+    altRevealDelays[key] = Math.min(i * 100, 600);
+  });
+}
 ---
 
 <Layout
@@ -143,81 +160,48 @@ const servicesRow2 = sortedServices.slice(3);
 
   <main id="main-content">
     <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32">
-      <div
-        class="flex flex-col gap-10 md:flex-row md:items-end md:justify-between"
-        aria-label="Propuesta de valor B2B"
-      >
-        <div class="min-w-0 max-w-3xl">
-          <SectionLabel
-            text="Servicios para empresas · Diagnóstico gratuito"
-            textEn="B2B Services · Free diagnosis"
-          />
-          <h1
-            class="mt-3 font-display font-extrabold tracking-tight text-slate-900"
-            style="font-size: var(--text-5xl);"
-          >
-            <span data-es
-              >Software a medida para <em class="not-italic text-orange-600">multiplicar el ROI</em> de su negocio.</span
-            >
-            <span data-en class="hidden"
-              >Custom software to <em class="not-italic text-orange-600">multiply ROI</em> for your business.</span
-            >
-          </h1>
-        </div>
-        <p class="max-w-md text-base leading-relaxed text-slate-600 md:max-w-sm md:text-right">
+      <div class="max-w-3xl" aria-label="Propuesta de valor">
+        <SectionLabel
+          text="Servicios para emprendedores · creadores · pymes"
+          textEn="For entrepreneurs, creators &amp; small businesses"
+        />
+        <h1
+          class="mt-3 font-display font-extrabold tracking-tight text-slate-900"
+          style="font-size: var(--text-5xl);"
+        >
           <span data-es
-            >Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y
-            sistemas de gestión exclusivos.</span
+            >Software a medida para <em class="not-italic text-orange-600">multiplicar el ROI</em> de su negocio.</span
           >
           <span data-en class="hidden"
-            >Fixed cost reduction and operational optimization through automation, artificial intelligence, and
-            exclusive management systems.</span
+            >Custom software to <em class="not-italic text-orange-600">multiply ROI</em> for your business.</span
+          >
+        </h1>
+        <p class="mt-6 max-w-3xl text-base leading-relaxed text-slate-600">
+          <span data-es
+            >Si estás empezando, necesitás ordenar la oferta y la conversión sin depender de diez herramientas sueltas. Si
+            creás contenido o marca personal, querés un sitio y flujos que te representen sin perder tiempo en
+            parches. Si llevás una pyme, el foco es menos fricción día a día y números que se entiendan. En los tres
+            casos ayudamos a definir qué conviene automatizar, integrar o construir a medida, con entregas claras y
+            seguimiento — sin promesas técnicas vacías.</span
+          >
+          <span data-en class="hidden"
+            >If you are starting out, you need a clear offer and conversion path without juggling ten disconnected
+            tools. If you are a creator or personal brand, you want a site and flows that represent you without endless
+            workarounds. If you run an SME, the focus is less daily friction and metrics everyone can act on. In all
+            three cases we help you decide what to automate, integrate, or build custom — with clear milestones and
+            follow-through, not empty technical promises.</span
           >
         </p>
       </div>
     </SectionWrapper>
 
-    <SectionWrapper bg="bg-slate-50" tone="default" padding="py-16 md:py-20" revealAlt>
-      <div
-        class="flex flex-col gap-8 rounded-2xl border border-slate-200/80 bg-white p-8 md:flex-row md:items-center md:gap-12 md:p-10"
-        role="region"
-        aria-label="Propuesta de valor: de gasto a inversión"
-      >
-        <div class="min-w-0 flex-1">
-          <h3 class="mb-2 font-display text-lg font-bold text-slate-900">
-            <span data-es>Software como gasto</span>
-            <span data-en class="hidden">Software as expense</span>
-          </h3>
-          <p class="text-sm leading-relaxed text-slate-600">
-            <span data-es
-              >Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a
-              mes.</span
-            >
-            <span data-en class="hidden"
-              >Recurring licenses, disconnected tools, manual processes that consume hours and capital month after
-              month.</span
-            >
-          </p>
-        </div>
-        <div class="flex shrink-0 justify-center text-3xl text-orange-500 md:text-4xl" aria-hidden="true">→</div>
-        <div class="min-w-0 flex-1">
-          <h3 class="mb-2 font-display text-lg font-bold text-orange-600">
-            <span data-es>Software como inversión</span>
-            <span data-en class="hidden">Software as investment</span>
-          </h3>
-          <p class="text-sm leading-relaxed text-slate-600">
-            <span data-es
-              >Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido.</span
-            >
-            <span data-en class="hidden"
-              >Proprietary systems, measurable automation and concrete return on every peso invested.</span
-            >
-          </p>
-        </div>
-      </div>
-    </SectionWrapper>
-
-    <SectionWrapper bg="bg-white" tone="default" padding="pb-8 pt-4 md:py-24" revealAlt>
+    <SectionWrapper
+      bg="bg-white"
+      tone="default"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.catalog1}
+    >
       <header class="mb-8 md:mb-12" aria-labelledby="services-heading">
         <SectionLabel text="Catálogo" textEn="Catalog" />
         <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
@@ -225,10 +209,18 @@ const servicesRow2 = sortedServices.slice(3);
           <span data-en class="hidden">Services</span>
         </h2>
         <p class="mt-2 max-w-2xl text-sm text-slate-600">
-          <span data-es>Cuatro ejes de intervención con impacto directo en la operación.</span>
-          <span data-en class="hidden">Four intervention axes with direct operational impact.</span>
+          <span data-es>
+            {sortedServices.length} ejes de intervención con impacto directo en la operación.
+          </span>
+          <span data-en class="hidden">
+            {sortedServices.length} focus areas with direct operational impact.
+          </span>
         </p>
       </header>
+
+      <div class="mb-6 md:mb-8">
+        <SectionLabel text="Más solicitados" textEn="Most requested" />
+      </div>
 
       <p class="mb-3 text-sm text-slate-500 md:hidden">
         <span data-es>Deslizá horizontalmente para ver todos los servicios.</span>
@@ -236,41 +228,63 @@ const servicesRow2 = sortedServices.slice(3);
       </p>
 
       <div
-        class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:w-full md:snap-none md:flex-col md:gap-0 md:overflow-visible [&::-webkit-scrollbar]:hidden"
+        class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:grid md:w-full md:snap-none md:grid-cols-2 md:gap-8 md:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
         role="region"
         aria-labelledby="services-heading"
         tabindex="0"
       >
-        <div class="flex gap-4 md:grid md:w-full md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-          {
-            servicesRow1.map((service) => (
-              <div
-                id={serviceAnchorId(service.slug)}
-                class="service-card-anchor w-[min(300px,86vw)] shrink-0 snap-start md:w-auto"
-              >
-                <ServiceCard service={serviceCardPayload(service)} />
-              </div>
-            ))
-          }
-        </div>
         {
-          servicesRow2.length > 0 && (
-            <div class="flex gap-4 bg-slate-50 px-1 py-2 md:mt-16 md:grid md:w-full md:grid-cols-2 md:gap-8 md:px-0 md:py-0 lg:grid-cols-3">
-              {servicesRow2.map((service) => (
-                <div
-                  id={serviceAnchorId(service.slug)}
-                  class="service-card-anchor w-[min(300px,86vw)] shrink-0 snap-start md:w-auto"
-                >
-                  <ServiceCard service={serviceCardPayload(service)} />
-                </div>
-              ))}
+          servicesRow1.map((service) => (
+            <div
+              id={serviceAnchorId(service.slug)}
+              class="service-card-anchor w-[min(300px,86vw)] shrink-0 md:w-auto"
+            >
+              <ServiceCard service={serviceCardPayload(service)} />
             </div>
-          )
+          ))
         }
       </div>
     </SectionWrapper>
 
-    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32" revealAlt>
+    {
+      servicesRow2.length > 0 && (
+        <SectionWrapper
+          bg="bg-slate-50"
+          tone="default"
+          padding="py-24 md:py-32"
+          revealAlt
+          revealDelayMs={altRevealDelays.catalog2}
+        >
+          <p class="mb-8 text-sm text-slate-500 md:hidden">
+            <span data-es>Deslizá para ver el resto del catálogo.</span>
+            <span data-en class="hidden">Swipe to see the rest of the catalog.</span>
+          </p>
+          <div
+            class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:grid md:w-full md:snap-none md:grid-cols-2 md:gap-8 md:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
+            role="region"
+            aria-label="Catálogo de servicios, continuación"
+            tabindex="0"
+          >
+            {servicesRow2.map((service) => (
+              <div
+                id={serviceAnchorId(service.slug)}
+                class="service-card-anchor w-[min(300px,86vw)] shrink-0 md:w-auto"
+              >
+                <ServiceCard service={serviceCardPayload(service)} />
+              </div>
+            ))}
+          </div>
+        </SectionWrapper>
+      )
+    }
+
+    <SectionWrapper
+      bg="bg-white"
+      tone="default"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.caseStudy}
+    >
       <SectionLabel text="Caso de uso" textEn="Use case" />
       <div class="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-6 md:p-8">
         <div class="mb-4 flex flex-wrap items-center gap-3">
@@ -281,7 +295,12 @@ const servicesRow2 = sortedServices.slice(3);
             <span data-es>Caso de éxito: gestión integral deportiva (Double Click™)</span>
             <span data-en class="hidden">Success story: comprehensive sports management (Double Click™)</span>
           </h2>
-          <span class="tag tag-warn text-xs" aria-label="Proyecto en curso">⚠ En curso</span>
+          <span
+            class="inline-flex items-center rounded-full border border-amber-200/90 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-900"
+          >
+            <span data-es>En curso</span>
+            <span data-en class="hidden">In progress</span>
+          </span>
         </div>
         <p class="mb-8 text-sm leading-relaxed text-slate-600">
           <span data-es
@@ -330,19 +349,31 @@ const servicesRow2 = sortedServices.slice(3);
       </div>
     </SectionWrapper>
 
-    <SectionWrapper bg="bg-slate-950" tone="dark" padding="py-24 md:py-32" revealAlt>
+    <SectionWrapper
+      bg="bg-slate-950"
+      tone="dark"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.how}
+    >
       <h2 class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl">
         <span data-es>Cómo trabajamos</span>
         <span data-en class="hidden">How we work</span>
       </h2>
       <div class="grid gap-12 md:grid-cols-3">
-        <div class="relative">
-          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">01</p>
-          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+        <div class="relative pt-1">
+          <p
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            01
+          </p>
+          <h3 class="relative z-10 mt-10 font-display text-xl font-bold text-white md:mt-12">
             <span data-es>Diagnóstico</span>
             <span data-en class="hidden">Discovery</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          <p class="mt-2 text-sm leading-relaxed text-slate-300">
             <span data-es>Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras.</span
             >
             <span data-en class="hidden"
@@ -350,24 +381,36 @@ const servicesRow2 = sortedServices.slice(3);
             >
           </p>
         </div>
-        <div class="relative">
-          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">02</p>
-          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+        <div class="relative pt-1">
+          <p
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            02
+          </p>
+          <h3 class="relative z-10 mt-10 font-display text-xl font-bold text-white md:mt-12">
             <span data-es>Propuesta y entrega</span>
             <span data-en class="hidden">Proposal &amp; delivery</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          <p class="mt-2 text-sm leading-relaxed text-slate-300">
             <span data-es>Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles.</span>
             <span data-en class="hidden">We prioritize impact, define scope and ship in visible iterations.</span>
           </p>
         </div>
-        <div class="relative">
-          <p class="font-display font-black leading-none text-orange-500/30" style="font-size: var(--text-6xl);">03</p>
-          <h3 class="relative -mt-6 font-display text-lg font-bold text-white">
+        <div class="relative pt-1">
+          <p
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            03
+          </p>
+          <h3 class="relative z-10 mt-10 font-display text-xl font-bold text-white md:mt-12">
             <span data-es>Evolución</span>
             <span data-en class="hidden">Evolution</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          <p class="mt-2 text-sm leading-relaxed text-slate-300">
             <span data-es>Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo.</span>
             <span data-en class="hidden">Measurement, improvements and support so the system keeps paying for itself.</span>
           </p>
@@ -375,27 +418,45 @@ const servicesRow2 = sortedServices.slice(3);
       </div>
     </SectionWrapper>
 
-    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32" revealAlt>
-      <FAQAccordion entries={faqEntries} ctaHref="#contacto" class="!mt-0 border-0 bg-transparent p-0" />
+    <SectionWrapper
+      bg="bg-white"
+      tone="default"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.faq}
+    >
+      <FAQAccordion
+        entries={faqEntries}
+        ctaHref="#contacto"
+        showSidebarCta={false}
+        class="!mt-0 border-0 bg-transparent p-0"
+      />
     </SectionWrapper>
 
     <div class="px-6 pb-16 md:pb-24">
       <SectionWrapper
         bg="bg-orange-600"
         tone="accent"
-        padding="py-14 md:py-16"
+        padding="py-24 md:py-32"
         maxWidth="max-w-4xl"
         class="rounded-3xl"
         innerClass="text-center"
         revealAlt
+        revealDelayMs={altRevealDelays.ctaOrange}
       >
         <h2 class="font-display text-2xl font-bold text-white md:text-3xl">
           <span data-es>¿Listo para el siguiente paso?</span>
           <span data-en class="hidden">Ready for the next step?</span>
         </h2>
-        <p class="mx-auto mt-3 max-w-lg text-sm text-white/90">
-          <span data-es>Solicitá diagnóstico gratuito o escribinos por el formulario.</span>
-          <span data-en class="hidden">Request a free diagnosis or reach us via the form.</span>
+        <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/90">
+          <span data-es
+            >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar
+            juntos. También podés escribirnos por el formulario de abajo cuando quieras.</span
+          >
+          <span data-en class="hidden"
+            >Book a free 30-minute diagnosis — we review your operations and tell you if working together makes sense.
+            You can also reach us anytime via the form below.</span
+          >
         </p>
         <div class="mt-6 flex justify-center">
           <CTAButton
@@ -408,7 +469,14 @@ const servicesRow2 = sortedServices.slice(3);
       </SectionWrapper>
     </div>
 
-    <SectionWrapper bg="bg-slate-50" tone="default" padding="py-24 md:py-32" id="contacto" revealAlt>
+    <SectionWrapper
+      bg="bg-slate-50"
+      tone="default"
+      padding="py-24 md:py-32"
+      id="contacto"
+      revealAlt
+      revealDelayMs={altRevealDelays.contact}
+    >
       <div class="section-header mb-10">
         <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
         <h2
