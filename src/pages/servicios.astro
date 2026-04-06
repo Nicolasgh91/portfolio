@@ -8,7 +8,6 @@ import SectionLabel from '../components/SectionLabel.astro';
 import PageHeroSection from '../components/PageHeroSection.astro';
 import heroServiciosDerecha from '../assets/services/hero-servicios-derecha.webp';
 import FAQAccordion from '../components/FAQAccordion.astro';
-import CTAButton from '../components/CTAButton.astro';
 import { getCollection } from 'astro:content';
 import ServiceCard from '../components/ServiceCard.astro';
 import type { CollectionEntry } from 'astro:content';
@@ -129,10 +128,10 @@ const servicesJsonLd = {
 
 const faqJsonLd = buildFaqPageJsonLd(faqEntries);
 
-/** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` según secciones visibles */
+/** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` por sección con revealDelayMs (el bloque naranja CTA no usa delay, alineado a /talento). */
 const altRevealDelays: Record<string, number> = {};
 {
-  const keys = ['catalog', 'caseStudy', 'how', 'faq', 'ctaOrange', 'contact'];
+  const keys = ['catalog', 'caseStudy', 'how', 'faq', 'contact'];
   keys.forEach((key, i) => {
     altRevealDelays[key] = Math.min(i * 100, 600);
   });
@@ -383,18 +382,17 @@ const altRevealDelays: Record<string, number> = {};
       <SectionWrapper
         bg="bg-orange-600"
         tone="accent"
-        padding="py-24 md:py-32"
-        maxWidth="max-w-4xl"
+        padding="py-16 md:py-24"
+        maxWidth="max-w-3xl"
         class="rounded-3xl"
         innerClass="text-center"
         revealAlt
-        revealDelayMs={altRevealDelays.ctaOrange}
       >
         <h2 class="font-display text-2xl font-bold text-white md:text-3xl">
           <span data-es>¿Listo para el siguiente paso?</span>
           <span data-en class="hidden">Ready for the next step?</span>
         </h2>
-        <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/90">
+        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-white/90">
           <span data-es
             >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar
             juntos. También podés escribirnos por el formulario de abajo cuando quieras.</span
@@ -404,14 +402,13 @@ const altRevealDelays: Record<string, number> = {};
             You can also reach us anytime via the form below.</span
           >
         </p>
-        <div class="mt-6 flex justify-center">
-          <CTAButton
-            href="#contacto"
-            label="Ir a contacto"
-            labelEn="Go to contact"
-            variant="inverse"
-          />
-        </div>
+        <p class="mt-8">
+          <a href="#contacto" class="btn-secondary btn-bounce">
+            <span data-es>Contactar</span>
+            <span data-en class="hidden">Contact</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </p>
       </SectionWrapper>
     </div>
 

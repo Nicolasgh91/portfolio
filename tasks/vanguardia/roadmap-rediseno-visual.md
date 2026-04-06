@@ -259,22 +259,9 @@ Los siguientes componentes nuevos se crean durante el rediseño y quedan disponi
 
 ---
 
-### 6. `<CTAButton>` — Botón primario con flecha
+### 6. CTAs con flecha — patrón en tokens (sin componente dedicado)
 
-**Props:**
-- `href`: string
-- `label`: string
-- `variant`: `"primary"` | `"secondary"` | `"inverse"` (default: `"primary"`)
-- `arrow`: boolean (default: `true`)
-
-**Variantes:**
-- `primary`: `bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-8 py-4 text-lg font-semibold`
-- `secondary`: `bg-slate-800 hover:bg-slate-700 text-white`
-- `inverse`: `bg-white text-orange-600 hover:bg-slate-50`
-
-Todas incluyen flecha SVG inline (`→`) si `arrow=true`.
-
-**Reutilización:** todas las páginas. Reemplaza los botones ad-hoc actuales con estilos inconsistentes.
+**Implementación:** `docs/componentes/btn-bounce.md` + `.btn-primary` / `.btn-secondary` en `src/styles/tokens.css`. Los cierres en bloques `tone="accent"` (p. ej. `/talento`, `/servicios`) usan **`btn-secondary btn-bounce`** y `span.arrow`, no un componente Astro aparte.
 
 ---
 
@@ -299,7 +286,6 @@ Todas incluyen flecha SVG inline (`→`) si `arrow=true`.
 | `<ProjectCard>` | ✅ | — | ✅ | — | — | — | ✅ |
 | `<LogoMarquee>` | — | — | ✅ | — | — | — | ✅ |
 | `<FAQAccordion>` | — | ✅ | — | — | ✅ | — | ✅ |
-| `<CTAButton>` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `<SectionLabel>` | ✅ | ✅ | ✅ | — | ✅ | — | ✅ |
 
 ---
@@ -355,7 +341,7 @@ Cada componente nuevo genera una entrada pareada en `docs/componentes/`:
 - `docs/componentes/ProjectCard.md`
 - `docs/componentes/LogoMarquee.md`
 - `docs/componentes/FAQAccordion.md`
-- `docs/componentes/CTAButton.md`
+- `docs/componentes/btn-bounce.md` (patrón CTA con flecha)
 - `docs/componentes/SectionLabel.md`
 
 Cualquier componente entregado sin su markdown pareado se registra como deuda técnica en `docs/deuda-tecnica.md`.
