@@ -1,0 +1,98 @@
+---
+/**
+ * Hero de página: imagen fullscreen + capas (gradiente, ruido, glow) y copy en columna única.
+ * Reutilizable en rutas que no usen el mock de dashboard de la home.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from './SectionLabel.astro';
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  imageWidth: number;
+  imageHeight: number;
+  headingId: string;
+  /** Rótulo superior (ES); si se omite label y labelEn, no hay SectionLabel. */
+  labelText?: string;
+  labelTextEn?: string;
+}
+
+const {
+  image,
+  alt,
+  imageWidth,
+  imageHeight,
+  headingId,
+  labelText,
+  labelTextEn,
+} = Astro.props;
+
+const showLabel = Boolean(labelText?.trim() || labelTextEn?.trim());
+const labelEs = (labelText ?? labelTextEn ?? '').trim();
+const labelEn = (labelTextEn ?? labelText ?? '').trim();
+---
+
+<section
+  class="section-dark relative min-h-screen overflow-hidden bg-slate-950"
+  aria-labelledby={headingId}
+>
+  <div class="pointer-events-none absolute inset-0 z-0">
+    <Image
+      src={image}
+      alt={alt}
+      width={imageWidth}
+      height={imageHeight}
+      widths={[640, 768, 1024, 1280, 1536]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      class="h-full min-h-full w-full object-cover opacity-[0.28]"
+    />
+  </div>
+  <div
+    class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/90 via-slate-950/82 to-slate-950"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[58%] bg-gradient-to-t from-slate-950 from-35% via-slate-950/92 to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-0 z-[2] opacity-[0.35] motion-reduce:hidden"
+    aria-hidden="true"
+    style="background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\");"
+  >
+  </div>
+  <div
+    class="hero-glow pointer-events-none absolute -top-28 left-1/2 z-[2] h-[400px] w-[600px] -translate-x-1/2 motion-reduce:hidden"
+    aria-hidden="true"
+    style="background: radial-gradient(ellipse, hsla(var(--accent-h), var(--accent-s), 56%, 0.12) 0%, transparent 70%);"
+  >
+  </div>
+
+  <div
+    class="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col justify-center px-6 py-16 md:py-24"
+  >
+    <div class="w-full max-w-5xl" aria-label="Propuesta de valor">
+      {
+        showLabel && (
+          <SectionLabel text={labelEs} textEn={labelEn} colorClass="text-[var(--accent-text)]" />
+        )
+      }
+      <h1
+        id={headingId}
+        class="mt-3 font-display font-extrabold tracking-tight text-white"
+        style="font-size: var(--text-5xl);"
+      >
+        <slot name="heading" />
+      </h1>
+      <div class="mt-6 max-w-5xl text-base leading-relaxed text-slate-300">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>

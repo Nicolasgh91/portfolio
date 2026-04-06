@@ -28,6 +28,7 @@ export default {
     /* LogoMarquee: nombre distinto de `scroll` para evitar colisión con CSS global */
     'animate-marqueeScroll',
     'hover:[animation-play-state:paused]',
+    'animate-bounce',
   ],
   theme: {
     extend: {

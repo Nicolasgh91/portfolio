@@ -25,7 +25,7 @@ const projects = defineCollection({
         .enum(['top', 'center', 'bottom'])
         .default('top')
         .describe(
-          'Anclaje vertical de la portada en ProjectCard (object-position): top para screenshots con cabecera reconocible; center/bottom para fotos u otros focos.',
+          'Anclaje vertical de la portada en ProjectCard (object-position desde md): top para screenshots con cabecera reconocible; center/bottom para fotos u otros focos. Por debajo de md ProjectCard fuerza crop centrado (max-md:object-center).',
         ),
     }),
 });
@@ -65,7 +65,13 @@ const services = defineCollection({
       coverImage: image()
         .optional()
         .describe(
-          'Imagen de tarjeta; ruta relativa al MDX (p. ej. ../../assets/blog/nombre.webp). Tiene prioridad sobre imageKey.',
+          'Imagen de tarjeta; ruta relativa al MDX (p. ej. ../../assets/blog/nombre.webp o ../../assets/services/nombre.webp). Tiene prioridad sobre imageKey.',
+        ),
+      tags: z
+        .array(z.string())
+        .optional()
+        .describe(
+          'Etiquetas cortas (stack / categoría) para pills en ServiceCard del catálogo /servicios; p. ej. tecnologías o verticales.',
         ),
     }),
 });

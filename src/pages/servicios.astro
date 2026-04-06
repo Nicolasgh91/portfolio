@@ -5,6 +5,8 @@ import Nav from '../components/Nav.astro';
 import ContactForm from '../components/ContactForm.astro';
 import SectionWrapper from '../components/SectionWrapper.astro';
 import SectionLabel from '../components/SectionLabel.astro';
+import PageHeroSection from '../components/PageHeroSection.astro';
+import heroServiciosDerecha from '../assets/services/hero-servicios-derecha.webp';
 import FAQAccordion from '../components/FAQAccordion.astro';
 import CTAButton from '../components/CTAButton.astro';
 import { getCollection } from 'astro:content';
@@ -105,6 +107,7 @@ function serviceCardPayload(service: CollectionEntry<'services'>) {
     price: resolved.price,
     priceUnit: resolved.priceUnit,
     pricePrefix: resolved.pricePrefix,
+    tags: service.data.tags,
   };
 }
 
@@ -126,21 +129,10 @@ const servicesJsonLd = {
 
 const faqJsonLd = buildFaqPageJsonLd(faqEntries);
 
-const servicesRow1 = sortedServices.slice(0, 3);
-const servicesRow2 = sortedServices.slice(3);
-
 /** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` según secciones visibles */
 const altRevealDelays: Record<string, number> = {};
 {
-  const keys = [
-    'catalog1',
-    ...(servicesRow2.length > 0 ? ['catalog2'] : []),
-    'caseStudy',
-    'how',
-    'faq',
-    'ctaOrange',
-    'contact',
-  ];
+  const keys = ['catalog', 'caseStudy', 'how', 'faq', 'ctaOrange', 'contact'];
   keys.forEach((key, i) => {
     altRevealDelays[key] = Math.min(i * 100, 600);
   });
@@ -149,7 +141,7 @@ const altRevealDelays: Record<string, number> = {};
 
 <Layout
   title="Servicios B2B — Nicolás Hruszczak"
-  description="Software a medida, automatización con IA y auditoría de procesos para empresas y pymes que buscan reducir costos y multiplicar resultados."
+  description="Para locales, profesionales y creadores: web y automatización a medida. Ordenamos mensajes y procesos, más ventas y tiempo recuperado, sin jerga técnica."
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
@@ -159,56 +151,53 @@ const altRevealDelays: Record<string, number> = {};
   <Nav activePage="servicios" />
 
   <main id="main-content">
-    <SectionWrapper bg="bg-white" tone="default" padding="py-24 md:py-32">
-      <div class="max-w-3xl" aria-label="Propuesta de valor">
-        <SectionLabel
-          text="Servicios para emprendedores · creadores · pymes"
-          textEn="For entrepreneurs, creators &amp; small businesses"
-        />
-        <h1
-          class="mt-3 font-display font-extrabold tracking-tight text-slate-900"
-          style="font-size: var(--text-5xl);"
+    <PageHeroSection
+      image={heroServiciosDerecha}
+      alt="Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."
+      imageWidth={1536}
+      imageHeight={1024}
+      headingId="services-hero-heading"
+      labelText="Servicios para emprendedores · creadores · pymes"
+      labelTextEn="For entrepreneurs, creators &amp; small businesses"
+    >
+      <Fragment slot="heading">
+        <span data-es
+          >Tecnología a medida para que tu negocio <em class="not-italic text-[var(--accent-text)]">crezca sin estrés</em>.</span
         >
-          <span data-es
-            >Software a medida para <em class="not-italic text-orange-600">multiplicar el ROI</em> de su negocio.</span
-          >
-          <span data-en class="hidden"
-            >Custom software to <em class="not-italic text-orange-600">multiply ROI</em> for your business.</span
-          >
-        </h1>
-        <p class="mt-6 max-w-3xl text-base leading-relaxed text-slate-600">
-          <span data-es
-            >Si estás empezando, necesitás ordenar la oferta y la conversión sin depender de diez herramientas sueltas. Si
-            creás contenido o marca personal, querés un sitio y flujos que te representen sin perder tiempo en
-            parches. Si llevás una pyme, el foco es menos fricción día a día y números que se entiendan. En los tres
-            casos ayudamos a definir qué conviene automatizar, integrar o construir a medida, con entregas claras y
-            seguimiento — sin promesas técnicas vacías.</span
-          >
-          <span data-en class="hidden"
-            >If you are starting out, you need a clear offer and conversion path without juggling ten disconnected
-            tools. If you are a creator or personal brand, you want a site and flows that represent you without endless
-            workarounds. If you run an SME, the focus is less daily friction and metrics everyone can act on. In all
-            three cases we help you decide what to automate, integrate, or build custom — with clear milestones and
-            follow-through, not empty technical promises.</span
-          >
-        </p>
-      </div>
-    </SectionWrapper>
+        <span data-en class="hidden"
+          >Tailored technology so your business can <em class="not-italic text-[var(--accent-text)]">grow without the stress</em>.</span
+        >
+      </Fragment>
+      <p>
+        <span data-es
+          >Ya sea que tengas un local comercial, ofrezcas servicios profesionales o crees contenido, <em
+            class="not-italic text-[var(--accent-text)]">diseñamos tu web y automatizamos tus procesos</em>. Convertí el
+          caos de mensajes en <em class="not-italic text-[var(--accent-text)]">ventas automáticas</em> y <em
+            class="not-italic text-[var(--accent-text)]">recuperá tu tiempo</em>.</span
+        >
+        <span data-en class="hidden"
+          >Whether you run a store, offer professional services, or create content, we <em
+            class="not-italic text-[var(--accent-text)]">design your site and automate your workflows</em>. Turn message
+          chaos into <em class="not-italic text-[var(--accent-text)]">automatic sales</em> and <em
+            class="not-italic text-[var(--accent-text)]">get your time back</em>.</span
+        >
+      </p>
+    </PageHeroSection>
 
     <SectionWrapper
-      bg="bg-white"
+      bg="bg-[var(--bg-surface-container-low)]"
       tone="default"
       padding="py-24 md:py-32"
       revealAlt
-      revealDelayMs={altRevealDelays.catalog1}
+      revealDelayMs={altRevealDelays.catalog}
     >
       <header class="mb-8 md:mb-12" aria-labelledby="services-heading">
-        <SectionLabel text="Catálogo" textEn="Catalog" />
-        <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+        <SectionLabel text="Catálogo" textEn="Catalog" colorClass="text-[var(--accent-text)]" />
+        <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
           <span data-es>Servicios</span>
           <span data-en class="hidden">Services</span>
         </h2>
-        <p class="mt-2 max-w-2xl text-sm text-slate-600">
+        <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           <span data-es>
             {sortedServices.length} ejes de intervención con impacto directo en la operación.
           </span>
@@ -219,90 +208,43 @@ const altRevealDelays: Record<string, number> = {};
       </header>
 
       <div class="mb-6 md:mb-8">
-        <SectionLabel text="Más solicitados" textEn="Most requested" />
+        <SectionLabel text="Más solicitados" textEn="Most requested" colorClass="text-[var(--accent-text)]" />
       </div>
 
-      <p class="mb-3 text-sm text-slate-500 md:hidden">
-        <span data-es>Deslizá horizontalmente para ver todos los servicios.</span>
-        <span data-en class="hidden">Swipe sideways to see all services.</span>
-      </p>
-
-      <div
-        class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:grid md:w-full md:snap-none md:grid-cols-2 md:gap-8 md:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
-        role="region"
-        aria-labelledby="services-heading"
-        tabindex="0"
-      >
+      <div class="flex flex-col gap-8 md:gap-10" role="region" aria-labelledby="services-heading">
         {
-          servicesRow1.map((service) => (
-            <div
-              id={serviceAnchorId(service.slug)}
-              class="service-card-anchor w-[min(300px,86vw)] shrink-0 md:w-auto"
-            >
-              <ServiceCard service={serviceCardPayload(service)} />
+          sortedServices.map((service, i) => (
+            <div id={serviceAnchorId(service.slug)} class="service-card-anchor">
+              <ServiceCard
+                headingId={`service-heading-${service.slug}`}
+                imageSide={i % 2 === 0 ? 'left' : 'right'}
+                service={serviceCardPayload(service)}
+              />
             </div>
           ))
         }
       </div>
     </SectionWrapper>
 
-    {
-      servicesRow2.length > 0 && (
-        <SectionWrapper
-          bg="bg-slate-50"
-          tone="default"
-          padding="py-24 md:py-32"
-          revealAlt
-          revealDelayMs={altRevealDelays.catalog2}
-        >
-          <p class="mb-8 text-sm text-slate-500 md:hidden">
-            <span data-es>Deslizá para ver el resto del catálogo.</span>
-            <span data-en class="hidden">Swipe to see the rest of the catalog.</span>
-          </p>
-          <div
-            class="flex w-max max-w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] md:grid md:w-full md:snap-none md:grid-cols-2 md:gap-8 md:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
-            role="region"
-            aria-label="Catálogo de servicios, continuación"
-            tabindex="0"
-          >
-            {servicesRow2.map((service) => (
-              <div
-                id={serviceAnchorId(service.slug)}
-                class="service-card-anchor w-[min(300px,86vw)] shrink-0 md:w-auto"
-              >
-                <ServiceCard service={serviceCardPayload(service)} />
-              </div>
-            ))}
-          </div>
-        </SectionWrapper>
-      )
-    }
-
-    <SectionWrapper
-      bg="bg-white"
-      tone="default"
-      padding="py-24 md:py-32"
-      revealAlt
-      revealDelayMs={altRevealDelays.caseStudy}
-    >
-      <SectionLabel text="Caso de uso" textEn="Use case" />
-      <div class="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-6 md:p-8">
+    <SectionWrapper tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={altRevealDelays.caseStudy}>
+      <SectionLabel text="Caso de uso" textEn="Use case" colorClass="text-[var(--accent-text)]" />
+      <div class="mt-6 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-tertiary)] p-6 md:p-8">
         <div class="mb-4 flex flex-wrap items-center gap-3">
           <h2
             id="case-heading"
-            class="font-display text-xl font-bold tracking-tight text-slate-900 md:text-2xl"
+            class="font-display text-xl font-bold tracking-tight text-[var(--text-primary)] md:text-2xl"
           >
             <span data-es>Caso de éxito: gestión integral deportiva (Double Click™)</span>
             <span data-en class="hidden">Success story: comprehensive sports management (Double Click™)</span>
           </h2>
           <span
-            class="inline-flex items-center rounded-full border border-amber-200/90 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-900"
+            class="inline-flex items-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent-text)]"
           >
             <span data-es>En curso</span>
             <span data-en class="hidden">In progress</span>
           </span>
         </div>
-        <p class="mb-8 text-sm leading-relaxed text-slate-600">
+        <p class="mb-8 text-sm leading-relaxed text-[var(--text-secondary)]">
           <span data-es
             >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de
             Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</span
@@ -314,7 +256,7 @@ const altRevealDelays: Record<string, number> = {};
         </p>
         <div class="grid gap-6 md:grid-cols-2">
           <div
-            class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500"
+            class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 text-center text-xs text-[var(--text-muted)]"
             role="img"
             aria-label="Espacio reservado para captura del dashboard de gestión"
           >
@@ -322,11 +264,11 @@ const altRevealDelays: Record<string, number> = {};
             Panel de reservas · Métricas · Clientes
           </div>
           <div class="card self-start">
-            <h3 class="mb-2 font-display text-base font-bold text-slate-900">
+            <h3 class="mb-2 font-display text-base font-bold text-[var(--text-primary)]">
               <span data-es>Resultado</span>
               <span data-en class="hidden">Result</span>
             </h3>
-            <p class="text-sm leading-relaxed text-slate-600">
+            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
               <span data-es
                 >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa.
                 Panel unificado de métricas de retención de clientes.</span
@@ -340,8 +282,11 @@ const altRevealDelays: Record<string, number> = {};
               <span class="tag">Python</span>
               <span class="tag">Next.js</span>
               <span class="tag">PostgreSQL</span>
-              <a href="#contacto" class="tag tag-accent" data-en="Request similar solution →" data-es="Solicitar solución similar →">
-                Solicitar solución similar →
+              <a href="#contacto" class="tag tag-accent btn-bounce inline-flex items-center gap-1">
+                <span data-en="Request similar solution" data-es="Solicitar solución similar"
+                  >Solicitar solución similar</span
+                >
+                <span class="arrow" aria-hidden="true">→</span>
               </a>
             </div>
           </div>
@@ -373,7 +318,7 @@ const altRevealDelays: Record<string, number> = {};
             <span data-es>Diagnóstico</span>
             <span data-en class="hidden">Discovery</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          <p class="mt-2 text-sm font-medium leading-relaxed">
             <span data-es>Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras.</span
             >
             <span data-en class="hidden"
@@ -393,7 +338,7 @@ const altRevealDelays: Record<string, number> = {};
             <span data-es>Propuesta y entrega</span>
             <span data-en class="hidden">Proposal &amp; delivery</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          <p class="mt-2 text-sm font-medium leading-relaxed">
             <span data-es>Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles.</span>
             <span data-en class="hidden">We prioritize impact, define scope and ship in visible iterations.</span>
           </p>
@@ -410,7 +355,7 @@ const altRevealDelays: Record<string, number> = {};
             <span data-es>Evolución</span>
             <span data-en class="hidden">Evolution</span>
           </h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          <p class="mt-2 text-sm font-medium leading-relaxed">
             <span data-es>Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo.</span>
             <span data-en class="hidden">Measurement, improvements and support so the system keeps paying for itself.</span>
           </p>
@@ -419,17 +364,18 @@ const altRevealDelays: Record<string, number> = {};
     </SectionWrapper>
 
     <SectionWrapper
-      bg="bg-white"
-      tone="default"
+      bg="bg-slate-950"
+      tone="dark"
       padding="py-24 md:py-32"
       revealAlt
       revealDelayMs={altRevealDelays.faq}
     >
       <FAQAccordion
+        variant="darkBand"
         entries={faqEntries}
         ctaHref="#contacto"
         showSidebarCta={false}
-        class="!mt-0 border-0 bg-transparent p-0"
+        class="!mt-0"
       />
     </SectionWrapper>
 
@@ -470,7 +416,7 @@ const altRevealDelays: Record<string, number> = {};
     </div>
 
     <SectionWrapper
-      bg="bg-slate-50"
+      bg="bg-[var(--bg-secondary)]"
       tone="default"
       padding="py-24 md:py-32"
       id="contacto"
@@ -481,7 +427,7 @@ const altRevealDelays: Record<string, number> = {};
         <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
         <h2
           id="contact-heading"
-          class="font-display text-2xl font-bold text-slate-900 md:text-3xl"
+          class="font-display text-2xl font-bold text-[var(--text-primary)] md:text-3xl"
           data-en="Let's evaluate your challenge"
           data-es="Evaluemos su desafío"
         >

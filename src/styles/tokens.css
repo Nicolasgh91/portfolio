@@ -75,6 +75,9 @@
   --bg-tertiary:      hsl(240, 11%, 12%);
   --bg-card:          hsla(240, 13%, 10%, 0.6);
   --bg-tag:           hsl(240, 12%, 14%);
+  /* Franjas / tarjetas con jerarquía tonal (p. ej. catálogo /servicios); ver ADR-003 */
+  --bg-surface-container-low:    var(--bg-secondary);
+  --bg-surface-container-lowest: var(--bg-primary);
 
   --text-primary:     hsl(240, 11%, 96%);
   --text-secondary:   hsl(240, 9%, 60%);
@@ -178,6 +181,8 @@
   --bg-tertiary:      hsl(60, 11%, 91%);
   --bg-card:          hsla(0, 0%, 100%, 0.7);
   --bg-tag:           hsl(60, 11%, 91%);
+  --bg-surface-container-low:    var(--bg-tertiary);
+  --bg-surface-container-lowest: var(--bg-secondary);
 
   --text-primary:     hsl(240, 10%, 6%);
   --text-secondary:   hsl(240, 9%, 32%);
@@ -549,6 +554,64 @@ html.light .catalog-carousel__nav {
     --card-project-min-h-md: 450px;
   }
 
+  /**
+   * ServiceCard (/servicios): en claro fondo opaco --bg-surface-container-lowest;
+   * en tema oscuro (sin clase `light` en html) vidrio con --bg-card + blur.
+   * No usar utilidades Tailwind `dark:` para esto: `html` mantiene `class="dark"` siempre.
+   */
+  .service-card-shell-bg {
+    background-color: var(--bg-surface-container-lowest);
+  }
+  :root:not(.light) .service-card-shell-bg {
+    background-color: var(--bg-card);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  /**
+   * Hover en tarjetas con shell: composable con .service-card-shell-bg (mismo nodo).
+   * Claro: --bg-tertiary. Oscuro: velado blanco sobre vidrio (contraste vs. hover con --bg-tertiary).
+   */
+  .shell-hover {
+    transition: background-color 200ms ease;
+  }
+  :root.light .shell-hover:hover {
+    background-color: var(--bg-tertiary);
+  }
+  :root:not(.light) .shell-hover:hover {
+    background-color: hsla(0, 0%, 100%, 0.1);
+  }
+
+  /**
+   * LogoMarquee (/talento): franja contenida en `.page-container`; fondo acento; texto/iconos
+   * con `currentColor` → `--color-on-accent` (mismo criterio que botón primario sobre acento).
+   */
+  .logo-marquee--accent {
+    background-color: hsl(var(--accent-h), var(--accent-s), 56%);
+    color: var(--color-on-accent);
+  }
+  html.light .logo-marquee--accent {
+    background-color: var(--color-accent-600);
+    color: var(--color-on-accent);
+  }
+  /* `p { color: text-secondary }` global anula herencia; los rótulos deben seguir el on-accent */
+  .logo-marquee--accent p {
+    color: inherit;
+  }
+  .logo-marquee__slot {
+    display: inline-flex;
+    height: 2.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    opacity: 0.92;
+  }
+  .logo-marquee__slot :is(svg) {
+    display: block;
+    height: 2rem;
+    max-height: 2rem;
+    width: auto;
+  }
+
   /*
    * Bloques de color fijo (color blocking): no heredan inversión de html.dark / :root.light.
    * Usar junto con bg-slate-950 / bg-orange-600 (Tailwind) en el mismo elemento o wrapper.
@@ -563,7 +626,7 @@ html.light .catalog-carousel__nav {
     color: hsl(240, 11%, 96%);
   }
   .section-dark p {
-    color: hsl(215, 20%, 75%);
+    color: hsl(215, 16%, 82%);
   }
 
   .section-accent,

@@ -22,6 +22,8 @@ interface Props {
   external?: boolean;
   coverPosition?: CoverPosition;
   direction?: Direction;
+  /** Etiquetas de stack (colección `projects.tags`); pills bajo la descripción. */
+  tags?: string[];
 }
 
 const {
@@ -38,18 +40,21 @@ const {
   external = false,
   coverPosition = 'top',
   direction = 'left',
+  tags = [],
 } = Astro.props;
 
 const linkAttrs = external
   ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
   : {};
 
-const objectPositionClass =
+/** Móvil: crop centrado (viewport alto + asset panorámico). Desktop: según frontmatter. */
+const objectPositionMobileClass = 'max-md:object-center';
+const objectPositionDesktopClass =
   coverPosition === 'center'
-    ? 'object-center'
+    ? 'md:object-center'
     : coverPosition === 'bottom'
-      ? 'object-bottom'
-      : 'object-top';
+      ? 'md:object-bottom'
+      : 'md:object-top';
 
 const gradientMobile =
   'linear-gradient(to top, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.6) 50%, transparent 100%)';
@@ -65,8 +70,8 @@ const alignClass =
 
 const badgeClass =
   badgeVariant === 'live'
-    ? 'rounded-full bg-[rgba(74,222,128,0.15)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#4ade80]'
-    : 'rounded-full bg-[rgba(234,179,8,0.15)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#eab308]';
+    ? 'rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-success)]'
+    : 'rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#eab308]';
 ---
 
 <article
@@ -85,7 +90,8 @@ const badgeClass =
         decoding="async"
         class:list={[
           'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100',
-          objectPositionClass,
+          objectPositionMobileClass,
+          objectPositionDesktopClass,
         ]}
       />
     ) : (
@@ -127,6 +133,19 @@ const badgeClass =
       <span data-es>{description}</span>
       <span data-en class="hidden">{descriptionEn}</span>
     </p>
+    {
+      tags.length > 0 && (
+        <ul class="project-card__tags mt-3 flex list-none flex-wrap gap-2 p-0" role="list">
+          {tags.map((t) => (
+            <li>
+              <span class="project-card__tag inline-block rounded-md bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-2 py-0.5 text-[10px] font-medium text-[var(--accent-text)]">
+                {t}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
     <span
       class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white"
       aria-hidden="true"

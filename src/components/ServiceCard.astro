@@ -1,7 +1,7 @@
 ---
 /**
- * Tarjeta catálogo servicios (RD-2): ratio ~4:5, imagen ~60 % arriba, label + título + CTA.
- * Tema claro sobre filas white / slate-50; sin borde duro (sombra suave + hover).
+ * Catálogo /servicios — Alternativa C: fila apilada, barra de acento izquierda,
+ * zig-zag en md+, esquinas asimétricas en la imagen y pills de stack.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -10,7 +10,12 @@ import cloudServers from '../assets/blog/cloud-servers.webp';
 import satellite from '../assets/blog/satellite.webp';
 import site from '../data/site.json';
 
+type ImageSide = 'left' | 'right';
+
 interface Props {
+  /** `id` del `<h3>` para `aria-labelledby` del overlay o enlace principal. */
+  headingId: string;
+  imageSide?: ImageSide;
   service: {
     title: string;
     titleEn?: string;
@@ -25,13 +30,16 @@ interface Props {
     price?: string;
     priceUnit?: string;
     pricePrefix?: string;
+    tags?: string[];
   };
 }
 
-const { service } = Astro.props;
+const { service, headingId, imageSide = 'left' } = Astro.props;
 const pricePrefix = service.pricePrefix ?? '$';
 const inquire = service.price === 'Consultar';
 const whatsappHref = site.author?.whatsapp;
+const tags = service.tags ?? [];
+const overlayTags = tags.slice(0, 2);
 
 const imageMap = {
   'human-ai': humanAi,
@@ -40,14 +48,27 @@ const imageMap = {
 } as const;
 
 const imageSrc = service.coverImage ?? (service.imageKey ? imageMap[service.imageKey] : humanAi);
-const imageSizes =
-  '(min-width: 1024px) 32vw, (min-width: 768px) 45vw, min(86vw, 300px)';
+const imageSizes = '(min-width: 1024px) 560px, (min-width: 768px) 45vw, 100vw';
 
 const isFullCardLink = !inquire && Boolean(service.href);
 const linkHref = service.href ?? undefined;
 
 const shellClass =
-  'group relative flex aspect-[4/5] w-full shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm motion-reduce:transition-none focus-within:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500';
+  'group/card service-card-shell-bg relative overflow-hidden rounded-2xl border border-[var(--border-strong)] will-change-transform transition-all duration-200 ease-out shadow-md hover:shadow-lg border-l-4 border-l-[var(--color-accent-600)] focus-within:shadow-lg motion-reduce:will-change-auto motion-reduce:transition-none motion-reduce:hover:shadow-md';
+
+const rowClass =
+  imageSide === 'right'
+    ? 'flex min-h-0 w-full flex-col md:flex-row-reverse'
+    : 'flex min-h-0 w-full flex-col md:flex-row';
+
+const imgWrapClass =
+  imageSide === 'left'
+    ? 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tl-3xl md:rounded-bl-3xl'
+    : 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tr-3xl md:rounded-br-3xl';
+
+const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
+  ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
+  : {};
 ---
 
 {inquire ? (
@@ -55,21 +76,30 @@ const shellClass =
     {service.href ? (
       <a
         href={service.href}
-        class="flex min-h-0 flex-1 flex-col no-underline outline-none"
+        class:list={[rowClass, 'no-underline outline-none']}
         aria-label={service.title}
       >
-        <div class="relative min-h-0 flex-[3] basis-0 overflow-hidden bg-slate-100" aria-hidden="true">
+        <div class={imgWrapClass} aria-hidden="true">
           <Image
             src={imageSrc}
             alt=""
-            width={800}
-            height={1000}
-            widths={[400, 560, 800]}
+            width={1200}
+            height={800}
+            widths={[480, 720, 960, 1200]}
             sizes={imageSizes}
             loading="lazy"
             decoding="async"
-            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
           />
+          {overlayTags.length > 0 && (
+            <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+              {overlayTags.map((t) => (
+                <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
           {service.featured && (
             <span
               class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
@@ -80,20 +110,21 @@ const shellClass =
             </span>
           )}
         </div>
-        <div class="flex min-h-0 flex-[2] basis-0 flex-col gap-2 border-t border-slate-100 p-5">
-          <p class="text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors duration-300 group-hover:text-orange-600">
+        <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
             <span data-es>Servicio</span>
             <span data-en class="hidden">Service</span>
           </p>
           <h3
-            class="font-display text-xl font-semibold leading-tight tracking-tight text-slate-900 md:text-2xl"
+            id={headingId}
+            class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
             data-en={service.titleEn ?? service.title}
             data-es={service.title}
           >
             {service.title}
           </h3>
           <p
-            class="line-clamp-2 text-sm leading-relaxed text-slate-600"
+            class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
             data-en={service.shortDescriptionEn ?? service.shortDescription}
             data-es={service.shortDescription}
           >
@@ -101,96 +132,127 @@ const shellClass =
           </p>
           {(service.roiFocus || service.roiFocusEn) && (
             <p
-              class="line-clamp-2 text-xs leading-relaxed text-slate-500"
+              class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
               data-en={service.roiFocusEn ?? service.roiFocus}
               data-es={service.roiFocus ?? service.roiFocusEn}
             >
               {service.roiFocus ?? service.roiFocusEn}
             </p>
           )}
-          <span class="mt-auto inline-flex items-center gap-1 pt-1 text-sm font-semibold text-orange-600">
+          {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
+              {tags.map((t) => (
+                <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+          <span class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]">
             <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="shrink-0"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
+            <span class="arrow" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="shrink-0"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
           </span>
         </div>
       </a>
     ) : (
       <>
-        <div class="relative min-h-0 flex-[3] basis-0 overflow-hidden bg-slate-100" aria-hidden="true">
-          <Image
-            src={imageSrc}
-            alt=""
-            width={800}
-            height={1000}
-            widths={[400, 560, 800]}
-            sizes={imageSizes}
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-          />
-          {service.featured && (
-            <span
-              class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-              data-en="Most chosen"
-              data-es="Más elegido"
-            >
-              Más elegido
-            </span>
-          )}
-        </div>
-        <div class="flex min-h-0 flex-[2] basis-0 flex-col gap-2 border-t border-slate-100 p-5">
-          <p class="text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors duration-300 group-hover:text-orange-600">
-            <span data-es>Servicio</span>
-            <span data-en class="hidden">Service</span>
-          </p>
-          <h3
-            class="font-display text-xl font-semibold leading-tight tracking-tight text-slate-900 md:text-2xl"
-            data-en={service.titleEn ?? service.title}
-            data-es={service.title}
-          >
-            {service.title}
-          </h3>
-          <p
-            class="line-clamp-2 text-sm leading-relaxed text-slate-600"
-            data-en={service.shortDescriptionEn ?? service.shortDescription}
-            data-es={service.shortDescription}
-          >
-            {service.shortDescription}
-          </p>
-          {(service.roiFocus || service.roiFocusEn) && (
-            <p
-              class="line-clamp-2 text-xs leading-relaxed text-slate-500"
-              data-en={service.roiFocusEn ?? service.roiFocus}
-              data-es={service.roiFocus ?? service.roiFocusEn}
-            >
-              {service.roiFocus ?? service.roiFocusEn}
+        <div class={rowClass}>
+          <div class={imgWrapClass} aria-hidden="true">
+            <Image
+              src={imageSrc}
+              alt=""
+              width={1200}
+              height={800}
+              widths={[480, 720, 960, 1200]}
+              sizes={imageSizes}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
+            />
+            {overlayTags.length > 0 && (
+              <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+                {overlayTags.map((t) => (
+                  <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+            {service.featured && (
+              <span
+                class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
+                data-en="Most chosen"
+                data-es="Más elegido"
+              >
+                Más elegido
+              </span>
+            )}
+          </div>
+          <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
+            <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+              <span data-es>Servicio</span>
+              <span data-en class="hidden">Service</span>
             </p>
-          )}
+            <h3
+              id={headingId}
+              class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
+              data-en={service.titleEn ?? service.title}
+              data-es={service.title}
+            >
+              {service.title}
+            </h3>
+            <p
+              class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
+              data-en={service.shortDescriptionEn ?? service.shortDescription}
+              data-es={service.shortDescription}
+            >
+              {service.shortDescription}
+            </p>
+            {(service.roiFocus || service.roiFocusEn) && (
+              <p
+                class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
+                data-en={service.roiFocusEn ?? service.roiFocus}
+                data-es={service.roiFocus ?? service.roiFocusEn}
+              >
+                {service.roiFocus ?? service.roiFocusEn}
+              </p>
+            )}
+            {tags.length > 0 && (
+              <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
+                {tags.map((t) => (
+                  <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </>
     )}
 
     <div
-      class="mt-auto flex flex-shrink-0 flex-wrap gap-3 border-t border-slate-100 px-5 py-4"
+      class="relative z-20 flex flex-shrink-0 flex-wrap gap-3 border-t border-[var(--border-normal)] bg-[var(--bg-surface-container-low)] px-6 py-4 md:px-8"
       role="group"
       aria-label="Contacto comercial"
     >
       <a
         href="#contacto"
-        class="text-sm font-semibold text-orange-600 underline-offset-2 hover:underline"
+        class="text-sm font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
         data-en="Request pricing"
         data-es="Consultar precio"
       >
@@ -199,7 +261,7 @@ const shellClass =
       {whatsappHref && (
         <a
           href={whatsappHref}
-          class="text-sm font-medium text-slate-600 underline-offset-2 hover:text-slate-900 hover:underline"
+          class="text-sm font-medium text-[var(--text-secondary)] underline-offset-2 hover:text-[var(--text-primary)] hover:underline"
           target="_blank"
           rel="noopener noreferrer"
           data-en="WhatsApp"
@@ -211,166 +273,216 @@ const shellClass =
     </div>
   </div>
 ) : isFullCardLink ? (
-  <a href={linkHref} class:list={[shellClass, 'no-underline']} aria-label={service.title}>
-    <div class="relative min-h-0 flex-[3] basis-0 overflow-hidden bg-slate-100" aria-hidden="true">
-      <Image
-        src={imageSrc}
-        alt=""
-        width={800}
-        height={1000}
-        widths={[400, 560, 800]}
-        sizes={imageSizes}
-        loading="lazy"
-        decoding="async"
-        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-      />
-      {service.featured && (
-        <span
-          class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-          data-en="Most chosen"
-          data-es="Más elegido"
-        >
-          Más elegido
-        </span>
-      )}
-    </div>
-    <div class="flex min-h-0 flex-[2] basis-0 flex-col gap-2 border-t border-slate-100 p-5">
-      <p class="text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors duration-300 group-hover:text-orange-600">
-        <span data-es>Servicio</span>
-        <span data-en class="hidden">Service</span>
-      </p>
-      <h3
-        class="font-display text-xl font-semibold leading-tight tracking-tight text-slate-900 md:text-2xl"
-        data-en={service.titleEn ?? service.title}
-        data-es={service.title}
-      >
-        {service.title}
-      </h3>
-      <p
-        class="line-clamp-2 text-sm leading-relaxed text-slate-600"
-        data-en={service.shortDescriptionEn ?? service.shortDescription}
-        data-es={service.shortDescription}
-      >
-        {service.shortDescription}
-      </p>
-      {(service.roiFocus || service.roiFocusEn) && (
-        <p
-          class="line-clamp-2 text-xs leading-relaxed text-slate-500"
-          data-en={service.roiFocusEn ?? service.roiFocus}
-          data-es={service.roiFocus ?? service.roiFocusEn}
-        >
-          {service.roiFocus ?? service.roiFocusEn}
-        </p>
-      )}
-      {service.price && (
-        <div class="mt-1">
-          <span
-            class="text-[10px] font-semibold uppercase tracking-wider text-slate-400"
-            data-en="From"
-            data-es="Desde"
-          >
-            Desde
-          </span>
-          <div class="flex items-baseline gap-1">
-            <span class="font-display text-lg font-bold text-orange-600">
-              {pricePrefix}{service.price}
-            </span>
-            {service.priceUnit && (
-              <span class="text-xs font-medium text-slate-500">{service.priceUnit}</span>
-            )}
+  <article class={shellClass}>
+    <div class:list={[rowClass, 'relative z-0']}>
+      <div class={imgWrapClass} aria-hidden="true">
+        <Image
+          src={imageSrc}
+          alt=""
+          width={1200}
+          height={800}
+          widths={[480, 720, 960, 1200]}
+          sizes={imageSizes}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
+        />
+        {overlayTags.length > 0 && (
+          <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+            {overlayTags.map((t) => (
+              <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                {t}
+              </span>
+            ))}
           </div>
-        </div>
-      )}
-      <span class="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-semibold text-orange-600">
-        <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="shrink-0"
-          aria-hidden="true"
+        )}
+        {service.featured && (
+          <span
+            class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
+            data-en="Most chosen"
+            data-es="Más elegido"
+          >
+            Más elegido
+          </span>
+        )}
+      </div>
+      <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+          <span data-es>Servicio</span>
+          <span data-en class="hidden">Service</span>
+        </p>
+        <h3
+          id={headingId}
+          class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
+          data-en={service.titleEn ?? service.title}
+          data-es={service.title}
         >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </span>
+          {service.title}
+        </h3>
+        <p
+          class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
+          data-en={service.shortDescriptionEn ?? service.shortDescription}
+          data-es={service.shortDescription}
+        >
+          {service.shortDescription}
+        </p>
+        {(service.roiFocus || service.roiFocusEn) && (
+          <p
+            class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
+            data-en={service.roiFocusEn ?? service.roiFocus}
+            data-es={service.roiFocus ?? service.roiFocusEn}
+          >
+            {service.roiFocus ?? service.roiFocusEn}
+          </p>
+        )}
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
+            {tags.map((t) => (
+              <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+        {service.price && (
+          <div class="mt-1">
+            <span
+              class="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+              data-en="From"
+              data-es="Desde"
+            >
+              Desde
+            </span>
+            <div class="flex items-baseline gap-1">
+              <span class="font-display text-lg font-bold text-[var(--accent)]">
+                {pricePrefix}{service.price}
+              </span>
+              {service.priceUnit && (
+                <span class="text-xs font-medium text-[var(--text-muted)]">{service.priceUnit}</span>
+              )}
+            </div>
+          </div>
+        )}
+        <span class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]">
+          <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
+          <span class="arrow" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="shrink-0"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </span>
+      </div>
     </div>
-  </a>
+    <a
+      href={linkHref}
+      class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+      aria-labelledby={headingId}
+      {...linkAttrs}
+    >
+    </a>
+  </article>
 ) : (
   <div class={shellClass}>
-    <div class="relative min-h-0 flex-[3] basis-0 overflow-hidden bg-slate-100" aria-hidden="true">
-      <Image
-        src={imageSrc}
-        alt=""
-        width={800}
-        height={1000}
-        widths={[400, 560, 800]}
-        sizes={imageSizes}
-        loading="lazy"
-        decoding="async"
-        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-      />
-      {service.featured && (
-        <span
-          class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-          data-en="Most chosen"
-          data-es="Más elegido"
-        >
-          Más elegido
-        </span>
-      )}
-    </div>
-    <div class="flex min-h-0 flex-[2] basis-0 flex-col gap-2 border-t border-slate-100 p-5">
-      <p class="text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors duration-300 group-hover:text-orange-600">
-        <span data-es>Servicio</span>
-        <span data-en class="hidden">Service</span>
-      </p>
-      <h3
-        class="font-display text-xl font-semibold leading-tight tracking-tight text-slate-900 md:text-2xl"
-        data-en={service.titleEn ?? service.title}
-        data-es={service.title}
-      >
-        {service.title}
-      </h3>
-      <p
-        class="line-clamp-2 text-sm leading-relaxed text-slate-600"
-        data-en={service.shortDescriptionEn ?? service.shortDescription}
-        data-es={service.shortDescription}
-      >
-        {service.shortDescription}
-      </p>
-      {(service.roiFocus || service.roiFocusEn) && (
-        <p
-          class="line-clamp-2 text-xs leading-relaxed text-slate-500"
-          data-en={service.roiFocusEn ?? service.roiFocus}
-          data-es={service.roiFocus ?? service.roiFocusEn}
-        >
-          {service.roiFocus ?? service.roiFocusEn}
-        </p>
-      )}
-      {service.price && (
-        <div class="mt-1">
-          <span
-            class="text-[10px] font-semibold uppercase tracking-wider text-slate-400"
-            data-en="From"
-            data-es="Desde"
-          >
-            Desde
-          </span>
-          <div class="flex items-baseline gap-1">
-            <span class="font-display text-lg font-bold text-orange-600">
-              {pricePrefix}{service.price}
-            </span>
-            {service.priceUnit && (
-              <span class="text-xs font-medium text-slate-500">{service.priceUnit}</span>
-            )}
+    <div class={rowClass}>
+      <div class={imgWrapClass} aria-hidden="true">
+        <Image
+          src={imageSrc}
+          alt=""
+          width={1200}
+          height={800}
+          widths={[480, 720, 960, 1200]}
+          sizes={imageSizes}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
+        />
+        {overlayTags.length > 0 && (
+          <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+            {overlayTags.map((t) => (
+              <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                {t}
+              </span>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+        {service.featured && (
+          <span
+            class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
+            data-en="Most chosen"
+            data-es="Más elegido"
+          >
+            Más elegido
+          </span>
+        )}
+      </div>
+      <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+          <span data-es>Servicio</span>
+          <span data-en class="hidden">Service</span>
+        </p>
+        <h3
+          id={headingId}
+          class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
+          data-en={service.titleEn ?? service.title}
+          data-es={service.title}
+        >
+          {service.title}
+        </h3>
+        <p
+          class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
+          data-en={service.shortDescriptionEn ?? service.shortDescription}
+          data-es={service.shortDescription}
+        >
+          {service.shortDescription}
+        </p>
+        {(service.roiFocus || service.roiFocusEn) && (
+          <p
+            class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
+            data-en={service.roiFocusEn ?? service.roiFocus}
+            data-es={service.roiFocus ?? service.roiFocusEn}
+          >
+            {service.roiFocus ?? service.roiFocusEn}
+          </p>
+        )}
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
+            {tags.map((t) => (
+              <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+        {service.price && (
+          <div class="mt-1">
+            <span
+              class="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+              data-en="From"
+              data-es="Desde"
+            >
+              Desde
+            </span>
+            <div class="flex items-baseline gap-1">
+              <span class="font-display text-lg font-bold text-[var(--accent)]">
+                {pricePrefix}{service.price}
+              </span>
+              {service.priceUnit && (
+                <span class="text-xs font-medium text-[var(--text-muted)]">{service.priceUnit}</span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )}

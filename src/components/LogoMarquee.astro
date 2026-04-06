@@ -24,18 +24,25 @@ const logoSvgs = [
   nodejsSvg,
 ] as const;
 
-const logoSlotClass =
-  'inline-flex h-10 shrink-0 items-center text-white/80 grayscale brightness-[2] contrast-125 [&>svg]:block [&>svg]:h-8 [&>svg]:max-h-8 [&>svg]:w-auto';
+const logoSlotClass = 'logo-marquee__slot';
 ---
 
-<div class="section-dark overflow-hidden bg-slate-950 py-16">
-  <p class="mb-8 text-center text-xs font-bold uppercase tracking-widest text-slate-500">
-    <span data-es>Stack y herramientas</span>
-    <span data-en class="hidden">Stack &amp; tools</span>
-  </p>
+<div
+  class="logo-marquee--accent overflow-hidden rounded-2xl px-5 py-10 md:px-8 md:py-16"
+>
+  <div class="mx-auto mb-8 flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between md:mb-10">
+    <p class="text-center text-xs font-bold uppercase tracking-widest sm:text-left">
+      <span data-es>Stack y herramientas</span>
+      <span data-en class="hidden">Stack &amp; tools</span>
+    </p>
+    <p class="text-center text-[0.65rem] font-bold uppercase tracking-[0.2em] sm:text-right">
+      <span data-es>Stack principal</span>
+      <span data-en class="hidden">Core stack</span>
+    </p>
+  </div>
 
   <ul
-    class="hidden list-none flex-wrap items-center justify-center gap-x-12 gap-y-8 px-4 motion-reduce:flex"
+    class="hidden list-none flex-wrap items-center justify-center gap-x-12 gap-y-8 motion-reduce:flex"
     aria-label="Stack y herramientas"
   >
     {
@@ -50,7 +57,7 @@ const logoSlotClass =
     aria-hidden="true"
   >
     {
-      [0, 1].map((copy) => (
+      [0, 1].map(() => (
         <div class="flex shrink-0 items-center gap-12 pr-12 md:gap-16 md:pr-16">
           {logoSvgs.map((svg) => (
             <span class={logoSlotClass} set:html={svg} />
