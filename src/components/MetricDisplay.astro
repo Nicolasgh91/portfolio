@@ -6,7 +6,7 @@ interface Props {
   valueColorClass?: string;
 }
 
-const { value, label, labelEn, valueColorClass = 'text-orange-500' } = Astro.props;
+const { value, label, labelEn, valueColorClass = 'text-[var(--accent)]' } = Astro.props;
 ---
 
 <div class="text-center">
@@ -17,7 +17,7 @@ const { value, label, labelEn, valueColorClass = 'text-orange-500' } = Astro.pro
     {value}
   </p>
   <p
-    class="mt-2 text-sm font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400"
+    class="mt-2 text-sm font-medium uppercase tracking-wider text-[var(--text-secondary)]"
   >
     <span data-es>{label}</span>
     <span data-en class="hidden">{labelEn}</span>

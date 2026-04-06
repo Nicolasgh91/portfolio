@@ -108,10 +108,10 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
       type="submit"
       class="btn-primary btn-primary--lg w-full"
       id="submit-btn"
-      data-en="Evaluate my company's potential"
-      data-es="Evaluar el potencial de mi empresa"
+      data-en="Send inquiry"
+      data-es="Enviar consulta"
     >
-      Evaluar el potencial de mi empresa
+      Enviar consulta
     </button>
   </form>
 </div>
@@ -360,8 +360,8 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = isEN
-        ? (submitBtn.dataset.en ?? 'Evaluate my company\'s potential')
-        : (submitBtn.dataset.es ?? 'Evaluar el potencial de mi empresa');
+        ? (submitBtn.dataset.en ?? 'Send inquiry')
+        : (submitBtn.dataset.es ?? 'Enviar consulta');
     }
   });
 </script>

@@ -25,17 +25,21 @@ export default {
     'translate-y-0',
     'transition-all',
     'duration-700',
+    /* LogoMarquee: nombre distinto de `scroll` para evitar colisión con CSS global */
+    'animate-marqueeScroll',
+    'hover:[animation-play-state:paused]',
+    'animate-bounce',
   ],
   theme: {
     extend: {
       keyframes: {
-        scroll: {
+        marqueeScroll: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
       },
       animation: {
-        scroll: 'scroll 30s linear infinite',
+        marqueeScroll: 'marqueeScroll 30s linear infinite',
       },
     },
   },

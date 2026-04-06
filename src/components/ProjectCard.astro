@@ -2,17 +2,28 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
+type CoverPosition = 'top' | 'center' | 'bottom';
+type Direction = 'left' | 'right';
+type BadgeVariant = 'live' | 'in-progress';
+
 interface Props {
   title: string;
   titleEn: string;
   description: string;
   descriptionEn: string;
+  /** `id` del `<h3>` para `aria-labelledby` del overlay; evitar colisión con otros `id` de la página (p. ej. `project-card-${slug}`). */
+  headingId: string;
   image?: ImageMetadata;
   href: string;
   badge?: string;
   badgeEn?: string;
-  span?: 1 | 2;
+  /** Solo aplica si hay `badge`; default `in-progress` (amarillo). */
+  badgeVariant?: BadgeVariant;
   external?: boolean;
+  coverPosition?: CoverPosition;
+  direction?: Direction;
+  /** Etiquetas de stack (colección `projects.tags`); pills bajo la descripción. */
+  tags?: string[];
 }
 
 const {
@@ -20,76 +31,134 @@ const {
   titleEn,
   description,
   descriptionEn,
+  headingId,
   image,
   href,
   badge,
   badgeEn,
-  span = 1,
+  badgeVariant = 'in-progress',
   external = false,
+  coverPosition = 'top',
+  direction = 'left',
+  tags = [],
 } = Astro.props;
 
-const spanClass = span === 2 ? 'md:col-span-2' : '';
 const linkAttrs = external
   ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
   : {};
+
+/** Móvil: crop centrado (viewport alto + asset panorámico). Desktop: según frontmatter. */
+const objectPositionMobileClass = 'max-md:object-center';
+const objectPositionDesktopClass =
+  coverPosition === 'center'
+    ? 'md:object-center'
+    : coverPosition === 'bottom'
+      ? 'md:object-bottom'
+      : 'md:object-top';
+
+const gradientMobile =
+  'linear-gradient(to top, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.6) 50%, transparent 100%)';
+const gradientLeft =
+  'linear-gradient(to right, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.7) 35%, rgba(10,10,15,0.2) 60%, transparent 100%)';
+const gradientRight =
+  'linear-gradient(to left, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.7) 35%, rgba(10,10,15,0.2) 60%, transparent 100%)';
+
+const gradientDesktop = direction === 'right' ? gradientRight : gradientLeft;
+
+const alignClass =
+  direction === 'right' ? 'items-end text-right ml-auto' : 'items-start text-left';
+
+const badgeClass =
+  badgeVariant === 'live'
+    ? 'rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-success)]'
+    : 'rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#eab308]';
 ---
 
 <article
-  class:list={[
-    'group relative min-h-[min(22rem,70vw)] overflow-hidden rounded-2xl md:min-h-[20rem]',
-    spanClass,
-  ]}
+  class="group/card relative min-h-[var(--card-project-min-h)] overflow-hidden rounded-2xl md:min-h-[var(--card-project-min-h-md)]"
 >
-  {image ? (
-    <Image
-      src={image}
-      alt=""
-      width={1200}
-      height={800}
-      loading="lazy"
-      decoding="async"
-      class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-    />
-  ) : (
-    <div
-      class="section-dark absolute inset-0 flex items-center justify-center bg-slate-800 px-6"
-      aria-hidden="true"
-    >
-      <p
-        class="text-center font-display font-bold leading-tight text-white"
-        style="font-size: var(--text-4xl);"
-      >
-        {title}
-      </p>
-    </div>
-  )}
+  {
+    image ? (
+      <Image
+        src={image}
+        alt=""
+        width={1920}
+        height={823}
+        widths={[640, 960, 1280, 1920]}
+        sizes="(min-width: 1280px) 1280px, 100vw"
+        loading="lazy"
+        decoding="async"
+        class:list={[
+          'absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100',
+          objectPositionMobileClass,
+          objectPositionDesktopClass,
+        ]}
+      />
+    ) : (
+      <div class="absolute inset-0 bg-[var(--bg-secondary)]" aria-hidden="true" />
+    )
+  }
   <div
-    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent transition-opacity duration-500 group-hover:from-slate-950/80"
+    class="pointer-events-none absolute inset-0 md:hidden"
+    style={`background: ${gradientMobile}`}
     aria-hidden="true"
   >
   </div>
-  <div class="relative flex h-full min-h-[min(22rem,70vw)] flex-col justify-end p-6 md:min-h-[20rem] md:p-8">
-    {badge && (
-      <span
-        class="mb-3 inline-flex w-fit rounded-full bg-orange-500/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-      >
-        <span data-es>{badge}</span>
-        <span data-en class="hidden">{badgeEn ?? badge}</span>
-      </span>
-    )}
-    <h3 class="font-display text-xl font-bold text-white md:text-2xl">
+  <div
+    class="pointer-events-none absolute inset-0 hidden md:block"
+    style={`background: ${gradientDesktop}`}
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class:list={[
+      'relative z-[1] flex w-full max-w-full flex-col justify-end p-8 md:max-w-[50%] md:justify-center md:p-10',
+      'min-h-[var(--card-project-min-h)] md:min-h-[var(--card-project-min-h-md)]',
+      alignClass,
+    ]}
+  >
+    {
+      badge && (
+        <span class:list={['mb-3 inline-flex w-fit', badgeClass]}>
+          <span data-es>{badge}</span>
+          <span data-en class="hidden">{badgeEn ?? badge}</span>
+        </span>
+      )
+    }
+    <h3 id={headingId} class="font-display text-xl font-medium text-white md:text-2xl">
       <span data-es>{title}</span>
       <span data-en class="hidden">{titleEn}</span>
     </h3>
-    <p class="mt-2 max-w-prose text-sm leading-relaxed text-slate-200">
+    <p class="mt-2 max-w-prose text-sm font-normal leading-relaxed text-white/65">
       <span data-es>{description}</span>
       <span data-en class="hidden">{descriptionEn}</span>
     </p>
+    {
+      tags.length > 0 && (
+        <ul class="project-card__tags mt-3 flex list-none flex-wrap gap-2 p-0" role="list">
+          {tags.map((t) => (
+            <li>
+              <span class="project-card__tag inline-block rounded-md bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-2 py-0.5 text-[10px] font-medium text-[var(--accent-text)]">
+                {t}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <span
+      class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white"
+      aria-hidden="true"
+    >
+      <span data-es>Ver proyecto</span>
+      <span data-en class="hidden">View project</span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </span>
   </div>
   <a
     href={href}
-    class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
-    aria-label={`${title} — ver proyecto`}
+    class="absolute inset-0 z-[2] rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+    aria-labelledby={headingId}
     {...linkAttrs}
   >
   </a>

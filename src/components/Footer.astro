@@ -51,7 +51,10 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   aria-label="Pie de página"
   style="background: var(--footer-bg); border-top: 0.5px solid var(--border-subtle);"
 >
-  <div class="page-container" style="padding-top: var(--sp-2xl); padding-bottom: var(--sp-xl);">
+  <div
+    class="mx-auto w-full max-w-7xl px-6"
+    style="padding-top: var(--sp-2xl); padding-bottom: var(--sp-xl);"
+  >
 
     <!-- ── Pre-footer CTA card ─────────────────────────────── -->
     <div
@@ -68,11 +71,10 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
         <p style="color: var(--text-secondary); font-size: var(--text-base); margin-bottom: var(--sp-lg); line-height: 1.75;">
           30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.
         </p>
-        <a
-          href="/servicios#contacto"
-          class="btn-primary"
-        >
-          Agenda una reunión →
+        <a href="/servicios#contacto" class="btn-primary btn-bounce">
+          <span data-es>Agenda una reunión</span>
+          <span data-en class="hidden">Book a meeting</span>
+          <span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
     </div>

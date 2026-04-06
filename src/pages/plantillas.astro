@@ -423,11 +423,11 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
           </p>
           <a
             href="/servicios#contacto"
-            class="relative mt-8 inline-flex items-center justify-center rounded-[var(--radius-lg)] bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
-            data-es="Agendar reunión →"
-            data-en="Book a call →"
+            class="btn-bounce relative mt-8 inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-lg)] bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
-            Agendar reunión →
+            <span data-es>Agendar reunión</span>
+            <span data-en class="hidden">Book a call</span>
+            <span class="arrow" aria-hidden="true">→</span>
           </a>
           <p
             class="relative mt-4 text-sm text-[var(--text-muted)]"

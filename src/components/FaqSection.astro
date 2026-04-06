@@ -121,13 +121,10 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
             Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar
             juntos.
           </p>
-          <a
-            href={ctaHref}
-            class="btn-primary w-fit font-medium"
-            data-en="Book free diagnosis →"
-            data-es="Agendar diagnóstico gratis →"
-          >
-            Agendar diagnóstico gratis →
+          <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
+            <span data-es>Agendar diagnóstico gratis</span>
+            <span data-en class="hidden">Book free diagnosis</span>
+            <span class="arrow" aria-hidden="true">→</span>
           </a>
         </div>
       )

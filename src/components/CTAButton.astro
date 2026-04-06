@@ -22,23 +22,23 @@ const variants = {
 } as const;
 ---
 
-<a href={href} class:list={[base, variants[variant], className]}>
+<a href={href} class:list={[base, variants[variant], arrow && 'btn-bounce', className]}>
   <span data-es>{label}</span>
   <span data-en class="hidden">{labelEn}</span>
   {arrow && (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="shrink-0"
-      aria-hidden="true"
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
+    <span class="arrow" aria-hidden="true">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M5 12h14M13 6l6 6-6 6" />
+      </svg>
+    </span>
   )}
 </a>
