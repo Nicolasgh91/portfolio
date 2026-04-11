@@ -56,7 +56,14 @@ const services = defineCollection({
         .describe('Identificador estable para analytics o deep links al ancla del servicio.'),
       icon: z.string().optional().describe('Opcional; la tarjeta puede usar solo coverImage.'),
       order: z.number().default(99).describe('Orden en la página /servicios (menor = primero).'),
-      href: z.string().optional().describe('URL interna o externa si la tarjeta enlaza fuera del ancla por defecto.'),
+      href: z
+        .string()
+        .optional()
+        .refine(
+          (v) => !v || v.startsWith('/') || v.startsWith('#') || /^https?:\/\//.test(v),
+          { message: 'href must be a relative path (/ or #) or an http(s) URL.' },
+        )
+        .describe('URL interna o externa si la tarjeta enlaza fuera del ancla por defecto.'),
       featured: z.boolean().default(false).describe('Marca el servicio como destacado en el catálogo.'),
       imageKey: z
         .enum(['human-ai', 'cloud-servers', 'satellite'])

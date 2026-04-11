@@ -49,7 +49,7 @@ function openChat() {
   chatWindow.classList.add('open');
   badge.style.opacity = '0';
   syncTriggerA11y();
-  window.parent.postMessage({ chat: 'open' }, '*');
+  window.parent.postMessage({ chat: 'open' }, window.location.origin);
   setTimeout(() => input.focus(), 300);
 }
 
@@ -58,7 +58,7 @@ function closeChat() {
   trigger.classList.remove('open');
   chatWindow.classList.remove('open');
   syncTriggerA11y();
-  window.parent.postMessage({ chat: 'close' }, '*');
+  window.parent.postMessage({ chat: 'close' }, window.location.origin);
 }
 
 trigger.addEventListener('click', () => {
@@ -73,6 +73,7 @@ closeBtn.addEventListener('click', e => {
 
 // ── Cerrar desde el padre (click fuera del iframe) ──────────────────────────
 window.addEventListener('message', e => {
+  if (e.origin !== window.location.origin) return;
   if (e.data === 'chat:close' && isOpen) closeChat();
 });
 
