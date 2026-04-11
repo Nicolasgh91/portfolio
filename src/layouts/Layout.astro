@@ -365,7 +365,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           document.body.appendChild(iframe);
 
           window.addEventListener('message', (e) => {
-            if (e.origin !== window.location.origin) return;
+            if (e.source !== iframe.contentWindow) return;
             if (e.data?.chat === 'open') {
               iframe.style.width = '420px';
               iframe.style.height = '680px';
@@ -377,7 +377,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           });
 
           document.addEventListener('click', () => {
-            try { iframe.contentWindow.postMessage('chat:close', window.location.origin); } catch(e) {}
+            try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
           });
         }
 
