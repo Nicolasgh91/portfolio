@@ -39,7 +39,7 @@ function getIP(req) {
 }
 
 function corsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin);
+  const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
   return {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGINS[0],
@@ -58,6 +58,12 @@ function json(data, status = 200, origin = '') {
 
 function isLocalOrigin(origin) {
   return origin.includes('localhost') || origin.includes('127.0.0.1');
+}
+
+function isVercelPreview(origin) {
+  try {
+    return new URL(origin).hostname.endsWith('.vercel.app');
+  } catch { return false; }
 }
 
 // ── SEC-001: Server-side system prompt ──────────────────────────────
@@ -179,7 +185,7 @@ export default async function handler(req) {
 
   // ── Preflight (SEC-004) ───────────────────────────────────────────
   if (req.method === 'OPTIONS') {
-    const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin);
+    const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
     return new Response(null, {
       status: 204,
       headers: {
@@ -197,7 +203,7 @@ export default async function handler(req) {
   // ── Capa 1: origin (SEC-004) ──────────────────────────────────────
   const isLocal = isLocalOrigin(origin);
   const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin);
-  if (origin && !isLocal && !isAllowedOrigin) {
+  if (origin && !isLocal && !isAllowedOrigin && !isVercelPreview(origin)) {
     return json({ error: 'Origen no permitido.' }, 403, origin);
   }
 
