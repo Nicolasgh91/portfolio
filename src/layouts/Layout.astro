@@ -365,6 +365,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           document.body.appendChild(iframe);
 
           window.addEventListener('message', (e) => {
+            if (e.source !== iframe.contentWindow) return;
             if (e.data?.chat === 'open') {
               iframe.style.width = '420px';
               iframe.style.height = '680px';

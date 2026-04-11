@@ -24,6 +24,13 @@ const logoSvgs = [
   nodejsSvg,
 ] as const;
 
+const SVG_DENY = /<script|on\w+\s*=|javascript:|<foreignObject|<embed|<object|<iframe/i;
+for (const svg of logoSvgs) {
+  if (SVG_DENY.test(svg)) {
+    throw new Error('Marquee SVG contains potentially dangerous content. Aborting build.');
+  }
+}
+
 const logoSlotClass = 'logo-marquee__slot';
 ---
 
