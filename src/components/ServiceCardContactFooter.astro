@@ -1,0 +1,40 @@
+---
+/**
+ * Footer de contacto (consulta de precio + WhatsApp) de la variante "inquire"
+ * de ServiceCard. Se coloca FUERA del `<a>` envolvente para preservar la
+ * accesibilidad de enlaces anidados. Extraído de ServiceCard.astro (M-08).
+ */
+
+interface Props {
+  whatsappHref?: string;
+}
+
+const { whatsappHref } = Astro.props;
+---
+
+<div
+  class="relative z-20 flex flex-shrink-0 flex-wrap gap-3 border-t border-[var(--border-normal)] bg-[var(--bg-surface-container-low)] px-6 py-4 md:px-8"
+  role="group"
+  aria-label="Contacto comercial"
+>
+  <a
+    href="#contacto"
+    class="text-sm font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
+    data-en="Request pricing"
+    data-es="Consultar precio"
+  >
+    Consultar precio
+  </a>
+  {whatsappHref && (
+    <a
+      href={whatsappHref}
+      class="text-sm font-medium text-[var(--text-secondary)] underline-offset-2 hover:text-[var(--text-primary)] hover:underline"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-en="WhatsApp"
+      data-es="WhatsApp"
+    >
+      WhatsApp
+    </a>
+  )}
+</div>

@@ -70,6 +70,9 @@
   --color-success: hsl(152, 43%, 55%);
   --success-rgb: 76, 175, 125; /* para uso con rgba() en decorativos */
 
+  /* Danger — rojo semántico para errores de formulario y snackbar de error */
+  --color-danger: #E24B4A;
+
   --bg-primary:       hsl(240, 10%, 6%);
   --bg-secondary:     hsl(240, 9%, 9%);
   --bg-tertiary:      hsl(240, 11%, 12%);
@@ -175,6 +178,7 @@
   --accent-text:      var(--color-accent-700);
   --color-success: hsl(152, 50%, 38%);
   --success-rgb: 76, 175, 125;
+  --color-danger: #C2352E;
 
   --bg-primary:       hsl(60, 11%, 95%);
   --bg-secondary:     hsl(0, 0%, 100%);

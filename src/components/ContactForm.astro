@@ -9,27 +9,33 @@
 const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_ACCESS_KEY';
 ---
 
-<div class="form-wrap" role="form" aria-label="Formulario de contacto B2B">
+<div
+  class="rounded-[var(--radius-lg)] border-[0.5px] border-[var(--border-normal)] bg-[var(--bg-secondary)] p-[var(--sp-xl)] mt-[var(--sp-xl)]"
+  role="form"
+  aria-label="Formulario de contacto B2B"
+>
   <h3
+    class="mb-1.5"
     data-en="Evaluate your company's potential"
     data-es="Evaluar el potencial de su empresa"
   >Evaluar el potencial de su empresa</h3>
   <p
+    class="mb-[var(--sp-lg)] text-[length:var(--text-sm)]"
     data-en="Complete the form to schedule a free diagnosis session."
     data-es="Complete el formulario para coordinar un diagnóstico sin costo."
   >Complete el formulario para coordinar un diagnóstico sin costo.</p>
 
   <form id="contact-form" novalidate>
     <!-- Honeypot anti-spam -->
-    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+    <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" aria-hidden="true" />
     <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
     <input type="hidden" name="subject" data-en="New B2B inquiry — Portfolio" data-es="Nueva consulta B2B — Portfolio" value="Nueva consulta B2B — Portfolio" />
     <input type="hidden" name="from_name" value="Portfolio NH" />
     <input type="hidden" name="redirect" value="false" />
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="contact-name" data-en="Full name *" data-es="Nombre completo *">
+    <div class="grid grid-cols-1 gap-[var(--sp-md)] sm:grid-cols-2">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[length:var(--text-xs)] tracking-[0.2px] text-[var(--text-secondary)]" for="contact-name" data-en="Full name *" data-es="Nombre completo *">
           Nombre completo *
         </label>
         <input
@@ -44,8 +50,8 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
         <span class="field-error" id="name-error" role="alert" aria-live="polite"></span>
       </div>
 
-      <div class="form-group">
-        <label for="contact-email" data-en="Work email *" data-es="Email de trabajo *">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[length:var(--text-xs)] tracking-[0.2px] text-[var(--text-secondary)]" for="contact-email" data-en="Work email *" data-es="Email de trabajo *">
           Email de trabajo *
         </label>
         <input
@@ -60,8 +66,8 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
         <span class="field-error" id="email-error" role="alert" aria-live="polite"></span>
       </div>
 
-      <div class="form-group">
-        <label for="contact-company" data-en="Company" data-es="Empresa">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[length:var(--text-xs)] tracking-[0.2px] text-[var(--text-secondary)]" for="contact-company" data-en="Company" data-es="Empresa">
           Empresa
         </label>
         <input
@@ -73,8 +79,8 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
         />
       </div>
 
-      <div class="form-group">
-        <label for="contact-metric" data-en="Expected success metric" data-es="Métrica de éxito esperada">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[length:var(--text-xs)] tracking-[0.2px] text-[var(--text-secondary)]" for="contact-metric" data-en="Expected success metric" data-es="Métrica de éxito esperada">
           Métrica de éxito esperada
         </label>
         <select id="contact-metric" name="metric">
@@ -88,8 +94,8 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
         </select>
       </div>
 
-      <div class="form-group full">
-        <label for="contact-challenge" data-en="Main operational challenge to solve *" data-es="Desafío operativo principal a resolver *">
+      <div class="flex flex-col gap-1.5 sm:col-span-2">
+        <label class="text-[length:var(--text-xs)] tracking-[0.2px] text-[var(--text-secondary)]" for="contact-challenge" data-en="Main operational challenge to solve *" data-es="Desafío operativo principal a resolver *">
           Desafío operativo principal a resolver *
         </label>
         <textarea
@@ -106,7 +112,7 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
 
     <button
       type="submit"
-      class="btn-primary btn-primary--lg w-full"
+      class="btn-primary btn-primary--lg w-full justify-center mt-[var(--sp-md)]"
       id="submit-btn"
       data-en="Send inquiry"
       data-es="Enviar consulta"
@@ -130,36 +136,9 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
 </div>
 
 <style>
-  .form-wrap {
-    background: var(--bg-secondary);
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-xl);
-    margin-top: var(--sp-xl);
-  }
-  .form-wrap h3 { margin-bottom: 6px; }
-  .form-wrap > p { margin-bottom: var(--sp-lg); font-size: var(--text-sm); }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-md);
-  }
-  @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .form-group.full { grid-column: 1 / -1; }
-
-  label {
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
-    letter-spacing: 0.2px;
-  }
-
+  /* Estilos base de inputs: usan selectores de estado (focus, aria-invalid,
+     placeholder) que no se pueden expresar como clases en el markup. Migrar
+     a Tailwind acá requeriría data-attrs + variants; se mantiene scoped CSS. */
   input, textarea, select {
     background: var(--bg-tertiary);
     border: 0.5px solid var(--border-normal);
@@ -179,21 +158,19 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     color: var(--text-muted);
   }
   input[aria-invalid="true"], textarea[aria-invalid="true"] {
-    border-color: #E24B4A;
+    border-color: var(--color-danger);
   }
 
   .field-error {
     font-size: var(--text-xs);
-    color: #E24B4A;
+    color: var(--color-danger);
     min-height: 16px;
   }
 
-  #submit-btn {
-    justify-content: center;
-    margin-top: var(--sp-md);
-  }
-
   /* ── Snackbar ─────────────────────────────────────────────── */
+  /* El snackbar se mantiene en scoped CSS por el stack [aria-hidden],
+     modificadores .success/.error y transiciones coordinadas (opacity +
+     translate) que se escriben más limpio acá que como utilidades. */
   .snackbar {
     position: fixed;
     bottom: 32px;
@@ -224,7 +201,7 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_AC
     color: #fff;
   }
   .snackbar.error {
-    background: #E24B4A;
+    background: var(--color-danger);
     color: #fff;
   }
   .snackbar-close {

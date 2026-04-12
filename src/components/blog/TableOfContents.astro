@@ -1,18 +1,13 @@
 ---
 import { randomUUID } from 'node:crypto';
-
-interface HeadingEntry {
-  depth: number;
-  slug: string;
-  text: string;
-}
+import { filterTocHeadings, type TocHeading } from '../../lib/toc';
 
 interface Props {
-  headings: HeadingEntry[];
+  headings: TocHeading[];
 }
 
 const { headings } = Astro.props;
-const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const tocHeadings = filterTocHeadings(headings);
 const tocRootId = `toc-root-${randomUUID()}`;
 ---
 

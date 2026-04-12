@@ -3,9 +3,16 @@
  * FAQ con i18n (data-en / data-es). JSON-LD FAQPage debe inyectarse en la página (`buildFaqPageJsonLd`).
  * Modo native: `<details>`; modo animated: acordeón con grid 0fr/1fr + script acotado por id.
  */
+import {
+  FAQ_TAG_THRESHOLD,
+  FAQ_CATEGORY_LABEL,
+  FAQ_CATEGORY_CLASS,
+  type FaqCategory,
+} from '../lib/faq-taxonomy';
+
 export interface FaqItem {
   order: number;
-  category: 'proceso' | 'comercial' | 'tecnico' | 'soporte';
+  category: FaqCategory;
   question: string;
   questionEn: string;
   answer: string;
@@ -51,25 +58,9 @@ const {
   faqAnimatedRootId = 'faq-animated-root',
 } = Astro.props;
 
-/** Umbral para mostrar tags de categoría; ajustable si el producto lo requiere. */
-const FAQ_TAG_THRESHOLD = 8;
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
-
-const categoryLabel = {
-  proceso: { es: 'Proceso', en: 'Process' },
-  comercial: { es: 'Comercial', en: 'Commercial' },
-  tecnico: { es: 'Técnico', en: 'Technical' },
-  soporte: { es: 'Soporte', en: 'Support' },
-} as const;
-
-const categoryTagClass: Record<FaqItem['category'], string> = {
-  proceso:
-    'border-[var(--accent-border)] bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] text-[var(--accent)]',
-  comercial:
-    'border-[hsla(152,43%,55%,0.25)] bg-[hsla(152,43%,55%,0.1)] text-[var(--color-success)]',
-  tecnico: 'border-[hsla(258,60%,70%,0.25)] bg-[hsla(258,60%,70%,0.1)] text-[hsl(258,55%,72%)]',
-  soporte: 'border-[hsla(199,70%,60%,0.25)] bg-[hsla(199,70%,60%,0.1)] text-[hsl(199,75%,68%)]',
-};
+const categoryLabel = FAQ_CATEGORY_LABEL;
+const categoryTagClass = FAQ_CATEGORY_CLASS;
 ---
 
 <div class:list={['mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10', rootClass]}>

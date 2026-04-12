@@ -1,0 +1,32 @@
+---
+/**
+ * Badge "Desde $XXX / unit" para la variante con precio de ServiceCard.
+ * Extraído de ServiceCard.astro (M-08).
+ */
+
+interface Props {
+  price: string;
+  pricePrefix: string;
+  priceUnit?: string;
+}
+
+const { price, pricePrefix, priceUnit } = Astro.props;
+---
+
+<div class="mt-1">
+  <span
+    class="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+    data-en="From"
+    data-es="Desde"
+  >
+    Desde
+  </span>
+  <div class="flex items-baseline gap-1">
+    <span class="font-display text-lg font-bold text-[var(--accent)]">
+      {pricePrefix}{price}
+    </span>
+    {priceUnit && (
+      <span class="text-xs font-medium text-[var(--text-muted)]">{priceUnit}</span>
+    )}
+  </div>
+</div>

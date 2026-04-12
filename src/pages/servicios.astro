@@ -13,6 +13,7 @@ import ServiceCard from '../components/ServiceCard.astro';
 import type { CollectionEntry } from 'astro:content';
 import pricing from '../data/pricing.json';
 import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
+import { serviceAnchorId } from '../lib/service-anchor-id';
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
@@ -24,17 +25,7 @@ const faqEntries = faqDocs
   .flatMap((doc) => doc.data)
   .sort((a, b) => a.order - b.order);
 
-/** Anclas alineadas con Nav.astro (#agentes-ia, #sitios-web, …). */
-function serviceAnchorId(slug: string): string {
-  const map: Record<string, string> = {
-    'chatbots-ia': 'agentes-ia',
-    'landing-page': 'sitios-web',
-    'ecommerce-platforms': 'ecommerce',
-    'workflow-automation': 'automatizacion',
-    'local-llms': 'local-llms',
-  };
-  return map[slug] ?? `service-${slug}`;
-}
+/** Anclas alineadas con Nav.astro (#agentes-ia, #sitios-web, …). Ver `src/lib/service-anchor-id.ts`. */
 
 type PricingEntry = { price: string; unit?: string; prefix?: string };
 

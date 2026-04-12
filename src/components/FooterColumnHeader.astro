@@ -1,0 +1,17 @@
+---
+/**
+ * Encabezado tipográfico repetido de las columnas del footer
+ * (Servicios / Recursos / Contacto). Extraído de Footer.astro (L-15).
+ */
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<p
+  class="font-[family-name:var(--font-body)] text-[length:var(--text-xs)] font-semibold tracking-[1.5px] uppercase text-[var(--text-muted)] mb-[var(--sp-md)]"
+>
+  {label}
+</p>

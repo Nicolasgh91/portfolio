@@ -10,20 +10,28 @@ interface Props {
 
 const { src, alt, class: className } = Astro.props;
 
-const slideModules = import.meta.glob('../assets/slides/**/slide-*.webp', { eager: true });
+// Lazy glob: avoids eagerly loading every slide in the project. We filter by
+// folder needle first, then await only the loaders that match this viewer.
+const slideModules = import.meta.glob('../assets/slides/**/slide-*.webp');
 const folderNeedle = `/slides/${src}/`;
 
-const orderedSlides = Object.entries(slideModules)
-  .filter(([path]) => path.includes(folderNeedle))
-  .map(([path, mod]) => {
+const matchingEntries = Object.entries(slideModules).filter(([path]) =>
+  path.includes(folderNeedle),
+);
+
+const loadedSlides = await Promise.all(
+  matchingEntries.map(async ([path, loader]) => {
+    const mod = await loader();
     const match = path.match(/slide-(\d+)\.webp$/);
     return {
       path,
       page: match ? Number.parseInt(match[1], 10) : Number.POSITIVE_INFINITY,
       image: getSlideImageFromGlobModule(mod),
     };
-  })
-  .sort((a, b) => a.page - b.page);
+  }),
+);
+
+const orderedSlides = loadedSlides.sort((a, b) => a.page - b.page);
 
 const renderedTotalPages = orderedSlides.length;
 const hasSlides = renderedTotalPages > 0;
@@ -333,9 +341,18 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
           else goNext();
         });
 
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') collapseFullscreen();
-        });
+        // L-14: AbortController por instancia del viewer. Reemplaza el flag
+        // global `window.__slideEscBound` por un teardown determinista. Si en
+        // el futuro Astro view transitions nos pide liberar listeners, basta
+        // con llamar `controller.abort()`.
+        const controller = new AbortController();
+        document.addEventListener(
+          'keydown',
+          (e) => {
+            if (e.key === 'Escape') collapseFullscreen();
+          },
+          { signal: controller.signal },
+        );
 
         render();
       </script>
