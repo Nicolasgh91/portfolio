@@ -14,11 +14,12 @@ import heroBackdrop from '../assets/home/hero-banner.webp';
       alt=""
       width={1536}
       height={1024}
-      widths={[640, 768, 1024, 1280, 1536]}
+      widths={[480, 640, 768, 1024, 1280, 1536]}
       sizes="100vw"
       loading="eager"
       fetchpriority="high"
       decoding="async"
+      quality={55}
       class="h-full min-h-full w-full object-cover opacity-[0.28]"
     />
   </div>
@@ -97,21 +98,21 @@ import heroBackdrop from '../assets/home/hero-banner.webp';
             <div class="h-2 w-2 rounded-full bg-[#ffbd2e]"></div>
             <div class="h-2 w-2 rounded-full bg-[#27c93f]"></div>
           </div>
-          <span class="ml-1 text-xs text-slate-500">Panel operativo — Double Click™</span>
+          <span class="ml-1 text-xs text-slate-400">Panel operativo — Double Click™</span>
         </div>
         <div class="flex flex-col gap-4 p-5">
           <div class="grid grid-cols-3 gap-2.5">
             <div class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3">
               <div class="mb-1 font-display text-xl font-bold leading-none text-orange-400">$847k</div>
-              <div class="text-[10px] text-slate-500">Facturación mes</div>
+              <div class="text-[10px] text-slate-400">Facturación mes</div>
             </div>
             <div class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3">
               <div class="mb-1 font-display text-xl font-bold leading-none text-emerald-400">+28%</div>
-              <div class="text-[10px] text-slate-500">Retención clientes</div>
+              <div class="text-[10px] text-slate-400">Retención clientes</div>
             </div>
             <div class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3">
               <div class="mb-1 font-display text-xl font-bold leading-none text-white">142</div>
-              <div class="text-[10px] text-slate-500">Reservas activas</div>
+              <div class="text-[10px] text-slate-400">Reservas activas</div>
             </div>
           </div>
           <div class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-4">
@@ -146,14 +147,14 @@ import heroBackdrop from '../assets/home/hero-banner.webp';
                             : 'hsla(215, 25%, 27%, 0.9)',
                     }}
                   />
-                  <span class="text-[9px] text-slate-500">S{i + 1}</span>
+                  <span class="text-[9px] text-slate-400">S{i + 1}</span>
                 </div>
               ))}
             </div>
           </div>
           <div class="flex gap-2.5">
             <div class="flex-1 rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3">
-              <div class="mb-2.5 text-[11px] text-slate-500">Actividad reciente</div>
+              <div class="mb-2.5 text-[11px] text-slate-400">Actividad reciente</div>
               {[
                 { color: '#34d399', text: 'Nueva reserva confirmada', time: '2m' },
                 { color: 'var(--color-accent-400)', text: 'Pago procesado $3.200', time: '8m' },
@@ -165,7 +166,7 @@ import heroBackdrop from '../assets/home/hero-banner.webp';
                     style={{ background: item.color }}
                   />
                   <span class="flex-1 text-[11px] text-slate-300">{item.text}</span>
-                  <span class="text-[10px] text-slate-500">{item.time}</span>
+                  <span class="text-[10px] text-slate-400">{item.time}</span>
                 </div>
               ))}
             </div>
@@ -174,7 +175,7 @@ import heroBackdrop from '../assets/home/hero-banner.webp';
             >
               <div class="text-[10px] font-semibold uppercase tracking-widest text-orange-400">IA activa</div>
               <div class="font-display text-[22px] font-bold text-orange-400">24/7</div>
-              <div class="text-[10px] leading-snug text-slate-500">Respondiendo consultas sin intervención manual.</div>
+              <div class="text-[10px] leading-snug text-slate-400">Respondiendo consultas sin intervención manual.</div>
             </div>
           </div>
         </div>
