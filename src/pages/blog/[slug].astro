@@ -9,6 +9,7 @@ import ShareBar from '../../components/blog/ShareBar.astro';
 import TableWrapper from '../../components/mdx/TableWrapper.astro';
 import SlideViewer from '../../components/SlideViewer.astro';
 import SectionSpacer from '../../components/SectionSpacer.astro';
+import { filterTocHeadings } from '../../lib/toc';
 import humanAi from '../../assets/blog/human-ai.webp';
 import satellite from '../../assets/blog/satellite.webp';
 import cloudServers from '../../assets/blog/cloud-servers.webp';
@@ -43,7 +44,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
-const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const tocHeadings = filterTocHeadings(headings);
 
 // Datos para JSON-LD
 const siteUrl = 'https://escalatunegocioconia.com';

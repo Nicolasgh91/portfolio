@@ -1,20 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import site from '../data/site.json';
+import { serviceAnchorId } from '../lib/service-anchor-id';
+import FooterColumnHeader from './FooterColumnHeader.astro';
+import FooterPill from './FooterPill.astro';
 
 const { author, social } = site;
 const year = new Date().getFullYear();
-
-function serviceAnchorId(slug: string): string {
-  const map: Record<string, string> = {
-    'chatbots-ia': 'agentes-ia',
-    'landing-page': 'sitios-web',
-    'ecommerce-platforms': 'ecommerce',
-    'workflow-automation': 'automatizacion',
-    'local-llms': 'local-llms',
-  };
-  return map[slug] ?? `service-${slug}`;
-}
 
 // Dynamic services — sorted by `order` field
 const services = (await getCollection('services'))
@@ -49,26 +41,27 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 <footer
   role="contentinfo"
   aria-label="Pie de página"
-  style="background: var(--footer-bg); border-top: 0.5px solid var(--border-subtle);"
+  class="bg-[var(--footer-bg)] border-t-[0.5px] border-[var(--border-subtle)]"
 >
-  <div
-    class="mx-auto w-full max-w-7xl px-6"
-    style="padding-top: var(--sp-2xl); padding-bottom: var(--sp-xl);"
-  >
+  <div class="mx-auto w-full max-w-7xl px-6 pt-[var(--sp-2xl)] pb-[var(--sp-xl)]">
 
     <!-- ── Pre-footer CTA card ─────────────────────────────── -->
     <div
-      style="position: relative; overflow: hidden; background: var(--footer-card-bg); border: 0.5px solid var(--border-normal); border-radius: var(--radius-xl); padding: var(--sp-xl) var(--sp-xl); margin-bottom: var(--sp-2xl);"
+      class="relative overflow-hidden bg-[var(--footer-card-bg)] border-[0.5px] border-[var(--border-normal)] rounded-[var(--radius-xl)] px-[var(--sp-xl)] py-[var(--sp-xl)] mb-[var(--sp-2xl)]"
     >
       <!-- Decorative glow -->
       <div aria-hidden="true" class="footer-glow"></div>
 
-      <div style="position: relative; max-width: 560px;">
+      <div class="relative max-w-[560px]">
         <p class="label">¿Listo para empezar?</p>
-        <h2 style="font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; letter-spacing: -1px; color: var(--text-primary); margin-bottom: var(--sp-sm);">
+        <h2
+          class="font-[family-name:var(--font-display)] text-[length:var(--text-2xl)] font-extrabold tracking-[-1px] text-[var(--text-primary)] mb-[var(--sp-sm)]"
+        >
           Convertí tu operación en una ventaja competitiva.
         </h2>
-        <p style="color: var(--text-secondary); font-size: var(--text-base); margin-bottom: var(--sp-lg); line-height: 1.75;">
+        <p
+          class="text-[length:var(--text-base)] leading-[1.75] text-[var(--text-secondary)] mb-[var(--sp-lg)]"
+        >
           30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.
         </p>
         <a href="/servicios#contacto" class="btn-primary btn-bounce">
@@ -84,15 +77,19 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
       <!-- Brand column -->
       <div class="footer-brand">
-        <div style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: var(--sp-sm);">
-          nh<span style="color: var(--accent);">.</span>
+        <div
+          class="font-[family-name:var(--font-display)] text-[20px] font-extrabold text-[var(--text-primary)] mb-[var(--sp-sm)]"
+        >
+          nh<span class="text-[var(--accent)]">.</span>
         </div>
-        <p style="font-size: var(--text-xs); color: var(--text-muted); margin-bottom: var(--sp-md); line-height: 1.6;">
+        <p
+          class="text-[length:var(--text-xs)] leading-[1.6] text-[var(--text-muted)] mb-[var(--sp-md)]"
+        >
           Analista funcional<br />y desarrollador full stack.
         </p>
 
         <!-- Social icons -->
-        <div style="display: flex; gap: var(--sp-sm); align-items: center;">
+        <div class="flex items-center gap-[var(--sp-sm)]">
           <!-- GitHub -->
           <a
             href={social.github}
@@ -146,10 +143,8 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
       <!-- Servicios column (dynamic) -->
       <div>
-        <p style="font-family: var(--font-body); font-size: var(--text-xs); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-md);">
-          Servicios
-        </p>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--sp-sm);">
+        <FooterColumnHeader label="Servicios" />
+        <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           {services.map((svc) => (
             <li>
               <a
@@ -163,11 +158,10 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
           <li>
             <a
               href="/servicios#contacto"
-              class="footer-link"
-              style="display: inline-flex; align-items: center; gap: var(--sp-xs);"
+              class="footer-link inline-flex items-center gap-[var(--sp-xs)]"
             >
               Diagnóstico gratuito
-              <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent); background: var(--accent-bg); padding: 1px 6px; border-radius: var(--radius-pill);">Gratis</span>
+              <FooterPill label="Gratis" />
             </a>
           </li>
         </ul>
@@ -175,21 +169,16 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
       <!-- Recursos column (dynamic from blog) -->
       <div>
-        <p style="font-family: var(--font-body); font-size: var(--text-xs); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-md);">
-          Recursos
-        </p>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--sp-sm);">
+        <FooterColumnHeader label="Recursos" />
+        <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           {blogPosts.map((post, i) => (
             <li>
               <a
                 href={`/blog/${post.slug}`}
-                class="footer-link"
-                style="display: inline-flex; align-items: center; gap: var(--sp-xs);"
+                class="footer-link inline-flex items-center gap-[var(--sp-xs)]"
               >
                 {post.data.title}
-                {i === 0 && (
-                  <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent); background: var(--accent-bg); padding: 1px 6px; border-radius: var(--radius-pill);">Nuevo</span>
-                )}
+                {i === 0 && <FooterPill label="Nuevo" />}
               </a>
             </li>
           ))}
@@ -198,10 +187,8 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
       <!-- Contacto column (static) -->
       <div>
-        <p style="font-family: var(--font-body); font-size: var(--text-xs); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-md);">
-          Contacto
-        </p>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--sp-sm);">
+        <FooterColumnHeader label="Contacto" />
+        <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           <li>
             <a
               href={`mailto:${author.email}`}
@@ -231,7 +218,7 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
             </a>
           </li>
           <li>
-            <span style="font-size: var(--text-sm); color: var(--text-muted);">
+            <span class="text-[length:var(--text-sm)] text-[var(--text-muted)]">
               Buenos Aires, AR
             </span>
           </li>
@@ -243,7 +230,7 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
     <!-- ── Bottom bar ──────────────────────────────────────── -->
     <div class="divider"></div>
     <div class="footer-bottom">
-      <p style="font-size: var(--text-xs); color: var(--text-muted); margin: 0;">
+      <p class="text-[length:var(--text-xs)] text-[var(--text-muted)] m-0">
         © {year} {author.name}. Todos los derechos reservados.
       </p>
     </div>
@@ -253,6 +240,9 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
 <style>
   /* ── Footer grid ──────────────────────────────────────── */
+  /* Multi-breakpoint grid: mantener en scoped CSS porque expresar
+     `.footer-brand { grid-column: span 2 }` como utilidad Tailwind
+     requeriría classes inline dependientes del viewport. */
   .footer-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -269,6 +259,7 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   }
 
   /* ── CTA decorative glow ──────────────────────────────── */
+  /* radial-gradient no se expresa limpiamente como utilidad. */
   .footer-glow {
     position: absolute;
     top: -80px;
@@ -281,13 +272,13 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   }
 
   /* ── Nav link hover ───────────────────────────────────── */
+  /* prefers-reduced-motion gate sobre una transition: vive acá. */
   .footer-link {
     font-size: var(--text-sm);
     color: var(--text-secondary);
   }
   .footer-link:hover { color: var(--text-primary); }
 
-  /* ── Transitions (respect reduced-motion) ────────────── */
   @media (prefers-reduced-motion: no-preference) {
     .footer-link { transition: color 150ms ease; }
   }

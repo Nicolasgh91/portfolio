@@ -15,6 +15,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
 
 <div
   id={shareRootId}
+  data-share-bar
   class="mt-6 inline-flex flex-wrap items-center gap-2"
   role="group"
   aria-label="Compartir articulo"
@@ -81,23 +82,23 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
   </button>
 </div>
 
-<script define:vars={{ shareRootId }}>
-  const root = document.getElementById(shareRootId);
-  if (!root) return;
+<script>
+  // CSP-005: sin `define:vars`; cada ShareBar resuelve su raíz via `data-share-bar`.
+  document.querySelectorAll('[data-share-bar]').forEach((root) => {
+    const button = root.querySelector('[data-copy-url]');
+    if (!(button instanceof HTMLButtonElement)) return;
 
-  const button = root.querySelector('[data-copy-url]');
-  if (!(button instanceof HTMLButtonElement)) return;
+    button.addEventListener('click', async () => {
+      const shareUrl = button.getAttribute('data-copy-url');
+      if (!shareUrl) return;
 
-  button.addEventListener('click', async () => {
-    const shareUrl = button.getAttribute('data-copy-url');
-    if (!shareUrl) return;
-
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      button.classList.add('text-[var(--color-success)]');
-      setTimeout(() => button.classList.remove('text-[var(--color-success)]'), 2000);
-    } catch {
-      // fail-silent: no bloquea lectura del articulo
-    }
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        button.classList.add('text-[var(--color-success)]');
+        setTimeout(() => button.classList.remove('text-[var(--color-success)]'), 2000);
+      } catch {
+        // fail-silent: no bloquea lectura del articulo
+      }
+    });
   });
 </script>

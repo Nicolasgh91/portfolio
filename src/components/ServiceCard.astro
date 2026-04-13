@@ -2,13 +2,21 @@
 /**
  * Catálogo /servicios — Alternativa C: fila apilada, barra de acento izquierda,
  * zig-zag en md+, esquinas asimétricas en la imagen y pills de stack.
+ *
+ * Public props API intacta. Internamente delega a subcomponentes pequeños
+ * (M-08) que centralizan la duplicación de las tres variantes: `inquire`,
+ * full-card-link y default.
  */
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import humanAi from '../assets/blog/human-ai.webp';
 import cloudServers from '../assets/blog/cloud-servers.webp';
 import satellite from '../assets/blog/satellite.webp';
 import site from '../data/site.json';
+import ServiceCardMedia from './ServiceCardMedia.astro';
+import ServiceCardBody from './ServiceCardBody.astro';
+import ServiceCardContactFooter from './ServiceCardContactFooter.astro';
+import ServiceCardPrice from './ServiceCardPrice.astro';
+import ServiceCardArrow from './ServiceCardArrow.astro';
 
 type ImageSide = 'left' | 'right';
 
@@ -69,6 +77,28 @@ const imgWrapClass =
 const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
   ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
   : {};
+
+// Shape compartida por ServiceCardBody
+const bodyProps = {
+  headingId,
+  title: { es: service.title, en: service.titleEn },
+  description: {
+    short: { es: service.shortDescription, en: service.shortDescriptionEn },
+    roiFocus:
+      service.roiFocus || service.roiFocusEn
+        ? { es: service.roiFocus ?? service.roiFocusEn ?? '', en: service.roiFocusEn ?? service.roiFocus }
+        : undefined,
+  },
+  tags,
+};
+
+const mediaProps = {
+  imageSrc,
+  imageSizes,
+  imgWrapClass,
+  overlayTags,
+  featured: service.featured ?? false,
+};
 ---
 
 {inquire ? (
@@ -79,309 +109,30 @@ const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
         class:list={[rowClass, 'no-underline outline-none']}
         aria-label={service.title}
       >
-        <div class={imgWrapClass} aria-hidden="true">
-          <Image
-            src={imageSrc}
-            alt=""
-            width={1200}
-            height={800}
-            widths={[480, 720, 960, 1200]}
-            sizes={imageSizes}
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
-          />
-          {overlayTags.length > 0 && (
-            <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-              {overlayTags.map((t) => (
-                <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-          {service.featured && (
-            <span
-              class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-              data-en="Most chosen"
-              data-es="Más elegido"
-            >
-              Más elegido
-            </span>
-          )}
-        </div>
-        <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
-          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-            <span data-es>Servicio</span>
-            <span data-en class="hidden">Service</span>
-          </p>
-          <h3
-            id={headingId}
-            class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
-            data-en={service.titleEn ?? service.title}
-            data-es={service.title}
-          >
-            {service.title}
-          </h3>
-          <p
-            class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
-            data-en={service.shortDescriptionEn ?? service.shortDescription}
-            data-es={service.shortDescription}
-          >
-            {service.shortDescription}
-          </p>
-          {(service.roiFocus || service.roiFocusEn) && (
-            <p
-              class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
-              data-en={service.roiFocusEn ?? service.roiFocus}
-              data-es={service.roiFocus ?? service.roiFocusEn}
-            >
-              {service.roiFocus ?? service.roiFocusEn}
-            </p>
-          )}
-          {tags.length > 0 && (
-            <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
-              {tags.map((t) => (
-                <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-          <span class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]">
-            <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
-            <span class="arrow" aria-hidden="true">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="shrink-0"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </span>
-          </span>
-        </div>
+        <ServiceCardMedia {...mediaProps} />
+        <ServiceCardBody {...bodyProps}>
+          <ServiceCardArrow />
+        </ServiceCardBody>
       </a>
     ) : (
-      <>
-        <div class={rowClass}>
-          <div class={imgWrapClass} aria-hidden="true">
-            <Image
-              src={imageSrc}
-              alt=""
-              width={1200}
-              height={800}
-              widths={[480, 720, 960, 1200]}
-              sizes={imageSizes}
-              loading="lazy"
-              decoding="async"
-              class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
-            />
-            {overlayTags.length > 0 && (
-              <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-                {overlayTags.map((t) => (
-                  <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            )}
-            {service.featured && (
-              <span
-                class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-                data-en="Most chosen"
-                data-es="Más elegido"
-              >
-                Más elegido
-              </span>
-            )}
-          </div>
-          <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
-            <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-              <span data-es>Servicio</span>
-              <span data-en class="hidden">Service</span>
-            </p>
-            <h3
-              id={headingId}
-              class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
-              data-en={service.titleEn ?? service.title}
-              data-es={service.title}
-            >
-              {service.title}
-            </h3>
-            <p
-              class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
-              data-en={service.shortDescriptionEn ?? service.shortDescription}
-              data-es={service.shortDescription}
-            >
-              {service.shortDescription}
-            </p>
-            {(service.roiFocus || service.roiFocusEn) && (
-              <p
-                class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
-                data-en={service.roiFocusEn ?? service.roiFocus}
-                data-es={service.roiFocus ?? service.roiFocusEn}
-              >
-                {service.roiFocus ?? service.roiFocusEn}
-              </p>
-            )}
-            {tags.length > 0 && (
-              <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
-                {tags.map((t) => (
-                  <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </>
+      <div class={rowClass}>
+        <ServiceCardMedia {...mediaProps} />
+        <ServiceCardBody {...bodyProps} />
+      </div>
     )}
 
-    <div
-      class="relative z-20 flex flex-shrink-0 flex-wrap gap-3 border-t border-[var(--border-normal)] bg-[var(--bg-surface-container-low)] px-6 py-4 md:px-8"
-      role="group"
-      aria-label="Contacto comercial"
-    >
-      <a
-        href="#contacto"
-        class="text-sm font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
-        data-en="Request pricing"
-        data-es="Consultar precio"
-      >
-        Consultar precio
-      </a>
-      {whatsappHref && (
-        <a
-          href={whatsappHref}
-          class="text-sm font-medium text-[var(--text-secondary)] underline-offset-2 hover:text-[var(--text-primary)] hover:underline"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-en="WhatsApp"
-          data-es="WhatsApp"
-        >
-          WhatsApp
-        </a>
-      )}
-    </div>
+    <ServiceCardContactFooter whatsappHref={whatsappHref} />
   </div>
 ) : isFullCardLink ? (
   <article class={shellClass}>
     <div class:list={[rowClass, 'relative z-0']}>
-      <div class={imgWrapClass} aria-hidden="true">
-        <Image
-          src={imageSrc}
-          alt=""
-          width={1200}
-          height={800}
-          widths={[480, 720, 960, 1200]}
-          sizes={imageSizes}
-          loading="lazy"
-          decoding="async"
-          class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
-        />
-        {overlayTags.length > 0 && (
-          <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {overlayTags.map((t) => (
-              <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
-        {service.featured && (
-          <span
-            class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-            data-en="Most chosen"
-            data-es="Más elegido"
-          >
-            Más elegido
-          </span>
-        )}
-      </div>
-      <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
-        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-          <span data-es>Servicio</span>
-          <span data-en class="hidden">Service</span>
-        </p>
-        <h3
-          id={headingId}
-          class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
-          data-en={service.titleEn ?? service.title}
-          data-es={service.title}
-        >
-          {service.title}
-        </h3>
-        <p
-          class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
-          data-en={service.shortDescriptionEn ?? service.shortDescription}
-          data-es={service.shortDescription}
-        >
-          {service.shortDescription}
-        </p>
-        {(service.roiFocus || service.roiFocusEn) && (
-          <p
-            class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
-            data-en={service.roiFocusEn ?? service.roiFocus}
-            data-es={service.roiFocus ?? service.roiFocusEn}
-          >
-            {service.roiFocus ?? service.roiFocusEn}
-          </p>
-        )}
-        {tags.length > 0 && (
-          <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
-            {tags.map((t) => (
-              <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
+      <ServiceCardMedia {...mediaProps} />
+      <ServiceCardBody {...bodyProps}>
         {service.price && (
-          <div class="mt-1">
-            <span
-              class="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
-              data-en="From"
-              data-es="Desde"
-            >
-              Desde
-            </span>
-            <div class="flex items-baseline gap-1">
-              <span class="font-display text-lg font-bold text-[var(--accent)]">
-                {pricePrefix}{service.price}
-              </span>
-              {service.priceUnit && (
-                <span class="text-xs font-medium text-[var(--text-muted)]">{service.priceUnit}</span>
-              )}
-            </div>
-          </div>
+          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
         )}
-        <span class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]">
-          <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
-          <span class="arrow" aria-hidden="true">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="shrink-0"
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </span>
-        </span>
-      </div>
+        <ServiceCardArrow />
+      </ServiceCardBody>
     </div>
     <a
       href={linkHref}
@@ -394,95 +145,12 @@ const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
 ) : (
   <div class={shellClass}>
     <div class={rowClass}>
-      <div class={imgWrapClass} aria-hidden="true">
-        <Image
-          src={imageSrc}
-          alt=""
-          width={1200}
-          height={800}
-          widths={[480, 720, 960, 1200]}
-          sizes={imageSizes}
-          loading="lazy"
-          decoding="async"
-          class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
-        />
-        {overlayTags.length > 0 && (
-          <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {overlayTags.map((t) => (
-              <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
-        {service.featured && (
-          <span
-            class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-            data-en="Most chosen"
-            data-es="Más elegido"
-          >
-            Más elegido
-          </span>
-        )}
-      </div>
-      <div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
-        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-          <span data-es>Servicio</span>
-          <span data-en class="hidden">Service</span>
-        </p>
-        <h3
-          id={headingId}
-          class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
-          data-en={service.titleEn ?? service.title}
-          data-es={service.title}
-        >
-          {service.title}
-        </h3>
-        <p
-          class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
-          data-en={service.shortDescriptionEn ?? service.shortDescription}
-          data-es={service.shortDescription}
-        >
-          {service.shortDescription}
-        </p>
-        {(service.roiFocus || service.roiFocusEn) && (
-          <p
-            class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
-            data-en={service.roiFocusEn ?? service.roiFocus}
-            data-es={service.roiFocus ?? service.roiFocusEn}
-          >
-            {service.roiFocus ?? service.roiFocusEn}
-          </p>
-        )}
-        {tags.length > 0 && (
-          <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
-            {tags.map((t) => (
-              <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
+      <ServiceCardMedia {...mediaProps} />
+      <ServiceCardBody {...bodyProps}>
         {service.price && (
-          <div class="mt-1">
-            <span
-              class="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
-              data-en="From"
-              data-es="Desde"
-            >
-              Desde
-            </span>
-            <div class="flex items-baseline gap-1">
-              <span class="font-display text-lg font-bold text-[var(--accent)]">
-                {pricePrefix}{service.price}
-              </span>
-              {service.priceUnit && (
-                <span class="text-xs font-medium text-[var(--text-muted)]">{service.priceUnit}</span>
-              )}
-            </div>
-          </div>
+          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
         )}
-      </div>
+      </ServiceCardBody>
     </div>
   </div>
 )}

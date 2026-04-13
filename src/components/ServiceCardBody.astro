@@ -1,0 +1,68 @@
+---
+/**
+ * Encabezado + descripción + ROI + tags de la card de /servicios. Expone
+ * <slot /> para que cada variante añada su propio trailing (precio, flecha).
+ * Extraído de ServiceCard.astro (M-08).
+ */
+
+interface BilingualField {
+  es: string;
+  en?: string;
+}
+
+interface Props {
+  headingId: string;
+  title: BilingualField;
+  description: {
+    short: BilingualField;
+    roiFocus?: BilingualField;
+  };
+  tags: string[];
+}
+
+const { headingId, title, description, tags } = Astro.props;
+const roi = description.roiFocus;
+const titleEn = title.en ?? title.es;
+const shortEn = description.short.en ?? description.short.es;
+---
+
+<div class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10">
+  <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+    <span data-es>Servicio</span>
+    <span data-en class="hidden">Service</span>
+  </p>
+  <h3
+    id={headingId}
+    class="font-display text-xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] md:text-2xl"
+    data-en={titleEn}
+    data-es={title.es}
+  >
+    {title.es}
+  </h3>
+  <p
+    class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
+    data-en={shortEn}
+    data-es={description.short.es}
+  >
+    {description.short.es}
+  </p>
+  {roi && (
+    <p
+      class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]"
+      data-en={roi.en ?? roi.es}
+      data-es={roi.es}
+    >
+      {roi.es}
+    </p>
+  )}
+  {tags.length > 0 && (
+    <div class="flex flex-wrap gap-2" aria-label="Stack y enfoque">
+      {tags.map((t) => (
+        <span class="rounded-full border border-[var(--border-normal)] bg-[var(--bg-tag)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+          {t}
+        </span>
+      ))}
+    </div>
+  )}
+  <slot />
+</div>
