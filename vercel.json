@@ -15,6 +15,15 @@
           "value": "default-src 'self'; script-src 'self' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.web3forms.com https://generativelanguage.googleapis.com https://vitals.vercel-insights.com https://va.vercel-scripts.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com"
         }
       ]
+    },
+    {
+      "source": "/chatbot/widget/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-LVCvKaZUJfl+toLvUbjEaklAf/NS4IIKJWxC/w9TdpE=' 'sha256-5c6QGVm4J/XE36WO3hwi8bUO1PFeIQ6cf5tu3CoeAMU='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.web3forms.com https://generativelanguage.googleapis.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+        }
+      ]
     }
   ]
 }

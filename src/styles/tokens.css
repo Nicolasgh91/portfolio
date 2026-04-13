@@ -65,6 +65,10 @@
   --accent-bg:        hsla(var(--accent-h), var(--accent-s), 56%, 0.07);
   --accent-border:    hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --accent-text:      var(--color-accent-400);
+  /* A11Y: color reforzado para texto pequeño sobre fondos teñidos (e.g. accent-bg).
+     En dark mode usa el accent estándar (10:1 sobre bg-primary). En light mode
+     baja a accent-800 para alcanzar 7:1 sobre el accent-bg translúcido. */
+  --accent-on-tint:   var(--color-accent-400);
 
   /* Success — verde semántico para estados positivos y métricas */
   --color-success: hsl(152, 43%, 55%);
@@ -176,6 +180,7 @@
   --accent-bg:        hsla(32, 94%, 44%, 0.06);
   --accent-border:    hsla(32, 94%, 44%, 0.25);
   --accent-text:      var(--color-accent-700);
+  --accent-on-tint:   var(--color-accent-800);
   --color-success: hsl(152, 50%, 38%);
   --success-rgb: 76, 175, 125;
   --color-danger: #C2352E;
@@ -302,7 +307,9 @@ em { font-style: normal; color: var(--accent); }
   letter-spacing: 2px;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--accent);
+  /* A11Y: usar accent-text (color-accent-700 en light) para asegurar contraste WCAG AA
+     contra fondos claros (bg-secondary, footer-card-bg). En dark mode equivale a --accent. */
+  color: var(--accent-text);
   margin-bottom: var(--sp-sm);
 }
 
