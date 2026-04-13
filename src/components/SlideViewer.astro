@@ -150,11 +150,14 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         />
       </div>
 
-      <script define:vars={{ viewerId, fullscreenBtnId }}>
-        const viewer = document.getElementById(viewerId);
-        if (!viewer) return;
+      <script>
+        // CSP-005: sin `define:vars` (que siempre emite inline). Iteramos
+        // todas las instancias del componente en la página; cada viewer
+        // resuelve su UI via atributos `data-slide-*` ya presentes en el markup.
+        document.querySelectorAll('[data-slide-viewer]').forEach((viewer) => {
+        if (!(viewer instanceof HTMLElement)) return;
 
-        const fsBtn = document.getElementById(fullscreenBtnId);
+        const fsBtn = viewer.querySelector('[data-slide-fullscreen]');
         const iconExpand = viewer.querySelector('[data-slide-fs-icon-expand]');
         const iconCollapse = viewer.querySelector('[data-slide-fs-icon-collapse]');
 
@@ -355,6 +358,7 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
         );
 
         render();
+        });
       </script>
     </section>
   ) : (

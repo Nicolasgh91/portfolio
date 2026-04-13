@@ -174,7 +174,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
         ))}
       </div>
     ) : (
-      <div id={faqAnimatedRootId} class="faq-animated-root flex flex-col">
+      <div id={faqAnimatedRootId} data-faq-animated-root class="faq-animated-root flex flex-col">
         {entries.map((item, index) => (
           <div
             class:list={[
@@ -216,23 +216,24 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
 
 {
   accordionStyle === 'animated' && (
-    <script is:inline define:vars={{ faqAnimatedRootId }}>
-      (function () {
-        var root = document.getElementById(faqAnimatedRootId);
-        if (!root) return;
-        function syncAria() {
-          root.querySelectorAll('.faq-item--animated').forEach(function (item) {
-            var btn = item.querySelector('.faq-q');
+    <script>
+      // CSP-005: sin `is:inline`/`define:vars`; cada FAQ animada resuelve su
+      // raíz via `data-faq-animated-root` para que Astro pueda empaquetar el
+      // script como archivo externo (CSP script-src 'self').
+      document.querySelectorAll('[data-faq-animated-root]').forEach((root) => {
+        const syncAria = () => {
+          root.querySelectorAll('.faq-item--animated').forEach((item) => {
+            const btn = item.querySelector('.faq-q');
             if (btn)
               btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
           });
-        }
-        root.querySelectorAll('.faq-q').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var item = btn.closest('.faq-item--animated');
+        };
+        root.querySelectorAll('.faq-q').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item--animated');
             if (!item || !root.contains(item)) return;
-            var wasOpen = item.classList.contains('open');
-            root.querySelectorAll('.faq-item--animated').forEach(function (i) {
+            const wasOpen = item.classList.contains('open');
+            root.querySelectorAll('.faq-item--animated').forEach((i) => {
               i.classList.remove('open');
             });
             if (!wasOpen) item.classList.add('open');
@@ -240,7 +241,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
           });
         });
         syncAria();
-      })();
+      });
     </script>
   )
 }

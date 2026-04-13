@@ -442,7 +442,10 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
   </main>
 </Layout>
 
-<script is:inline>
+<script>
+  // CSP-005: sin `is:inline`; Astro empaqueta el script como archivo externo
+  // (asset inline limit 0 en astro.config.mjs) para que CSP script-src 'self'
+  // lo permita.
   (function () {
     const carousel = document.getElementById('catalog-carousel');
 
