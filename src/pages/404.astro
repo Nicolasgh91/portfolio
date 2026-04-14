@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+---
+
+<Layout
+  title="404 — Página no encontrada"
+  description="La URL solicitada no existe. Volvé al inicio o explorá servicios y artículos técnicos."
+>
+  <Nav />
+  <main id="main-content" class="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center gap-5 px-6 py-16 text-center">
+    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Error 404</p>
+    <h1 class="font-display text-4xl font-bold tracking-tight text-[var(--text-primary)] md:text-5xl">Página no encontrada</h1>
+    <p class="max-w-xl text-sm leading-relaxed text-[var(--text-secondary)]">
+      La ruta que intentaste abrir no está disponible. Podés volver al inicio o seguir por las secciones principales.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="/" class="btn-primary btn-bounce">Ir al inicio</a>
+      <a href="/servicios" class="btn-secondary">Ver servicios</a>
+      <a href="/blog" class="btn-secondary">Leer blog</a>
+    </div>
+  </main>
+</Layout>

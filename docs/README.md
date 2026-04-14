@@ -14,6 +14,7 @@
 | [decisiones/adr-002-sitio-docs.md](./decisiones/adr-002-sitio-docs.md) | Starlight / sitio docs dedicado | Diferido |
 | [decisiones/adr-003-servicios-tonal-layering.md](./decisiones/adr-003-servicios-tonal-layering.md) | Capas tonales + glass solo en oscuro en `/servicios` | Activo |
 | [subsistemas/landing-templates.md](./subsistemas/landing-templates.md) | Contrato Zod, demos, carrusel `/plantillas`, strip de demos en home (`template-carousel-images.ts`) | Activo |
+| [subsistemas/seo-tecnico.md](./subsistemas/seo-tecnico.md) | Sitemap único con `@astrojs/sitemap`, `robots.txt`, i18n ES/EN indexable y checklist operativo GSC | Activo |
 | [subsistemas/sistema-diseno.md](./subsistemas/sistema-diseno.md) | Tokens, `.section-dark` / `.section-accent`, safelist, animación marquee | Activo |
 | [subsistemas/convenciones-contenido.md](./subsistemas/convenciones-contenido.md) | Frontmatter MDX por colección | Activo |
 | [subsistemas/faq-jsonld-seo.md](./subsistemas/faq-jsonld-seo.md) | FAQPage JSON-LD, sin microdata, tests y Rich Results manual | Activo |

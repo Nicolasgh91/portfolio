@@ -10,6 +10,7 @@ import TableWrapper from '../../components/mdx/TableWrapper.astro';
 import SlideViewer from '../../components/SlideViewer.astro';
 import SectionSpacer from '../../components/SectionSpacer.astro';
 import { filterTocHeadings } from '../../lib/toc';
+import { localeFromPathname } from '../../lib/locale-path';
 import humanAi from '../../assets/blog/human-ai.webp';
 import satellite from '../../assets/blog/satellite.webp';
 import cloudServers from '../../assets/blog/cloud-servers.webp';
@@ -45,10 +46,12 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
 const tocHeadings = filterTocHeadings(headings);
+const isEnglish = localeFromPathname(Astro.url.pathname) === 'en';
+const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
 
 // Datos para JSON-LD
 const siteUrl = 'https://escalatunegocioconia.com';
-const postUrl = `${siteUrl}/blog/${post.slug}`;
+const postUrl = `${siteUrl}${blogBaseHref}/${post.slug}`;
 const authorName = 'Nicolás Hruszczak';
 const pubDateISO = post.data.pubDate.toISOString();
 
@@ -117,7 +120,7 @@ const breadcrumbJsonLd = {
       '@type': 'ListItem',
       position: 2,
       name: 'Blog',
-      item: `${siteUrl}/blog`,
+      item: `${siteUrl}${blogBaseHref}`,
     },
     {
       '@type': 'ListItem',
@@ -173,9 +176,9 @@ const related = allPosts
       <nav class="mb-8 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]" aria-label="Ruta de navegación">
         <a href="/" class="transition-colors hover:text-[var(--color-accent-400)]">Inicio</a>
         <span aria-hidden="true" class="opacity-40">/</span>
-        <a href="/blog" class="transition-colors hover:text-[var(--color-accent-400)]">Blog</a>
+        <a href={blogBaseHref} class="transition-colors hover:text-[var(--color-accent-400)]">Blog</a>
         <span aria-hidden="true" class="opacity-40">/</span>
-        <a href={`/blog/categoria/${post.data.category}`} class="transition-colors hover:text-[var(--color-accent-400)]">
+        <a href={`/blog/categoria/${encodeURIComponent(post.data.category)}`} class="transition-colors hover:text-[var(--color-accent-400)]">
           {post.data.category}
         </a>
         <span aria-hidden="true" class="opacity-40">/</span>
@@ -187,7 +190,7 @@ const related = allPosts
           <header class="mb-8">
             <div class="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
               <a
-                href={`/blog/categoria/${post.data.category}`}
+                href={`/blog/categoria/${encodeURIComponent(post.data.category)}`}
                 class="rounded-full border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--accent-text)] no-underline"
               >
                 {post.data.category}
@@ -261,7 +264,7 @@ const related = allPosts
               </div>
             </div>
             <div class="flex flex-wrap gap-2">
-              <a href="/blog" class="btn-secondary" data-en="← Back to blog" data-es="← Volver al blog">
+              <a href={blogBaseHref} class="btn-secondary" data-en="← Back to blog" data-es="← Volver al blog">
                 ← Volver al blog
               </a>
               <a href="/servicios#contacto" class="btn-primary btn-bounce">
@@ -289,7 +292,7 @@ const related = allPosts
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {related.map((r) => (
                   <a
-                    href={`/blog/${r.slug}`}
+                    href={`${blogBaseHref}/${r.slug}`}
                     class="group btn-bounce flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
                   >
                     <span class="text-xs font-semibold uppercase tracking-wide text-[var(--accent-text)]">{r.data.category}</span>

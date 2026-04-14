@@ -10,6 +10,7 @@ import cloudServers from '../assets/blog/cloud-servers.webp';
 import ogHuellaDelFuego from '../assets/open-graphs/og-huella-del-fuego.webp';
 import thumbArquitecturaGranEscala from '../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp';
 import thumbMicroservicies from '../assets/blog/thumbnails/thumb-microservicies.webp';
+import { localeFromPathname } from '../lib/locale-path';
 
 type CoverImageKey =
   | 'human-ai'
@@ -39,6 +40,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog' : '/blog';
 
 const coverByKey: Record<CoverImageKey, typeof humanAi> = {
   'human-ai': humanAi,
@@ -92,7 +94,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
 
   <!-- ── CTA flotante (visible solo en hover) ── -->
   <a
-    href={`/blog/${post.slug}`}
+    href={`${blogBaseHref}/${post.slug}`}
     class="blog-card__cta"
     aria-label={readLabel}
     data-en="Read article"

@@ -1,8 +1,23 @@
 ---
+import { getAlternatePathname, localeFromPathname } from '../lib/locale-path';
+
 interface Props {
   activePage?: 'home' | 'servicios' | 'talento' | 'blog';
 }
 const { activePage = 'home' } = Astro.props;
+const pathname = Astro.url.pathname;
+const locale = localeFromPathname(pathname);
+const isEnglish = locale === 'en';
+const homeHref = isEnglish ? '/en' : '/';
+const servicesHref = isEnglish ? '/en/services' : '/servicios';
+const blogHref = isEnglish ? '/en/blog' : '/blog';
+const talentHref = isEnglish ? '/en/talent' : '/talento';
+const templatesHref = isEnglish ? '/en/templates' : '/plantillas';
+const servicesAiHref = `${servicesHref}#agentes-ia`;
+const servicesEcommerceHref = `${servicesHref}#ecommerce`;
+const servicesAutomationHref = `${servicesHref}#automatizacion`;
+const servicesContactHref = `${servicesHref}#contacto`;
+const languageSwitchHref = getAlternatePathname(pathname);
 ---
 
 <header>
@@ -13,14 +28,14 @@ const { activePage = 'home' } = Astro.props;
   >
 
     <!-- Logo -->
-    <a href="/" class="nav-logo" aria-label="Nicolás Hruszczak — Inicio">
+    <a href={homeHref} class="nav-logo" aria-label={isEnglish ? 'Nicolás Hruszczak — Home' : 'Nicolás Hruszczak — Inicio'}>
       nh<span>.</span>
     </a>
 
     <!-- Links centro (desktop) — siempre en el DOM para SEO -->
     <ul class="nav-tabs" role="list">
       <li><a
-        href="/"
+        href={homeHref}
         class={`nav-tab ${activePage === 'home' ? 'active' : ''}`}
         aria-current={activePage === 'home' ? 'page' : undefined}
         data-en="Home" data-es="Inicio"
@@ -28,7 +43,7 @@ const { activePage = 'home' } = Astro.props;
 
       <li class="nav-tab-dropdown-wrapper">
         <a
-          href="/servicios"
+          href={servicesHref}
           id="services-tab-link"
           class={`nav-tab nav-tab--services-main ${activePage === 'servicios' ? 'active' : ''}`}
           aria-current={activePage === 'servicios' ? 'page' : undefined}
@@ -44,19 +59,19 @@ const { activePage = 'home' } = Astro.props;
           aria-label="Abrir submenú de servicios B2B"
         ><span class="dropdown-arrow" aria-hidden="true">▾</span></button>
         <div id="services-menu" class="services-menu" role="menu" aria-labelledby="services-tab-link" hidden>
-          <a role="menuitem" href="/servicios#agentes-ia" class="services-item">
+          <a role="menuitem" href={servicesAiHref} class="services-item">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
             Chatbots IA
           </a>
-          <a role="menuitem" href="/servicios#ecommerce" class="services-item">
+          <a role="menuitem" href={servicesEcommerceHref} class="services-item">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             E-commerce
           </a>
-          <a role="menuitem" href="/servicios#automatizacion" class="services-item">
+          <a role="menuitem" href={servicesAutomationHref} class="services-item">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
             Automatización
           </a>
-          <a role="menuitem" href="/plantillas" class="services-item">
+          <a role="menuitem" href={templatesHref} class="services-item">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             Sitios web
           </a>
@@ -64,14 +79,14 @@ const { activePage = 'home' } = Astro.props;
       </li>
 
       <li><a
-        href="/blog"
+        href={blogHref}
         class={`nav-tab ${activePage === 'blog' ? 'active' : ''}`}
         aria-current={activePage === 'blog' ? 'page' : undefined}
         data-en="Blog" data-es="Blog"
       >Blog</a></li>
 
       <li><a
-        href="/talento"
+        href={talentHref}
         class={`nav-tab ${activePage === 'talento' ? 'active' : ''}`}
         aria-current={activePage === 'talento' ? 'page' : undefined}
         data-en="Profile" data-es="Perfil profesional"
@@ -90,13 +105,13 @@ const { activePage = 'home' } = Astro.props;
           title="Tema"
         >◑ Dark</button>
 
-        <button
+        <a
           id="lang-btn"
           class="ctrl-btn"
-          data-action="lang-toggle"
-          aria-label="Switch to English"
+          href={languageSwitchHref}
+          aria-label={isEnglish ? 'Cambiar a español' : 'Switch to English'}
           title="Language / Idioma"
-        >EN</button>
+        >{isEnglish ? 'ES' : 'EN'}</a>
 
         <button
           id="a11y-btn"
@@ -111,7 +126,7 @@ const { activePage = 'home' } = Astro.props;
 
       <!-- CTA desktop -->
       <a
-        href="/servicios#contacto"
+        href={servicesContactHref}
         class="btn-primary btn-primary--sm btn-primary--glow"
         data-en="Free diagnosis →"
         data-es="Diagnóstico gratis →"
@@ -122,7 +137,7 @@ const { activePage = 'home' } = Astro.props;
     <!-- Mobile right: CTA compacto + hamburguesa -->
     <div class="nav-mobile-right">
       <a
-        href="/servicios#contacto"
+        href={servicesContactHref}
         class="btn-primary btn-primary--sm btn-primary--glow btn-primary--compact"
         data-en="Diagnosis →"
         data-es="Diagnóstico →"
@@ -153,49 +168,49 @@ const { activePage = 'home' } = Astro.props;
   >
     <ul class="drawer-links">
       <li><a
-        href="/"
+        href={homeHref}
         class={`drawer-link ${activePage === 'home' ? 'active' : ''}`}
         aria-current={activePage === 'home' ? 'page' : undefined}
         data-en="Home" data-es="Inicio"
       >Inicio</a></li>
 
       <li><a
-        href="/servicios"
+        href={servicesHref}
         class={`drawer-link ${activePage === 'servicios' ? 'active' : ''}`}
         aria-current={activePage === 'servicios' ? 'page' : undefined}
         data-en="B2B Services" data-es="Servicios B2B"
       >Servicios B2B</a></li>
 
       <li><a
-        href="/servicios#agentes-ia"
+        href={servicesAiHref}
         class="drawer-link drawer-link--sub"
         data-en="AI chatbots" data-es="Chatbots IA"
       >Chatbots IA</a></li>
       <li><a
-        href="/servicios#ecommerce"
+        href={servicesEcommerceHref}
         class="drawer-link drawer-link--sub"
         data-en="E-commerce" data-es="E-commerce"
       >E-commerce</a></li>
       <li><a
-        href="/servicios#automatizacion"
+        href={servicesAutomationHref}
         class="drawer-link drawer-link--sub"
         data-en="Automation" data-es="Automatización"
       >Automatización</a></li>
       <li><a
-        href="/plantillas"
+        href={templatesHref}
         class="drawer-link drawer-link--sub"
         data-en="Websites" data-es="Sitios web"
       >Sitios web</a></li>
 
       <li><a
-        href="/blog"
+        href={blogHref}
         class={`drawer-link ${activePage === 'blog' ? 'active' : ''}`}
         aria-current={activePage === 'blog' ? 'page' : undefined}
         data-en="Blog" data-es="Blog"
       >Blog</a></li>
 
       <li><a
-        href="/talento"
+        href={talentHref}
         class={`drawer-link ${activePage === 'talento' ? 'active' : ''}`}
         aria-current={activePage === 'talento' ? 'page' : undefined}
         data-en="Profile" data-es="Perfil profesional"
@@ -210,11 +225,11 @@ const { activePage = 'home' } = Astro.props;
         aria-label="Cambiar tema claro/oscuro"
       >◑ Dark</button>
 
-      <button
+      <a
         class="ctrl-btn"
-        data-action="lang-toggle"
-        aria-label="Switch to English"
-      >EN</button>
+        href={languageSwitchHref}
+        aria-label={isEnglish ? 'Cambiar a español' : 'Switch to English'}
+      >{isEnglish ? 'ES' : 'EN'}</a>
 
       <button
         id="drawer-a11y-toggle"
@@ -266,7 +281,7 @@ const { activePage = 'home' } = Astro.props;
     </div>
 
     <a
-      href="/servicios#contacto"
+      href={servicesContactHref}
       class="btn-primary btn-primary--lg mt-2 w-full shrink-0 text-center font-bold"
       data-en="Request free diagnosis →"
       data-es="Solicitar diagnóstico gratuito →"

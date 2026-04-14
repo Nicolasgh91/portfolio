@@ -2,6 +2,7 @@
 // TaxonomyFilter.astro
 // Navegación por categorías y etiquetas del blog.
 // Uso: <TaxonomyFilter categories={cats} tags={tags} activeCategory="arquitectura" activeTag="Docker" />
+import { localeFromPathname } from '../lib/locale-path';
 
 interface Props {
   categories: string[];
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const { categories, tags = [], activeCategory, activeTag } = Astro.props;
+const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog' : '/blog';
 ---
 
 <nav class="taxonomy" aria-label="Filtros del blog">
@@ -24,7 +26,7 @@ const { categories, tags = [], activeCategory, activeTag } = Astro.props;
       >Categorías</span>
       <ul class="taxonomy__pills">
         <li><a
-          href="/blog"
+          href={blogBaseHref}
           class={`taxonomy__pill ${!activeCategory && !activeTag ? 'taxonomy__pill--active' : ''}`}
           aria-current={!activeCategory && !activeTag ? 'page' : undefined}
           data-en="All"
@@ -33,7 +35,7 @@ const { categories, tags = [], activeCategory, activeTag } = Astro.props;
         {categories.map((cat) => (
           <li>
             <a
-              href={`/blog/categoria/${cat}`}
+              href={`/blog/categoria/${encodeURIComponent(cat)}`}
               class={`taxonomy__pill ${activeCategory === cat ? 'taxonomy__pill--active' : ''}`}
               aria-current={activeCategory === cat ? 'page' : undefined}
             >{cat}</a>

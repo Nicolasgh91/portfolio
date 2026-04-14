@@ -1,15 +1,18 @@
 ---
+import { localeFromPathname } from '../../lib/locale-path';
+
 interface Props {
   tags: string[];
   category: string;
 }
 
 const { tags, category } = Astro.props;
+const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog' : '/blog';
 ---
 
 <footer class="mt-12 border-t border-[color:var(--border-subtle)] pt-8">
   <a
-    href={`/blog/categoria/${category}`}
+    href={`/blog/categoria/${encodeURIComponent(category)}`}
     class="mb-4 inline-block text-xs uppercase tracking-widest text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--color-accent-400)]"
   >
     {category}

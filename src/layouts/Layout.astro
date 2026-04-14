@@ -4,6 +4,7 @@ import Analytics from '@vercel/analytics/astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import site from '../data/site.json';
+import { getAlternatePathname, localeFromPathname } from '../lib/locale-path';
 
 interface Props {
   title: string;
@@ -19,16 +20,25 @@ interface Props {
 const {
   title,
   description,
-  lang = 'es',
+  lang,
   ogImage = '/og-desktop.png',
   ogImageType: ogImageTypeProp,
   ogImageWidth: ogImageWidthProp,
   ogImageHeight: ogImageHeightProp,
 } = Astro.props;
 
-const canonical = Astro.url.href;
 const siteName = 'Nicolás Hruszczak';
 const siteUrl = 'https://escalatunegocioconia.com';
+const pathname = Astro.url.pathname;
+const locale = localeFromPathname(pathname);
+const alternatePathname = getAlternatePathname(pathname);
+const canonical = new URL(pathname, siteUrl).href;
+const englishHref = locale === 'en' ? canonical : new URL(alternatePathname, siteUrl).href;
+const spanishHref = locale === 'es' ? canonical : new URL(alternatePathname, siteUrl).href;
+const xDefaultHref = spanishHref;
+const resolvedTitle = locale === 'en' ? `${title} | English` : title;
+const resolvedDescription =
+  locale === 'en' ? `${description} English version for international audiences.` : description;
 
 function inferOgImageType(path: string): string {
   const lower = path.split('?')[0].toLowerCase();
@@ -44,11 +54,11 @@ const ogImageHeight = ogImageHeightProp ?? 768;
 ---
 
 <!doctype html>
-<html lang={lang} class="dark no-js">
+<html lang={lang ?? locale} class="dark no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+    <meta name="description" content={resolvedDescription} />
     <meta name="author" content="Nicolás Hruszczak" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonical} />
@@ -56,8 +66,8 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <!-- Open Graph base -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
     <meta property="og:image" content={`${siteUrl}${ogImage}`} />
     <meta property="og:image:width" content={String(ogImageWidth)} />
     <meta property="og:image:height" content={String(ogImageHeight)} />
@@ -68,8 +78,8 @@ const ogImageHeight = ogImageHeightProp ?? 768;
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
     <meta name="theme-color" content="#FBBF24" />
@@ -79,9 +89,9 @@ const ogImageHeight = ogImageHeightProp ?? 768;
          have been extracted to /scripts/*.js so CSP can drop that directive. -->
 
     <!-- hreflang -->
-    <link rel="alternate" hreflang="es" href={canonical} />
-    <link rel="alternate" hreflang="en" href={canonical} />
-    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="alternate" hreflang="es" href={spanishHref} />
+    <link rel="alternate" hreflang="en" href={englishHref} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -124,7 +134,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <!-- SLOT: JSON-LD y meta adicional por página (artículos, etc.) -->
     <slot name="head" />
 
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
 
     <!-- Tema + strip no-js + no-motion antes del primer paint.
          Sync script (no defer/async) para evitar FOUC en el cambio de tema. -->
