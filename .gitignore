@@ -22,8 +22,8 @@ Thumbs.db
 .env*.local
 
 #Docs
-docs
-docs/
+#docs
+#docs/
 
 # Local slide sources (heavy originals, not for git)
 content-sources/
