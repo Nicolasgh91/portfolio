@@ -191,7 +191,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           // del estado del iframe.
           document.addEventListener('click', () => {
             if (!chatOpen) return;
-            try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
+            try { iframe.contentWindow.postMessage('chat:close', window.location.origin); } catch(e) {}
           });
         }
 
