@@ -76,9 +76,19 @@ function isLocalOrigin(origin) {
   return origin.includes('localhost') || origin.includes('127.0.0.1');
 }
 
+// SEC-002: Scope preview CORS to this project's own deployments only.
+// VERCEL_PROJECT_NAME is injected automatically by Vercel at build/deploy time.
+// Without it (e.g. a local dev server) preview CORS is intentionally disabled —
+// use localhost instead.
 function isVercelPreview(origin) {
   try {
-    return new URL(origin).hostname.endsWith('.vercel.app');
+    const host = new URL(origin).hostname;
+    if (!host.endsWith('.vercel.app')) return false;
+    const project = (process.env.VERCEL_PROJECT_NAME ?? '').toLowerCase().trim();
+    if (!project) return false;
+    // Matches canonical project URL ({project}.vercel.app) and
+    // branch/PR preview URLs ({project}-{branch|hash}-{team}.vercel.app).
+    return host === `${project}.vercel.app` || host.startsWith(`${project}-`);
   } catch { return false; }
 }
 
