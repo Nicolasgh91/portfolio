@@ -1,5 +1,6 @@
 import { withBreaker } from '../lib/circuit-breaker.js';
 import { fetchWithTimeout } from '../lib/fetch-with-timeout.js';
+import { isLocalOrigin, isVercelDeploymentOrigin } from '../lib/chat-origin-allowlist.js';
 
 export const config = { runtime: 'edge' };
 
@@ -55,7 +56,8 @@ function getIP(req) {
 }
 
 function corsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
+  const allowed =
+    ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelDeploymentOrigin(origin);
   return {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGINS[0],
@@ -70,26 +72,6 @@ function json(data, status = 200, origin = '') {
     status,
     headers: corsHeaders(origin),
   });
-}
-
-function isLocalOrigin(origin) {
-  return origin.includes('localhost') || origin.includes('127.0.0.1');
-}
-
-// SEC-002: Scope preview CORS to this project's own deployments only.
-// VERCEL_PROJECT_NAME is injected automatically by Vercel at build/deploy time.
-// Without it (e.g. a local dev server) preview CORS is intentionally disabled —
-// use localhost instead.
-function isVercelPreview(origin) {
-  try {
-    const host = new URL(origin).hostname;
-    if (!host.endsWith('.vercel.app')) return false;
-    const project = (process.env.VERCEL_PROJECT_NAME ?? '').toLowerCase().trim();
-    if (!project) return false;
-    // Matches canonical project URL ({project}.vercel.app) and
-    // branch/PR preview URLs ({project}-{branch|hash}-{team}.vercel.app).
-    return host === `${project}.vercel.app` || host.startsWith(`${project}-`);
-  } catch { return false; }
 }
 
 // ── SEC-001: Server-side system prompt ──────────────────────────────
@@ -234,7 +216,8 @@ export default async function handler(req) {
 
   // ── Preflight (SEC-004) ───────────────────────────────────────────
   if (req.method === 'OPTIONS') {
-    const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
+    const allowed =
+      ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelDeploymentOrigin(origin);
     return new Response(null, {
       status: 204,
       headers: {
@@ -252,7 +235,7 @@ export default async function handler(req) {
   // ── Capa 1: origin (SEC-004) ──────────────────────────────────────
   const isLocal = isLocalOrigin(origin);
   const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin);
-  if (origin && !isLocal && !isAllowedOrigin && !isVercelPreview(origin)) {
+  if (origin && !isLocal && !isAllowedOrigin && !isVercelDeploymentOrigin(origin)) {
     return json({ error: 'Origen no permitido.' }, 403, origin);
   }
 

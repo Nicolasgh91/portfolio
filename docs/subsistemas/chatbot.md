@@ -2,7 +2,7 @@
 
 ## Alcance
 - Widget en `public/chatbot/widget/` + datos en `public/chatbot/data/`.
-- Backend BFF en `api/chat.js` (Vercel Edge).
+- Backend BFF en `api/chat.js` (Vercel Edge); allowlist de `Origin` para preview acotada a hostnames del despliegue (`VERCEL_URL` / `VERCEL_BRANCH_URL` / `{VERCEL_PROJECT_NAME}.vercel.app`, ver [seguridad.md](./seguridad.md) SEC-004).
 - Inyección global del iframe desde `src/layouts/Layout.astro`.
 
 ## Flujo end-to-end
