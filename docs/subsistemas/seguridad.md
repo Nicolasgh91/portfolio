@@ -7,7 +7,7 @@ Referencia viva de controles observados en código.
 | SEC-001 system prompt server-side | Implementado | `api/chat.js`, `public/chatbot/widget/js/api.js`, `main.js` |
 | SEC-002 rate limiting por IP | Implementado | `api/chat.js` (`RATE_LIMIT`, `Retry-After`) |
 | SEC-003 límites de payload/input | Implementado | `main.js` (`MAX_INPUT`), `api/chat.js` (`MAX_BODY_SIZE`, `MAX_HISTORY_LEN`) |
-| SEC-004 CORS restrictivo | Implementado | `api/chat.js` preflight + allowlist origins |
+| SEC-004 CORS restrictivo | Implementado | `api/chat.js` + `lib/chat-origin-allowlist.js`: dominios en `ALLOWED_ORIGINS`; local solo con hostname exacto (`localhost`, `127.0.0.1`, `::1`); preview Vercel solo `https` y hostname igual a `VERCEL_URL`, `VERCEL_BRANCH_URL` o `{VERCEL_PROJECT_NAME}.vercel.app` |
 | SEC-005 CSP | Implementado | `src/layouts/Layout.astro` meta `Content-Security-Policy` |
 | SEC-006 Content-Type estricto | Implementado | `api/chat.js` valida `application/json` |
 | SEC-007 errores no sensibles al usuario | Implementado | `main.js` mensaje genérico; `api/chat.js` errores acotados |
@@ -22,6 +22,7 @@ Referencia viva de controles observados en código.
 ## Decisiones
 - Defensa en capas en `/api/chat`: origen, content-type, rate, tamaño, budget, breaker.
 - Clave Gemini confinada a servidor (`process.env`).
+- SEC-004: no se usa coincidencia por substring en `Origin` ni prefijo libre sobre `*.vercel.app`; dominios de preview ajenos al despliegue no reciben CORS aunque compartan prefijo de nombre de proyecto.
 
 ## Pendientes recomendados
 - Definir formalmente SEC-012 (documento o implementación faltante).
