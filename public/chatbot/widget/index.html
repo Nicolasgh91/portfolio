@@ -10,6 +10,10 @@
     Debe estar ANTES del <link> al CSS para que los tokens ya existan
     cuando el browser evalúe las variables en chat.css.
     NO convertir a type="module". NO mover al body. NO hacer async/defer.
+
+    CSP: este script está inline-permitido vía sha256 hash en vercel.json
+    (route /chatbot/widget/*). Si modificás el contenido, regenerá los hashes
+    con `node scripts/csp-hash.mjs` y actualizá el header CSP en vercel.json.
   -->
   <script>
     (function() {

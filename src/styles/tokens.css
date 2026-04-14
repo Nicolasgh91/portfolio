@@ -65,16 +65,26 @@
   --accent-bg:        hsla(var(--accent-h), var(--accent-s), 56%, 0.07);
   --accent-border:    hsla(var(--accent-h), var(--accent-s), 56%, 0.25);
   --accent-text:      var(--color-accent-400);
+  /* A11Y: color reforzado para texto pequeño sobre fondos teñidos (e.g. accent-bg).
+     En dark mode usa el accent estándar (10:1 sobre bg-primary). En light mode
+     baja a accent-800 para alcanzar 7:1 sobre el accent-bg translúcido. */
+  --accent-on-tint:   var(--color-accent-400);
 
   /* Success — verde semántico para estados positivos y métricas */
   --color-success: hsl(152, 43%, 55%);
   --success-rgb: 76, 175, 125; /* para uso con rgba() en decorativos */
+
+  /* Danger — rojo semántico para errores de formulario y snackbar de error */
+  --color-danger: #E24B4A;
 
   --bg-primary:       hsl(240, 10%, 6%);
   --bg-secondary:     hsl(240, 9%, 9%);
   --bg-tertiary:      hsl(240, 11%, 12%);
   --bg-card:          hsla(240, 13%, 10%, 0.6);
   --bg-tag:           hsl(240, 12%, 14%);
+  /* Franjas / tarjetas con jerarquía tonal (p. ej. catálogo /servicios); ver ADR-003 */
+  --bg-surface-container-low:    var(--bg-secondary);
+  --bg-surface-container-lowest: var(--bg-primary);
 
   --text-primary:     hsl(240, 11%, 96%);
   --text-secondary:   hsl(240, 9%, 60%);
@@ -108,6 +118,11 @@
   --text-xl:    24px;
   --text-2xl:   32px;
   --text-3xl:   46px;
+  /* Display / métricas: escala con --font-scale (panel a11y) */
+  --text-4xl:   calc(clamp(2.5rem, 3.2vw + 1rem, 3.5rem) * var(--font-scale));
+  --text-5xl:   calc(clamp(3rem, 4.2vw + 1rem, 4.5rem) * var(--font-scale));
+  --text-6xl:   calc(clamp(3.25rem, 5.5vw + 1rem, 6rem) * var(--font-scale));
+  --text-metric: var(--text-6xl);
 
   --sp-xs:   4px;
   --sp-sm:   8px;
@@ -115,6 +130,8 @@
   --sp-lg:   24px;
   --sp-xl:   48px;
   --sp-2xl:  80px;
+  --sp-3xl:  128px;
+  --sp-4xl:  160px;
 
   --radius-sm:   6px;
   --radius-md:   10px;
@@ -163,14 +180,18 @@
   --accent-bg:        hsla(32, 94%, 44%, 0.06);
   --accent-border:    hsla(32, 94%, 44%, 0.25);
   --accent-text:      var(--color-accent-700);
+  --accent-on-tint:   var(--color-accent-800);
   --color-success: hsl(152, 50%, 38%);
   --success-rgb: 76, 175, 125;
+  --color-danger: #C2352E;
 
   --bg-primary:       hsl(60, 11%, 95%);
   --bg-secondary:     hsl(0, 0%, 100%);
   --bg-tertiary:      hsl(60, 11%, 91%);
   --bg-card:          hsla(0, 0%, 100%, 0.7);
   --bg-tag:           hsl(60, 11%, 91%);
+  --bg-surface-container-low:    var(--bg-tertiary);
+  --bg-surface-container-lowest: var(--bg-secondary);
 
   --text-primary:     hsl(240, 10%, 6%);
   --text-secondary:   hsl(240, 9%, 32%);
@@ -286,7 +307,9 @@ em { font-style: normal; color: var(--accent); }
   letter-spacing: 2px;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--accent);
+  /* A11Y: usar accent-text (color-accent-700 en light) para asegurar contraste WCAG AA
+     contra fondos claros (bg-secondary, footer-card-bg). En dark mode equivale a --accent. */
+  color: var(--accent-text);
   margin-bottom: var(--sp-sm);
 }
 
@@ -536,6 +559,100 @@ html.light .catalog-carousel__nav {
 @tailwind components;
 
 @layer components {
+  /* ProjectCard (home /talento): altura mínima sin magic numbers en el componente */
+  :root {
+    --card-project-min-h: 400px;
+    --card-project-min-h-md: 450px;
+  }
+
+  /**
+   * ServiceCard (/servicios): en claro fondo opaco --bg-surface-container-lowest;
+   * en tema oscuro (sin clase `light` en html) vidrio con --bg-card + blur.
+   * No usar utilidades Tailwind `dark:` para esto: `html` mantiene `class="dark"` siempre.
+   */
+  .service-card-shell-bg {
+    background-color: var(--bg-surface-container-lowest);
+  }
+  :root:not(.light) .service-card-shell-bg {
+    background-color: var(--bg-card);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  /**
+   * Hover en tarjetas con shell: composable con .service-card-shell-bg (mismo nodo).
+   * Claro: --bg-tertiary. Oscuro: velado blanco sobre vidrio (contraste vs. hover con --bg-tertiary).
+   */
+  .shell-hover {
+    transition: background-color 200ms ease;
+  }
+  :root.light .shell-hover:hover {
+    background-color: var(--bg-tertiary);
+  }
+  :root:not(.light) .shell-hover:hover {
+    background-color: hsla(0, 0%, 100%, 0.1);
+  }
+
+  /**
+   * LogoMarquee (/talento): franja contenida en `.page-container`; fondo acento; texto/iconos
+   * con `currentColor` → `--color-on-accent` (mismo criterio que botón primario sobre acento).
+   */
+  .logo-marquee--accent {
+    background-color: hsl(var(--accent-h), var(--accent-s), 56%);
+    color: var(--color-on-accent);
+  }
+  html.light .logo-marquee--accent {
+    background-color: var(--color-accent-600);
+    color: var(--color-on-accent);
+  }
+  /* `p { color: text-secondary }` global anula herencia; los rótulos deben seguir el on-accent */
+  .logo-marquee--accent p {
+    color: inherit;
+  }
+  .logo-marquee__slot {
+    display: inline-flex;
+    height: 2.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    opacity: 0.92;
+  }
+  .logo-marquee__slot :is(svg) {
+    display: block;
+    height: 2rem;
+    max-height: 2rem;
+    width: auto;
+  }
+
+  /*
+   * Bloques de color fijo (color blocking): no heredan inversión de html.dark / :root.light.
+   * Usar junto con bg-slate-950 / bg-orange-600 (Tailwind) en el mismo elemento o wrapper.
+   */
+  .section-dark,
+  .section-dark h1,
+  .section-dark h2,
+  .section-dark h3,
+  .section-dark h4,
+  .section-dark a:not(.btn-primary),
+  .section-dark .btn-secondary {
+    color: hsl(240, 11%, 96%);
+  }
+  .section-dark p {
+    color: hsl(215, 16%, 82%);
+  }
+
+  .section-accent,
+  .section-accent h1,
+  .section-accent h2,
+  .section-accent h3,
+  .section-accent h4,
+  .section-accent a:not(.btn-primary),
+  .section-accent .btn-secondary {
+    color: #ffffff;
+  }
+  .section-accent p {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
   /* ── Sistema de botones (variantes + modificadores) ─────── */
   .btn-primary,
   .btn-secondary,
@@ -681,6 +798,33 @@ html.light .catalog-carousel__nav {
     min-height: 2rem;
   }
 
+  /* Hook + hijo .arrow: rebote al hover (sin forwards; keyframes en raíz del archivo) */
+  .btn-bounce .arrow {
+    @apply inline-flex items-center shrink-0 transition-transform duration-300 ease-out;
+  }
+  .btn-bounce:hover .arrow {
+    animation: bounce-right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ProjectCard: mismo bounce que btn-bounce; hover en article.group/card (incl. overlay <a>) */
+  .group\/card .arrow {
+    @apply inline-flex items-center shrink-0 transition-transform duration-300 ease-out;
+  }
+  .group\/card:hover .arrow {
+    animation: bounce-right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-bounce:hover .arrow {
+      animation: none;
+      transform: translateX(5px);
+    }
+    .group\/card:hover .arrow {
+      animation: none;
+      transform: translateX(5px);
+    }
+  }
+
   /* Nav CTA: glow + pulse (dark); light sin sombra idle */
   .btn-primary--glow {
     position: relative;
@@ -747,6 +891,27 @@ html.light .catalog-carousel__nav {
     .btn-tertiary:active {
       transform: none;
     }
+  }
+
+  /* Secundario sobre bloques fijos: borde/fondo legibles con :root.light */
+  .section-dark .btn-secondary {
+    border-color: hsla(0, 0%, 100%, 0.28);
+    background: hsla(0, 0%, 100%, 0.08);
+  }
+  .section-dark .btn-secondary:hover {
+    border-color: hsla(0, 0%, 100%, 0.45);
+    background: hsla(0, 0%, 100%, 0.14);
+    color: hsl(240, 11%, 96%);
+  }
+
+  .section-accent .btn-secondary {
+    border-color: hsla(0, 0%, 100%, 0.35);
+    background: hsla(0, 0%, 100%, 0.1);
+  }
+  .section-accent .btn-secondary:hover {
+    border-color: hsla(0, 0%, 100%, 0.5);
+    background: hsla(0, 0%, 100%, 0.16);
+    color: #ffffff;
   }
 
   :root.no-motion .btn-primary--glow::after {
@@ -817,7 +982,69 @@ html.light .catalog-carousel__nav {
       transform: none;
       transition: none;
     }
+
+    /* Alt B: visible sin depender solo del script (refuerzo RD-4.4) */
+    [data-alt-reveal] {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      transition: none !important;
+    }
   }
+
+  /*
+   * Enlaces con clases de botón: anular color del `a` global del mismo archivo.
+   * Dentro de @layer components para que .section-dark / .section-accent ganen por especificidad.
+   */
+  a.btn-primary,
+  a.btn-primary:hover {
+    color: var(--btn-primary-text);
+  }
+  a.btn-secondary {
+    color: var(--btn-secondary-text);
+  }
+  a.btn-secondary:hover {
+    color: var(--btn-secondary-text-hover);
+  }
+  a.btn-tertiary {
+    color: var(--btn-tertiary-text);
+  }
+  a.btn-tertiary:hover {
+    color: var(--btn-tertiary-text-hover);
+  }
+
+  /* Enlace secundario en bloque oscuro: refuerzo frente a `a.btn-secondary` (:root.light). */
+  .section-dark a.btn-secondary,
+  .section-dark a.btn-secondary:hover {
+    color: hsl(240, 11%, 96%);
+  }
+}
+
+@keyframes bounce-right {
+  0% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Sin capa: gana a reglas en @layer components (mismo patrón que glow vía orden) */
+:root.no-motion .btn-bounce:hover .arrow {
+  animation: none;
+  transform: translateX(5px);
+}
+:root.no-motion .group\/card:hover .arrow {
+  animation: none;
+  transform: translateX(5px);
 }
 
 /* Sin JS: el contenido no puede depender de .is-visible (SEO / crawlers) */
@@ -826,25 +1053,9 @@ html.light .catalog-carousel__nav {
   transform: none;
 }
 
-/*
-  Enlaces con clases de botón: la regla global `a` / `a:hover` vive fuera de @layer
-  y pisa los colores definidos en @layer components.
-*/
-a.btn-primary,
-a.btn-primary:hover {
-  color: var(--btn-primary-text);
-}
-a.btn-secondary {
-  color: var(--btn-secondary-text);
-}
-a.btn-secondary:hover {
-  color: var(--btn-secondary-text-hover);
-}
-a.btn-tertiary {
-  color: var(--btn-tertiary-text);
-}
-a.btn-tertiary:hover {
-  color: var(--btn-tertiary-text-hover);
+.no-js [data-alt-reveal] {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 @tailwind utilities;

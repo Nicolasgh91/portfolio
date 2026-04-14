@@ -1,14 +1,34 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import HeroSection from '../components/HeroSection.astro';
+import SectionWrapper from '../components/SectionWrapper.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import MetricDisplay from '../components/MetricDisplay.astro';
 import { getCollection } from 'astro:content';
+import { landingTemplates } from '../data/landing-templates';
+import type { LandingTemplate } from '../schemas';
+import { getTemplateCarouselImage } from '../data/template-carousel-images';
+import { resolveTemplateDemoUrl } from '../lib/resolve-template-demo-url';
 
-// Obtener proyectos featured, ordenados
 const allProjects = await getCollection('projects');
 const featuredProjects = allProjects
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
+
+const templatePymeBase =
+  import.meta.env.PUBLIC_TEMPLATE_PYME_URL ?? 'https://template-pyme.escalatunegocioconia.com';
+
+const templatesWithResolvedDemo = landingTemplates
+  .filter((t) => t.status === 'available')
+  .map((t) => ({
+    template: t,
+    demoUrl: resolveTemplateDemoUrl(t, templatePymeBase),
+  }))
+  .filter((x): x is { template: LandingTemplate; demoUrl: string } => x.demoUrl !== null)
+  .sort((a, b) => b.template.priority - a.template.priority);
 ---
 
 <Layout
@@ -20,254 +40,229 @@ const featuredProjects = allProjects
 
   <main id="main-content">
     <HeroSection />
-    <div class="page-container">
 
-      <!-- ── Stats bar ─────────────────────────────────────── -->
-      <div
-        class="stats-bar reveal reveal--scale hidden"
-        style="--reveal-delay: 0ms"
-        role="list"
-        aria-label="Estadísticas"
-      >
-        <div class="stat-item" role="listitem">
-          <div class="stat-num">3+</div>
-          <div
-            class="stat-label"
-            data-en="Years in full stack development"
-            data-es="Años en desarrollo de soluciones de productos tecnológicos"
-          >Años en desarrollo de soluciones de productos tecnológicos</div>
-        </div>
-        <div class="stat-item" role="listitem">
-          <div class="stat-num">{allProjects.length}</div>
-          <div
-            class="stat-label"
-            data-en="Active engineering projects"
-            data-es="Proyectos de ingeniería activos"
-          >Proyectos de ingeniería activos</div>
-        </div>
-        <div class="stat-item" role="listitem">
-          <div class="stat-num">∞</div>
-          <div
-            class="stat-label"
-            data-en="AI agent expertise"
-            data-es="Dominio de agentes de IA"
-          >Dominio de agentes de IA</div>
-        </div>
-      </div>
-
-      <!-- ── Split CTA ──────────────────────────────────────── -->
-      <nav class="split-cta reveal reveal--scale" style="--reveal-delay: 0ms" aria-label="Rutas de navegación">
-        <a href="/servicios" class="btn-tertiary split-cta__cell p-0">
-          <h2>
-            <span aria-hidden="true">📊</span>
-            <span
-              data-en="For businesses &amp; SMEs"
-              data-es="Para empresas y pymes"
-            >Para empresas y pymes</span>
+    <SectionWrapper tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={0}>
+      <nav class="grid gap-6 md:grid-cols-2 md:gap-8" aria-label="Rutas de navegación">
+        <a
+          href="/servicios"
+          class="btn-bounce flex flex-col gap-5 rounded-2xl border border-[var(--border-normal)] border-l-4 border-l-[var(--color-accent-600)] bg-[var(--bg-secondary)] p-6 transition-transform duration-200 hover:-translate-y-1 hover:bg-[var(--bg-tertiary)] md:p-8"
+        >
+          <h2 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)]">
+            <span data-es>Para empresas y pymes</span>
+            <span data-en class="hidden">For businesses &amp; SMEs</span>
           </h2>
-          <p
-            data-en="Diagnosis, proposal and execution. Fixed cost reduction, process automation, and proprietary management systems."
-            data-es="Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios."
-          >Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios.</p>
-          <span
-            class="split-cta-arrow"
-            data-en="Explore services →"
-            data-es="Explorar servicios →"
-          >Explorar servicios →</span>
+          <p class="text-base leading-relaxed text-[var(--text-secondary)]">
+            <span data-es
+              >Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de
+              gestión propietarios.</span
+            >
+            <span data-en class="hidden"
+              >Diagnosis, proposal and execution. Fixed cost reduction, process automation, and proprietary management
+              systems.</span
+            >
+          </p>
+          <span class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)] md:mt-3">
+            <span data-es>Explorar servicios</span>
+            <span data-en class="hidden">Explore services</span>
+            <span class="arrow" aria-hidden="true">
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </span>
         </a>
 
-        <a href="/talento" class="btn-tertiary split-cta__cell p-0">
-          <h2>
-            <span aria-hidden="true">💼</span>
-            <span
-              data-en="For recruiters"
-              data-es="Para reclutadores"
-            >Para reclutadores</span>
+        <a
+          href="/talento"
+          class="btn-bounce flex flex-col gap-5 rounded-2xl border border-[var(--border-normal)] border-l-4 border-l-[var(--text-muted)] bg-[var(--bg-secondary)] p-6 transition-transform duration-200 hover:-translate-y-1 hover:bg-[var(--bg-tertiary)] md:p-8"
+        >
+          <h2 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)]">
+            <span data-es>Para reclutadores</span>
+            <span data-en class="hidden">For recruiters</span>
           </h2>
-          <p
-            data-en="Functional analyst, full stack developer and software architect. Updated stack, AI expertise and agile methodologies."
-            data-es="Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles."
-          >Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles.</p>
-          <span
-            class="split-cta-arrow"
-            data-en="View technical profile →"
-            data-es="Ver perfil técnico →"
-          >Ver perfil técnico →</span>
+          <p class="text-base leading-relaxed text-[var(--text-secondary)]">
+            <span data-es
+              >Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en
+              IA y metodologías ágiles.</span
+            >
+            <span data-en class="hidden"
+              >Functional analyst, full stack developer and software architect. Current stack, AI expertise and agile
+              practices.</span
+            >
+          </p>
+          <span class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)] md:mt-3">
+            <span data-es>Ver perfil técnico</span>
+            <span data-en class="hidden">View technical profile</span>
+            <span class="arrow" aria-hidden="true">
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </span>
         </a>
       </nav>
+    </SectionWrapper>
 
-      <div class="divider"></div>
+    <SectionWrapper bg="bg-slate-950" tone="dark" padding="py-24 md:py-32" revealAlt revealDelayMs={100}>
+      <header class="mb-12 md:mb-16">
+        <SectionLabel text="Proyectos" textEn="Projects" />
+        <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <span data-es>Trabajo reciente</span>
+          <span data-en class="hidden">Recent work</span>
+        </h2>
+      </header>
 
-      <!-- ── Proyectos recientes (dinámico) ────────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="projects-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Projects"
-            data-es="Proyectos"
-          >Proyectos</span>
-          <h2
-            id="projects-heading"
-            data-en="Recent work"
-            data-es="Trabajo reciente"
-          >Trabajo reciente</h2>
-        </div>
+      <div class="flex flex-col gap-6 md:gap-8">
+        {
+          featuredProjects.map((project, i) => (
+            <ProjectCard
+              headingId={`project-card-${project.slug}`}
+              direction={i % 2 === 0 ? 'left' : 'right'}
+              title={project.data.title}
+              titleEn={project.data.title}
+              description={project.data.description}
+              descriptionEn={project.data.descriptionEn}
+              coverPosition={project.data.coverPosition}
+              image={project.data.coverImage}
+              tags={project.data.tags}
+              href={
+                project.data.url
+                  ? project.data.url
+                  : project.slug === 'huelladelfuego'
+                    ? '/blog/caso-huelladelfuego'
+                    : `/talento#${project.slug}`
+              }
+              badge={
+                project.data.status === 'live'
+                  ? 'En producción'
+                  : project.data.status === 'in-progress'
+                    ? 'En progreso'
+                    : undefined
+              }
+              badgeEn={
+                project.data.status === 'live' ? 'Live' : project.data.status === 'in-progress' ? 'In progress' : undefined
+              }
+              badgeVariant={project.data.status === 'live' ? 'live' : 'in-progress'}
+              external={Boolean(project.data.url)}
+            />
+          ))
+        }
+      </div>
 
-        <div class="grid-2">
-          {featuredProjects.map((project) => (
-            <article class="project-card">
-              <div class="project-header">
-                <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                  <span aria-hidden="true" style="font-size:20px">{project.data.icon}</span>
-                  {project.data.title}
-                </h3>
-                {project.data.url && (
+      <div class="mt-12 text-center md:mt-16">
+        <a href="/blog" class="btn-secondary btn-bounce inline-flex items-center gap-1.5">
+          <span data-es>Leer artículos técnicos</span>
+          <span data-en class="hidden">Read technical articles</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </SectionWrapper>
+
+    <SectionWrapper bg="bg-[var(--bg-secondary)]" tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={200}>
+      <header class="mb-12 md:mb-16">
+        <SectionLabel text="Impacto" textEn="Impact" colorClass="text-[var(--accent)]" />
+        <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
+          <span data-es>Métricas de impacto</span>
+          <span data-en class="hidden">Impact metrics</span>
+        </h2>
+      </header>
+      <div class="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
+        <MetricDisplay
+          value="+11"
+          label="empresas acompañadas"
+          labelEn="companies served"
+        />
+        <MetricDisplay
+          value="−40%"
+          label="reducción típica de costos fijos"
+          labelEn="typical fixed-cost reduction"
+        />
+        <MetricDisplay value="24/7" label="disponibilidad IA en producción" labelEn="AI uptime in production" />
+      </div>
+    </SectionWrapper>
+
+    {
+      templatesWithResolvedDemo.length > 0 && (
+        <SectionWrapper tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={250}>
+          <header class="mb-10 md:mb-12">
+            <SectionLabel text="Proyectos web" textEn="Web projects" colorClass="text-[var(--accent)]" />
+            <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
+              <span data-es>Sitios que ya están en producción</span>
+              <span data-en class="hidden">Sites already in production</span>
+            </h2>
+            <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+              <span data-es>Recorré los proyectos web que nuestros clientes usan todos los días.</span>
+              <span data-en class="hidden">Browse the web projects our clients use every day.</span>
+            </p>
+          </header>
+
+          <div
+            class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:snap-none [&::-webkit-scrollbar]:hidden"
+            role="list"
+            aria-label="Proyectos web"
+          >
+            {templatesWithResolvedDemo.map(({ template, demoUrl }) => {
+              const thumb = getTemplateCarouselImage(template.slug);
+              const external = /^https?:\/\//i.test(demoUrl);
+              return (
+                <article
+                  class="w-[min(280px,86vw)] shrink-0 snap-start md:w-auto"
+                  role="listitem"
+                >
                   <a
-                    href={project.data.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="project-url"
-                  >{project.data.url.replace('http://', '').replace('https://', '')}&nbsp;↗</a>
-                )}
-                {project.data.status === 'in-progress' && (
-                  <span class="tag tag-accent" style="font-size:10px">
-                    <span data-en="In progress" data-es="En progreso">En progreso</span>
-                  </span>
-                )}
-              </div>
-
-              <p
-                data-en={project.data.descriptionEn}
-                data-es={project.data.description}
-              >{project.data.description}</p>
-
-              <div class="tags">
-                <a href={`/talento#${project.slug}`} class="tag tag-accent"
-                  data-en="View project →"
-                  data-es="Ver proyecto →"
-                >Ver proyecto →</a>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <!-- Enlace al blog técnico -->
-        <div style="text-align:center; margin-top: var(--sp-lg);">
-          <a href="/blog" class="btn-secondary"
-            data-en="Read technical articles →"
-            data-es="Leer artículos técnicos →"
-          >Leer artículos técnicos →</a>
-        </div>
-      </section>
-
-    </div>
+                    href={demoUrl}
+                    class="group btn-bounce flex flex-col"
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <div class="aspect-video overflow-hidden rounded-xl border border-[var(--border-normal)] bg-[var(--bg-tertiary)]">
+                      {thumb ? (
+                        <Image
+                          src={thumb}
+                          alt=""
+                          width={640}
+                          height={360}
+                          sizes="(min-width: 768px) 30vw, 86vw"
+                          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        />
+                      ) : (
+                        <div class="flex h-full w-full items-center justify-center bg-[var(--bg-tag)] text-xs font-medium text-[var(--text-muted)]">
+                          <span data-es>Vista previa</span>
+                          <span data-en class="hidden">Preview</span>
+                        </div>
+                      )}
+                    </div>
+                    <h3 class="mt-3 font-display text-base font-semibold tracking-tight text-[var(--text-primary)]">
+                      <span data-es>{template.title}</span>
+                      <span data-en class="hidden">{template.titleEn}</span>
+                    </h3>
+                    <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--accent)]">
+                      <span data-es>Ir al sitio</span>
+                      <span data-en class="hidden">Visit site</span>
+                      <span class="arrow" aria-hidden="true">→</span>
+                    </span>
+                  </a>
+                </article>
+              );
+            })}
+          </div>
+        </SectionWrapper>
+      )
+    }
   </main>
-
 </Layout>
-
-<style>
-  .cta-row > a {
-    flex: 1;
-    min-width: 250px;
-    max-width: 320px;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .stats-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin-bottom: var(--sp-xl);
-  }
-  /* Scoped `display:grid` beats global Tailwind `.hidden`. */
-  .stats-bar.hidden {
-    display: none;
-  }
-  @media (max-width: 480px) {
-    .stats-bar { grid-template-columns: 1fr; }
-  }
-  .stat-item {
-    padding: var(--sp-lg);
-    text-align: center;
-    border-right: 0.5px solid var(--border-normal);
-  }
-  .stat-item:last-child { border-right: none; }
-  @media (max-width: 480px) {
-    .stat-item { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
-    .stat-item:last-child { border-bottom: none; }
-  }
-  .stat-num {
-    font-family: var(--font-display);
-    font-size: calc(var(--text-2xl) * var(--font-scale));
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
-    margin-top: 6px;
-  }
-
-  .split-cta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  @media (max-width: 560px) { .split-cta { grid-template-columns: 1fr; } }
-  .split-cta__cell {
-    padding: var(--sp-lg);
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    transition: background 0.15s ease;
-  }
-  .split-cta__cell:hover {
-    background: var(--accent-bg);
-  }
-  .split-cta__cell:first-child { border-right: 0.5px solid var(--border-normal); }
-  @media (max-width: 560px) {
-    .split-cta__cell:first-child { border-right: none; border-bottom: 0.5px solid var(--border-normal); }
-  }
-  .split-cta__cell h2 { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); font-size: calc(var(--text-lg) * var(--font-scale)); letter-spacing: -0.4px; color: var(--text-primary); font-family: var(--font-display); }
-  .split-cta__cell p { font-size: var(--text-sm); line-height: 1.65; margin-bottom: var(--sp-md); flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
-  .split-cta-arrow { font-size: var(--text-sm); color: var(--accent); margin-top: auto; }
-
-  .project-card {
-    background: var(--bg-card);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg);
-    transition: border-color 0.15s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-    text-align: center;
-  }
-  .project-card:hover { border-color: var(--border-normal); }
-  .project-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--sp-xs);
-    margin-bottom: var(--sp-sm);
-  }
-  .project-header h3 { margin-bottom: 0; }
-  .project-url { font-size: var(--text-xs); color: var(--text-muted); }
-  .project-url:hover { color: var(--accent); }
-  .project-card p { font-size: var(--text-sm); flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: var(--sp-sm); }
-  .project-card .tags { margin-top: auto; justify-content: center; width: 100%; }
-
-</style>

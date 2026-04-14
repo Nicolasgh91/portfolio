@@ -6,7 +6,11 @@ const { activePage = 'home' } = Astro.props;
 ---
 
 <header>
-  <nav class="nav" role="navigation" aria-label="Navegación principal">
+  <nav
+    class="nav"
+    role="navigation"
+    aria-label="Navegación principal"
+  >
 
     <!-- Logo -->
     <a href="/" class="nav-logo" aria-label="Nicolás Hruszczak — Inicio">
@@ -81,7 +85,7 @@ const { activePage = 'home' } = Astro.props;
         <button
           id="theme-btn"
           class="ctrl-btn"
-          onclick="nhTheme.toggle()"
+          data-action="theme-toggle"
           aria-label="Cambiar tema claro/oscuro"
           title="Tema"
         >◑ Dark</button>
@@ -89,7 +93,7 @@ const { activePage = 'home' } = Astro.props;
         <button
           id="lang-btn"
           class="ctrl-btn"
-          onclick="nhLang.toggle()"
+          data-action="lang-toggle"
           aria-label="Switch to English"
           title="Language / Idioma"
         >EN</button>
@@ -97,7 +101,7 @@ const { activePage = 'home' } = Astro.props;
         <button
           id="a11y-btn"
           class="ctrl-btn"
-          onclick="nhA11y.togglePanel()"
+          data-action="a11y-toggle-panel"
           aria-label="Opciones de accesibilidad"
           aria-expanded="false"
           aria-controls="a11y-panel"
@@ -202,13 +206,13 @@ const { activePage = 'home' } = Astro.props;
     <div class="drawer-controls">
       <button
         class="ctrl-btn"
-        onclick="nhTheme.toggle()"
+        data-action="theme-toggle"
         aria-label="Cambiar tema claro/oscuro"
       >◑ Dark</button>
 
       <button
         class="ctrl-btn"
-        onclick="nhLang.toggle()"
+        data-action="lang-toggle"
         aria-label="Switch to English"
       >EN</button>
 
@@ -231,11 +235,11 @@ const { activePage = 'home' } = Astro.props;
           <span class="a11y-label" id="drawer-font-size-label">Tamaño de texto</span>
           <div class="a11y-btns" role="group" aria-labelledby="drawer-font-size-label">
             <button class="a11y-btn a11y-fs-btn on" data-scale="1"
-              onclick="nhA11y.setFontScale(1)" aria-pressed="true">A</button>
+              data-action="a11y-font-scale" aria-pressed="true">A</button>
             <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
-              onclick="nhA11y.setFontScale(1.15)" aria-pressed="false">A+</button>
+              data-action="a11y-font-scale" aria-pressed="false">A+</button>
             <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
-              onclick="nhA11y.setFontScale(1.3)" aria-pressed="false">A++</button>
+              data-action="a11y-font-scale" aria-pressed="false">A++</button>
           </div>
         </div>
 
@@ -243,9 +247,9 @@ const { activePage = 'home' } = Astro.props;
           <span class="a11y-label" id="drawer-contrast-label">Contraste</span>
           <div class="a11y-btns" role="group" aria-labelledby="drawer-contrast-label">
             <button class="a11y-btn on"
-              onclick="nhA11y.setHighContrast(false)" aria-pressed="false">Normal</button>
+              data-action="a11y-high-contrast" data-value="off" aria-pressed="false">Normal</button>
             <button class="a11y-btn"
-              onclick="nhA11y.setHighContrast(true)" aria-pressed="false">Alto contraste</button>
+              data-action="a11y-high-contrast" data-value="on" aria-pressed="false">Alto contraste</button>
           </div>
         </div>
 
@@ -253,9 +257,9 @@ const { activePage = 'home' } = Astro.props;
           <span class="a11y-label" id="drawer-motion-label">Movimiento</span>
           <div class="a11y-btns" role="group" aria-labelledby="drawer-motion-label">
             <button class="a11y-btn on"
-              onclick="nhA11y.setReducedMotion(false, true)" aria-pressed="true">Activado</button>
+              data-action="a11y-reduced-motion" data-value="off" aria-pressed="true">Activado</button>
             <button class="a11y-btn"
-              onclick="nhA11y.setReducedMotion(true, true)" aria-pressed="false">Reducido</button>
+              data-action="a11y-reduced-motion" data-value="on" aria-pressed="false">Reducido</button>
           </div>
         </div>
       </div>
@@ -304,11 +308,11 @@ const { activePage = 'home' } = Astro.props;
       <span class="a11y-label" id="font-size-label">Tamaño de texto</span>
       <div class="a11y-btns" role="group" aria-labelledby="font-size-label">
         <button class="a11y-btn a11y-fs-btn on" data-scale="1"
-          onclick="nhA11y.setFontScale(1)" aria-pressed="true">A</button>
+          data-action="a11y-font-scale" aria-pressed="true">A</button>
         <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
-          onclick="nhA11y.setFontScale(1.15)" aria-pressed="false">A+</button>
+          data-action="a11y-font-scale" aria-pressed="false">A+</button>
         <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
-          onclick="nhA11y.setFontScale(1.3)" aria-pressed="false">A++</button>
+          data-action="a11y-font-scale" aria-pressed="false">A++</button>
       </div>
     </div>
 
@@ -316,9 +320,9 @@ const { activePage = 'home' } = Astro.props;
       <span class="a11y-label" id="contrast-label">Contraste</span>
       <div class="a11y-btns" role="group" aria-labelledby="contrast-label">
         <button class="a11y-btn on" id="hc-off"
-          onclick="nhA11y.setHighContrast(false)" aria-pressed="false">Normal</button>
+          data-action="a11y-high-contrast" data-value="off" aria-pressed="false">Normal</button>
         <button class="a11y-btn" id="hc-on"
-          onclick="nhA11y.setHighContrast(true)" aria-pressed="false">Alto contraste</button>
+          data-action="a11y-high-contrast" data-value="on" aria-pressed="false">Alto contraste</button>
       </div>
     </div>
 
@@ -326,9 +330,9 @@ const { activePage = 'home' } = Astro.props;
       <span class="a11y-label" id="motion-label">Movimiento</span>
       <div class="a11y-btns" role="group" aria-labelledby="motion-label">
         <button class="a11y-btn on" id="mot-on"
-          onclick="nhA11y.setReducedMotion(false, true)" aria-pressed="true">Activado</button>
+          data-action="a11y-reduced-motion" data-value="off" aria-pressed="true">Activado</button>
         <button class="a11y-btn" id="mot-off"
-          onclick="nhA11y.setReducedMotion(true, true)" aria-pressed="false">Reducido</button>
+          data-action="a11y-reduced-motion" data-value="on" aria-pressed="false">Reducido</button>
       </div>
     </div>
   </div>

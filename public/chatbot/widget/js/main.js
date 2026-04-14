@@ -73,6 +73,7 @@ closeBtn.addEventListener('click', e => {
 
 // ── Cerrar desde el padre (click fuera del iframe) ──────────────────────────
 window.addEventListener('message', e => {
+  if (e.source !== window.parent) return;
   if (e.data === 'chat:close' && isOpen) closeChat();
 });
 

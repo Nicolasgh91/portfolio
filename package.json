@@ -6,8 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --import tsx --test ./schemas/index.test.ts",
-    "typecheck": "tsc --noEmit -p ."
+    "test": "node --import tsx --test ./schemas/index.test.ts ./src/lib/faq-jsonld.test.ts",
+    "typecheck": "astro sync && tsc --noEmit -p ."
   },
   "dependencies": {
     "@astrojs/mdx": "4.3.14",

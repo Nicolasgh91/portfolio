@@ -1,7 +1,8 @@
 ---
 /**
  * Página de prueba (SV-07): dos instancias de ShareBar, TableOfContents y SlideViewer
- * para validar init con define:vars + getElementById. No enlazar desde producción si no se desea indexar.
+ * para validar init via querySelectorAll sobre atributos `data-*`. No enlazar
+ * desde producción si no se desea indexar.
  */
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';

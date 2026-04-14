@@ -1,8 +1,13 @@
 ---
+import { Fragment } from 'astro/jsx-runtime';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import PageHeroSection from '../components/PageHeroSection.astro';
+import SectionWrapper from '../components/SectionWrapper.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
 import { getCollection } from 'astro:content';
-import CapabilityCard from '../components/CapabilityCard.astro';
+import bannerTalentoNaranja from '../assets/talento/banner-talento-naranja.webp';
 
 const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
 
@@ -26,9 +31,6 @@ const capabilities = [
       'Diseño de sistemas multi-agente con memoria persistente, herramientas y planificación autónoma.',
     descriptionEn:
       'Design of multi-agent systems with persistent memory, tools and autonomous planning.',
-    icon: '🤖',
-    level: 90,
-    tags: ['LangChain', 'LlamaIndex', 'Python'],
   },
   {
     title: 'Infraestructura y DevOps',
@@ -37,9 +39,6 @@ const capabilities = [
       'Despliegue de servicios en cloud y on-premise, CI/CD, contenedores y monitoreo de producción.',
     descriptionEn:
       'Cloud and on-premise service deployment, CI/CD, containers and production monitoring.',
-    icon: '🗄️',
-    level: 85,
-    tags: ['Docker', 'Oracle Cloud', 'GitHub Actions'],
   },
   {
     title: 'Sistemas geoespaciales',
@@ -48,9 +47,57 @@ const capabilities = [
       'Análisis y visualización de datos geográficos integrados en plataformas de gestión operativa.',
     descriptionEn:
       'Analysis and visualization of geographic data integrated into operational management platforms.',
-    icon: '🗺️',
-    level: 80,
-    tags: ['PostGIS', 'FastAPI', 'QGIS'],
+  },
+];
+
+const softSkills = [
+  {
+    title: 'Comunicación efectiva',
+    titleEn: 'Effective communication',
+    description:
+      'Síntesis clara entre contexto técnico y negocio, y documentación acorde a cada audiencia.',
+    descriptionEn:
+      'Clear synthesis between technical and business context, with documentation suited to each audience.',
+  },
+  {
+    title: 'Liderazgo técnico',
+    titleEn: 'Technical leadership',
+    description:
+      'Dirección de decisiones de arquitectura, priorización y calidad sin perder velocidad de entrega.',
+    descriptionEn:
+      'Guiding architecture choices, prioritization, and quality without sacrificing delivery speed.',
+  },
+  {
+    title: 'Mentoría y facilitación',
+    titleEn: 'Mentoring and facilitation',
+    description:
+      'Acompañamiento a perfiles en formación y dinámicas que alinean al equipo en objetivos comunes.',
+    descriptionEn:
+      'Support for early-career profiles and facilitation that keeps teams aligned on shared goals.',
+  },
+  {
+    title: 'Resolución de conflictos',
+    titleEn: 'Conflict resolution',
+    description:
+      'Negociación empática y foco en acuerdos accionables cuando hay tensión técnica u operativa.',
+    descriptionEn:
+      'Empathetic negotiation and actionable agreements when technical or operational tension arises.',
+  },
+  {
+    title: 'Pensamiento sistémico',
+    titleEn: 'Systems thinking',
+    description:
+      'Visión integral de dependencias, riesgos y efectos colaterales antes de comprometer cambios.',
+    descriptionEn:
+      'Holistic view of dependencies, risks, and side effects before committing to change.',
+  },
+  {
+    title: 'Gestión de stakeholders',
+    titleEn: 'Stakeholder management',
+    description:
+      'Expectativas alineadas, seguimiento de compromisos y comunicación predecible con negocio.',
+    descriptionEn:
+      'Aligned expectations, commitment tracking, and predictable communication with the business.',
   },
 ];
 ---
@@ -63,104 +110,105 @@ const capabilities = [
   <Nav activePage="talento" />
 
   <main id="main-content">
+    <PageHeroSection
+      image={bannerTalentoNaranja}
+      alt="Banner visual cálido en tonos naranja para la página de perfil profesional."
+      imageWidth={1671}
+      imageHeight={940}
+      headingId="talento-hero-heading"
+      labelText="Analista funcional · Desarrollador full-stack · Arquitecto de software"
+      labelTextEn="Functional analyst · Full-stack developer · Software architect"
+    >
+      <Fragment slot="heading">Nicolás Hruszczak</Fragment>
+      <p>
+        <span data-es
+          >Analista desarrollador de <em class="not-italic text-[var(--accent-text)]"
+            >soluciones full stack o funcionales</em
+          >
+          para cualquier aplicación de Software. <em class="not-italic text-[var(--accent-text)]"
+            >Análisis de necesidades y puntos de dolor</em
+          >, con <em class="not-italic text-[var(--accent-text)]">propuestas de mejora eficientes</em> y acorde al
+          alcance establecido. <em class="not-italic text-[var(--accent-text)]"
+            >Comunicación clara con negocio y stakeholders</em
+          >, mentoría a perfiles en formación y criterio de producto para priorizar entregas con impacto.</span
+        >
+        <span data-en class="hidden"
+          >Analyst-developer of <em class="not-italic text-[var(--accent-text)]"
+            >full-stack or functional solutions</em
+          >
+          for any software application. <em class="not-italic text-[var(--accent-text)]"
+            >Analysis of needs and pain points</em
+          >, with <em class="not-italic text-[var(--accent-text)]">efficient improvement proposals</em> aligned with
+          the agreed scope. <em class="not-italic text-[var(--accent-text)]"
+            >Clear communication with business and stakeholders</em
+          >, mentoring for early-career profiles and product judgment to prioritize high-impact delivery.</span
+        >
+      </p>
+      <div class="mt-8 flex justify-center md:justify-start">
+        <a
+          href={GITHUB_REPOS_URL}
+          class="btn-secondary border-white/20 bg-white/5 text-white hover:border-white/35 hover:bg-white/10"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Ver repositorios en GitHub"
+          data-en="GitHub repositories"
+          data-es="Repositorios en GitHub"
+        >
+          Repositorios en GitHub
+        </a>
+      </div>
+    </PageHeroSection>
+
     <div class="page-container">
-      <!-- Perfil -->
       <section
-        class="relative mb-16 min-h-[28vh] overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] px-6 py-10 md:mb-20 md:px-10 md:py-12"
-        aria-label="Perfil profesional"
-      >
-        <div
-          class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_center,_hsla(var(--accent-h),var(--accent-s),56%,0.22)_0%,_transparent_68%)] opacity-90"
-          aria-hidden="true"
-        ></div>
-
-        <div class="relative min-w-0">
-          <p
-            class="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
-            data-en="Professional profile"
-            data-es="Perfil profesional"
-          >
-            Perfil profesional
-          </p>
-          <h1
-            class="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-extrabold leading-tight tracking-tight text-[var(--text-primary)]"
-          >
-            Nicolás Hruszczak
-          </h1>
-          <p
-            class="mt-2 max-w-xl font-body text-base font-medium text-[var(--accent-text)]"
-            data-en="Functional analyst and full stack developer."
-            data-es="Analista funcional y desarrollador full stack."
-          >
-            Analista funcional y desarrollador full stack.
-          </p>
-          <p
-            class="mt-2 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)]"
-            data-en="Technology management, software architecture and AI implementation for scalable solutions."
-            data-es="Gestión de la tecnología, arquitectura de software e implementación de IA para soluciones escalables."
-          >
-            Gestión de la tecnología, arquitectura de software e implementación de IA para soluciones escalables.
-          </p>
-          <div class="mt-6 flex flex-wrap gap-2">
-            <a
-              href={GITHUB_REPOS_URL}
-              class="btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Ver repositorios en GitHub"
-              data-en="⌥ GitHub repositories"
-              data-es="⌥ Repositorios en GitHub"
-              >⌥ Repositorios en GitHub</a
-            >
-          </div>
-        </div>
-      </section>
-
-      <!-- Capacidades técnicas -->
-      <section
-        class="mb-16 md:mb-20 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
+        class="mb-16 rounded-2xl bg-[var(--bg-surface-container-low)] px-5 py-10 opacity-0 translate-y-4 transition-all duration-700 md:mb-24 md:px-8 md:py-12"
         aria-labelledby="capabilities-heading"
+        data-alt-reveal
       >
-        <header class="mb-8 md:mb-10">
-          <div class="mb-2 flex items-center gap-3">
-            <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
-            <span
-              class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
-              data-en="Capabilities"
-              data-es="Capacidades"
-              >Capacidades</span
-            >
-          </div>
+        <header class="mb-10 md:mb-12">
+          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]">
+            <span data-es>Capacidades</span>
+            <span data-en class="hidden">Capabilities</span>
+          </p>
           <h2
             id="capabilities-heading"
-            class="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-3xl"
-            data-en="Technical capabilities"
-            data-es="Capacidades técnicas"
+            class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            Capacidades técnicas
+            <span data-es>Capacidades técnicas</span>
+            <span data-en class="hidden">Technical capabilities</span>
           </h2>
         </header>
-        <div class="grid-3">
-          {capabilities.map((cap) => (
-            <CapabilityCard capability={cap} />
-          ))}
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+          {
+            capabilities.map((cap) => (
+              <div class="service-card-shell-bg shell-hover rounded-2xl p-6 md:p-8">
+                <h3 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)] md:text-2xl">
+                  <span data-es>{cap.title}</span>
+                  <span data-en class="hidden">{cap.titleEn}</span>
+                </h3>
+                <p class="mt-3 text-base font-normal leading-relaxed text-[var(--text-secondary)]">
+                  <span data-es>{cap.description}</span>
+                  <span data-en class="hidden">{cap.descriptionEn}</span>
+                </p>
+              </div>
+            ))
+          }
         </div>
       </section>
 
-      <div class="my-12 h-px md:my-16" aria-hidden="true"></div>
+      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
 
       <!-- Roles -->
       <section
-        class="mb-16 md:mb-20 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
+        class="mb-16 rounded-2xl bg-[var(--bg-primary)] px-5 py-10 opacity-0 translate-y-4 transition-all duration-700 md:mb-20 md:px-8 md:py-12"
         aria-labelledby="roles-heading"
+        data-alt-reveal
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
             <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
             <span
-              class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
+              class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Professional background"
               data-es="Trayectoria profesional"
               >Trayectoria profesional</span
@@ -177,9 +225,7 @@ const capabilities = [
         </header>
 
         <div class="grid gap-6 sm:grid-cols-2">
-          <article
-            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 md:p-10"
-          >
+          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 sm:col-span-2 md:p-10">
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
@@ -202,9 +248,7 @@ const capabilities = [
             </div>
           </article>
 
-          <article
-            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 md:p-10"
-          >
+          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
@@ -227,9 +271,7 @@ const capabilities = [
             </div>
           </article>
 
-          <article
-            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 md:p-10"
-          >
+          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
@@ -252,9 +294,7 @@ const capabilities = [
             </div>
           </article>
 
-          <article
-            class="relative overflow-hidden rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] p-8 md:p-10"
-          >
+          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
@@ -279,183 +319,68 @@ const capabilities = [
         </div>
       </section>
 
-      <div class="my-12 h-px md:my-16" aria-hidden="true"></div>
+      <div class="mb-6 opacity-0 translate-y-4 transition-all duration-700 md:mb-8" data-alt-reveal>
+        <LogoMarquee />
+      </div>
 
-      <!-- Stack -->
+      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
+
+      <!-- Habilidades interpersonales -->
       <section
-        class="mb-16 md:mb-20 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
-        aria-labelledby="stack-heading"
+        class="mb-16 rounded-2xl bg-[var(--bg-surface-container-low)] px-5 py-10 opacity-0 translate-y-4 transition-all duration-700 md:mb-20 md:px-8 md:py-12"
+        aria-labelledby="soft-skills-heading"
+        data-alt-reveal
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
             <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
             <span
-              class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
-              data-en="Technologies"
-              data-es="Tecnologías"
-              >Tecnologías</span
+              class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
+              data-en="Profile"
+              data-es="Perfil"
+              >Perfil</span
             >
           </div>
           <h2
-            id="stack-heading"
+            id="soft-skills-heading"
             class="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-3xl"
-            data-en="Stack &amp; skills"
-            data-es="Stack y habilidades"
+            data-en="Interpersonal skills"
+            data-es="Habilidades interpersonales"
           >
-            Stack &amp; skills
+            Habilidades interpersonales
           </h2>
         </header>
-
-        <div class="space-y-8">
-          <div>
-            <h3
-              class="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
-              data-en="Languages &amp; frameworks"
-              data-es="Lenguajes y frameworks"
-            >
-              Lenguajes y frameworks
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1.5 text-xs font-medium text-[var(--accent-text)]"
-                ><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true"
-                ></span>Python (FastAPI)</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1.5 text-xs font-medium text-[var(--accent-text)]"
-                ><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true"
-                ></span>React + TypeScript</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Tailwind CSS</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Astro</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>SQL</span
-              >
-            </div>
-          </div>
-
-          <div>
-            <h3
-              class="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
-              data-en="Architecture &amp; data"
-              data-es="Arquitectura y datos"
-            >
-              Arquitectura y datos
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1.5 text-xs font-medium text-[var(--accent-text)]"
-                ><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true"
-                ></span>PostgreSQL + PostGIS</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1.5 text-xs font-medium text-[var(--accent-text)]"
-                ><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true"
-                ></span>Docker</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Oracle Cloud</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Redis</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Tableau</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Celery</span
-              >
-            </div>
-          </div>
-
-          <div>
-            <h3
-              class="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
-              data-en="Methodologies &amp; AI"
-              data-es="Metodologías e IA"
-            >
-              Metodologías e IA
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1.5 text-xs font-medium text-[var(--accent-text)]"
-                data-en="Context engineering"
-                data-es="Ingeniería de contexto"
-                ><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true"
-                ></span>Ingeniería de contexto</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Scrum</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>UML / BPMN</span
-              >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tag)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
-                ><span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--text-muted)]"
-                  aria-hidden="true"
-                ></span>Design Thinking</span
-              >
-            </div>
-          </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {
+            softSkills.map((item) => (
+              <div class="service-card-shell-bg shell-hover rounded-2xl p-5 md:p-6">
+                <h3 class="font-display text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+                  <span data-es>{item.title}</span>
+                  <span data-en class="hidden">{item.titleEn}</span>
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
+                  <span data-es>{item.description}</span>
+                  <span data-en class="hidden">{item.descriptionEn}</span>
+                </p>
+              </div>
+            ))
+          }
         </div>
       </section>
 
-      <div class="my-12 h-px md:my-16" aria-hidden="true"></div>
+      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
 
       <!-- Formación -->
       <section
-        class="mb-16 md:mb-20 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
+        class="mb-16 rounded-2xl bg-[var(--bg-secondary)] px-5 py-10 opacity-0 translate-y-4 transition-all duration-700 md:mb-20 md:px-8 md:py-12"
         aria-labelledby="edu-heading"
+        data-alt-reveal
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
             <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
             <span
-              class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
+              class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Education"
               data-es="Formación"
               >Formación</span
@@ -471,179 +396,201 @@ const capabilities = [
           </h2>
         </header>
 
-        <ul class="list-none space-y-0 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] px-4 py-2" role="list">
-          <li
-            class="flex flex-col gap-3 border-b border-[color:var(--border-subtle)] py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
-            role="listitem"
-          >
-            <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Bachelor's degree in technology and information management"
-                data-es="Licenciatura en gestión de tecnología de la información"
-              >
-                Licenciatura en gestión de tecnología de la información
-              </div>
-              <div
-                class="mt-1 text-xs text-[var(--text-secondary)]"
-                data-en="UADE · 2024–2028 (In progress)"
-                data-es="UADE · 2024–2028 (En curso)"
-              >
-                UADE · 2024–2028 (En curso)
-              </div>
-            </div>
-            <span class="tag shrink-0 self-start sm:self-center" data-en="University" data-es="Universidad"
-              >Universidad</span
+        <ul class="list-none space-y-4 p-0" role="list">
+          <li role="listitem">
+            <article
+              class="service-card-shell-bg shell-hover flex flex-col gap-3 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between md:p-6"
             >
-          </li>
-          <li
-            class="flex flex-col gap-3 border-b border-[color:var(--border-subtle)] py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
-            role="listitem"
-          >
-            <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Technician in Computer Programming"
-                data-es="Tecnicatura en Programación Informática"
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span
+                    class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
+                    data-en="In progress"
+                    data-es="En curso"
+                    >En curso</span
+                  >
+                  <span
+                    class="text-sm font-bold text-[var(--text-primary)]"
+                    data-en="Bachelor's degree in technology and information management"
+                    data-es="Licenciatura en gestión de tecnología de la información"
+                  >
+                    Licenciatura en gestión de tecnología de la información
+                  </span>
+                </div>
+                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UADE · 2024–2028" data-es="UADE · 2024–2028">
+                  UADE · 2024–2028
+                </div>
+              </div>
+              <span
+                class="inline-flex shrink-0 self-start rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)] sm:self-center"
+                data-en="University"
+                data-es="Universidad">Universidad</span
               >
-                Tecnicatura en Programación Informática
-              </div>
-              <div class="mt-1 text-xs text-[var(--text-secondary)]" data-en="UTN · 2023–2024" data-es="UTN · 2023–2024">
-                UTN · 2023–2024
-              </div>
-            </div>
-            <span class="tag shrink-0 self-start sm:self-center" data-en="University" data-es="Universidad">Universidad</span>
+            </article>
           </li>
-          <li class="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between" role="listitem">
-            <div>
-              <div
-                class="text-sm font-medium text-[var(--text-primary)]"
-                data-en="Business Analysis Diploma"
-                data-es="Diplomatura en Análisis de Negocios"
-              >
-                Diplomatura en Análisis de Negocios
-              </div>
-              <div class="mt-1 text-xs text-[var(--text-secondary)]" data-en="UTN FRBA · 2024" data-es="UTN FRBA · 2024">
-                UTN FRBA · 2024
-              </div>
-            </div>
-            <span class="tag shrink-0 self-start sm:self-center" data-en="Specialization" data-es="Diplomatura"
-              >Diplomatura</span
+          <li role="listitem">
+            <article
+              class="service-card-shell-bg shell-hover flex flex-col gap-3 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between md:p-6"
             >
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span
+                    class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
+                    data-en="Completed"
+                    data-es="Completado"
+                    >Completado</span
+                  >
+                  <span
+                    class="text-sm font-bold text-[var(--text-primary)]"
+                    data-en="Technician in Computer Programming"
+                    data-es="Tecnicatura en Programación Informática"
+                  >
+                    Tecnicatura en Programación Informática
+                  </span>
+                </div>
+                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UTN · 2023–2024" data-es="UTN · 2023–2024">
+                  UTN · 2023–2024
+                </div>
+              </div>
+              <span
+                class="inline-flex shrink-0 self-start rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)] sm:self-center"
+                data-en="University"
+                data-es="Universidad">Universidad</span
+              >
+            </article>
+          </li>
+          <li role="listitem">
+            <article
+              class="service-card-shell-bg shell-hover flex flex-col gap-3 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between md:p-6"
+            >
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span
+                    class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
+                    data-en="Completed"
+                    data-es="Completado"
+                    >Completado</span
+                  >
+                  <span
+                    class="text-sm font-bold text-[var(--text-primary)]"
+                    data-en="Business Analysis Diploma"
+                    data-es="Diplomatura en Análisis de Negocios"
+                  >
+                    Diplomatura en Análisis de Negocios
+                  </span>
+                </div>
+                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UTN FRBA · 2024" data-es="UTN FRBA · 2024">
+                  UTN FRBA · 2024
+                </div>
+              </div>
+              <span
+                class="inline-flex shrink-0 self-start rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)] sm:self-center"
+                data-en="Specialization"
+                data-es="Diplomatura">Diplomatura</span
+              >
+            </article>
           </li>
         </ul>
       </section>
 
-      <div class="my-12 h-px md:my-16" aria-hidden="true"></div>
+      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
 
       <!-- Proyectos -->
       <section
-        class="mb-16 md:mb-20 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
+        class="mb-16 rounded-2xl bg-[var(--bg-primary)] px-4 py-12 opacity-0 translate-y-4 transition-all duration-700 md:mb-24 md:px-8 md:py-16"
         aria-labelledby="projects-heading"
+        data-alt-reveal
       >
-        <header class="mb-8 md:mb-10">
-          <div class="mb-2 flex items-center gap-3">
-            <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
-            <span
-              class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
-              data-en="Engineering"
-              data-es="Ingeniería"
-              >Ingeniería</span
-            >
-          </div>
+        <header class="mb-10 md:mb-12">
+          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]">
+            <span data-es>Ingeniería</span>
+            <span data-en class="hidden">Engineering</span>
+          </p>
           <h2
             id="projects-heading"
-            class="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-3xl"
-            data-en="Technical projects"
-            data-es="Proyectos técnicos"
+            class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            Proyectos técnicos
+            <span data-es>Proyectos técnicos</span>
+            <span data-en class="hidden">Technical projects</span>
           </h2>
         </header>
 
-        <div class="grid-2">
-          {sortedProjects.map((project) => (
-            <article
-              class="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-[color:var(--accent-border)] hover:shadow-[0_20px_50px_-16px_rgba(0,0,0,0.35)]"
-              id={project.slug}
-            >
-              <div
-                class="h-1 shrink-0 bg-gradient-to-r from-[var(--color-accent-400)] to-[var(--color-accent-600)]"
-                aria-hidden="true"
-              ></div>
-              <div class="flex flex-1 flex-col p-6">
-                <div class="flex flex-wrap items-start justify-between gap-3">
-                  <h3 class="flex min-w-0 items-center gap-2 text-left text-lg font-bold text-[var(--text-primary)]">
-                    <span aria-hidden="true" class="text-xl leading-none">{project.data.icon}</span>
-                    <span>{project.data.title}</span>
-                  </h3>
-                  <span
-                    class:list={[
-                      'inline-flex shrink-0 items-center rounded-[var(--radius-sm)] border px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide',
-                      project.data.status === 'live' &&
-                        'border-[color:rgba(29,158,117,0.4)] bg-[rgba(29,158,117,0.1)] text-[var(--color-success)]',
-                      project.data.status === 'in-progress' &&
-                        'border-[color:var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent-text)]',
-                      project.data.status === 'completed' &&
-                        'border-[color:var(--border-normal)] bg-[var(--bg-tag)] text-[var(--text-secondary)]',
-                    ]}
-                    data-en={statusLabel(project.data.status, 'en')}
-                    data-es={statusLabel(project.data.status, 'es')}
-                  >
-                    {statusLabel(project.data.status, 'es')}
-                  </span>
-                </div>
-
-                {project.data.url && (
-                  <a
-                    href={project.data.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="mt-2 inline-flex max-w-full break-all text-left text-xs text-[var(--text-muted)] underline-offset-2 hover:text-[var(--accent)]"
-                    aria-label={`Sitio de ${project.data.title}`}
-                  >
-                    {project.data.url.replace('http://', '').replace('https://', '')}&nbsp;↗
-                  </a>
-                )}
-
-                <p
-                  class="mt-4 flex-1 line-clamp-4 text-left text-sm leading-relaxed text-[var(--text-secondary)]"
-                  data-en={project.data.descriptionEn}
-                  data-es={project.data.description}
-                >
-                  {project.data.description}
-                </p>
-
-                <div
-                  class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border-subtle)] pt-4"
-                >
-                  <a
-                    href={project.slug === 'huelladelfuego' ? '/blog/caso-huelladelfuego' : `/talento#${project.slug}`}
-                    class="text-sm font-semibold text-[var(--accent-text)] underline-offset-2 transition-colors hover:text-[var(--accent-hover)]"
-                    data-en="View case →"
-                    data-es="Ver caso →"
-                  >
-                    Ver caso →
-                  </a>
-                  {project.data.githubUrl && (
-                    <a
-                      href={project.data.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="btn-secondary px-3 py-2 text-xs"
-                      data-en="View code →"
-                      data-es="Ver código →"
-                    >
-                      Ver código →
-                    </a>
-                  )}
-                </div>
+        <div class="flex flex-col gap-6 md:gap-8">
+          {
+            sortedProjects.map((project, i) => (
+              <div id={project.slug}>
+                <ProjectCard
+                  headingId={`project-card-${project.slug}`}
+                  direction={i % 2 === 0 ? 'left' : 'right'}
+                  title={project.data.title}
+                  titleEn={project.data.title}
+                  description={project.data.description}
+                  descriptionEn={project.data.descriptionEn}
+                  coverPosition={project.data.coverPosition}
+                  image={project.data.coverImage}
+                  tags={project.data.tags}
+                  href={
+                    project.data.url
+                      ? project.data.url
+                      : project.slug === 'huelladelfuego'
+                        ? '/blog/caso-huelladelfuego'
+                        : `/talento#${project.slug}`
+                  }
+                  badge={
+                    project.data.status === 'live' || project.data.status === 'in-progress'
+                      ? statusLabel(project.data.status, 'es')
+                      : undefined
+                  }
+                  badgeEn={
+                    project.data.status === 'live' || project.data.status === 'in-progress'
+                      ? statusLabel(project.data.status, 'en')
+                      : undefined
+                  }
+                  badgeVariant={project.data.status === 'live' ? 'live' : 'in-progress'}
+                  external={Boolean(project.data.url)}
+                />
               </div>
-            </article>
-          ))}
+            ))
+          }
         </div>
       </section>
+
+      <div class="mb-16 md:mb-24">
+        <SectionWrapper
+          bg="bg-[var(--accent)]"
+          tone="accent"
+          padding="py-16 md:py-24"
+          maxWidth="max-w-3xl"
+          class="rounded-3xl"
+          innerClass="text-center"
+          revealAlt
+        >
+          <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
+            <span data-es>¿Hablamos?</span>
+            <span data-en class="hidden">Let&apos;s talk</span>
+          </h2>
+          <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
+            <span data-es
+              >Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría,
+              el pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado.</span
+            >
+            <span data-en class="hidden"
+              >If you have questions about my background, want to check references, or explore a consulting engagement,
+              the site footer includes the contact form if you prefer a structured message.</span
+            >
+          </p>
+          <p class="mt-8">
+            <a
+              href="/servicios#contacto"
+              class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
+            >
+              <span data-es>Contactar</span>
+              <span data-en class="hidden">Contact</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </p>
+        </SectionWrapper>
+      </div>
     </div>
   </main>
 </Layout>

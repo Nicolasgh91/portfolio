@@ -1,17 +1,29 @@
 ---
-// ServiceCard.astro
-// Tarjeta de catálogo de servicios B2B — rediseñada
-// Layout: imagen contextual + overlay gradiente + precio (numérico o CTA Consultar) + badge "Más elegido"
-// Hover: barra lateral amber que crece + glow radial + image scale + CTA reveal
-// Uso: <ServiceCard service={service} />
-
-import { Image } from 'astro:assets';
+/**
+ * Catálogo /servicios — Alternativa C: fila apilada, barra de acento izquierda,
+ * zig-zag en md+, esquinas asimétricas en la imagen y pills de stack.
+ *
+ * Public props API intacta. Internamente delega a subcomponentes pequeños
+ * (M-08) que centralizan la duplicación de las tres variantes: `inquire`,
+ * full-card-link y default.
+ */
+import type { ImageMetadata } from 'astro';
 import humanAi from '../assets/blog/human-ai.webp';
 import cloudServers from '../assets/blog/cloud-servers.webp';
 import satellite from '../assets/blog/satellite.webp';
 import site from '../data/site.json';
+import ServiceCardMedia from './ServiceCardMedia.astro';
+import ServiceCardBody from './ServiceCardBody.astro';
+import ServiceCardContactFooter from './ServiceCardContactFooter.astro';
+import ServiceCardPrice from './ServiceCardPrice.astro';
+import ServiceCardArrow from './ServiceCardArrow.astro';
+
+type ImageSide = 'left' | 'right';
 
 interface Props {
+  /** `id` del `<h3>` para `aria-labelledby` del overlay o enlace principal. */
+  headingId: string;
+  imageSide?: ImageSide;
   service: {
     title: string;
     titleEn?: string;
@@ -20,589 +32,125 @@ interface Props {
     roiFocus?: string;
     roiFocusEn?: string;
     href?: string;
+    coverImage?: ImageMetadata;
     imageKey?: 'human-ai' | 'cloud-servers' | 'satellite';
     featured?: boolean;
-    /** Valor principal del precio (sin prefijo monetario si usás pricePrefix). El literal "Consultar" activa CTA a contacto. */
     price?: string;
     priceUnit?: string;
-    /** Prefijo antes del valor (por defecto "$"; usar "" para ARS u otro). */
     pricePrefix?: string;
+    tags?: string[];
   };
 }
 
-const { service } = Astro.props;
+const { service, headingId, imageSide = 'left' } = Astro.props;
 const pricePrefix = service.pricePrefix ?? '$';
 const inquire = service.price === 'Consultar';
 const whatsappHref = site.author?.whatsapp;
+const tags = service.tags ?? [];
+const overlayTags = tags.slice(0, 2);
 
 const imageMap = {
   'human-ai': humanAi,
   'cloud-servers': cloudServers,
-  'satellite': satellite,
+  satellite: satellite,
 } as const;
 
-const imageSrc = service.imageKey ? imageMap[service.imageKey] : humanAi;
+const imageSrc = service.coverImage ?? (service.imageKey ? imageMap[service.imageKey] : humanAi);
+const imageSizes = '(min-width: 1024px) 560px, (min-width: 768px) 45vw, 100vw';
 
-const El = service.href && !inquire ? 'a' : 'div';
+const isFullCardLink = !inquire && Boolean(service.href);
+const linkHref = service.href ?? undefined;
+
+const shellClass =
+  'group/card service-card-shell-bg relative overflow-hidden rounded-2xl border border-[var(--border-strong)] will-change-transform transition-all duration-200 ease-out shadow-md hover:shadow-lg border-l-4 border-l-[var(--color-accent-600)] focus-within:shadow-lg motion-reduce:will-change-auto motion-reduce:transition-none motion-reduce:hover:shadow-md';
+
+const rowClass =
+  imageSide === 'right'
+    ? 'flex min-h-0 w-full flex-col md:flex-row-reverse'
+    : 'flex min-h-0 w-full flex-col md:flex-row';
+
+const imgWrapClass =
+  imageSide === 'left'
+    ? 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tl-3xl md:rounded-bl-3xl'
+    : 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tr-3xl md:rounded-br-3xl';
+
+const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
+  ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
+  : {};
+
+// Shape compartida por ServiceCardBody
+const bodyProps = {
+  headingId,
+  title: { es: service.title, en: service.titleEn },
+  description: {
+    short: { es: service.shortDescription, en: service.shortDescriptionEn },
+    roiFocus:
+      service.roiFocus || service.roiFocusEn
+        ? { es: service.roiFocus ?? service.roiFocusEn ?? '', en: service.roiFocusEn ?? service.roiFocus }
+        : undefined,
+  },
+  tags,
+};
+
+const mediaProps = {
+  imageSrc,
+  imageSizes,
+  imgWrapClass,
+  overlayTags,
+  featured: service.featured ?? false,
+};
 ---
 
 {inquire ? (
-  <div
-    class:list={['group', 'service-card', 'service-card--inquire', service.featured && 'service-card--featured']}
-  >
-    <span
-      class="absolute inset-y-[12%] left-0 w-[3px] origin-center scale-y-0 rounded-r-sm bg-orange-500 transition-transform duration-300 ease-out group-hover:scale-y-100"
-      aria-hidden="true"
-    ></span>
-
-    <span
-      class="pointer-events-none absolute inset-0 rounded-xl bg-[radial-gradient(ellipse_at_0%_50%,rgba(245,158,11,0.09)_0%,transparent_65%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      aria-hidden="true"
-    ></span>
-
+  <div class={shellClass}>
     {service.href ? (
       <a
-        class="service-card__stretch-link"
         href={service.href}
+        class:list={[rowClass, 'no-underline outline-none']}
         aria-label={service.title}
       >
-        <div class="service-card__media" aria-hidden="true">
-          <Image
-            src={imageSrc}
-            alt=""
-            width={560}
-            height={280}
-            loading="lazy"
-            class="service-card__img"
-          />
-          <div class="service-card__media-fade"></div>
-          {service.featured && (
-            <span
-              class="service-card__badge"
-              data-en="Most chosen"
-              data-es="Más elegido"
-              aria-label="Servicio más elegido"
-            >
-              Más elegido
-            </span>
-          )}
-        </div>
-
-        <div class="service-card__body">
-          <h3
-            class="service-card__title"
-            data-en={service.titleEn ?? service.title}
-            data-es={service.title}
-          >
-            {service.title}
-          </h3>
-          <p
-            class="service-card__desc"
-            data-en={service.shortDescriptionEn ?? service.shortDescription}
-            data-es={service.shortDescription}
-          >
-            {service.shortDescription}
-          </p>
-          {(service.roiFocus || service.roiFocusEn) && (
-            <p
-              class="service-card__roi"
-              data-en={service.roiFocusEn ?? service.roiFocus}
-              data-es={service.roiFocus ?? service.roiFocusEn}
-            >
-              {service.roiFocus ?? service.roiFocusEn}
-            </p>
-          )}
-          <span class="service-card__cta" aria-hidden="true">
-            <span data-en="See detail" data-es="Ver detalle">Ver detalle</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-            </svg>
-          </span>
-        </div>
+        <ServiceCardMedia {...mediaProps} />
+        <ServiceCardBody {...bodyProps}>
+          <ServiceCardArrow />
+        </ServiceCardBody>
       </a>
     ) : (
-      <>
-        <div class="service-card__media" aria-hidden="true">
-          <Image
-            src={imageSrc}
-            alt=""
-            width={560}
-            height={280}
-            loading="lazy"
-            class="service-card__img"
-          />
-          <div class="service-card__media-fade"></div>
-          {service.featured && (
-            <span
-              class="service-card__badge"
-              data-en="Most chosen"
-              data-es="Más elegido"
-              aria-label="Servicio más elegido"
-            >
-              Más elegido
-            </span>
-          )}
-        </div>
-
-        <div class="service-card__body">
-          <h3
-            class="service-card__title"
-            data-en={service.titleEn ?? service.title}
-            data-es={service.title}
-          >
-            {service.title}
-          </h3>
-          <p
-            class="service-card__desc"
-            data-en={service.shortDescriptionEn ?? service.shortDescription}
-            data-es={service.shortDescription}
-          >
-            {service.shortDescription}
-          </p>
-          {(service.roiFocus || service.roiFocusEn) && (
-            <p
-              class="service-card__roi"
-              data-en={service.roiFocusEn ?? service.roiFocus}
-              data-es={service.roiFocus ?? service.roiFocusEn}
-            >
-              {service.roiFocus ?? service.roiFocusEn}
-            </p>
-          )}
-        </div>
-      </>
-    )}
-
-    <div class="service-card__inquire">
-      <a
-        href="#contacto"
-        class="service-card__inquire-link"
-        data-en="Request pricing"
-        data-es="Consultar precio"
-        aria-label="Ir al formulario de contacto para consultar precio"
-      >Consultar precio</a>
-      {whatsappHref && (
-        <a
-          href={whatsappHref}
-          class="service-card__inquire-link service-card__inquire-link--secondary"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-en="WhatsApp"
-          data-es="WhatsApp"
-          aria-label="Contactar por WhatsApp"
-        >WhatsApp</a>
-      )}
-    </div>
-  </div>
-) : (
-<El
-  class:list={['group', 'service-card', service.featured && 'service-card--featured']}
-  href={service.href ?? undefined}
-  aria-label={service.href ? service.title : undefined}
->
-  <span
-    class="absolute inset-y-[12%] left-0 w-[3px] origin-center scale-y-0 rounded-r-sm bg-orange-500 transition-transform duration-300 ease-out group-hover:scale-y-100"
-    aria-hidden="true"
-  ></span>
-
-  <span
-    class="pointer-events-none absolute inset-0 rounded-xl bg-[radial-gradient(ellipse_at_0%_50%,rgba(245,158,11,0.09)_0%,transparent_65%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-    aria-hidden="true"
-  ></span>
-
-  <!-- ZONA IMAGEN -->
-  <div class="service-card__media" aria-hidden="true">
-    <Image
-      src={imageSrc}
-      alt=""
-      width={560}
-      height={280}
-      loading="lazy"
-      class="service-card__img"
-    />
-    <!-- Gradiente que funde la imagen con el fondo de la tarjeta -->
-    <div class="service-card__media-fade"></div>
-    <!-- Badge "Más elegido" -->
-    {service.featured && (
-      <span
-        class="service-card__badge"
-        data-en="Most chosen"
-        data-es="Más elegido"
-        aria-label="Servicio más elegido"
-      >
-        Más elegido
-      </span>
-    )}
-  </div>
-
-  <!-- ZONA CONTENIDO -->
-  <div class="service-card__body">
-
-    <!-- Título -->
-    <h3
-      class="service-card__title"
-      data-en={service.titleEn ?? service.title}
-      data-es={service.title}
-    >
-      {service.title}
-    </h3>
-
-    <!-- Descripción corta (2 líneas) -->
-    <p
-      class="service-card__desc"
-      data-en={service.shortDescriptionEn ?? service.shortDescription}
-      data-es={service.shortDescription}
-    >
-      {service.shortDescription}
-    </p>
-
-    {(service.roiFocus || service.roiFocusEn) && (
-      <p
-        class="service-card__roi"
-        data-en={service.roiFocusEn ?? service.roiFocus}
-        data-es={service.roiFocus ?? service.roiFocusEn}
-      >
-        {service.roiFocus ?? service.roiFocusEn}
-      </p>
-    )}
-
-    <!-- Bloque de precio -->
-    {service.price && (
-      <div class="service-card__price-block">
-        <span
-          class="service-card__price-label"
-          data-en="From"
-          data-es="Desde"
-        >Desde</span>
-        <div class="service-card__price-row">
-          <span class="service-card__price-value">{pricePrefix}{service.price}</span>
-          {service.priceUnit && (
-            <span class="service-card__price-unit">{service.priceUnit}</span>
-          )}
-        </div>
+      <div class={rowClass}>
+        <ServiceCardMedia {...mediaProps} />
+        <ServiceCardBody {...bodyProps} />
       </div>
     )}
 
-    <!-- CTA inline solo si tiene href -->
-    {service.href && (
-      <span class="service-card__cta" aria-hidden="true">
-        <span data-en="See detail" data-es="Ver detalle">Ver detalle</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-        </svg>
-      </span>
-    )}
-
+    <ServiceCardContactFooter whatsappHref={whatsappHref} />
   </div>
-</El>
+) : isFullCardLink ? (
+  <article class={shellClass}>
+    <div class:list={[rowClass, 'relative z-0']}>
+      <ServiceCardMedia {...mediaProps} />
+      <ServiceCardBody {...bodyProps}>
+        {service.price && (
+          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
+        )}
+        <ServiceCardArrow />
+      </ServiceCardBody>
+    </div>
+    <a
+      href={linkHref}
+      class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+      aria-labelledby={headingId}
+      {...linkAttrs}
+    >
+    </a>
+  </article>
+) : (
+  <div class={shellClass}>
+    <div class={rowClass}>
+      <ServiceCardMedia {...mediaProps} />
+      <ServiceCardBody {...bodyProps}>
+        {service.price && (
+          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
+        )}
+      </ServiceCardBody>
+    </div>
+  </div>
 )}
-
-<style>
-  /* ─────────────────────────────────────────
-     BASE
-  ───────────────────────────────────────── */
-  .service-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 260px;
-    max-width: 300px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    background: #1f2937;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    text-decoration: none;
-
-    transition:
-      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 300ms ease,
-      box-shadow 320ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     BARRA LATERAL
-     Crece desde el centro en vertical al hover
-  ───────────────────────────────────────── */
-  .service-card__bar {
-    position: absolute;
-    left: 0;
-    top: 12%;
-    bottom: 12%;
-    width: 3px;
-    border-radius: 0 2px 2px 0;
-    background: #f59e0b;
-    transform: scaleY(0);
-    transform-origin: center;
-    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: 2;
-  }
-
-  /* ─────────────────────────────────────────
-     GLOW RADIAL
-     Ilumina desde la izquierda
-  ───────────────────────────────────────── */
-  .service-card__glow {
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    background: radial-gradient(
-      ellipse at 0% 50%,
-      rgba(245, 158, 11, 0.09) 0%,
-      transparent 65%
-    );
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 400ms ease;
-    z-index: 1;
-  }
-
-  /* ─────────────────────────────────────────
-     IMAGEN
-  ───────────────────────────────────────── */
-  .service-card__media {
-    position: relative;
-    width: 100%;
-    height: 140px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  .service-card__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  /* Gradiente que funde imagen con fondo de la tarjeta */
-  .service-card__media-fade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 30%,
-      rgba(31, 41, 55, 0.65) 65%,
-      #1f2937 100%
-    );
-    pointer-events: none;
-  }
-
-  /* ─────────────────────────────────────────
-     BADGE "Más elegido"
-  ───────────────────────────────────────── */
-  .service-card__badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #f59e0b;
-    color: #111827;
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 9999px;
-    z-index: 3;
-  }
-
-  /* ─────────────────────────────────────────
-     BODY
-  ───────────────────────────────────────── */
-  .service-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px 18px 20px;
-    flex: 1;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* ─────────────────────────────────────────
-     TÍTULO — max 2 líneas
-  ───────────────────────────────────────── */
-  .service-card__title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: #f3f4f6;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    transition: color 200ms ease;
-  }
-
-  /* ─────────────────────────────────────────
-     DESCRIPCIÓN — max 2 líneas
-  ───────────────────────────────────────── */
-  .service-card__desc {
-    font-size: 0.8125rem;
-    color: #9ca3af;
-    line-height: 1.55;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex: 1;
-  }
-
-  .service-card__roi {
-    font-size: 0.75rem;
-    color: #d1d5db;
-    line-height: 1.45;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin-top: 2px;
-  }
-
-  /* ─────────────────────────────────────────
-     BLOQUE DE PRECIO
-  ───────────────────────────────────────── */
-  .service-card__price-block {
-    margin-top: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .service-card__price-label {
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #6b7280;
-  }
-
-  .service-card__price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-  }
-
-  .service-card__price-value {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #f59e0b;
-  }
-
-  .service-card__price-unit {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #6b7280;
-  }
-
-  /* ─────────────────────────────────────────
-     CTA INLINE
-  ───────────────────────────────────────── */
-  .service-card__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #f59e0b;
-    margin-top: 2px;
-    opacity: 0;
-    transform: translateX(-4px);
-    transition:
-      opacity 260ms ease 40ms,
-      transform 260ms ease 40ms;
-  }
-
-  /* ─────────────────────────────────────────
-     HOVER — todos los efectos juntos
-  ───────────────────────────────────────── */
-  .service-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(245, 158, 11, 0.35);
-    box-shadow:
-      0 16px 40px -8px rgba(245, 158, 11, 0.12),
-      0 0 0 1px rgba(245, 158, 11, 0.10);
-  }
-
-  .service-card:hover .service-card__bar {
-    transform: scaleY(1);
-  }
-
-  .service-card:hover .service-card__glow {
-    opacity: 1;
-  }
-
-  .service-card:hover .service-card__img {
-    transform: scale(1.06);
-  }
-
-  .service-card:hover .service-card__title {
-    color: #ffffff;
-  }
-
-  .service-card:hover .service-card__cta {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  /* ─────────────────────────────────────────
-     FOCUS visible (accesibilidad teclado)
-  ───────────────────────────────────────── */
-  .service-card:focus-visible {
-    outline: 2px solid #f59e0b;
-    outline-offset: 3px;
-  }
-
-  .service-card--inquire {
-    min-height: 100%;
-  }
-
-  .service-card__stretch-link {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .service-card__inquire {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 14px;
-    padding: 0 18px 18px;
-    margin-top: auto;
-    flex-shrink: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .service-card__inquire-link {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #f59e0b;
-    text-decoration: none;
-    transition: color 200ms ease;
-  }
-
-  .service-card__inquire-link:hover {
-    color: #fbbf24;
-    text-decoration: underline;
-  }
-
-  .service-card__inquire-link:focus-visible {
-    outline: 2px solid #f59e0b;
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  .service-card__inquire-link--secondary {
-    font-weight: 500;
-    color: #9ca3af;
-  }
-
-  .service-card__inquire-link--secondary:hover {
-    color: #d1d5db;
-  }
-</style>

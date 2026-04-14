@@ -1,0 +1,17 @@
+---
+/**
+ * Pildorita inline para destacar un ítem del footer ("Gratis", "Nuevo").
+ * Extraída de Footer.astro (L-15).
+ */
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<span
+  class="text-[10px] font-semibold tracking-[0.5px] uppercase text-[var(--accent-on-tint)] bg-[var(--accent-bg)] rounded-[var(--radius-pill)] px-1.5 py-px"
+>
+  {label}
+</span>

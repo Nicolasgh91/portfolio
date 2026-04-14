@@ -17,7 +17,23 @@ const MAX_MSG_CHARS    = 2_000;
 const MAX_BODY_SIZE    = 50_000;
 const DAILY_BUDGET     = 200;
 
+// Hard cap on rateMap entries. Each entry is ~80 bytes (IP string + {c, r}),
+// so 10k entries ≈ 800 KB — well under Edge's 128 MB memory limit.
+// On breach we drop the 10% oldest entries in a single pass.
+const RATE_MAP_MAX     = 10_000;
+
+// Allowlist of host suffixes that loadJSON() is permitted to fetch from
+// when the Edge function runs in production. Matches the canonical domains.
+const PROMPT_HOST_ALLOWLIST = [
+  'escalatunegocioconia.com',
+  'escalatunegocioconia.com.ar',
+];
+
 // ── State (in-memory, per Edge instance) ────────────────────────────
+// TODO(rate-limit): migrate to Vercel KV / Upstash — the in-memory map is
+// per-Edge-instance and does not enforce limits across replicas. See
+// follow-up issue; current implementation is a bandaid, not production
+// hardening.
 const rateMap      = new Map();
 let   dailyCount   = 0;
 let   dailyResetAt = nextMidnight();
@@ -39,7 +55,7 @@ function getIP(req) {
 }
 
 function corsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin);
+  const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
   return {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGINS[0],
@@ -60,11 +76,49 @@ function isLocalOrigin(origin) {
   return origin.includes('localhost') || origin.includes('127.0.0.1');
 }
 
+// SEC-002: Scope preview CORS to this project's own deployments only.
+// VERCEL_PROJECT_NAME is injected automatically by Vercel at build/deploy time.
+// Without it (e.g. a local dev server) preview CORS is intentionally disabled —
+// use localhost instead.
+function isVercelPreview(origin) {
+  try {
+    const host = new URL(origin).hostname;
+    if (!host.endsWith('.vercel.app')) return false;
+    const project = (process.env.VERCEL_PROJECT_NAME ?? '').toLowerCase().trim();
+    if (!project) return false;
+    // Matches canonical project URL ({project}.vercel.app) and
+    // branch/PR preview URLs ({project}-{branch|hash}-{team}.vercel.app).
+    return host === `${project}.vercel.app` || host.startsWith(`${project}-`);
+  } catch { return false; }
+}
+
 // ── SEC-001: Server-side system prompt ──────────────────────────────
-async function loadJSON(path) {
+function assertSafePromptOrigin(baseOrigin) {
+  // In production, refuse to fetch prompt data from anywhere other than the
+  // canonical allowlisted hosts over HTTPS — defence-in-depth in case req.url
+  // is ever spoofed via a malicious Host header.
+  if (process.env.VERCEL_ENV !== 'production') return;
+  try {
+    const u = new URL(baseOrigin);
+    if (u.protocol !== 'https:') {
+      throw new Error(`non-HTTPS origin: ${baseOrigin}`);
+    }
+    const hostAllowed = PROMPT_HOST_ALLOWLIST.some((h) =>
+      u.hostname === h || u.hostname.endsWith(`.${h}`)
+    );
+    if (!hostAllowed) {
+      throw new Error(`host not in allowlist: ${u.hostname}`);
+    }
+  } catch (err) {
+    console.warn('[chat] prompt origin guard:', err.message);
+    throw err;
+  }
+}
+
+async function loadJSON(path, baseOrigin) {
   // En Vercel Edge, los archivos de public/ son accesibles via fetch
-  // Usamos URL relativa al dominio actual
-  const url = `https://escalatunegocioconia.com${path}`;
+  // relativa al origin de la request entrante (no hardcodeado).
+  const url = new URL(path, baseOrigin).toString();
   const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
   if (!res.ok) throw new Error(`Failed to load ${path}`);
   return res.json();
@@ -139,11 +193,12 @@ function resolveDataProfile(raw) {
   return raw === 'viandas' ? 'viandas' : 'default';
 }
 
-async function getSystemPrompt(profileKey) {
+async function getSystemPrompt(profileKey, baseOrigin) {
   const profile = resolveDataProfile(profileKey);
   if (systemPromptCache.has(profile)) return systemPromptCache.get(profile);
 
   try {
+    assertSafePromptOrigin(baseOrigin);
     const paths =
       profile === 'viandas'
         ? {
@@ -158,9 +213,9 @@ async function getSystemPrompt(profileKey) {
           };
 
     const [cfg, services, articles] = await Promise.all([
-      loadJSON(paths.config),
-      loadJSON(paths.services),
-      loadJSON(paths.articles),
+      loadJSON(paths.config, baseOrigin),
+      loadJSON(paths.services, baseOrigin),
+      loadJSON(paths.articles, baseOrigin),
     ]);
     const built = buildSystemPrompt({ config: cfg, services, articles });
     systemPromptCache.set(profile, built);
@@ -179,7 +234,7 @@ export default async function handler(req) {
 
   // ── Preflight (SEC-004) ───────────────────────────────────────────
   if (req.method === 'OPTIONS') {
-    const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin);
+    const allowed = ALLOWED_ORIGINS.includes(origin) || isLocalOrigin(origin) || isVercelPreview(origin);
     return new Response(null, {
       status: 204,
       headers: {
@@ -197,7 +252,7 @@ export default async function handler(req) {
   // ── Capa 1: origin (SEC-004) ──────────────────────────────────────
   const isLocal = isLocalOrigin(origin);
   const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin);
-  if (origin && !isLocal && !isAllowedOrigin) {
+  if (origin && !isLocal && !isAllowedOrigin && !isVercelPreview(origin)) {
     return json({ error: 'Origen no permitido.' }, 403, origin);
   }
 
@@ -210,6 +265,23 @@ export default async function handler(req) {
   // ── Capa 3: rate limit (SEC-002) ──────────────────────────────────
   const ip    = getIP(req);
   const now   = Date.now();
+
+  // Probabilistic pruning: ~1.5% of requests sweep expired entries. Also
+  // sweep unconditionally when we cross the hard cap to bound memory.
+  if (Math.random() < 1 / 64 || rateMap.size >= RATE_MAP_MAX) {
+    for (const [k, v] of rateMap) {
+      if (now > v.r) rateMap.delete(k);
+    }
+    // If still at cap after pruning, evict the 10% oldest by reset-time.
+    if (rateMap.size >= RATE_MAP_MAX) {
+      const evictCount = Math.ceil(RATE_MAP_MAX * 0.1);
+      const oldest = [...rateMap.entries()]
+        .sort((a, b) => a[1].r - b[1].r)
+        .slice(0, evictCount);
+      for (const [k] of oldest) rateMap.delete(k);
+    }
+  }
+
   const entry = rateMap.get(ip);
 
   let remaining = RATE_LIMIT;
@@ -272,7 +344,11 @@ export default async function handler(req) {
   dailyCount++;
 
   // ── SEC-001: construir system prompt server-side ──────────────────
-  const systemPrompt = await getSystemPrompt(dataProfile);
+  // Derive the base origin from the request URL (not a hardcoded host) so
+  // preview/staging deploys read their own prompt data. The allowlist guard
+  // in assertSafePromptOrigin() prevents hijacking in production.
+  const baseOrigin = new URL(req.url).origin;
+  const systemPrompt = await getSystemPrompt(dataProfile, baseOrigin);
 
   // ── Llamada a Gemini ──────────────────────────────────────────────
   const GEMINI_KEY   = process.env.GEMINI_API_KEY;

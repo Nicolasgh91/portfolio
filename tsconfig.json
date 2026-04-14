@@ -8,5 +8,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["schemas/**/*.ts", "src/**/*.ts"]
+  "include": ["schemas/**/*.ts", "src/**/*.ts", "src/**/*.d.ts", ".astro/types.d.ts"]
 }

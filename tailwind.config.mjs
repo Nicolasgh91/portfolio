@@ -18,9 +18,30 @@ export default {
     'p-2',
     'h-full',
     'overflow-hidden',
+    /* Alt B scroll-reveal (clases toggled por JS; purga segura) */
+    'opacity-0',
+    'opacity-100',
+    'translate-y-4',
+    'translate-y-0',
+    'transition-all',
+    'duration-700',
+    /* LogoMarquee: nombre distinto de `scroll` para evitar colisión con CSS global */
+    'animate-marqueeScroll',
+    'hover:[animation-play-state:paused]',
+    'animate-bounce',
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        marqueeScroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        marqueeScroll: 'marqueeScroll 30s linear infinite',
+      },
+    },
   },
   plugins: [],
 };

@@ -1,12 +1,19 @@
 ---
+import { Fragment } from 'astro/jsx-runtime';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import ContactForm from '../components/ContactForm.astro';
+import SectionWrapper from '../components/SectionWrapper.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import PageHeroSection from '../components/PageHeroSection.astro';
+import heroServiciosDerecha from '../assets/services/hero-servicios-derecha.webp';
+import FAQAccordion from '../components/FAQAccordion.astro';
 import { getCollection } from 'astro:content';
 import ServiceCard from '../components/ServiceCard.astro';
-import FaqSection from '../components/FaqSection.astro';
 import type { CollectionEntry } from 'astro:content';
 import pricing from '../data/pricing.json';
+import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
+import { serviceAnchorId } from '../lib/service-anchor-id';
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection('services');
@@ -18,17 +25,7 @@ const faqEntries = faqDocs
   .flatMap((doc) => doc.data)
   .sort((a, b) => a.order - b.order);
 
-/** Anclas alineadas con Nav.astro (#agentes-ia, #sitios-web, …). */
-function serviceAnchorId(slug: string): string {
-  const map: Record<string, string> = {
-    'chatbots-ia': 'agentes-ia',
-    'landing-page': 'sitios-web',
-    'ecommerce-platforms': 'ecommerce',
-    'workflow-automation': 'automatizacion',
-    'local-llms': 'local-llms',
-  };
-  return map[slug] ?? `service-${slug}`;
-}
+/** Anclas alineadas con Nav.astro (#agentes-ia, #sitios-web, …). Ver `src/lib/service-anchor-id.ts`. */
 
 type PricingEntry = { price: string; unit?: string; prefix?: string };
 
@@ -84,6 +81,26 @@ function resolveServicePrice(
   return { price: PRICE_INQUIRE, pricePrefix: '', priceUnit: undefined };
 }
 
+function serviceCardPayload(service: CollectionEntry<'services'>) {
+  const resolved = resolveServicePrice(service.slug, service.data);
+  return {
+    title: service.data.title,
+    titleEn: service.data.titleEn,
+    shortDescription: service.data.shortDescription ?? service.data.description,
+    shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+    roiFocus: service.data.roiFocus,
+    roiFocusEn: service.data.roiFocusEn,
+    coverImage: service.data.coverImage,
+    imageKey: service.data.imageKey,
+    featured: service.data.featured,
+    href: service.data.href,
+    price: resolved.price,
+    priceUnit: resolved.priceUnit,
+    pricePrefix: resolved.pricePrefix,
+    tags: service.data.tags,
+  };
+}
+
 const siteUrl = 'https://escalatunegocioconia.com';
 const servicesJsonLd = {
   '@context': 'https://schema.org',
@@ -99,416 +116,322 @@ const servicesJsonLd = {
     },
   })),
 };
+
+const faqJsonLd = buildFaqPageJsonLd(faqEntries);
+
+/** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` por sección con revealDelayMs (el bloque naranja CTA no usa delay, alineado a /talento). */
+const altRevealDelays: Record<string, number> = {};
+{
+  const keys = ['catalog', 'caseStudy', 'how', 'faq', 'contact'];
+  keys.forEach((key, i) => {
+    altRevealDelays[key] = Math.min(i * 100, 600);
+  });
+}
 ---
 
 <Layout
   title="Servicios B2B — Nicolás Hruszczak"
-  description="Software a medida, automatización con IA y auditoría de procesos para empresas y pymes que buscan reducir costos y multiplicar resultados."
+  description="Para locales, profesionales y creadores: web y automatización a medida. Ordenamos mensajes y procesos, más ventas y tiempo recuperado, sin jerga técnica."
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   </Fragment>
   <Nav activePage="servicios" />
 
   <main id="main-content">
-    <div class="page-container">
+    <PageHeroSection
+      image={heroServiciosDerecha}
+      alt="Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."
+      imageWidth={1536}
+      imageHeight={1024}
+      headingId="services-hero-heading"
+      labelText="Servicios para emprendedores · creadores · pymes"
+      labelTextEn="For entrepreneurs, creators &amp; small businesses"
+    >
+      <Fragment slot="heading">
+        <span data-es
+          >Tecnología a medida para que tu negocio <em class="not-italic text-[var(--accent-text)]">crezca sin estrés</em>.</span
+        >
+        <span data-en class="hidden"
+          >Tailored technology so your business can <em class="not-italic text-[var(--accent-text)]">grow without the stress</em>.</span
+        >
+      </Fragment>
+      <p>
+        <span data-es
+          >Ya sea que tengas un local comercial, ofrezcas servicios profesionales o crees contenido, <em
+            class="not-italic text-[var(--accent-text)]">diseñamos tu web y automatizamos tus procesos</em>. Convertí el
+          caos de mensajes en <em class="not-italic text-[var(--accent-text)]">ventas automáticas</em> y <em
+            class="not-italic text-[var(--accent-text)]">recuperá tu tiempo</em>.</span
+        >
+        <span data-en class="hidden"
+          >Whether you run a store, offer professional services, or create content, we <em
+            class="not-italic text-[var(--accent-text)]">design your site and automate your workflows</em>. Turn message
+          chaos into <em class="not-italic text-[var(--accent-text)]">automatic sales</em> and <em
+            class="not-italic text-[var(--accent-text)]">get your time back</em>.</span
+        >
+      </p>
+    </PageHeroSection>
 
-      <!-- ── Hero ─────────────────────────────────────────── -->
-      <section class="hero" aria-label="Propuesta de valor B2B">
-        <div
-          class="badge"
-          data-en="B2B Services · Free diagnosis"
-          data-es="Servicios para empresas · Diagnóstico gratuito"
-        >Servicios para empresas · Diagnóstico gratuito</div>
+    <SectionWrapper
+      bg="bg-[var(--bg-surface-container-low)]"
+      tone="default"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.catalog}
+    >
+      <header class="mb-8 md:mb-12" aria-labelledby="services-heading">
+        <SectionLabel text="Catálogo" textEn="Catalog" colorClass="text-[var(--accent-text)]" />
+        <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
+          <span data-es>Servicios</span>
+          <span data-en class="hidden">Services</span>
+        </h2>
+        <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+          <span data-es>
+            {sortedServices.length} ejes de intervención con impacto directo en la operación.
+          </span>
+          <span data-en class="hidden">
+            {sortedServices.length} focus areas with direct operational impact.
+          </span>
+        </p>
+      </header>
 
-        <h1
-          data-en='Custom software to<br><em>multiply ROI</em><br>for your business.'
-          data-es='Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.'
-        >Software a medida para<br><em>multiplicar el ROI</em><br>de su negocio.</h1>
-
-        <p
-          class="hero-sub"
-          data-en="Fixed cost reduction and operational optimization through automation, artificial intelligence, and exclusive management systems."
-          data-es="Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos."
-        >Reducción de gastos fijos y optimización operativa mediante automatización, inteligencia artificial y sistemas de gestión exclusivos.</p>
-
-        <div class="cta-row">
-          <a
-            href="#contacto"
-            class="btn-primary"
-            data-en="Request free diagnosis"
-            data-es="Solicitar diagnóstico gratuito"
-          >Solicitar diagnóstico gratuito</a>
-        </div>
-      </section>
-
-      <!-- ── Value banner ──────────────────────────────────── -->
-      <div
-        class="value-banner reveal reveal--scale"
-        style="--reveal-delay: 0ms"
-        role="region"
-        aria-label="Propuesta de valor: de gasto a inversión"
-      >
-        <div class="value-banner-col">
-          <h3
-            data-en="Software as expense"
-            data-es="Software como gasto"
-          >Software como gasto</h3>
-          <p
-            data-en="Recurring licenses, disconnected tools, manual processes that consume hours and capital month after month."
-            data-es="Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes."
-          >Licencias recurrentes, herramientas desconectadas, procesos manuales que consumen horas y capital mes a mes.</p>
-        </div>
-        <div class="value-banner-arrow" aria-hidden="true">→</div>
-        <div class="value-banner-col accent">
-          <h3
-            data-en="Software as investment"
-            data-es="Software como inversión"
-          >Software como inversión</h3>
-          <p
-            data-en="Proprietary systems, measurable automation and concrete return on every peso invested."
-            data-es="Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido."
-          >Sistemas propietarios, automatización medible y retorno concreto sobre cada peso invertido.</p>
-        </div>
+      <div class="mb-6 md:mb-8">
+        <SectionLabel text="Más solicitados" textEn="Most requested" colorClass="text-[var(--accent-text)]" />
       </div>
 
-      <!-- ── Catálogo de servicios (dinámico) ──────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="services-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Catalog"
-            data-es="Catálogo"
-          >Catálogo</span>
+      <div class="flex flex-col gap-8 md:gap-10" role="region" aria-labelledby="services-heading">
+        {
+          sortedServices.map((service, i) => (
+            <div id={serviceAnchorId(service.slug)} class="service-card-anchor">
+              <ServiceCard
+                headingId={`service-heading-${service.slug}`}
+                imageSide={i % 2 === 0 ? 'left' : 'right'}
+                service={serviceCardPayload(service)}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </SectionWrapper>
+
+    <SectionWrapper tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={altRevealDelays.caseStudy}>
+      <SectionLabel text="Caso de uso" textEn="Use case" colorClass="text-[var(--accent-text)]" />
+      <div class="mt-6 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-tertiary)] p-6 md:p-8">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
           <h2
-            id="services-heading"
-            data-en="Services"
-            data-es="Servicios"
-          >Servicios</h2>
-          <p
-            style="margin-top:6px;font-size:var(--text-sm)"
-            data-en="Four intervention axes with direct operational impact."
-            data-es="Cuatro ejes de intervención con impacto directo en la operación."
-          >Cuatro ejes de intervención con impacto directo en la operación.</p>
-        </div>
-
-        <div class="services-carousel-shell" id="services-carousel-shell">
-          <p
-            id="services-carousel-hint"
-            class="services-carousel-hint"
-            hidden
-            data-en="Swipe or drag sideways to see all services."
-            data-es="Deslizá o arrastrá horizontalmente para ver todos los servicios."
-          >Deslizá o arrastrá horizontalmente para ver todos los servicios.</p>
-          <div class="services-carousel-viewport">
-            <div class="services-carousel-fade services-carousel-fade--left" aria-hidden="true"></div>
-            <div class="services-carousel-fade services-carousel-fade--right" aria-hidden="true"></div>
-            <div
-              class="services-carousel"
-              id="services-carousel"
-              role="region"
-              aria-labelledby="services-heading"
-              tabindex="0"
-            >
-              {sortedServices.map((service) => {
-                const resolved = resolveServicePrice(service.slug, service.data);
-                return (
-                  <div
-                    id={serviceAnchorId(service.slug)}
-                    class="service-card-anchor"
-                  >
-                    <ServiceCard service={{
-                      title: service.data.title,
-                      titleEn: service.data.titleEn,
-                      shortDescription: service.data.shortDescription ?? service.data.description,
-                      shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
-                      roiFocus: service.data.roiFocus,
-                      roiFocusEn: service.data.roiFocusEn,
-                      imageKey: service.data.imageKey,
-                      featured: service.data.featured,
-                      href: service.data.href,
-                      price: resolved.price,
-                      priceUnit: resolved.priceUnit,
-                      pricePrefix: resolved.pricePrefix,
-                    }} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── Case study ─────────────────────────────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="case-heading">
-        <div class="section-header">
+            id="case-heading"
+            class="font-display text-xl font-bold tracking-tight text-[var(--text-primary)] md:text-2xl"
+          >
+            <span data-es>Caso de éxito: gestión integral deportiva (Double Click™)</span>
+            <span data-en class="hidden">Success story: comprehensive sports management (Double Click™)</span>
+          </h2>
           <span
-            class="label"
-            data-en="Use case"
-            data-es="Caso de uso"
-          >Caso de uso</span>
+            class="inline-flex items-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent-text)]"
+          >
+            <span data-es>En curso</span>
+            <span data-en class="hidden">In progress</span>
+          </span>
         </div>
-
-        <div class="case-block">
-          <div class="case-header">
-            <h2
-              id="case-heading"
-              data-en="Success story: comprehensive sports management (Double Click™)"
-              data-es="Caso de éxito: gestión integral deportiva (Double Click™)"
-            >Caso de éxito: gestión integral deportiva (Double Click™)</h2>
-            <span class="tag tag-warn" aria-label="Proyecto en curso">⚠ En curso</span>
+        <p class="mb-8 text-sm leading-relaxed text-[var(--text-secondary)]">
+          <span data-es
+            >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de
+            Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</span
+          >
+          <span data-en class="hidden"
+            >A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating
+            the need for three separate paid software tools.</span
+          >
+        </p>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div
+            class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 text-center text-xs text-[var(--text-muted)]"
+            role="img"
+            aria-label="Espacio reservado para captura del dashboard de gestión"
+          >
+            [ Dashboard mockup ]<br /><br />
+            Panel de reservas · Métricas · Clientes
           </div>
+          <div class="card self-start">
+            <h3 class="mb-2 font-display text-base font-bold text-[var(--text-primary)]">
+              <span data-es>Resultado</span>
+              <span data-en class="hidden">Result</span>
+            </h3>
+            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
+              <span data-es
+                >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa.
+                Panel unificado de métricas de retención de clientes.</span
+              >
+              <span data-en class="hidden"
+                >Elimination of 3 monthly subscriptions. Significant reduction in administrative management time.
+                Unified client retention metrics panel.</span
+              >
+            </p>
+            <div class="tags mt-4">
+              <span class="tag">Python</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">PostgreSQL</span>
+              <a href="#contacto" class="tag tag-accent btn-bounce inline-flex items-center gap-1">
+                <span data-en="Request similar solution" data-es="Solicitar solución similar"
+                  >Solicitar solución similar</span
+                >
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </SectionWrapper>
 
+    <SectionWrapper
+      bg="bg-slate-950"
+      tone="dark"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.how}
+    >
+      <h2 class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl">
+        <span data-es>Cómo trabajamos</span>
+        <span data-en class="hidden">How we work</span>
+      </h2>
+      <div class="grid gap-12 md:grid-cols-3">
+        <div class="relative pt-[calc(var(--text-6xl)*1)]">
           <p
-            style="margin:var(--sp-sm) 0 var(--sp-lg);font-size:var(--text-sm)"
-            data-en="A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating the need for three separate paid software tools."
-            data-es="Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual."
-          >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</p>
-
-          <div class="grid-2">
-            <div
-              class="mock-placeholder"
-              role="img"
-              aria-label="Espacio reservado para captura del dashboard de gestión"
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            01
+          </p>
+          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+            <span data-es>Diagnóstico</span>
+            <span data-en class="hidden">Discovery</span>
+          </h3>
+          <p class="mt-2 text-sm font-medium leading-relaxed">
+            <span data-es>Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras.</span
             >
-              [ Dashboard mockup ]<br><br>
-              Panel de reservas · Métricas · Clientes
-            </div>
-
-            <div class="card" style="align-self:start">
-              <h3
-                style="font-size:var(--text-base);margin-bottom:var(--sp-sm)"
-                data-en="Result"
-                data-es="Resultado"
-              >Resultado</h3>
-              <p
-                style="font-size:var(--text-sm)"
-                data-en="Elimination of 3 monthly subscriptions. Significant reduction in administrative management time. Unified client retention metrics panel."
-                data-es="Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes."
-              >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes.</p>
-              <div class="tags">
-                <span class="tag">Python</span>
-                <span class="tag">Next.js</span>
-                <span class="tag">PostgreSQL</span>
-                <a href="#contacto" class="tag tag-accent"
-                  data-en="Request similar solution →"
-                  data-es="Solicitar solución similar →"
-                >Solicitar solución similar →</a>
-              </div>
-            </div>
-          </div>
+            <span data-en class="hidden"
+              >We map processes, bottlenecks and automation opportunities with clear metrics.</span
+            >
+          </p>
         </div>
-      </section>
-
-      <!-- ── FAQ ─────────────────────────────────────────────── -->
-      <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="faq-heading">
-        <FaqSection entries={faqEntries} ctaHref="#contacto" />
-      </section>
-
-      <!-- ── Formulario de contacto ──────────────────────────── -->
-      <section id="contacto" class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="contact-heading">
-        <div class="section-header">
-          <span
-            class="label"
-            data-en="Contact"
-            data-es="Contacto"
-          >Contacto</span>
-          <h2
-            id="contact-heading"
-            data-en="Let's evaluate your challenge"
-            data-es="Evaluemos su desafío"
-          >Evaluemos su desafío</h2>
+        <div class="relative pt-[calc(var(--text-6xl)*1)]">
+          <p
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            02
+          </p>
+          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+            <span data-es>Propuesta y entrega</span>
+            <span data-en class="hidden">Proposal &amp; delivery</span>
+          </h3>
+          <p class="mt-2 text-sm font-medium leading-relaxed">
+            <span data-es>Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles.</span>
+            <span data-en class="hidden">We prioritize impact, define scope and ship in visible iterations.</span>
+          </p>
         </div>
-        <ContactForm />
-      </section>
+        <div class="relative pt-[calc(var(--text-6xl)*1)]">
+          <p
+            class="pointer-events-none absolute left-0 top-0 font-display font-black leading-none text-orange-500/10 select-none"
+            style="font-size: var(--text-6xl);"
+            aria-hidden="true"
+          >
+            03
+          </p>
+          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+            <span data-es>Evolución</span>
+            <span data-en class="hidden">Evolution</span>
+          </h3>
+          <p class="mt-2 text-sm font-medium leading-relaxed">
+            <span data-es>Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo.</span>
+            <span data-en class="hidden">Measurement, improvements and support so the system keeps paying for itself.</span>
+          </p>
+        </div>
+      </div>
+    </SectionWrapper>
 
+    <SectionWrapper
+      bg="bg-slate-950"
+      tone="dark"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.faq}
+    >
+      <FAQAccordion
+        variant="darkBand"
+        entries={faqEntries}
+        ctaHref="#contacto"
+        showSidebarCta={false}
+        class="!mt-0"
+      />
+    </SectionWrapper>
+
+    <div class="mt-12 mb-16 md:mt-16 md:mb-24">
+      <SectionWrapper
+        bg="bg-[var(--accent)]"
+        tone="accent"
+        padding="py-16 md:py-24"
+        maxWidth="max-w-none"
+        class="rounded-none"
+        innerClass="text-center px-0"
+        revealAlt
+      >
+        <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
+          <span data-es>¿Listo para el siguiente paso?</span>
+          <span data-en class="hidden">Ready for the next step?</span>
+        </h2>
+        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
+          <span data-es
+            >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar
+            juntos. También podés escribirnos por el formulario de abajo cuando quieras.</span
+          >
+          <span data-en class="hidden"
+            >Book a free 30-minute diagnosis — we review your operations and tell you if working together makes sense.
+            You can also reach us anytime via the form below.</span
+          >
+        </p>
+        <p class="mt-8">
+          <a
+            href="#contacto"
+            class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
+          >
+            <span data-es>Contactar</span>
+            <span data-en class="hidden">Contact</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </p>
+      </SectionWrapper>
     </div>
+
+    <SectionWrapper
+      bg="bg-[var(--bg-secondary)]"
+      tone="default"
+      padding="py-24 md:py-32"
+      id="contacto"
+      revealAlt
+      revealDelayMs={altRevealDelays.contact}
+    >
+      <div class="section-header mb-10">
+        <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
+        <h2
+          id="contact-heading"
+          class="font-display text-2xl font-bold text-[var(--text-primary)] md:text-3xl"
+          data-en="Let's evaluate your challenge"
+          data-es="Evaluemos su desafío"
+        >
+          Evaluemos su desafío
+        </h2>
+      </div>
+      <ContactForm />
+    </SectionWrapper>
   </main>
-
-  <!-- Script: drag-to-scroll + estado overflow/fades del carrusel de servicios -->
-  <script>
-    const carousel = document.getElementById('services-carousel');
-    const shell = document.getElementById('services-carousel-shell');
-    const hint = document.getElementById('services-carousel-hint');
-
-    function updateCarouselState() {
-      if (!carousel || !shell) return;
-      const { scrollLeft, scrollWidth, clientWidth } = carousel;
-      const hasOverflow = scrollWidth > clientWidth + 1;
-      const atStart = scrollLeft <= 2;
-      const atEnd = scrollLeft + clientWidth >= scrollWidth - 2;
-
-      shell.classList.toggle('has-overflow', hasOverflow);
-      shell.classList.toggle('at-start', atStart);
-      shell.classList.toggle('at-end', atEnd);
-
-      if (hint) {
-        if (hasOverflow) hint.removeAttribute('hidden');
-        else hint.setAttribute('hidden', '');
-      }
-    }
-
-    if (carousel && shell) {
-      const reducedMotion = window.nhA11y.motionReduced;
-
-      const ro = new ResizeObserver(() => updateCarouselState());
-      ro.observe(carousel);
-      carousel.addEventListener('scroll', updateCarouselState, { passive: true });
-      window.addEventListener('load', updateCarouselState);
-      requestAnimationFrame(updateCarouselState);
-
-      carousel.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-        e.preventDefault();
-        const delta = e.key === 'ArrowRight' ? 280 : -280;
-        carousel.scrollBy({
-          left: delta,
-          behavior: reducedMotion ? 'auto' : 'smooth',
-        });
-      });
-
-      let isDown = false;
-      let startX = 0;
-      let scrollLeft = 0;
-
-      carousel.addEventListener('mousedown', (e) => {
-        isDown = true;
-        carousel.classList.add('is-dragging');
-        startX = e.pageX - carousel.offsetLeft;
-        scrollLeft = carousel.scrollLeft;
-      });
-
-      document.addEventListener('mouseup', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mouseleave', () => {
-        isDown = false;
-        carousel.classList.remove('is-dragging');
-      });
-
-      carousel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - carousel.offsetLeft;
-        carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
-      });
-    }
-  </script>
 
 </Layout>
 <style>
-  .value-banner {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-xl);
-    background: var(--bg-tertiary);
-    border: 0.5px solid var(--border-normal);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg) var(--sp-xl);
-    margin: var(--sp-xl) 0;
-  }
-  @media (max-width: 640px) {
-    .value-banner { flex-direction: column; text-align: center; gap: var(--sp-lg); }
-    .value-banner-arrow { transform: rotate(90deg); }
-  }
-  .value-banner-col { flex: 1; }
-  .value-banner-col h3 { margin-bottom: 6px; }
-  .value-banner-col.accent h3 { color: var(--accent); }
-  .value-banner-arrow { font-size: 28px; color: var(--accent); flex-shrink: 0; }
-
-  .case-block {
-    background: var(--bg-card);
-    border: 0.5px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-lg);
-    margin: var(--sp-xl) 0;
-  }
-  .mock-placeholder {
-    background: var(--bg-tertiary);
-    border: 0.5px dashed var(--border-normal);
-    border-radius: var(--radius-md);
-    padding: 40px var(--sp-lg);
-    text-align: center;
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-bottom: var(--sp-md);
-  }
-  .case-header {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-sm);
-    flex-wrap: wrap;
-    margin-bottom: var(--sp-sm);
-  }
-  .case-header h2 { font-size: calc(var(--text-xl) * var(--font-scale)); letter-spacing: -0.5px; }
-
-  /* ── Carrusel de servicios ───────────────────────────────── */
-  .services-carousel-shell {
-    margin-top: var(--sp-sm);
-  }
-  .services-carousel-hint {
-    margin: 0 0 var(--sp-sm);
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  .services-carousel-viewport {
-    position: relative;
-  }
-  .services-carousel-fade {
-    position: absolute;
-    top: 0;
-    bottom: 12px;
-    width: 48px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .services-carousel-fade--left {
-    left: 0;
-    background: linear-gradient(to right, var(--bg-primary), transparent);
-  }
-  .services-carousel-fade--right {
-    right: 0;
-    background: linear-gradient(to left, var(--bg-primary), transparent);
-  }
-  .services-carousel-shell.has-overflow:not(.at-start) .services-carousel-fade--left {
-    opacity: 1;
-  }
-  .services-carousel-shell.has-overflow:not(.at-end) .services-carousel-fade--right {
-    opacity: 1;
-  }
-  .services-carousel {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    cursor: grab;
-    outline: none;
-    /* padding para que la sombra hover no quede cortada */
-    padding-bottom: 12px;
-    padding-top: 4px;
-    /* ocultar scrollbar visualmente */
-    scrollbar-width: none;
-  }
-  .services-carousel:focus-visible {
-    box-shadow: 0 0 0 2px var(--accent-border);
-    border-radius: var(--radius-sm);
-  }
-  .services-carousel::-webkit-scrollbar { display: none; }
-  .services-carousel.is-dragging { cursor: grabbing; scroll-behavior: auto; }
-
   .service-card-anchor {
-    scroll-margin-top: 96px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    min-width: 260px;
-    max-width: 300px;
+    scroll-margin-top: 7rem;
   }
 </style>

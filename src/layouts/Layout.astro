@@ -1,7 +1,6 @@
 ---
 import '../styles/tokens.css';
 import Analytics from '@vercel/analytics/astro';
-import SpeedInsights from "@vercel/speed-insights/astro"
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import site from '../data/site.json';
@@ -30,7 +29,6 @@ const {
 const canonical = Astro.url.href;
 const siteName = 'Nicolás Hruszczak';
 const siteUrl = 'https://escalatunegocioconia.com';
-const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
 
 function inferOgImageType(path: string): string {
   const lower = path.split('?')[0].toLowerCase();
@@ -76,9 +74,9 @@ const ogImageHeight = ogImageHeightProp ?? 768;
 
     <meta name="theme-color" content="#FBBF24" />
 
-    <!-- SEC-005: Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://generativelanguage.googleapis.com https://va.vercel-scripts.com; frame-src 'self'; object-src 'none'; base-uri 'self';" />
+    <!-- SEC-005: Content Security Policy is now served as a header via vercel.json.
+         Previous <meta> tag required 'unsafe-inline' on script-src; inline scripts
+         have been extracted to /scripts/*.js so CSP can drop that directive. -->
 
     <!-- hreflang -->
     <link rel="alternate" hreflang="es" href={canonical} />
@@ -128,25 +126,16 @@ const ogImageHeight = ogImageHeightProp ?? 768;
 
     <title>{title}</title>
 
-    <!-- Tema + strip no-js + no-motion antes del primer paint (nh-reduced-motion / SO) -->
-    <script is:inline>
-      (function () {
-        const stored = localStorage.getItem('nh-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const isDark = stored ? stored === 'dark' : prefersDark;
-        document.documentElement.classList.toggle('light', !isDark);
-        if (isDark) document.documentElement.classList.remove('light');
+    <!-- Tema + strip no-js + no-motion antes del primer paint.
+         Sync script (no defer/async) para evitar FOUC en el cambio de tema. -->
+    <script src="/scripts/boot.js" is:inline></script>
 
-        document.documentElement.classList.remove('no-js');
+    <!-- Controladores globales (nhTheme, nhLang, nhA11y) + event delegation.
+         defer: se ejecuta tras parsear el DOM, antes de DOMContentLoaded. -->
+    <script src="/scripts/controllers.js" defer is:inline></script>
 
-        var motionStored = localStorage.getItem('nh-reduced-motion');
-        var reduceMotion =
-          motionStored !== null
-            ? motionStored === 'true'
-            : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) document.documentElement.classList.add('no-motion');
-      })();
-    </script>
+    <!-- Scroll reveal IntersectionObserver; depende de nhA11y (controllers.js). -->
+    <script src="/scripts/reveal.js" defer is:inline></script>
   </head>
 
   <body>
@@ -157,163 +146,9 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <Footer />
     <Analytics />
 
-    <!-- Controladores globales: tema, idioma, accesibilidad -->
-    <script is:inline>
-      // ── Tema ───────────────────────────────────────────────
-      window.nhTheme = {
-        isDark: !document.documentElement.classList.contains('light'),
-        toggle() {
-          this.isDark = !this.isDark;
-          document.documentElement.classList.toggle('light', !this.isDark);
-          localStorage.setItem('nh-theme', this.isDark ? 'dark' : 'light');
-          const btn = document.getElementById('theme-btn');
-          if (btn) btn.textContent = this.isDark ? '◑ Dark' : '◑ Light';
-        }
-      };
+    <!-- Controladores globales (nhTheme/nhLang/nhA11y) y reveal observer cargados
+         desde /scripts/*.js en <head>. Ver public/scripts/ y vercel.json CSP. -->
 
-      // ── Idioma ─────────────────────────────────────────────
-      window.nhLang = {
-        isEN: false,
-        toggle() {
-          this.isEN = !this.isEN;
-          const lang = this.isEN ? 'en' : 'es';
-          document.documentElement.lang = lang;
-          const btn = document.getElementById('lang-btn');
-          if (btn) btn.textContent = this.isEN ? 'ES' : 'EN';
-          document.querySelectorAll('[data-en][data-es]').forEach(el => {
-            const val = this.isEN ? el.dataset.en : el.dataset.es;
-            if (!val) return;
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-              el.placeholder = val;
-            } else if (el.tagName === 'OPTION') {
-              el.textContent = val;
-            } else {
-              el.innerHTML = val;
-            }
-          });
-          if (btn) btn.setAttribute('aria-label', this.isEN ? 'Cambiar a español' : 'Switch to English');
-        }
-      };
-
-      // ── Accesibilidad ──────────────────────────────────────
-      function nhInitialMotionReduced() {
-        var s = localStorage.getItem('nh-reduced-motion');
-        if (s === 'true') return true;
-        if (s === 'false') return false;
-        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      }
-
-      window.nhA11y = {
-        panelOpen: false,
-        motionReduced: nhInitialMotionReduced(),
-
-        togglePanel() {
-          this.panelOpen = !this.panelOpen;
-          const panel = document.getElementById('a11y-panel');
-          const btn   = document.getElementById('a11y-btn');
-          if (panel) panel.classList.toggle('open', this.panelOpen);
-          if (btn)   btn.classList.toggle('on', this.panelOpen);
-          if (btn)   btn.setAttribute('aria-expanded', String(this.panelOpen));
-        },
-
-        setFontScale(scale) {
-          document.documentElement.style.setProperty('--font-scale', scale);
-          localStorage.setItem('nh-font-scale', scale);
-          document.querySelectorAll('.a11y-fs-btn').forEach(b => {
-            b.classList.toggle('on', parseFloat(b.dataset.scale) === scale);
-            b.setAttribute('aria-pressed', String(parseFloat(b.dataset.scale) === scale));
-          });
-        },
-
-        setHighContrast(on) {
-          document.documentElement.classList.toggle('hc', on);
-          localStorage.setItem('nh-hc', on);
-          document.getElementById('hc-off')?.classList.toggle('on', !on);
-          document.getElementById('hc-on')?.classList.toggle('on', on);
-        },
-
-        setReducedMotion(on, persist) {
-          this.motionReduced = on;
-          document.documentElement.classList.toggle('no-motion', on);
-          let style = document.getElementById('nh-no-motion');
-          if (on) {
-            if (!style) {
-              style = document.createElement('style');
-              style.id = 'nh-no-motion';
-              style.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
-              document.head.appendChild(style);
-            }
-          } else {
-            style?.remove();
-          }
-          document.getElementById('mot-on')?.classList.toggle('on', !on);
-          document.getElementById('mot-off')?.classList.toggle('on', on);
-          if (persist) localStorage.setItem('nh-reduced-motion', String(on));
-        }
-      };
-
-      window.nhA11y.setReducedMotion(window.nhA11y.motionReduced);
-
-      // Restaurar preferencias persistidas (deferred to reduce TBT)
-      requestAnimationFrame(function() {
-        var savedScale = localStorage.getItem('nh-font-scale');
-        if (savedScale) nhA11y.setFontScale(parseFloat(savedScale));
-        var savedHC = localStorage.getItem('nh-hc');
-        if (savedHC === 'true') nhA11y.setHighContrast(true);
-      });
-    </script>
-
-    <!--
-      Scroll reveal: después del bloque nhA11y (window.nhA11y).
-      DOMContentLoaded + requestAnimationFrame: alineación con init síncrono de nhA11y / clase no-motion (head + setReducedMotion).
-    -->
-    <script is:inline>
-      (function () {
-        function reduceMotionActive() {
-          return (
-            window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-            document.documentElement.classList.contains('no-motion') ||
-            (typeof window.nhA11y !== 'undefined' && window.nhA11y.motionReduced === true)
-          );
-        }
-
-        function initReveal() {
-          requestAnimationFrame(function () {
-            var nodes = document.querySelectorAll('.reveal');
-            if (reduceMotionActive()) {
-              nodes.forEach(function (el) {
-                el.classList.add('is-visible');
-              });
-              return;
-            }
-            var observer = new IntersectionObserver(
-              function (entries) {
-                entries.forEach(function (entry) {
-                  if (!entry.isIntersecting) return;
-                  entry.target.classList.add('is-visible');
-                  observer.unobserve(entry.target);
-                });
-              },
-              // threshold 0: callback al haber intersección no nula con el root. Con 0.15, la ratio
-              // visible/total de un .reveal muy alto (p. ej. el <article class="prose"> de un post largo)
-              // puede no alcanzar nunca 15% y el contenido queda en opacity:0.
-              { threshold: 0, rootMargin: '0px 0px -50px 0px' }
-            );
-            nodes.forEach(function (el) {
-              observer.observe(el);
-            });
-          });
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initReveal);
-        } else {
-          initReveal();
-        }
-      })();
-    </script>
-
-    
     <script>
       (function() {
         function initChatWidget() {
@@ -335,19 +170,28 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           ].join(';');
           document.body.appendChild(iframe);
 
+          let chatOpen = false;
+
           window.addEventListener('message', (e) => {
+            if (e.source !== iframe.contentWindow) return;
             if (e.data?.chat === 'open') {
+              chatOpen = true;
               iframe.style.width = '420px';
               iframe.style.height = '680px';
             }
             if (e.data?.chat === 'close') {
+              chatOpen = false;
               iframe.style.width = '84px';
               iframe.style.height = '84px';
             }
           });
 
+          // L-14: solo notificamos "chat:close" cuando el widget está abierto.
+          // Antes se posteaba en cada click del documento, independientemente
+          // del estado del iframe.
           document.addEventListener('click', () => {
-            try { iframe.contentWindow.postMessage('chat:close', '*'); } catch(e) {}
+            if (!chatOpen) return;
+            try { iframe.contentWindow.postMessage('chat:close', window.location.origin); } catch(e) {}
           });
         }
 

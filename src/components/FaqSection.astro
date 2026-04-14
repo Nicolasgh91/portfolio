@@ -1,11 +1,18 @@
 ---
 /**
- * FAQ con microdata FAQPage, i18n (data-en / data-es).
+ * FAQ con i18n (data-en / data-es). JSON-LD FAQPage debe inyectarse en la página (`buildFaqPageJsonLd`).
  * Modo native: `<details>`; modo animated: acordeón con grid 0fr/1fr + script acotado por id.
  */
+import {
+  FAQ_TAG_THRESHOLD,
+  FAQ_CATEGORY_LABEL,
+  FAQ_CATEGORY_CLASS,
+  type FaqCategory,
+} from '../lib/faq-taxonomy';
+
 export interface FaqItem {
   order: number;
-  category: 'proceso' | 'comercial' | 'tecnico' | 'soporte';
+  category: FaqCategory;
   question: string;
   questionEn: string;
   answer: string;
@@ -51,25 +58,9 @@ const {
   faqAnimatedRootId = 'faq-animated-root',
 } = Astro.props;
 
-/** Umbral para mostrar tags de categoría; ajustable si el producto lo requiere. */
-const FAQ_TAG_THRESHOLD = 8;
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
-
-const categoryLabel = {
-  proceso: { es: 'Proceso', en: 'Process' },
-  comercial: { es: 'Comercial', en: 'Commercial' },
-  tecnico: { es: 'Técnico', en: 'Technical' },
-  soporte: { es: 'Soporte', en: 'Support' },
-} as const;
-
-const categoryTagClass: Record<FaqItem['category'], string> = {
-  proceso:
-    'border-[var(--accent-border)] bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] text-[var(--accent)]',
-  comercial:
-    'border-[hsla(152,43%,55%,0.25)] bg-[hsla(152,43%,55%,0.1)] text-[var(--color-success)]',
-  tecnico: 'border-[hsla(258,60%,70%,0.25)] bg-[hsla(258,60%,70%,0.1)] text-[hsl(258,55%,72%)]',
-  soporte: 'border-[hsla(199,70%,60%,0.25)] bg-[hsla(199,70%,60%,0.1)] text-[hsl(199,75%,68%)]',
-};
+const categoryLabel = FAQ_CATEGORY_LABEL;
+const categoryTagClass = FAQ_CATEGORY_CLASS;
 ---
 
 <div class:list={['mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10', rootClass]}>
@@ -121,13 +112,10 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
             Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar
             juntos.
           </p>
-          <a
-            href={ctaHref}
-            class="btn-primary w-fit font-medium"
-            data-en="Book free diagnosis →"
-            data-es="Agendar diagnóstico gratis →"
-          >
-            Agendar diagnóstico gratis →
+          <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
+            <span data-es>Agendar diagnóstico gratis</span>
+            <span data-en class="hidden">Book free diagnosis</span>
+            <span class="arrow" aria-hidden="true">→</span>
           </a>
         </div>
       )
@@ -136,14 +124,11 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
 
   {
     accordionStyle === 'native' ? (
-      <div class="flex flex-col gap-0.5" itemscope itemtype="https://schema.org/FAQPage">
+      <div class="flex flex-col gap-0.5">
         {entries.map((item, index) => (
           <details
             class="faq-item faq-item--native group overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-tertiary)] open:border-[var(--accent-border)] open:bg-[var(--bg-secondary)]"
             {...(index === 0 ? { open: true } : {})}
-            itemscope
-            itemprop="mainEntity"
-            itemtype="https://schema.org/Question"
           >
             <summary>
               <span class="flex min-w-0 flex-1 items-center gap-3.5">
@@ -161,7 +146,6 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
                 )}
                 <span
                   class="text-[15px] font-medium leading-snug text-[var(--text-secondary)] group-open:text-[var(--accent)]"
-                  itemprop="name"
                   data-en={item.questionEn}
                   data-es={item.question}
                 >
@@ -175,11 +159,10 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
                 +
               </span>
             </summary>
-            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div>
               <div class="px-5 pb-5 pt-0 md:pl-5">
                 <p
                   class="m-0 text-sm leading-relaxed text-[var(--text-secondary)]"
-                  itemprop="text"
                   data-en={item.answerEn}
                   data-es={item.answer}
                 >
@@ -191,28 +174,20 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
         ))}
       </div>
     ) : (
-      <div
-        id={faqAnimatedRootId}
-        class="faq-animated-root flex flex-col"
-        itemscope
-        itemtype="https://schema.org/FAQPage"
-      >
+      <div id={faqAnimatedRootId} data-faq-animated-root class="faq-animated-root flex flex-col">
         {entries.map((item, index) => (
           <div
             class:list={[
               'faq-item faq-item--animated border-b border-white/[0.07] py-6 first:pt-0 last:border-b-0',
               { open: index === 0 },
             ]}
-            itemscope
-            itemprop="mainEntity"
-            itemtype="https://schema.org/Question"
           >
             <button
               type="button"
               class="faq-q flex w-full cursor-pointer items-start justify-between gap-5 border-0 bg-transparent text-left text-lg font-semibold text-[var(--text-primary)]"
               aria-expanded={index === 0 ? 'true' : 'false'}
             >
-              <span class="min-w-0 flex-1" itemprop="name" data-en={item.questionEn} data-es={item.question}>
+              <span class="min-w-0 flex-1" data-en={item.questionEn} data-es={item.question}>
                 {item.question}
               </span>
               <span class="faq-icon shrink-0" aria-hidden="true">
@@ -221,10 +196,9 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
             </button>
             <div class="faq-answer-panel">
               <div class="min-h-0 overflow-hidden">
-                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <div>
                   <p
                     class="max-w-[680px] pt-4 text-sm font-light leading-relaxed text-[var(--text-secondary)]"
-                    itemprop="text"
                     data-en={item.answerEn}
                     data-es={item.answer}
                   >
@@ -242,23 +216,24 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
 
 {
   accordionStyle === 'animated' && (
-    <script is:inline define:vars={{ faqAnimatedRootId }}>
-      (function () {
-        var root = document.getElementById(faqAnimatedRootId);
-        if (!root) return;
-        function syncAria() {
-          root.querySelectorAll('.faq-item--animated').forEach(function (item) {
-            var btn = item.querySelector('.faq-q');
+    <script>
+      // CSP-005: sin `is:inline`/`define:vars`; cada FAQ animada resuelve su
+      // raíz via `data-faq-animated-root` para que Astro pueda empaquetar el
+      // script como archivo externo (CSP script-src 'self').
+      document.querySelectorAll('[data-faq-animated-root]').forEach((root) => {
+        const syncAria = () => {
+          root.querySelectorAll('.faq-item--animated').forEach((item) => {
+            const btn = item.querySelector('.faq-q');
             if (btn)
               btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
           });
-        }
-        root.querySelectorAll('.faq-q').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var item = btn.closest('.faq-item--animated');
+        };
+        root.querySelectorAll('.faq-q').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item--animated');
             if (!item || !root.contains(item)) return;
-            var wasOpen = item.classList.contains('open');
-            root.querySelectorAll('.faq-item--animated').forEach(function (i) {
+            const wasOpen = item.classList.contains('open');
+            root.querySelectorAll('.faq-item--animated').forEach((i) => {
               i.classList.remove('open');
             });
             if (!wasOpen) item.classList.add('open');
@@ -266,7 +241,7 @@ const categoryTagClass: Record<FaqItem['category'], string> = {
           });
         });
         syncAria();
-      })();
+      });
     </script>
   )
 }

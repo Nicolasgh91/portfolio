@@ -9,6 +9,7 @@ import ShareBar from '../../components/blog/ShareBar.astro';
 import TableWrapper from '../../components/mdx/TableWrapper.astro';
 import SlideViewer from '../../components/SlideViewer.astro';
 import SectionSpacer from '../../components/SectionSpacer.astro';
+import { filterTocHeadings } from '../../lib/toc';
 import humanAi from '../../assets/blog/human-ai.webp';
 import satellite from '../../assets/blog/satellite.webp';
 import cloudServers from '../../assets/blog/cloud-servers.webp';
@@ -43,7 +44,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
-const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const tocHeadings = filterTocHeadings(headings);
 
 // Datos para JSON-LD
 const siteUrl = 'https://escalatunegocioconia.com';
@@ -263,8 +264,10 @@ const related = allPosts
               <a href="/blog" class="btn-secondary" data-en="← Back to blog" data-es="← Volver al blog">
                 ← Volver al blog
               </a>
-              <a href="/servicios#contacto" class="btn-primary" data-en="Let's work together →" data-es="Hablemos →">
-                Hablemos →
+              <a href="/servicios#contacto" class="btn-primary btn-bounce">
+                <span data-es>Hablemos</span>
+                <span data-en class="hidden">Let&apos;s work together</span>
+                <span class="arrow" aria-hidden="true">→</span>
               </a>
             </div>
           </footer>
@@ -287,14 +290,16 @@ const related = allPosts
                 {related.map((r) => (
                   <a
                     href={`/blog/${r.slug}`}
-                    class="group flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
+                    class="group btn-bounce flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
                   >
                     <span class="text-xs font-semibold uppercase tracking-wide text-[var(--accent-text)]">{r.data.category}</span>
                     <h3 class="text-base font-semibold leading-6 text-[var(--text-primary)]" data-en={r.data.titleEn ?? r.data.title} data-es={r.data.title}>
                       {r.data.title}
                     </h3>
-                    <span class="mt-auto text-xs text-[var(--color-accent-400)]" data-en="Read →" data-es="Leer →">
-                      Leer →
+                    <span class="mt-auto inline-flex items-center gap-1 text-xs text-[var(--color-accent-400)]">
+                      <span data-es>Leer</span>
+                      <span data-en class="hidden">Read</span>
+                      <span class="arrow" aria-hidden="true">→</span>
                     </span>
                   </a>
                 ))}

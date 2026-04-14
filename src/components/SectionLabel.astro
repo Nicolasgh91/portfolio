@@ -1,0 +1,16 @@
+---
+interface Props {
+  text: string;
+  textEn: string;
+  colorClass?: string;
+}
+
+const { text, textEn, colorClass = 'text-orange-400' } = Astro.props;
+---
+
+<span
+  class:list={['block text-xs font-bold uppercase tracking-widest', colorClass]}
+>
+  <span data-es>{text}</span>
+  <span data-en class="hidden">{textEn}</span>
+</span>
