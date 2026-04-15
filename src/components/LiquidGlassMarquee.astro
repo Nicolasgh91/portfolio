@@ -1,0 +1,114 @@
+---
+import { Image } from "astro:assets";
+import darkLiquidBg from "../assets/talento/dark_liquid.webp";
+import lightLiquidBg from "../assets/talento/light_liquid.webp";
+
+interface Props {
+  items: string[];
+  label?: string;
+  labelEn?: string;
+  speed?: number;
+  class?: string;
+}
+
+const {
+  items,
+  label = "Stack y herramientas",
+  labelEn = "Stack & tools",
+  speed = 22,
+  class: className = "",
+} = Astro.props;
+
+const marqueeItems = [...items, ...items];
+---
+
+<section
+  class={`liquid-glass-marquee ${className}`.trim()}
+  aria-label="Stack tecnológico"
+>
+  <div class="liquid-glass-marquee__bg" aria-hidden="true">
+    <Image
+      src={darkLiquidBg}
+      alt=""
+      class="liquid-glass-marquee__bg-image lg-bg-dark"
+      loading="eager"
+      decoding="async"
+    />
+    <Image
+      src={lightLiquidBg}
+      alt=""
+      class="liquid-glass-marquee__bg-image lg-bg-light"
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+
+  <div class="liquid-glass">
+    <div class="liquid-glass__labels">
+      <span data-es={label} data-en={labelEn}>
+        {label}
+      </span>
+    </div>
+
+    <div class="liquid-glass__track">
+      <div
+        class="liquid-glass__slider"
+        style={`--liquid-glass-duration:${Math.max(speed, 1)}s;`}
+        aria-hidden="true"
+      >
+        {
+          marqueeItems.map((item, index) => (
+            <>
+              <span class="liquid-glass__item" data-es={item} data-en={item}>
+                {item}
+              </span>
+              {index < marqueeItems.length - 1 && (
+                <span class="liquid-glass__separator" aria-hidden="true" />
+              )}
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.documentElement;
+    const sliders = Array.from(
+      document.querySelectorAll(".liquid-glass__slider"),
+    );
+    if (!sliders.length) return;
+
+    const readStoredReducedMotion = () => {
+      const stored = localStorage.getItem("nh-reduced-motion");
+      if (stored === "true") return true;
+      if (stored === "false") return false;
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    };
+
+    const setState = (paused) => {
+      const playState = paused ? "paused" : "running";
+      sliders.forEach((slider) => {
+        slider.style.animationPlayState = playState;
+      });
+    };
+
+    let previousNoMotion = root.classList.contains("no-motion");
+    const initialReducedMotion = previousNoMotion || readStoredReducedMotion();
+    setState(initialReducedMotion);
+
+    const observer = new MutationObserver(() => {
+      const currentNoMotion = root.classList.contains("no-motion");
+      if (currentNoMotion === previousNoMotion) return;
+      previousNoMotion = currentNoMotion;
+      setState(currentNoMotion);
+    });
+
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  })();
+</script>

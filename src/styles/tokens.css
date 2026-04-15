@@ -726,6 +726,204 @@ html.light .catalog-carousel__nav {
     width: auto;
   }
 
+  /* LiquidGlassMarquee (/talento): contenedor con fondo mesh + cristal translúcido - actualizado */
+  .liquid-glass {
+    --lg-bg: linear-gradient(
+      145deg,
+      hsla(240, 15%, 16%, 0.5) 0%,
+      hsla(240, 12%, 10%, 0.55) 50%,
+      hsla(260, 14%, 14%, 0.5) 100%
+    );
+    --lg-border: 1px solid hsla(0, 0%, 100%, 0.1);
+    --lg-backdrop: blur(28px) saturate(1.35);
+    --lg-shadow:
+      0 2px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --lg-shadow-hover:
+      0 6px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --lg-label-color: var(--text-secondary);
+    --lg-item-color: var(--text-primary);
+    --lg-separator: hsla(0, 0%, 100%, 0.12);
+  }
+
+  .light .liquid-glass {
+    --lg-bg: linear-gradient(
+      145deg,
+      hsla(0, 0%, 100%, 0.5) 0%,
+      hsla(230, 30%, 96%, 0.4) 50%,
+      hsla(270, 20%, 98%, 0.45) 100%
+    );
+    --lg-border: 1px solid hsla(0, 0%, 100%, 0.65);
+    --lg-backdrop: blur(28px) saturate(1.5);
+    --lg-shadow:
+      0 2px 16px rgba(100, 100, 140, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    --lg-shadow-hover:
+      0 6px 32px rgba(100, 100, 160, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --lg-label-color: var(--text-secondary);
+    --lg-item-color: var(--text-primary);
+    --lg-separator: hsla(0, 0%, 0%, 0.12);
+  }
+
+  .liquid-glass-marquee {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 14px;
+    min-height: 12.5rem;
+    display: flex;
+  }
+
+  .liquid-glass-marquee__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .liquid-glass-marquee__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :root:not(.light) .liquid-glass-marquee__bg .lg-bg-dark {
+    display: block;
+  }
+  :root:not(.light) .liquid-glass-marquee__bg .lg-bg-light {
+    display: none;
+  }
+  .light .liquid-glass-marquee__bg .lg-bg-dark {
+    display: none;
+  }
+  .light .liquid-glass-marquee__bg .lg-bg-light {
+    display: block;
+  }
+
+  .liquid-glass {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    width: 100%;
+    flex: 1;
+    padding: 2.5rem 2rem;
+    border: var(--lg-border);
+    border-radius: inherit;
+    background: var(--lg-bg);
+    -webkit-backdrop-filter: var(--lg-backdrop);
+    backdrop-filter: var(--lg-backdrop);
+    box-shadow: var(--lg-shadow);
+    transition: box-shadow 0.5s ease;
+  }
+
+  .liquid-glass::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      180deg,
+      hsla(0, 0%, 100%, 0.16) 0%,
+      hsla(0, 0%, 100%, 0) 42%
+    );
+    pointer-events: none;
+  }
+
+  .liquid-glass:hover {
+    box-shadow: var(--lg-shadow-hover);
+  }
+
+  .liquid-glass__labels {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding-left: 0.5rem;
+    color: var(--lg-label-color);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .liquid-glass__track {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+  }
+
+  @keyframes liquidGlassScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .liquid-glass__slider {
+    display: inline-flex;
+    align-items: center;
+    min-width: max-content;
+    gap: 1rem;
+    animation: liquidGlassScroll var(--liquid-glass-duration, 22s) linear
+      infinite;
+    will-change: transform;
+  }
+
+  .liquid-glass__item {
+    color: var(--lg-item-color);
+    cursor: default;
+    user-select: none;
+    white-space: nowrap;
+    font-size: clamp(0.92rem, 0.2vw + 0.88rem, 1rem);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .liquid-glass__separator {
+    width: 1px;
+    height: 1rem;
+    flex: 0 0 1px;
+    background-color: var(--lg-separator);
+  }
+
+  :root.no-motion .liquid-glass__slider {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 768px) {
+    .liquid-glass {
+      padding: 1.75rem 1rem;
+    }
+    .liquid-glass__labels {
+      margin-bottom: 0.85rem;
+      padding-left: 0.35rem;
+      letter-spacing: 0.1em;
+    }
+  }
+
   /*
    * Bloques de color fijo (color blocking): no heredan inversión de html.dark / :root.light.
    * Usar junto con bg-slate-950 / bg-orange-600 (Tailwind) en el mismo elemento o wrapper.

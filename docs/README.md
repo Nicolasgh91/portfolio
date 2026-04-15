@@ -22,19 +22,20 @@
 
 ## Componentes (fichas)
 
-| Documento                                                              | Componente                                        |
-| ---------------------------------------------------------------------- | ------------------------------------------------- |
-| [componentes/section-wrapper.md](./componentes/section-wrapper.md)     | `SectionWrapper`                                  |
-| [componentes/section-label.md](./componentes/section-label.md)         | `SectionLabel`                                    |
-| [componentes/btn-bounce.md](./componentes/btn-bounce.md)               | Patrón `.btn-bounce` / `.arrow` (CTAs con flecha) |
-| [componentes/metric-display.md](./componentes/metric-display.md)       | `MetricDisplay`                                   |
-| [componentes/project-card.md](./componentes/project-card.md)           | `ProjectCard`                                     |
-| [componentes/faq-accordion.md](./componentes/faq-accordion.md)         | `FAQAccordion`                                    |
-| [componentes/LogoMarquee.md](./componentes/LogoMarquee.md)             | `LogoMarquee`                                     |
-| [componentes/hero-section.md](./componentes/hero-section.md)           | `HeroSection`                                     |
-| [componentes/page-hero-section.md](./componentes/page-hero-section.md) | `PageHeroSection`                                 |
-| [componentes/faq-section.md](./componentes/faq-section.md)             | `FaqSection`                                      |
-| [componentes/service-card.md](./componentes/service-card.md)           | `ServiceCard`                                     |
+| Documento                                                                    | Componente                                        |
+| ---------------------------------------------------------------------------- | ------------------------------------------------- |
+| [componentes/section-wrapper.md](./componentes/section-wrapper.md)           | `SectionWrapper`                                  |
+| [componentes/section-label.md](./componentes/section-label.md)               | `SectionLabel`                                    |
+| [componentes/btn-bounce.md](./componentes/btn-bounce.md)                     | Patrón `.btn-bounce` / `.arrow` (CTAs con flecha) |
+| [componentes/metric-display.md](./componentes/metric-display.md)             | `MetricDisplay`                                   |
+| [componentes/project-card.md](./componentes/project-card.md)                 | `ProjectCard`                                     |
+| [componentes/faq-accordion.md](./componentes/faq-accordion.md)               | `FAQAccordion`                                    |
+| [componentes/LogoMarquee.md](./componentes/LogoMarquee.md)                   | `LogoMarquee`                                     |
+| [componentes/hero-section.md](./componentes/hero-section.md)                 | `HeroSection`                                     |
+| [componentes/liquid-glass-marquee.md](./componentes/liquid-glass-marquee.md) | `LiquidGlassMarquee`                              |
+| [componentes/page-hero-section.md](./componentes/page-hero-section.md)       | `PageHeroSection`                                 |
+| [componentes/faq-section.md](./componentes/faq-section.md)                   | `FaqSection`                                      |
+| [componentes/service-card.md](./componentes/service-card.md)                 | `ServiceCard`                                     |
 
 El resto de fichas en [`componentes/`](./componentes/) siguen el mismo formato (ruta, props, comportamiento).
 
