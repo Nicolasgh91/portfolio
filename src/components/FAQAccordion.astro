@@ -2,12 +2,12 @@
 /**
  * FAQ con `<details>` nativo, sin microdata. El JSON-LD FAQPage debe inyectarse en la página vía `slot="head"`.
  */
-import type { FaqItem } from './FaqSection.astro';
+import type { FaqItem } from "./FaqSection.astro";
 import {
   FAQ_TAG_THRESHOLD,
   FAQ_CATEGORY_LABEL,
   FAQ_CATEGORY_CLASS,
-} from '../lib/faq-taxonomy';
+} from "../lib/faq-taxonomy";
 
 interface Props {
   entries: FaqItem[];
@@ -24,55 +24,53 @@ interface Props {
    * `darkBand`: colores fijos para bloques oscuros (p. ej. /servicios sobre slate-950);
    * evita depender de `html.light` donde los tokens claros romperían el contraste.
    */
-  variant?: 'default' | 'darkBand';
+  variant?: "default" | "darkBand";
 }
 
 const {
   entries,
-  ctaHref = '#contacto',
+  ctaHref = "#contacto",
   showSidebarCta = true,
-  eyebrowEs = 'Preguntas frecuentes',
-  eyebrowEn = 'FAQ',
-  headingEs = 'Todo lo que necesitás saber antes de arrancar',
-  headingEn = 'Everything you need to know before you get started',
-  introEs =
-    'Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.',
-  introEn =
-    "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
-  class: rootClass = '',
-  variant = 'default',
+  eyebrowEs = "Preguntas frecuentes",
+  eyebrowEn = "FAQ",
+  headingEs = "Todo lo que necesitás saber antes de arrancar",
+  headingEn = "Everything you need to know before you get started",
+  introEs = "Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.",
+  introEn = "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
+  class: rootClass = "",
+  variant = "default",
 } = Astro.props;
 
-const isDarkBand = variant === 'darkBand';
+const isDarkBand = variant === "darkBand";
 
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
 const categoryLabel = FAQ_CATEGORY_LABEL;
 const categoryTagClass = FAQ_CATEGORY_CLASS;
 
-const categoryTagClassDark: Record<FaqItem['category'], string> = {
-  proceso: 'border-orange-400/35 bg-orange-500/10 text-orange-300',
-  comercial: 'border-emerald-400/30 bg-emerald-500/10 text-emerald-300',
-  tecnico: 'border-violet-400/30 bg-violet-500/10 text-violet-200',
-  soporte: 'border-sky-400/30 bg-sky-500/10 text-sky-200',
+const categoryTagClassDark: Record<FaqItem["category"], string> = {
+  proceso: "border-orange-400/35 bg-orange-500/10 text-orange-300",
+  comercial: "border-emerald-400/30 bg-emerald-500/10 text-emerald-300",
+  tecnico: "border-violet-400/30 bg-violet-500/10 text-violet-200",
+  soporte: "border-sky-400/30 bg-sky-500/10 text-sky-200",
 };
 
 const rootToneClass = isDarkBand
-  ? 'mt-10 rounded-2xl border-2 border-orange-500/40 bg-slate-900/95 p-8 shadow-lg shadow-black/20 md:p-10'
-  : 'mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10';
+  ? "mt-10 rounded-2xl border-2 border-orange-500/40 bg-slate-900/95 p-8 shadow-lg shadow-black/20 md:p-10"
+  : "mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10";
 ---
 
 <div class:list={[rootToneClass, rootClass]}>
   <div
     class:list={[
-      'mb-10 grid gap-10 md:items-start',
-      showSidebarCta ? 'md:grid-cols-2' : 'md:grid-cols-1',
+      "mb-10 grid gap-10 md:items-start",
+      showSidebarCta ? "md:grid-cols-2" : "md:grid-cols-1",
     ]}
   >
     <header>
       <p
         class:list={[
-          'mb-2 text-xs font-bold uppercase tracking-[0.2em]',
-          isDarkBand ? 'text-orange-400' : 'text-[var(--accent-text)]',
+          "mb-2 text-xs font-bold uppercase tracking-[0.2em]",
+          isDarkBand ? "text-orange-400" : "text-[var(--accent-text)]",
         ]}
       >
         <span data-es>{eyebrowEs}</span>
@@ -81,8 +79,8 @@ const rootToneClass = isDarkBand
       <h2
         id="faq-heading"
         class:list={[
-          'font-display text-2xl font-extrabold tracking-tight md:text-3xl',
-          isDarkBand ? 'text-white' : 'text-[var(--text-primary)]',
+          "font-display text-2xl font-extrabold tracking-tight md:text-3xl",
+          isDarkBand ? "text-white" : "text-[var(--text-primary)]",
         ]}
       >
         <span data-es>{headingEs}</span>
@@ -90,8 +88,8 @@ const rootToneClass = isDarkBand
       </h2>
       <p
         class:list={[
-          'mt-4 max-w-xl text-sm leading-relaxed',
-          isDarkBand ? 'text-slate-300' : 'text-[var(--text-secondary)]',
+          "mt-4 max-w-xl text-sm leading-relaxed",
+          isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
         ]}
       >
         <span data-es>{introEs}</span>
@@ -102,31 +100,35 @@ const rootToneClass = isDarkBand
       showSidebarCta && (
         <div
           class:list={[
-            'flex flex-col justify-between gap-6 rounded-xl border p-6 md:max-w-sm md:justify-self-end',
+            "flex flex-col justify-between gap-6 rounded-xl border p-6 md:max-w-sm md:justify-self-end",
             isDarkBand
-              ? 'border-white/10 bg-slate-950/80'
-              : 'border-[var(--border-subtle)] bg-[var(--bg-tertiary)]',
+              ? "border-white/10 bg-slate-950/80"
+              : "border-[var(--border-subtle)] bg-[var(--bg-tertiary)]",
           ]}
         >
           <p
             class:list={[
-              'text-sm leading-relaxed',
-              isDarkBand ? 'text-slate-300' : 'text-[var(--text-secondary)]',
+              "text-sm leading-relaxed",
+              isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
             ]}
           >
             <span data-es>
-              Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido
-              trabajar juntos.
+              Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu
+              operación y te decimos si tiene sentido trabajar juntos.
             </span>
             <span data-en class="hidden">
-              Book a free 30-minute diagnosis. We review your operations and tell you if it makes sense to work
-              together.
+              Book a free 30-minute diagnosis. We review your operations and
+              tell you if it makes sense to work together.
             </span>
           </p>
           <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
             <span data-es>Agendar diagnóstico gratis</span>
-            <span data-en class="hidden">Book free diagnosis</span>
-            <span class="arrow" aria-hidden="true">→</span>
+            <span data-en class="hidden">
+              Book free diagnosis
+            </span>
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
           </a>
         </div>
       )
@@ -138,10 +140,10 @@ const rootToneClass = isDarkBand
       entries.map((item, index) => (
         <details
           class:list={[
-            'faq-item faq-item--native group overflow-hidden rounded-xl border',
+            "faq-item faq-item--native group overflow-hidden rounded-xl border",
             isDarkBand
-              ? 'border-white/10 bg-slate-950/70 open:border-orange-500/45 open:bg-slate-900/90'
-              : 'border-[var(--border-subtle)] bg-[var(--bg-tertiary)] open:border-[var(--accent-border)] open:bg-[var(--bg-secondary)]',
+              ? "border-white/10 bg-slate-950/70 open:border-orange-500/45 open:bg-slate-900/90"
+              : "border-[var(--border-subtle)] bg-[var(--bg-tertiary)] open:border-[var(--accent-border)] open:bg-[var(--bg-secondary)]",
           ]}
           {...(index === 0 ? { open: true } : {})}
         >
@@ -150,8 +152,10 @@ const rootToneClass = isDarkBand
               {showTags && (
                 <span
                   class:list={[
-                    'inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium md:inline-flex',
-                    isDarkBand ? categoryTagClassDark[item.category] : categoryTagClass[item.category],
+                    "inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium md:inline-flex",
+                    isDarkBand
+                      ? categoryTagClassDark[item.category]
+                      : categoryTagClass[item.category],
                   ]}
                   data-en={categoryLabel[item.category].en}
                   data-es={categoryLabel[item.category].es}
@@ -161,10 +165,10 @@ const rootToneClass = isDarkBand
               )}
               <h3
                 class:list={[
-                  'text-[15px] font-medium leading-snug',
+                  "text-[15px] font-medium leading-snug",
                   isDarkBand
-                    ? 'text-slate-200 group-open:text-orange-400'
-                    : 'text-[var(--text-secondary)] group-open:text-[var(--accent)]',
+                    ? "text-slate-200 group-open:text-orange-400"
+                    : "text-[var(--text-secondary)] group-open:text-[var(--accent)]",
                 ]}
               >
                 <span data-en={item.questionEn} data-es={item.question}>
@@ -174,10 +178,10 @@ const rootToneClass = isDarkBand
             </span>
             <span
               class:list={[
-                'flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border text-base leading-none transition-transform duration-200 group-open:rotate-45',
+                "flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border text-base leading-none transition-transform duration-200 group-open:rotate-45",
                 isDarkBand
-                  ? 'border-white/20 bg-slate-900 text-orange-400 group-open:border-orange-400 group-open:bg-orange-400 group-open:text-[var(--color-on-accent)]'
-                  : 'border-[var(--border-normal)] bg-[var(--bg-secondary)] text-[var(--accent)] group-open:border-[var(--accent)] group-open:bg-[var(--accent)] group-open:text-[var(--color-on-accent)]',
+                  ? "border-white/20 bg-slate-900 text-orange-400 group-open:border-orange-400 group-open:bg-orange-400 group-open:text-[var(--color-on-accent)]"
+                  : "border-[var(--border-normal)] bg-[var(--bg-secondary)] text-[var(--accent)] group-open:border-[var(--accent)] group-open:bg-[var(--accent)] group-open:text-[var(--color-on-accent)]",
               ]}
               aria-hidden="true"
             >
@@ -187,8 +191,8 @@ const rootToneClass = isDarkBand
           <div class="px-5 pb-5 pt-0 md:pl-5">
             <p
               class:list={[
-                'm-0 text-sm leading-relaxed',
-                isDarkBand ? 'text-slate-300' : 'text-[var(--text-secondary)]',
+                "m-0 text-sm leading-relaxed",
+                isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
               ]}
               data-en={item.answerEn}
               data-es={item.answer}

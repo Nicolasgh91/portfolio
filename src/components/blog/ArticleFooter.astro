@@ -1,13 +1,10 @@
 ---
-import { localeFromPathname } from '../../lib/locale-path';
-
 interface Props {
   tags: string[];
   category: string;
 }
 
 const { tags, category } = Astro.props;
-const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog' : '/blog';
 ---
 
 <footer class="mt-12 border-t border-[color:var(--border-subtle)] pt-8">
@@ -19,13 +16,15 @@ const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog
   </a>
 
   <div class="flex flex-wrap gap-2">
-    {tags.map((tag) => (
-      <a
-        href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
-        class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
-      >
-        #{tag}
-      </a>
-    ))}
+    {
+      tags.map((tag) => (
+        <a
+          href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
+          class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
+        >
+          #{tag}
+        </a>
+      ))
+    }
   </div>
 </footer>

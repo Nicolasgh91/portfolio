@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const landingTemplateSchema = z.object({
   slug: z.string(),
@@ -7,37 +7,43 @@ export const landingTemplateSchema = z.object({
   description: z.string(),
   descriptionEn: z.string().optional(),
   vertical: z.enum([
-    'gastronomia',
-    'profesionales',
-    'contenido',
-    'ecommerce',
-    'salud',
-    'inmobiliaria',
+    "gastronomia",
+    "profesionales",
+    "contenido",
+    "ecommerce",
+    "salud",
+    "inmobiliaria",
   ]),
-  type: z.enum(['landing', 'menu-digital', 'hub-contenido', 'catalogo']),
+  type: z.enum(["landing", "menu-digital", "hub-contenido", "catalogo"]),
   status: z
-    .enum(['available', 'coming_soon'])
+    .enum(["available", "coming_soon"])
     .describe(
-      'available: plantilla con URL canónica publicada y apta para JSON-LD; coming_soon: sin ficha indexable como ItemList.'
+      "available: plantilla con URL canónica publicada y apta para JSON-LD; coming_soon: sin ficha indexable como ItemList.",
     ),
   features: z.array(z.string()).min(1),
   thumbnail: z
     .string()
     .optional()
     .describe(
-      'Opcional: ruta bajo /public o URL absoluta (p. ej. OG o listados que no usen astro:assets). La miniatura del carrusel en /plantillas se resuelve con imports estáticos en src/data/template-carousel-images.ts → src/assets/templates/ (convención {slug}.webp o mapa explícito), no duplicar aquí.'
+      "Opcional: ruta bajo /public o URL absoluta (p. ej. OG o listados que no usen astro:assets). La miniatura del carrusel en /plantillas se resuelve con imports estáticos en src/data/template-carousel-images.ts → src/assets/templates/ (convención {slug}.webp o mapa explícito), no duplicar aquí.",
     ),
   cardBackground: z
-    .enum(['dark', 'light', 'warm'])
-    .default('dark')
-    .describe('Fondo de la tarjeta en el carrusel. Mixto por vertical como Apple Education.'),
+    .enum(["dark", "light", "warm"])
+    .default("dark")
+    .describe(
+      "Fondo de la tarjeta en el carrusel. Mixto por vertical como Apple Education.",
+    ),
   demoUrl: z
     .union([z.string().url(), z.string().regex(/^\//)])
     .optional()
-    .describe('URL absoluta o path relativo. Resolución en la página, no en este archivo.'),
+    .describe(
+      "URL absoluta o path relativo. Resolución en la página, no en este archivo.",
+    ),
   priceGroup: z
-    .enum(['basico', 'plantilla', 'full'])
-    .describe('Alineado a planes del catálogo: básico, plantilla disponible o full.'),
+    .enum(["basico", "plantilla", "full"])
+    .describe(
+      "Alineado a planes del catálogo: básico, plantilla disponible o full.",
+    ),
   priceLabel: z
     .string()
     .optional()

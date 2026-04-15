@@ -1,5 +1,5 @@
 ---
-import type { PricingPlan } from '../schemas';
+import type { PricingPlan } from "../schemas";
 
 interface Props {
   plan: PricingPlan;
@@ -7,7 +7,7 @@ interface Props {
   orderClass?: string;
 }
 
-const { plan, orderClass = '' } = Astro.props;
+const { plan, orderClass = "" } = Astro.props;
 
 const nameEs = plan.name;
 const nameEn = plan.nameEn ?? plan.name;
@@ -17,26 +17,26 @@ const featuresEn = plan.featuresEn ?? plan.features;
 
 const isRecommended = plan.recommended;
 
-const badgeEs = plan.recommendedLabel ?? 'Recomendado';
-const badgeEn = plan.recommendedLabelEn ?? 'Recommended';
+const badgeEs = plan.recommendedLabel ?? "Recomendado";
+const badgeEn = plan.recommendedLabelEn ?? "Recommended";
 
 const ctaEs = plan.ctaText;
 const ctaEn = plan.ctaTextEn ?? plan.ctaText;
 const ctaHref = plan.ctaHref;
 
 const priceDisplay =
-  typeof plan.price === 'number'
-    ? `$${plan.price.toLocaleString('es-AR')}`
+  typeof plan.price === "number"
+    ? `$${plan.price.toLocaleString("es-AR")}`
     : plan.price;
 ---
 
 <div
   class:list={[
-    'relative flex h-full flex-col rounded-[var(--radius-lg)] p-6',
+    "relative flex h-full flex-col rounded-[var(--radius-lg)] p-6",
     orderClass,
     isRecommended
-      ? 'border border-[var(--accent-border)] bg-[var(--accent-bg)] scale-[1.02] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5'
-      : 'border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-white/12 hover:-translate-y-0.5',
+      ? "border border-[var(--accent-border)] bg-[var(--accent-bg)] scale-[1.02] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
+      : "border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-white/12 hover:-translate-y-0.5",
   ]}
 >
   {
@@ -52,7 +52,7 @@ const priceDisplay =
       </div>
     )
   }
-  <div class:list={['mb-4', isRecommended && 'mt-2']}>
+  <div class:list={["mb-4", isRecommended && "mt-2"]}>
     <h3
       class="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--text-primary)]"
       data-es={nameEs}
@@ -60,7 +60,11 @@ const priceDisplay =
     >
       {nameEs}
     </h3>
-    <p class="mt-1 text-sm text-[var(--text-secondary)]" data-es={subEs} data-en={subEn}>
+    <p
+      class="mt-1 text-sm text-[var(--text-secondary)]"
+      data-es={subEs}
+      data-en={subEn}
+    >
       {subEs}
     </p>
     <p class="mt-4 flex flex-wrap items-baseline gap-2">
@@ -84,8 +88,11 @@ const priceDisplay =
       }
     </p>
   </div>
-  <div class="h-px bg-white/[0.07] my-7" aria-hidden="true" />
-  <ul class="mb-6 flex flex-1 flex-col gap-0 text-sm text-[var(--text-secondary)]" role="list">
+  <div class="h-px bg-white/[0.07] my-7" aria-hidden="true"></div>
+  <ul
+    class="mb-6 flex flex-1 flex-col gap-0 text-sm text-[var(--text-secondary)]"
+    role="list"
+  >
     {
       plan.features.map((f, i) => (
         <li class="flex items-start gap-2.5 py-1.5 font-light">

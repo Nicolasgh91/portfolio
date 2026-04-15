@@ -9,28 +9,28 @@
 
 ## Variantes de acción
 
-| Clase | Uso |
-|-------|-----|
-| `.btn-primary` | CTA de conversión (accent, texto `--color-on-accent`). |
-| `.btn-secondary` | Acción secundaria (transparente, borde sutil). |
-| `.btn-tertiary` | Navegación / texto + icono (sin borde de caja; outline solo en `:focus-visible`). |
+| Clase            | Uso                                                                               |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `.btn-primary`   | CTA de conversión (accent, texto `--color-on-accent`).                            |
+| `.btn-secondary` | Acción secundaria (transparente, borde sutil).                                    |
+| `.btn-tertiary`  | Navegación / texto + icono (sin borde de caja; outline solo en `:focus-visible`). |
 
 ## Modificadores de tamaño
 
-| Clase | Rol |
-|-------|-----|
+| Clase                                               | Rol                                                                |
+| --------------------------------------------------- | ------------------------------------------------------------------ |
 | `.btn-primary--sm` / `--sm` en secondary y tertiary | Nav CTA con glow, TOC móvil, flechas carrusel plantillas (`--sm`). |
-| (sin sufijo) | CTAs de página, tarjetas, sidebar FAQ. |
-| `.btn-primary--lg` / `--lg` | Submit de formulario, CTA del drawer móvil (`w-full`). |
-| `.btn-primary--compact` | Texto más chico en CTA nav móvil (junto con `--sm` + `--glow`). |
+| (sin sufijo)                                        | CTAs de página, tarjetas, sidebar FAQ.                             |
+| `.btn-primary--lg` / `--lg`                         | Submit de formulario, CTA del drawer móvil (`w-full`).             |
+| `.btn-primary--compact`                             | Texto más chico en CTA nav móvil (junto con `--sm` + `--glow`).    |
 
 ## Modificadores especiales
 
-| Clase | Rol |
-|-------|-----|
-| `.btn-primary--glow` | Solo con `.btn-primary--sm` en el CTA del header: sombra en dark, `cta-pulse` en `::after` si `prefers-reduced-motion: no-preference`; con `reduce` o `:root.no-motion` la animación se anula y la sombra queda estática (`--btn-glow-shadow-static`). |
-| `.btn-*--icon-only` | Controles circulares (SlideViewer: **primary** sólido sobre slides; BackToTop: **secondary** + utilidades Tailwind para vidrio oscuro). |
-| `.catalog-carousel__nav` | Capa glass sobre `.btn-secondary--sm` en `/plantillas` (fondo/borde dark vs `html.light`). |
+| Clase                    | Rol                                                                                                                                                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `.btn-primary--glow`     | Solo con `.btn-primary--sm` en el CTA del header: sombra en dark, `cta-pulse` en `::after` si `prefers-reduced-motion: no-preference`; con `reduce` o `:root.no-motion` la animación se anula y la sombra queda estática (`--btn-glow-shadow-static`). |
+| `.btn-*--icon-only`      | Controles circulares (SlideViewer: **primary** sólido sobre slides; BackToTop: **secondary** + utilidades Tailwind para vidrio oscuro).                                                                                                                |
+| `.catalog-carousel__nav` | Capa glass sobre `.btn-secondary--sm` en `/plantillas` (fondo/borde dark vs `html.light`).                                                                                                                                                             |
 
 ## Flecha animada (`.btn-bounce`)
 

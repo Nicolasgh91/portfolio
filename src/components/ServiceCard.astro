@@ -7,18 +7,18 @@
  * (M-08) que centralizan la duplicación de las tres variantes: `inquire`,
  * full-card-link y default.
  */
-import type { ImageMetadata } from 'astro';
-import humanAi from '../assets/blog/human-ai.webp';
-import cloudServers from '../assets/blog/cloud-servers.webp';
-import satellite from '../assets/blog/satellite.webp';
-import site from '../data/site.json';
-import ServiceCardMedia from './ServiceCardMedia.astro';
-import ServiceCardBody from './ServiceCardBody.astro';
-import ServiceCardContactFooter from './ServiceCardContactFooter.astro';
-import ServiceCardPrice from './ServiceCardPrice.astro';
-import ServiceCardArrow from './ServiceCardArrow.astro';
+import type { ImageMetadata } from "astro";
+import humanAi from "../assets/blog/human-ai.webp";
+import cloudServers from "../assets/blog/cloud-servers.webp";
+import satellite from "../assets/blog/satellite.webp";
+import site from "../data/site.json";
+import ServiceCardMedia from "./ServiceCardMedia.astro";
+import ServiceCardBody from "./ServiceCardBody.astro";
+import ServiceCardContactFooter from "./ServiceCardContactFooter.astro";
+import ServiceCardPrice from "./ServiceCardPrice.astro";
+import ServiceCardArrow from "./ServiceCardArrow.astro";
 
-type ImageSide = 'left' | 'right';
+type ImageSide = "left" | "right";
 
 interface Props {
   /** `id` del `<h3>` para `aria-labelledby` del overlay o enlace principal. */
@@ -33,7 +33,7 @@ interface Props {
     roiFocusEn?: string;
     href?: string;
     coverImage?: ImageMetadata;
-    imageKey?: 'human-ai' | 'cloud-servers' | 'satellite';
+    imageKey?: "human-ai" | "cloud-servers" | "satellite";
     featured?: boolean;
     price?: string;
     priceUnit?: string;
@@ -42,41 +42,44 @@ interface Props {
   };
 }
 
-const { service, headingId, imageSide = 'left' } = Astro.props;
-const pricePrefix = service.pricePrefix ?? '$';
-const inquire = service.price === 'Consultar';
+const { service, headingId, imageSide = "left" } = Astro.props;
+const pricePrefix = service.pricePrefix ?? "$";
+const inquire = service.price === "Consultar";
 const whatsappHref = site.author?.whatsapp;
 const tags = service.tags ?? [];
 const overlayTags = tags.slice(0, 2);
 
 const imageMap = {
-  'human-ai': humanAi,
-  'cloud-servers': cloudServers,
+  "human-ai": humanAi,
+  "cloud-servers": cloudServers,
   satellite: satellite,
 } as const;
 
-const imageSrc = service.coverImage ?? (service.imageKey ? imageMap[service.imageKey] : humanAi);
-const imageSizes = '(min-width: 1024px) 560px, (min-width: 768px) 45vw, 100vw';
+const imageSrc =
+  service.coverImage ??
+  (service.imageKey ? imageMap[service.imageKey] : humanAi);
+const imageSizes = "(min-width: 1024px) 560px, (min-width: 768px) 45vw, 100vw";
 
 const isFullCardLink = !inquire && Boolean(service.href);
 const linkHref = service.href ?? undefined;
 
 const shellClass =
-  'group/card service-card-shell-bg relative overflow-hidden rounded-2xl border border-[var(--border-strong)] will-change-transform transition-all duration-200 ease-out shadow-md hover:shadow-lg border-l-4 border-l-[var(--color-accent-600)] focus-within:shadow-lg motion-reduce:will-change-auto motion-reduce:transition-none motion-reduce:hover:shadow-md';
+  "group/card service-card-shell-bg relative overflow-hidden rounded-2xl border border-[var(--border-strong)] will-change-transform transition-all duration-200 ease-out shadow-md hover:shadow-lg border-l-4 border-l-[var(--color-accent-600)] focus-within:shadow-lg motion-reduce:will-change-auto motion-reduce:transition-none motion-reduce:hover:shadow-md";
 
 const rowClass =
-  imageSide === 'right'
-    ? 'flex min-h-0 w-full flex-col md:flex-row-reverse'
-    : 'flex min-h-0 w-full flex-col md:flex-row';
+  imageSide === "right"
+    ? "flex min-h-0 w-full flex-col md:flex-row-reverse"
+    : "flex min-h-0 w-full flex-col md:flex-row";
 
 const imgWrapClass =
-  imageSide === 'left'
-    ? 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tl-3xl md:rounded-bl-3xl'
-    : 'relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tr-3xl md:rounded-br-3xl';
+  imageSide === "left"
+    ? "relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tl-3xl md:rounded-bl-3xl"
+    : "relative min-h-[200px] w-full shrink-0 overflow-hidden bg-[var(--bg-tertiary)] max-md:rounded-t-xl md:min-h-[min(320px,40vh)] md:w-1/2 md:max-w-[52%] md:rounded-tr-3xl md:rounded-br-3xl";
 
-const linkAttrs = isFullCardLink && linkHref?.startsWith('http')
-  ? { target: '_blank' as const, rel: 'noopener noreferrer' as const }
-  : {};
+const linkAttrs =
+  isFullCardLink && linkHref?.startsWith("http")
+    ? { target: "_blank" as const, rel: "noopener noreferrer" as const }
+    : {};
 
 // Shape compartida por ServiceCardBody
 const bodyProps = {
@@ -86,7 +89,10 @@ const bodyProps = {
     short: { es: service.shortDescription, en: service.shortDescriptionEn },
     roiFocus:
       service.roiFocus || service.roiFocusEn
-        ? { es: service.roiFocus ?? service.roiFocusEn ?? '', en: service.roiFocusEn ?? service.roiFocus }
+        ? {
+            es: service.roiFocus ?? service.roiFocusEn ?? "",
+            en: service.roiFocusEn ?? service.roiFocus,
+          }
         : undefined,
   },
   tags,
@@ -101,56 +107,65 @@ const mediaProps = {
 };
 ---
 
-{inquire ? (
-  <div class={shellClass}>
-    {service.href ? (
-      <a
-        href={service.href}
-        class:list={[rowClass, 'no-underline outline-none']}
-        aria-label={service.title}
-      >
+{
+  inquire ? (
+    <div class={shellClass}>
+      {service.href ? (
+        <a
+          href={service.href}
+          class:list={[rowClass, "no-underline outline-none"]}
+          aria-label={service.title}
+        >
+          <ServiceCardMedia {...mediaProps} />
+          <ServiceCardBody {...bodyProps}>
+            <ServiceCardArrow />
+          </ServiceCardBody>
+        </a>
+      ) : (
+        <div class={rowClass}>
+          <ServiceCardMedia {...mediaProps} />
+          <ServiceCardBody {...bodyProps} />
+        </div>
+      )}
+
+      <ServiceCardContactFooter whatsappHref={whatsappHref} />
+    </div>
+  ) : isFullCardLink ? (
+    <article class={shellClass}>
+      <div class:list={[rowClass, "relative z-0"]}>
         <ServiceCardMedia {...mediaProps} />
         <ServiceCardBody {...bodyProps}>
+          {service.price && (
+            <ServiceCardPrice
+              price={service.price}
+              pricePrefix={pricePrefix}
+              priceUnit={service.priceUnit}
+            />
+          )}
           <ServiceCardArrow />
         </ServiceCardBody>
-      </a>
-    ) : (
+      </div>
+      <a
+        href={linkHref}
+        class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+        aria-labelledby={headingId}
+        {...linkAttrs}
+      />
+    </article>
+  ) : (
+    <div class={shellClass}>
       <div class={rowClass}>
         <ServiceCardMedia {...mediaProps} />
-        <ServiceCardBody {...bodyProps} />
+        <ServiceCardBody {...bodyProps}>
+          {service.price && (
+            <ServiceCardPrice
+              price={service.price}
+              pricePrefix={pricePrefix}
+              priceUnit={service.priceUnit}
+            />
+          )}
+        </ServiceCardBody>
       </div>
-    )}
-
-    <ServiceCardContactFooter whatsappHref={whatsappHref} />
-  </div>
-) : isFullCardLink ? (
-  <article class={shellClass}>
-    <div class:list={[rowClass, 'relative z-0']}>
-      <ServiceCardMedia {...mediaProps} />
-      <ServiceCardBody {...bodyProps}>
-        {service.price && (
-          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
-        )}
-        <ServiceCardArrow />
-      </ServiceCardBody>
     </div>
-    <a
-      href={linkHref}
-      class="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
-      aria-labelledby={headingId}
-      {...linkAttrs}
-    >
-    </a>
-  </article>
-) : (
-  <div class={shellClass}>
-    <div class={rowClass}>
-      <ServiceCardMedia {...mediaProps} />
-      <ServiceCardBody {...bodyProps}>
-        {service.price && (
-          <ServiceCardPrice price={service.price} pricePrefix={pricePrefix} priceUnit={service.priceUnit} />
-        )}
-      </ServiceCardBody>
-    </div>
-  </div>
-)}
+  )
+}

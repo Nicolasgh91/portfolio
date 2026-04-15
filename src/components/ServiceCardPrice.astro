@@ -25,8 +25,12 @@ const { price, pricePrefix, priceUnit } = Astro.props;
     <span class="font-display text-lg font-bold text-[var(--accent)]">
       {pricePrefix}{price}
     </span>
-    {priceUnit && (
-      <span class="text-xs font-medium text-[var(--text-muted)]">{priceUnit}</span>
-    )}
+    {
+      priceUnit && (
+        <span class="text-xs font-medium text-[var(--text-muted)]">
+          {priceUnit}
+        </span>
+      )
+    }
   </div>
 </div>

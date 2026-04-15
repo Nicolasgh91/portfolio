@@ -8,7 +8,7 @@ import {
   FAQ_CATEGORY_LABEL,
   FAQ_CATEGORY_CLASS,
   type FaqCategory,
-} from '../lib/faq-taxonomy';
+} from "../lib/faq-taxonomy";
 
 export interface FaqItem {
   order: number;
@@ -36,26 +36,24 @@ interface Props {
   /** Clases extra en el contenedor (p. ej. `mt-0` cuando el padre ya define separación). */
   class?: string;
   /** `native`: `<details>`; `animated`: botones + grid + JS (solo un panel abierto). */
-  accordionStyle?: 'native' | 'animated';
+  accordionStyle?: "native" | "animated";
   /** Id del contenedor del listado en modo animated (scope del script). */
   faqAnimatedRootId?: string;
 }
 
 const {
   entries,
-  ctaHref = '#contacto',
+  ctaHref = "#contacto",
   showSidebarCta = true,
-  eyebrowEs = 'Preguntas frecuentes',
-  eyebrowEn = 'FAQ',
-  headingEs = 'Todo lo que necesitás saber antes de arrancar',
-  headingEn = 'Everything you need to know before you get started',
-  introEs =
-    'Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.',
-  introEn =
-    "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
-  class: rootClass = '',
-  accordionStyle = 'native',
-  faqAnimatedRootId = 'faq-animated-root',
+  eyebrowEs = "Preguntas frecuentes",
+  eyebrowEn = "FAQ",
+  headingEs = "Todo lo que necesitás saber antes de arrancar",
+  headingEn = "Everything you need to know before you get started",
+  introEs = "Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.",
+  introEn = "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
+  class: rootClass = "",
+  accordionStyle = "native",
+  faqAnimatedRootId = "faq-animated-root",
 } = Astro.props;
 
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
@@ -63,11 +61,16 @@ const categoryLabel = FAQ_CATEGORY_LABEL;
 const categoryTagClass = FAQ_CATEGORY_CLASS;
 ---
 
-<div class:list={['mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10', rootClass]}>
+<div
+  class:list={[
+    "mt-10 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 md:p-10",
+    rootClass,
+  ]}
+>
   <div
     class:list={[
-      'mb-10 grid gap-10 md:items-start',
-      showSidebarCta ? 'md:grid-cols-2' : 'md:grid-cols-1',
+      "mb-10 grid gap-10 md:items-start",
+      showSidebarCta ? "md:grid-cols-2" : "md:grid-cols-1",
     ]}
   >
     <div>
@@ -109,13 +112,17 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
             data-en="Book a free 30-minute diagnosis. We'll review your operation and tell you whether working together makes sense."
             data-es="Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar juntos."
           >
-            Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar
-            juntos.
+            Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu
+            operación y te decimos si tiene sentido trabajar juntos.
           </p>
           <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
             <span data-es>Agendar diagnóstico gratis</span>
-            <span data-en class="hidden">Book free diagnosis</span>
-            <span class="arrow" aria-hidden="true">→</span>
+            <span data-en class="hidden">
+              Book free diagnosis
+            </span>
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
           </a>
         </div>
       )
@@ -123,7 +130,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
   </div>
 
   {
-    accordionStyle === 'native' ? (
+    accordionStyle === "native" ? (
       <div class="flex flex-col gap-0.5">
         {entries.map((item, index) => (
           <details
@@ -135,7 +142,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                 {showTags && (
                   <span
                     class:list={[
-                      'inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium md:inline-flex',
+                      "inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium md:inline-flex",
                       categoryTagClass[item.category],
                     ]}
                     data-en={categoryLabel[item.category].en}
@@ -174,20 +181,28 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
         ))}
       </div>
     ) : (
-      <div id={faqAnimatedRootId} data-faq-animated-root class="faq-animated-root flex flex-col">
+      <div
+        id={faqAnimatedRootId}
+        data-faq-animated-root
+        class="faq-animated-root flex flex-col"
+      >
         {entries.map((item, index) => (
           <div
             class:list={[
-              'faq-item faq-item--animated border-b border-white/[0.07] py-6 first:pt-0 last:border-b-0',
+              "faq-item faq-item--animated border-b border-white/[0.07] py-6 first:pt-0 last:border-b-0",
               { open: index === 0 },
             ]}
           >
             <button
               type="button"
               class="faq-q flex w-full cursor-pointer items-start justify-between gap-5 border-0 bg-transparent text-left text-lg font-semibold text-[var(--text-primary)]"
-              aria-expanded={index === 0 ? 'true' : 'false'}
+              aria-expanded={index === 0 ? "true" : "false"}
             >
-              <span class="min-w-0 flex-1" data-en={item.questionEn} data-es={item.question}>
+              <span
+                class="min-w-0 flex-1"
+                data-en={item.questionEn}
+                data-es={item.question}
+              >
                 {item.question}
               </span>
               <span class="faq-icon shrink-0" aria-hidden="true">
@@ -214,34 +229,33 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
   }
 </div>
 
-{
-  accordionStyle === 'animated' && (
-    <script>
-      // CSP-005: sin `is:inline`/`define:vars`; cada FAQ animada resuelve su
-      // raíz via `data-faq-animated-root` para que Astro pueda empaquetar el
-      // script como archivo externo (CSP script-src 'self').
-      document.querySelectorAll('[data-faq-animated-root]').forEach((root) => {
-        const syncAria = () => {
-          root.querySelectorAll('.faq-item--animated').forEach((item) => {
-            const btn = item.querySelector('.faq-q');
-            if (btn)
-              btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
-          });
-        };
-        root.querySelectorAll('.faq-q').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const item = btn.closest('.faq-item--animated');
-            if (!item || !root.contains(item)) return;
-            const wasOpen = item.classList.contains('open');
-            root.querySelectorAll('.faq-item--animated').forEach((i) => {
-              i.classList.remove('open');
-            });
-            if (!wasOpen) item.classList.add('open');
-            syncAria();
-          });
+<script>
+  // CSP-005: sin `is:inline`/`define:vars`; cada FAQ animada resuelve su
+  // raíz via `data-faq-animated-root` para que Astro pueda empaquetar el
+  // script como archivo externo (CSP script-src 'self').
+  document.querySelectorAll("[data-faq-animated-root]").forEach((root) => {
+    const syncAria = () => {
+      root.querySelectorAll(".faq-item--animated").forEach((item) => {
+        const btn = item.querySelector(".faq-q");
+        if (btn)
+          btn.setAttribute(
+            "aria-expanded",
+            item.classList.contains("open") ? "true" : "false",
+          );
+      });
+    };
+    root.querySelectorAll(".faq-q").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".faq-item--animated");
+        if (!item || !root.contains(item)) return;
+        const wasOpen = item.classList.contains("open");
+        root.querySelectorAll(".faq-item--animated").forEach((i) => {
+          i.classList.remove("open");
         });
+        if (!wasOpen) item.classList.add("open");
         syncAria();
       });
-    </script>
-  )
-}
+    });
+    syncAria();
+  });
+</script>

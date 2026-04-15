@@ -6,12 +6,12 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `value` | `string` | Sí | Valor mostrado (p. ej. `−40%`, `+3×`). |
-| `label` | `string` | Sí | Descripción corta ES. |
-| `labelEn` | `string` | Sí | Descripción corta EN. |
-| `valueColorClass` | `string` | No | Color del valor; default **`text-[var(--accent)]`** (definido en `tokens.css` en `:root` y `:root.light`). |
+| Prop              | Tipo     | Requerida | Descripción                                                                                                |
+| ----------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `value`           | `string` | Sí        | Valor mostrado (p. ej. `−40%`, `+3×`).                                                                     |
+| `label`           | `string` | Sí        | Descripción corta ES.                                                                                      |
+| `labelEn`         | `string` | Sí        | Descripción corta EN.                                                                                      |
+| `valueColorClass` | `string` | No        | Color del valor; default **`text-[var(--accent)]`** (definido en `tokens.css` en `:root` y `:root.light`). |
 
 ## Comportamiento
 

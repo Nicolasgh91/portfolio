@@ -6,10 +6,10 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `tags` | `string[]` | Sí | Etiquetas del post; enlaces a `/blog/etiqueta/{encodeURIComponent(tag)}`. |
-| `category` | `string` | Sí | Categoría; enlace a `/blog/categoria/{category}`. |
+| Prop       | Tipo       | Requerida | Descripción                                                               |
+| ---------- | ---------- | --------- | ------------------------------------------------------------------------- |
+| `tags`     | `string[]` | Sí        | Etiquetas del post; enlaces a `/blog/etiqueta/{encodeURIComponent(tag)}`. |
+| `category` | `string`   | Sí        | Categoría; enlace a `/blog/categoria/{category}`.                         |
 
 ## Comportamiento
 

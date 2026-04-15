@@ -6,10 +6,10 @@ Tarjeta de plan de precios para el catálogo de landings.
 
 ## Props
 
-| Prop | Tipo | Descripción |
-|------|------|-------------|
-| `plan` | `PricingPlan` | Datos validados (Zod) |
-| `orderClass` | `string` | Opcional; clases Tailwind para orden en grid (p. ej. `md:order-2`) |
+| Prop         | Tipo          | Descripción                                                        |
+| ------------ | ------------- | ------------------------------------------------------------------ |
+| `plan`       | `PricingPlan` | Datos validados (Zod)                                              |
+| `orderClass` | `string`      | Opcional; clases Tailwind para orden en grid (p. ej. `md:order-2`) |
 
 ## Variantes
 

@@ -20,14 +20,16 @@ const level = Math.min(100, Math.max(0, capability.level ?? 80));
   class="group relative flex flex-col gap-2.5 overflow-hidden rounded-xl border-[1.5px] border-transparent bg-[var(--bg-secondary)] p-5 pb-5 shadow-none transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-[color:rgba(124,58,237,0.45)] hover:shadow-[0_16px_40px_-8px_rgba(124,58,237,0.18)]"
   style={`--level: ${level}%`}
 >
-  {capability.icon && (
-    <div
-      class="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-violet-500/15 text-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[1.15] group-hover:-rotate-6 group-hover:bg-violet-500/30"
-      aria-hidden="true"
-    >
-      {capability.icon}
-    </div>
-  )}
+  {
+    capability.icon && (
+      <div
+        class="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-violet-500/15 text-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[1.15] group-hover:-rotate-6 group-hover:bg-violet-500/30"
+        aria-hidden="true"
+      >
+        {capability.icon}
+      </div>
+    )
+  }
 
   <h3
     class="text-sm font-bold leading-snug text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--text-primary)]"
@@ -45,21 +47,25 @@ const level = Math.min(100, Math.max(0, capability.level ?? 80));
     {capability.description}
   </p>
 
-  {capability.tags && capability.tags.length > 0 && (
-    <div class="mt-0.5 flex flex-wrap gap-1.5">
-      {capability.tags.slice(0, 4).map((tag) => (
-        <span
-          class="rounded-md border border-violet-400/35 bg-violet-950/40 px-1.5 py-0.5 text-[0.625rem] font-medium text-violet-100 transition-colors duration-200 group-hover:border-violet-300/55 group-hover:bg-violet-900/70 group-hover:text-white"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
-  )}
+  {
+    capability.tags && capability.tags.length > 0 && (
+      <div class="mt-0.5 flex flex-wrap gap-1.5">
+        {capability.tags.slice(0, 4).map((tag) => (
+          <span class="rounded-md border border-violet-400/35 bg-violet-950/40 px-1.5 py-0.5 text-[0.625rem] font-medium text-violet-100 transition-colors duration-200 group-hover:border-violet-300/55 group-hover:bg-violet-900/70 group-hover:text-white">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )
+  }
 
-  <div class="mt-1 h-0.5 w-full overflow-hidden rounded-full bg-[color:rgba(255,255,255,0.07)]" aria-hidden="true">
+  <div
+    class="mt-1 h-0.5 w-full overflow-hidden rounded-full bg-[color:rgba(255,255,255,0.07)]"
+    aria-hidden="true"
+  >
     <div
       class="h-full w-0 rounded-full bg-gradient-to-r from-violet-600 to-violet-300 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-[var(--level)]"
-    ></div>
+    >
+    </div>
   </div>
 </div>

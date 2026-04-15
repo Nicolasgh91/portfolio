@@ -4,8 +4,8 @@
  * Extraído de ServiceCard.astro (M-08) para eliminar la duplicación en las
  * tres variantes del branch (inquire / full-card / default).
  */
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 interface Props {
   imageSrc: ImageMetadata;
@@ -15,7 +15,13 @@ interface Props {
   featured?: boolean;
 }
 
-const { imageSrc, imageSizes, imgWrapClass, overlayTags, featured = false } = Astro.props;
+const {
+  imageSrc,
+  imageSizes,
+  imgWrapClass,
+  overlayTags,
+  featured = false,
+} = Astro.props;
 ---
 
 <div class={imgWrapClass} aria-hidden="true">
@@ -30,22 +36,26 @@ const { imageSrc, imageSizes, imgWrapClass, overlayTags, featured = false } = As
     decoding="async"
     class="h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
   />
-  {overlayTags.length > 0 && (
-    <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-      {overlayTags.map((t) => (
-        <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-          {t}
-        </span>
-      ))}
-    </div>
-  )}
-  {featured && (
-    <span
-      class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
-      data-en="Most chosen"
-      data-es="Más elegido"
-    >
-      Más elegido
-    </span>
-  )}
+  {
+    overlayTags.length > 0 && (
+      <div class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+        {overlayTags.map((t) => (
+          <span class="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+            {t}
+          </span>
+        ))}
+      </div>
+    )
+  }
+  {
+    featured && (
+      <span
+        class="absolute right-3 top-3 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
+        data-en="Most chosen"
+        data-es="Más elegido"
+      >
+        Más elegido
+      </span>
+    )
+  }
 </div>

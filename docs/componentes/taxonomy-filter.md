@@ -6,12 +6,12 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `categories` | `string[]` | Sí | Lista de categorías (texto mostrado = segmento de URL en `/blog/categoria/...`). |
-| `tags` | `string[]` | No | Etiquetas; default `[]`; enlaces a `/blog/etiqueta/` con `encodeURIComponent`. |
-| `activeCategory` | `string` | No | Marca pill activa y `aria-current` en categoría. |
-| `activeTag` | `string` | No | Marca pill activa en etiquetas. |
+| Prop             | Tipo       | Requerida | Descripción                                                                      |
+| ---------------- | ---------- | --------- | -------------------------------------------------------------------------------- |
+| `categories`     | `string[]` | Sí        | Lista de categorías (texto mostrado = segmento de URL en `/blog/categoria/...`). |
+| `tags`           | `string[]` | No        | Etiquetas; default `[]`; enlaces a `/blog/etiqueta/` con `encodeURIComponent`.   |
+| `activeCategory` | `string`   | No        | Marca pill activa y `aria-current` en categoría.                                 |
+| `activeTag`      | `string`   | No        | Marca pill activa en etiquetas.                                                  |
 
 ## Comportamiento
 

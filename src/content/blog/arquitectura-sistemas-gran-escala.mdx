@@ -5,7 +5,16 @@ description: "Confiabilidad, escalabilidad y mantenibilidad como pilares de todo
 descriptionEn: "Reliability, scalability and maintainability as pillars of every modern system. Comparative use cases, technology tables and FAQs to understand how to design systems that survive growth."
 pubDate: 2026-03-23
 category: "arquitectura"
-tags: ["arquitectura", "sistemas distribuidos", "bases de datos", "escalabilidad", "CAP", "Kafka", "PostgreSQL"]
+tags:
+  [
+    "arquitectura",
+    "sistemas distribuidos",
+    "bases de datos",
+    "escalabilidad",
+    "CAP",
+    "Kafka",
+    "PostgreSQL",
+  ]
 draft: false
 readingTime: 10
 priority: 0.8
@@ -17,9 +26,9 @@ slides:
   sourceType: pdf
 ---
 
-import SectionSpacer from '../../components/SectionSpacer.astro';
+import SectionSpacer from "../../components/SectionSpacer.astro";
 
-¿Cuántas veces escuchaste que un sistema "se cayó por el tráfico"? Detrás de esa frase hay una decisión de arquitectura que se tomó mal, o directamente no se tomó. Este artículo parte del libro de referencia de la industria —*Designing data-intensive applications*, de Martin Kleppmann— y lo traduce a decisiones concretas que cualquier negocio en crecimiento necesita entender.
+¿Cuántas veces escuchaste que un sistema "se cayó por el tráfico"? Detrás de esa frase hay una decisión de arquitectura que se tomó mal, o directamente no se tomó. Este artículo parte del libro de referencia de la industria —_Designing data-intensive applications_, de Martin Kleppmann— y lo traduce a decisiones concretas que cualquier negocio en crecimiento necesita entender.
 
 ## 1. Los tres pilares de todo sistema intensivo en datos
 
@@ -99,18 +108,18 @@ Herramientas: Apache Kafka, Apache Flink, AWS Kinesis.
 
 La siguiente tabla sintetiza las decisiones arquitectónicas más comunes y las tecnologías recomendadas para cada escenario de negocio.
 
-| Caso de uso | Dimensión crítica | Modelo recomendado | Tecnología de referencia | Por qué no la alternativa |
-|---|---|---|---|---|
-| Procesamiento de pagos / cobros | Consistencia ACID | Relacional (SQL) | PostgreSQL | NoSQL sin transacciones puede generar cobros duplicados o stock negativo |
-| Perfil de usuario con campos variables | Flexibilidad de esquema | Documentos (NoSQL) | MongoDB | SQL requiere migraciones costosas cada vez que se agrega un campo nuevo |
-| Carrito de compras en Black Friday | Alta disponibilidad | Leaderless | Cassandra / DynamoDB | Single-leader rechaza escrituras si el líder está caído → ventas perdidas |
-| Panel de control financiero / saldo de cuenta | Consistencia estricta de lectura | Single-leader | PostgreSQL con réplica de lectura | Leaderless puede mostrar saldo desactualizado al usuario |
-| Reporte de ventas mensuales | Alto throughput sobre datos históricos | Batch | Apache Spark / dbt | Stream es innecesariamente complejo para datos que no cambian durante la consulta |
-| Detección de fraude con tarjeta | Latencia sub-segundo | Stream | Apache Kafka + Flink | Batch solo detecta el fraude horas después, cuando el daño ya está hecho |
-| Catálogo de productos con categorías distintas | Atributos dinámicos por registro | Documentos (NoSQL) | MongoDB | SQL requiere tablas de atributos EAV complejas y lentas |
-| Dashboard de métricas sobre millones de eventos | Lectura de pocas columnas, muchas filas | Columnar | ClickHouse / BigQuery | Relacional escanea filas completas aunque solo necesites 2 columnas |
-| Logs y auditoría de eventos | Escritura append-only, lectura ocasional | Stream + almacenamiento frío | Kafka → S3 / GCS | Base de datos relacional se llena y degrada con millones de registros de log |
-| Agenda de turnos con confirmaciones | Consistencia + disponibilidad moderada | Relacional con caché | PostgreSQL + Redis | NoSQL introduce complejidad de conflictos innecesaria para volúmenes bajos |
+| Caso de uso                                     | Dimensión crítica                        | Modelo recomendado           | Tecnología de referencia          | Por qué no la alternativa                                                         |
+| ----------------------------------------------- | ---------------------------------------- | ---------------------------- | --------------------------------- | --------------------------------------------------------------------------------- |
+| Procesamiento de pagos / cobros                 | Consistencia ACID                        | Relacional (SQL)             | PostgreSQL                        | NoSQL sin transacciones puede generar cobros duplicados o stock negativo          |
+| Perfil de usuario con campos variables          | Flexibilidad de esquema                  | Documentos (NoSQL)           | MongoDB                           | SQL requiere migraciones costosas cada vez que se agrega un campo nuevo           |
+| Carrito de compras en Black Friday              | Alta disponibilidad                      | Leaderless                   | Cassandra / DynamoDB              | Single-leader rechaza escrituras si el líder está caído → ventas perdidas         |
+| Panel de control financiero / saldo de cuenta   | Consistencia estricta de lectura         | Single-leader                | PostgreSQL con réplica de lectura | Leaderless puede mostrar saldo desactualizado al usuario                          |
+| Reporte de ventas mensuales                     | Alto throughput sobre datos históricos   | Batch                        | Apache Spark / dbt                | Stream es innecesariamente complejo para datos que no cambian durante la consulta |
+| Detección de fraude con tarjeta                 | Latencia sub-segundo                     | Stream                       | Apache Kafka + Flink              | Batch solo detecta el fraude horas después, cuando el daño ya está hecho          |
+| Catálogo de productos con categorías distintas  | Atributos dinámicos por registro         | Documentos (NoSQL)           | MongoDB                           | SQL requiere tablas de atributos EAV complejas y lentas                           |
+| Dashboard de métricas sobre millones de eventos | Lectura de pocas columnas, muchas filas  | Columnar                     | ClickHouse / BigQuery             | Relacional escanea filas completas aunque solo necesites 2 columnas               |
+| Logs y auditoría de eventos                     | Escritura append-only, lectura ocasional | Stream + almacenamiento frío | Kafka → S3 / GCS                  | Base de datos relacional se llena y degrada con millones de registros de log      |
+| Agenda de turnos con confirmaciones             | Consistencia + disponibilidad moderada   | Relacional con caché         | PostgreSQL + Redis                | NoSQL introduce complejidad de conflictos innecesaria para volúmenes bajos        |
 
 <SectionSpacer size="xl" />
 
@@ -136,7 +145,7 @@ Para un cliente: "El cambio que hiciste ya está guardado de forma segura. Es po
 
 ### ¿Por qué no se puede confiar ciegamente en los timestamps de los servidores?
 
-Cada servidor tiene su propio reloj físico que tiende a adelantarse o atrasarse con el tiempo. En un sistema distribuido que usa timestamps para resolver conflictos del tipo "gana el último que escribió" (*last write wins*), un servidor con la hora mal configurada puede sobreescribir datos más nuevos con datos más viejos.
+Cada servidor tiene su propio reloj físico que tiende a adelantarse o atrasarse con el tiempo. En un sistema distribuido que usa timestamps para resolver conflictos del tipo "gana el último que escribió" (_last write wins_), un servidor con la hora mal configurada puede sobreescribir datos más nuevos con datos más viejos.
 
 La solución son los **relojes lógicos**: contadores o vectores de versión que rastrean el orden causal de los eventos, independientemente del tiempo físico. No importa si el servidor A marcó su escritura a las 10:00:01 y el servidor B a las 10:00:00 si se sabe que B escribió causalmente después de A.
 

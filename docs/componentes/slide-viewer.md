@@ -6,11 +6,11 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `src` | `string` | Sí | Nombre de carpeta bajo `src/assets/slides/<src>/` con `slide-NN.webp`. |
-| `alt` | `string` | Sí | Descripción accesible del bloque; se compone por página en cada `<Image>`. |
-| `class` | `string` | No | Clases Tailwind extra en el `<section>` contenedor. |
+| Prop    | Tipo     | Requerida | Descripción                                                                |
+| ------- | -------- | --------- | -------------------------------------------------------------------------- |
+| `src`   | `string` | Sí        | Nombre de carpeta bajo `src/assets/slides/<src>/` con `slide-NN.webp`.     |
+| `alt`   | `string` | Sí        | Descripción accesible del bloque; se compone por página en cada `<Image>`. |
+| `class` | `string` | No        | Clases Tailwind extra en el `<section>` contenedor.                        |
 
 ## Comportamiento
 
@@ -29,12 +29,12 @@
 
 ## Decisiones de diseño
 
-- IDs estables derivados de `src` (`slide-viewer-…`) para anclar el `<script>` con `define:vars` (evita `document.currentScript` en módulos).
+- IDs estables derivados de `src` (`slide-viewer-…`) en el markup; el `<script>` está al **final del componente** (fuera del ternario `hasSlides`) para tooling/Prettier y recorre `document.querySelectorAll('[data-slide-viewer]')` (sin `define:vars`).
 - Uso de `getSlideImageFromGlobModule` (`src/lib/slides.ts`) en lugar de cast manual al tipo de Astro.
 
 ## Deuda técnica conocida
 
-- Listener global `keydown` en `document` para `Escape` en fullscreen: con varias instancias activas puede haber solapamiento; valorar `AbortController` o registrar solo mientras `fixed` está activo.
+- Listener global `keydown` en `document` para `Escape` en fullscreen: cada instancia usa `AbortController` por viewer; revisar teardown si en el futuro hay view transitions.
 - Clases Tailwind aplicadas solo desde el script en modo fullscreen: asegurar purga JIT / `safelist` en `tailwind.config.mjs` (principalmente `h-full`; el resto del overlay usa clases estáticas en el markup).
 
 ## Estado

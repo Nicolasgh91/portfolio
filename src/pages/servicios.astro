@@ -1,26 +1,26 @@
 ---
-import { Fragment } from 'astro/jsx-runtime';
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import ContactForm from '../components/ContactForm.astro';
-import SectionWrapper from '../components/SectionWrapper.astro';
-import SectionLabel from '../components/SectionLabel.astro';
-import PageHeroSection from '../components/PageHeroSection.astro';
-import heroServiciosDerecha from '../assets/services/hero-servicios-derecha.webp';
-import FAQAccordion from '../components/FAQAccordion.astro';
-import { getCollection } from 'astro:content';
-import ServiceCard from '../components/ServiceCard.astro';
-import type { CollectionEntry } from 'astro:content';
-import pricing from '../data/pricing.json';
-import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
-import { serviceAnchorId } from '../lib/service-anchor-id';
+import { Fragment } from "astro/jsx-runtime";
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import ContactForm from "../components/ContactForm.astro";
+import SectionWrapper from "../components/SectionWrapper.astro";
+import SectionLabel from "../components/SectionLabel.astro";
+import PageHeroSection from "../components/PageHeroSection.astro";
+import heroServiciosDerecha from "../assets/services/hero-servicios-derecha.webp";
+import FAQAccordion from "../components/FAQAccordion.astro";
+import { getCollection } from "astro:content";
+import ServiceCard from "../components/ServiceCard.astro";
+import type { CollectionEntry } from "astro:content";
+import pricing from "../data/pricing.json";
+import { buildFaqPageJsonLd } from "../lib/faq-jsonld";
+import { serviceAnchorId } from "../lib/service-anchor-id";
 
 // Obtener servicios ordenados desde la colección de contenido
-const allServices = await getCollection('services');
+const allServices = await getCollection("services");
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 
 // FAQ: un archivo JSON = un ítem de colección; `data` es el array validado por Zod.
-const faqDocs = await getCollection('faq');
+const faqDocs = await getCollection("faq");
 const faqEntries = faqDocs
   .flatMap((doc) => doc.data)
   .sort((a, b) => a.order - b.order);
@@ -30,19 +30,19 @@ const faqEntries = faqDocs
 type PricingEntry = { price: string; unit?: string; prefix?: string };
 
 type ServicePriceSlug =
-  | 'chatbots-ia'
-  | 'landing-page'
-  | 'local-llms'
-  | 'ecommerce-platforms'
-  | 'workflow-automation';
+  | "chatbots-ia"
+  | "landing-page"
+  | "local-llms"
+  | "ecommerce-platforms"
+  | "workflow-automation";
 
 const prices = pricing as Record<ServicePriceSlug, PricingEntry>;
 
 /** Sentinel que ServiceCard interpreta como CTA a contacto (no bloque numérico). */
-const PRICE_INQUIRE = 'Consultar';
+const PRICE_INQUIRE = "Consultar";
 
 function parsePriceFromFrontmatter(
-  data: CollectionEntry<'services'>['data'],
+  data: CollectionEntry<"services">["data"],
 ): { price: string; priceUnit?: string; pricePrefix: string } | null {
   const raw = data.priceFrom?.trim();
   if (!raw) return null;
@@ -50,19 +50,19 @@ function parsePriceFromFrontmatter(
   if (ars) {
     const price = ars[1].trim();
     if (!price) return null;
-    return { price, priceUnit: 'ARS', pricePrefix: '' };
+    return { price, priceUnit: "ARS", pricePrefix: "" };
   }
-  if (raw.startsWith('$')) {
+  if (raw.startsWith("$")) {
     const price = raw.slice(1).trim();
     if (!price) return null;
-    return { price, priceUnit: undefined, pricePrefix: '$' };
+    return { price, priceUnit: undefined, pricePrefix: "$" };
   }
-  return { price: raw, priceUnit: undefined, pricePrefix: '' };
+  return { price: raw, priceUnit: undefined, pricePrefix: "" };
 }
 
 function resolveServicePrice(
   slug: string,
-  data: CollectionEntry<'services'>['data'],
+  data: CollectionEntry<"services">["data"],
 ): { price?: string; priceUnit?: string; pricePrefix: string } {
   const fromMatter = parsePriceFromFrontmatter(data);
   if (fromMatter) return fromMatter;
@@ -74,20 +74,21 @@ function resolveServicePrice(
     return {
       price: numeric,
       priceUnit: unit || undefined,
-      pricePrefix: entry.prefix ?? '',
+      pricePrefix: entry.prefix ?? "",
     };
   }
 
-  return { price: PRICE_INQUIRE, pricePrefix: '', priceUnit: undefined };
+  return { price: PRICE_INQUIRE, pricePrefix: "", priceUnit: undefined };
 }
 
-function serviceCardPayload(service: CollectionEntry<'services'>) {
+function serviceCardPayload(service: CollectionEntry<"services">) {
   const resolved = resolveServicePrice(service.slug, service.data);
   return {
     title: service.data.title,
     titleEn: service.data.titleEn,
     shortDescription: service.data.shortDescription ?? service.data.description,
-    shortDescriptionEn: service.data.shortDescriptionEn ?? service.data.descriptionEn,
+    shortDescriptionEn:
+      service.data.shortDescriptionEn ?? service.data.descriptionEn,
     roiFocus: service.data.roiFocus,
     roiFocusEn: service.data.roiFocusEn,
     coverImage: service.data.coverImage,
@@ -101,17 +102,17 @@ function serviceCardPayload(service: CollectionEntry<'services'>) {
   };
 }
 
-const siteUrl = 'https://escalatunegocioconia.com';
+const siteUrl = "https://escalatunegocioconia.com";
 const servicesJsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': sortedServices.map((s) => ({
-    '@type': 'Service',
+  "@context": "https://schema.org",
+  "@graph": sortedServices.map((s) => ({
+    "@type": "Service",
     name: s.data.title,
     description: s.data.shortDescription ?? s.data.description,
     url: `${siteUrl}/servicios#${serviceAnchorId(s.slug)}`,
     provider: {
-      '@type': 'Person',
-      name: 'Nicolás Hruszczak',
+      "@type": "Person",
+      name: "Nicolás Hruszczak",
       url: siteUrl,
     },
   })),
@@ -122,7 +123,7 @@ const faqJsonLd = buildFaqPageJsonLd(faqEntries);
 /** RD-4.1 stagger Alt B: `Math.min(i * 100, 600)` por sección con revealDelayMs (el bloque naranja CTA no usa delay, alineado a /talento). */
 const altRevealDelays: Record<string, number> = {};
 {
-  const keys = ['catalog', 'caseStudy', 'how', 'faq', 'contact'];
+  const keys = ["catalog", "caseStudy", "how", "faq", "contact"];
   keys.forEach((key, i) => {
     altRevealDelays[key] = Math.min(i * 100, 600);
   });
@@ -135,7 +136,10 @@ const altRevealDelays: Record<string, number> = {};
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(servicesJsonLd)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(servicesJsonLd)}
+    />
     <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   </Fragment>
   <Nav activePage="servicios" />
@@ -148,28 +152,42 @@ const altRevealDelays: Record<string, number> = {};
       imageHeight={1024}
       headingId="services-hero-heading"
       labelText="Servicios para emprendedores · creadores · pymes"
-      labelTextEn="For entrepreneurs, creators &amp; small businesses"
+      labelTextEn="For entrepreneurs, creators & small businesses"
     >
       <Fragment slot="heading">
         <span data-es
-          >Tecnología a medida para que tu negocio <em class="not-italic text-[var(--accent-text)]">crezca sin estrés</em>.</span
+          >Tecnología a medida para que tu negocio <em
+            class="not-italic text-[var(--accent-text)]">crezca sin estrés</em
+          >.</span
         >
         <span data-en class="hidden"
-          >Tailored technology so your business can <em class="not-italic text-[var(--accent-text)]">grow without the stress</em>.</span
+          >Tailored technology so your business can <em
+            class="not-italic text-[var(--accent-text)]"
+            >grow without the stress</em
+          >.</span
         >
       </Fragment>
       <p>
         <span data-es
-          >Ya sea que tengas un local comercial, ofrezcas servicios profesionales o crees contenido, <em
-            class="not-italic text-[var(--accent-text)]">diseñamos tu web y automatizamos tus procesos</em>. Convertí el
-          caos de mensajes en <em class="not-italic text-[var(--accent-text)]">ventas automáticas</em> y <em
-            class="not-italic text-[var(--accent-text)]">recuperá tu tiempo</em>.</span
+          >Ya sea que tengas un local comercial, ofrezcas servicios
+          profesionales o crees contenido, <em
+            class="not-italic text-[var(--accent-text)]"
+            >diseñamos tu web y automatizamos tus procesos</em
+          >. Convertí el caos de mensajes en <em
+            class="not-italic text-[var(--accent-text)]">ventas automáticas</em
+          > y <em class="not-italic text-[var(--accent-text)]"
+            >recuperá tu tiempo</em
+          >.</span
         >
         <span data-en class="hidden"
-          >Whether you run a store, offer professional services, or create content, we <em
-            class="not-italic text-[var(--accent-text)]">design your site and automate your workflows</em>. Turn message
-          chaos into <em class="not-italic text-[var(--accent-text)]">automatic sales</em> and <em
-            class="not-italic text-[var(--accent-text)]">get your time back</em>.</span
+          >Whether you run a store, offer professional services, or create
+          content, we <em class="not-italic text-[var(--accent-text)]"
+            >design your site and automate your workflows</em
+          >. Turn message chaos into <em
+            class="not-italic text-[var(--accent-text)]">automatic sales</em
+          > and <em class="not-italic text-[var(--accent-text)]"
+            >get your time back</em
+          >.</span
         >
       </p>
     </PageHeroSection>
@@ -182,14 +200,22 @@ const altRevealDelays: Record<string, number> = {};
       revealDelayMs={altRevealDelays.catalog}
     >
       <header class="mb-8 md:mb-12" aria-labelledby="services-heading">
-        <SectionLabel text="Catálogo" textEn="Catalog" colorClass="text-[var(--accent-text)]" />
-        <h2 id="services-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
+        <SectionLabel
+          text="Catálogo"
+          textEn="Catalog"
+          colorClass="text-[var(--accent-text)]"
+        />
+        <h2
+          id="services-heading"
+          class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl"
+        >
           <span data-es>Servicios</span>
           <span data-en class="hidden">Services</span>
         </h2>
         <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           <span data-es>
-            {sortedServices.length} ejes de intervención con impacto directo en la operación.
+            {sortedServices.length} ejes de intervención con impacto directo en la
+            operación.
           </span>
           <span data-en class="hidden">
             {sortedServices.length} focus areas with direct operational impact.
@@ -198,16 +224,24 @@ const altRevealDelays: Record<string, number> = {};
       </header>
 
       <div class="mb-6 md:mb-8">
-        <SectionLabel text="Más solicitados" textEn="Most requested" colorClass="text-[var(--accent-text)]" />
+        <SectionLabel
+          text="Más solicitados"
+          textEn="Most requested"
+          colorClass="text-[var(--accent-text)]"
+        />
       </div>
 
-      <div class="flex flex-col gap-8 md:gap-10" role="region" aria-labelledby="services-heading">
+      <div
+        class="flex flex-col gap-8 md:gap-10"
+        role="region"
+        aria-labelledby="services-heading"
+      >
         {
           sortedServices.map((service, i) => (
             <div id={serviceAnchorId(service.slug)} class="service-card-anchor">
               <ServiceCard
                 headingId={`service-heading-${service.slug}`}
-                imageSide={i % 2 === 0 ? 'left' : 'right'}
+                imageSide={i % 2 === 0 ? "left" : "right"}
                 service={serviceCardPayload(service)}
               />
             </div>
@@ -216,16 +250,31 @@ const altRevealDelays: Record<string, number> = {};
       </div>
     </SectionWrapper>
 
-    <SectionWrapper tone="default" padding="py-24 md:py-32" revealAlt revealDelayMs={altRevealDelays.caseStudy}>
-      <SectionLabel text="Caso de uso" textEn="Use case" colorClass="text-[var(--accent-text)]" />
-      <div class="mt-6 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-tertiary)] p-6 md:p-8">
+    <SectionWrapper
+      tone="default"
+      padding="py-24 md:py-32"
+      revealAlt
+      revealDelayMs={altRevealDelays.caseStudy}
+    >
+      <SectionLabel
+        text="Caso de uso"
+        textEn="Use case"
+        colorClass="text-[var(--accent-text)]"
+      />
+      <div
+        class="mt-6 rounded-2xl border border-[var(--border-normal)] bg-[var(--bg-tertiary)] p-6 md:p-8"
+      >
         <div class="mb-4 flex flex-wrap items-center gap-3">
           <h2
             id="case-heading"
             class="font-display text-xl font-bold tracking-tight text-[var(--text-primary)] md:text-2xl"
           >
-            <span data-es>Caso de éxito: gestión integral deportiva (Double Click™)</span>
-            <span data-en class="hidden">Success story: comprehensive sports management (Double Click™)</span>
+            <span data-es
+              >Caso de éxito: gestión integral deportiva (Double Click™)</span
+            >
+            <span data-en class="hidden"
+              >Success story: comprehensive sports management (Double Click™)</span
+            >
           </h2>
           <span
             class="inline-flex items-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent-text)]"
@@ -236,12 +285,14 @@ const altRevealDelays: Record<string, number> = {};
         </div>
         <p class="mb-8 text-sm leading-relaxed text-[var(--text-secondary)]">
           <span data-es
-            >Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de
-            Pilates, eliminando la necesidad de tres herramientas de software con pago mensual.</span
+            >Una aplicación a medida centraliza reservas, facturación y
+            retención de clientes para un estudio de Pilates, eliminando la
+            necesidad de tres herramientas de software con pago mensual.</span
           >
           <span data-en class="hidden"
-            >A custom application centralizes bookings, billing, and client retention for a Pilates studio — eliminating
-            the need for three separate paid software tools.</span
+            >A custom application centralizes bookings, billing, and client
+            retention for a Pilates studio — eliminating the need for three
+            separate paid software tools.</span
           >
         </p>
         <div class="grid gap-6 md:grid-cols-2">
@@ -254,26 +305,35 @@ const altRevealDelays: Record<string, number> = {};
             Panel de reservas · Métricas · Clientes
           </div>
           <div class="card self-start">
-            <h3 class="mb-2 font-display text-base font-bold text-[var(--text-primary)]">
+            <h3
+              class="mb-2 font-display text-base font-bold text-[var(--text-primary)]"
+            >
               <span data-es>Resultado</span>
               <span data-en class="hidden">Result</span>
             </h3>
             <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
               <span data-es
-                >Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa.
-                Panel unificado de métricas de retención de clientes.</span
+                >Eliminación de 3 suscripciones mensuales. Reducción
+                significativa del tiempo de gestión administrativa. Panel
+                unificado de métricas de retención de clientes.</span
               >
               <span data-en class="hidden"
-                >Elimination of 3 monthly subscriptions. Significant reduction in administrative management time.
-                Unified client retention metrics panel.</span
+                >Elimination of 3 monthly subscriptions. Significant reduction
+                in administrative management time. Unified client retention
+                metrics panel.</span
               >
             </p>
             <div class="tags mt-4">
               <span class="tag">Python</span>
               <span class="tag">Next.js</span>
               <span class="tag">PostgreSQL</span>
-              <a href="#contacto" class="tag tag-accent btn-bounce inline-flex items-center gap-1">
-                <span data-en="Request similar solution" data-es="Solicitar solución similar"
+              <a
+                href="#contacto"
+                class="tag tag-accent btn-bounce inline-flex items-center gap-1"
+              >
+                <span
+                  data-en="Request similar solution"
+                  data-es="Solicitar solución similar"
                   >Solicitar solución similar</span
                 >
                 <span class="arrow" aria-hidden="true">→</span>
@@ -291,7 +351,9 @@ const altRevealDelays: Record<string, number> = {};
       revealAlt
       revealDelayMs={altRevealDelays.how}
     >
-      <h2 class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl">
+      <h2
+        class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl"
+      >
         <span data-es>Cómo trabajamos</span>
         <span data-en class="hidden">How we work</span>
       </h2>
@@ -304,15 +366,20 @@ const altRevealDelays: Record<string, number> = {};
           >
             01
           </p>
-          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+          <h3
+            class="relative z-10 mt-0 font-display text-xl font-bold text-white"
+          >
             <span data-es>Diagnóstico</span>
             <span data-en class="hidden">Discovery</span>
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es>Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras.</span
+            <span data-es
+              >Entendemos procesos, cuellos de botella y oportunidades de
+              automatización con métricas claras.</span
             >
             <span data-en class="hidden"
-              >We map processes, bottlenecks and automation opportunities with clear metrics.</span
+              >We map processes, bottlenecks and automation opportunities with
+              clear metrics.</span
             >
           </p>
         </div>
@@ -324,13 +391,21 @@ const altRevealDelays: Record<string, number> = {};
           >
             02
           </p>
-          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+          <h3
+            class="relative z-10 mt-0 font-display text-xl font-bold text-white"
+          >
             <span data-es>Propuesta y entrega</span>
             <span data-en class="hidden">Proposal &amp; delivery</span>
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es>Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles.</span>
-            <span data-en class="hidden">We prioritize impact, define scope and ship in visible iterations.</span>
+            <span data-es
+              >Priorizamos impacto, definimos alcance y ejecutamos con entregas
+              iterativas visibles.</span
+            >
+            <span data-en class="hidden"
+              >We prioritize impact, define scope and ship in visible
+              iterations.</span
+            >
           </p>
         </div>
         <div class="relative pt-[calc(var(--text-6xl)*1)]">
@@ -341,13 +416,21 @@ const altRevealDelays: Record<string, number> = {};
           >
             03
           </p>
-          <h3 class="relative z-10 mt-0 font-display text-xl font-bold text-white">
+          <h3
+            class="relative z-10 mt-0 font-display text-xl font-bold text-white"
+          >
             <span data-es>Evolución</span>
             <span data-en class="hidden">Evolution</span>
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es>Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo.</span>
-            <span data-en class="hidden">Measurement, improvements and support so the system keeps paying for itself.</span>
+            <span data-es
+              >Mediciones, mejoras y soporte para que el sistema siga pagándose
+              solo en el tiempo.</span
+            >
+            <span data-en class="hidden"
+              >Measurement, improvements and support so the system keeps paying
+              for itself.</span
+            >
           </p>
         </div>
       </div>
@@ -379,18 +462,24 @@ const altRevealDelays: Record<string, number> = {};
         innerClass="text-center px-0"
         revealAlt
       >
-        <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
+        <h2
+          class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl"
+        >
           <span data-es>¿Listo para el siguiente paso?</span>
           <span data-en class="hidden">Ready for the next step?</span>
         </h2>
-        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
+        <p
+          class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90"
+        >
           <span data-es
-            >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar
-            juntos. También podés escribirnos por el formulario de abajo cuando quieras.</span
+            >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu
+            operación y te decimos si tiene sentido trabajar juntos. También
+            podés escribirnos por el formulario de abajo cuando quieras.</span
           >
           <span data-en class="hidden"
-            >Book a free 30-minute diagnosis — we review your operations and tell you if working together makes sense.
-            You can also reach us anytime via the form below.</span
+            >Book a free 30-minute diagnosis — we review your operations and
+            tell you if working together makes sense. You can also reach us
+            anytime via the form below.</span
           >
         </p>
         <p class="mt-8">
@@ -428,7 +517,6 @@ const altRevealDelays: Record<string, number> = {};
       <ContactForm />
     </SectionWrapper>
   </main>
-
 </Layout>
 <style>
   .service-card-anchor {

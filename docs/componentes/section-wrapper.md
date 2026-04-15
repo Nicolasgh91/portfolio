@@ -6,17 +6,17 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `bg` | `string` | No | Clases de fondo; default **`bg-[var(--bg-primary)]`** (tema vía `:root` / `:root.light` en `tokens.css`). Para bandas alternativas usar tokens (ej. `bg-[var(--bg-secondary)]`). **No** usar utilidades Tailwind `dark:` para el tema: el sitio alterna la clase **`light`** en `<html>`, no `dark`. |
-| `padding` | `string` | No | Default `py-24 md:py-32`. |
-| `maxWidth` | `string` | No | Default `max-w-7xl`. |
-| `tone` | `'default' \| 'dark' \| 'accent'` | No | **`default`:** sin bloque fijo; fondo/texto según tokens globales. **`dark` / `accent`:** `.section-dark` / `.section-accent` (texto fijo sobre color blocking). |
-| `id` | `string` | No | `id` del `<section>`. |
-| `class` | `string` | No | Clases en el `<section>`. |
-| `innerClass` | `string` | No | Clases en el contenedor interno (`mx-auto` + `maxWidth`). |
-| `revealAlt` | `boolean` | No | Si es `true`, añade `data-alt-reveal` y clases iniciales de Alt B (`opacity-0`, `translate-y-4`, transición). Solo tiene efecto en `/`, `/servicios` y `/talento` (ver [`scroll-reveal.md`](../scroll-reveal.md)). |
-| `revealDelayMs` | `number` | No | Retraso en ms para `transition-delay` (stagger RD-4.1); solo tiene sentido con `revealAlt`. |
+| Prop            | Tipo                              | Requerida | Descripción                                                                                                                                                                                                                                                                                          |
+| --------------- | --------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bg`            | `string`                          | No        | Clases de fondo; default **`bg-[var(--bg-primary)]`** (tema vía `:root` / `:root.light` en `tokens.css`). Para bandas alternativas usar tokens (ej. `bg-[var(--bg-secondary)]`). **No** usar utilidades Tailwind `dark:` para el tema: el sitio alterna la clase **`light`** en `<html>`, no `dark`. |
+| `padding`       | `string`                          | No        | Default `py-24 md:py-32`.                                                                                                                                                                                                                                                                            |
+| `maxWidth`      | `string`                          | No        | Default `max-w-7xl`.                                                                                                                                                                                                                                                                                 |
+| `tone`          | `'default' \| 'dark' \| 'accent'` | No        | **`default`:** sin bloque fijo; fondo/texto según tokens globales. **`dark` / `accent`:** `.section-dark` / `.section-accent` (texto fijo sobre color blocking).                                                                                                                                     |
+| `id`            | `string`                          | No        | `id` del `<section>`.                                                                                                                                                                                                                                                                                |
+| `class`         | `string`                          | No        | Clases en el `<section>`.                                                                                                                                                                                                                                                                            |
+| `innerClass`    | `string`                          | No        | Clases en el contenedor interno (`mx-auto` + `maxWidth`).                                                                                                                                                                                                                                            |
+| `revealAlt`     | `boolean`                         | No        | Si es `true`, añade `data-alt-reveal` y clases iniciales de Alt B (`opacity-0`, `translate-y-4`, transición). Solo tiene efecto en `/`, `/servicios` y `/talento` (ver [`scroll-reveal.md`](../scroll-reveal.md)).                                                                                   |
+| `revealDelayMs` | `number`                          | No        | Retraso en ms para `transition-delay` (stagger RD-4.1); solo tiene sentido con `revealAlt`.                                                                                                                                                                                                          |
 
 ## Comportamiento
 

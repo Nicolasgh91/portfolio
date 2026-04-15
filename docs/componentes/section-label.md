@@ -6,11 +6,11 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `text` | `string` | Sí | Texto ES (visible por defecto). |
-| `textEn` | `string` | Sí | Texto EN (`hidden` hasta `nhLang`). |
-| `colorClass` | `string` | No | Clases de color; default `text-orange-400`. |
+| Prop         | Tipo     | Requerida | Descripción                                 |
+| ------------ | -------- | --------- | ------------------------------------------- |
+| `text`       | `string` | Sí        | Texto ES (visible por defecto).             |
+| `textEn`     | `string` | Sí        | Texto EN (`hidden` hasta `nhLang`).         |
+| `colorClass` | `string` | No        | Clases de color; default `text-orange-400`. |
 
 ## Comportamiento
 

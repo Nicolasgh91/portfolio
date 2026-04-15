@@ -1,18 +1,18 @@
 ---
-import { getAlternatePathname, localeFromPathname } from '../lib/locale-path';
+import { getAlternatePathname, localeFromPathname } from "../lib/locale-path";
 
 interface Props {
-  activePage?: 'home' | 'servicios' | 'talento' | 'blog';
+  activePage?: "home" | "servicios" | "talento" | "blog";
 }
-const { activePage = 'home' } = Astro.props;
+const { activePage = "home" } = Astro.props;
 const pathname = Astro.url.pathname;
 const locale = localeFromPathname(pathname);
-const isEnglish = locale === 'en';
-const homeHref = isEnglish ? '/en' : '/';
-const servicesHref = isEnglish ? '/en/services' : '/servicios';
-const blogHref = isEnglish ? '/en/blog' : '/blog';
-const talentHref = isEnglish ? '/en/talent' : '/talento';
-const templatesHref = isEnglish ? '/en/templates' : '/plantillas';
+const isEnglish = locale === "en";
+const homeHref = isEnglish ? "/en" : "/";
+const servicesHref = isEnglish ? "/en/services" : "/servicios";
+const blogHref = isEnglish ? "/en/blog" : "/blog";
+const talentHref = isEnglish ? "/en/talent" : "/talento";
+const templatesHref = isEnglish ? "/en/templates" : "/plantillas";
 const servicesAiHref = `${servicesHref}#agentes-ia`;
 const servicesEcommerceHref = `${servicesHref}#ecommerce`;
 const servicesAutomationHref = `${servicesHref}#automatizacion`;
@@ -21,76 +21,155 @@ const languageSwitchHref = getAlternatePathname(pathname);
 ---
 
 <header>
-  <nav
-    class="nav"
-    role="navigation"
-    aria-label="Navegación principal"
-  >
-
+  <nav class="nav" role="navigation" aria-label="Navegación principal">
     <!-- Logo -->
-    <a href={homeHref} class="nav-logo" aria-label={isEnglish ? 'Nicolás Hruszczak — Home' : 'Nicolás Hruszczak — Inicio'}>
+    <a
+      href={homeHref}
+      class="nav-logo"
+      aria-label={isEnglish
+        ? "Nicolás Hruszczak — Home"
+        : "Nicolás Hruszczak — Inicio"}
+    >
       nh<span>.</span>
     </a>
 
     <!-- Links centro (desktop) — siempre en el DOM para SEO -->
     <ul class="nav-tabs" role="list">
-      <li><a
-        href={homeHref}
-        class={`nav-tab ${activePage === 'home' ? 'active' : ''}`}
-        aria-current={activePage === 'home' ? 'page' : undefined}
-        data-en="Home" data-es="Inicio"
-      >Inicio</a></li>
+      <li>
+        <a
+          href={homeHref}
+          class={`nav-tab ${activePage === "home" ? "active" : ""}`}
+          aria-current={activePage === "home" ? "page" : undefined}
+          data-en="Home"
+          data-es="Inicio">Inicio</a
+        >
+      </li>
 
       <li class="nav-tab-dropdown-wrapper">
         <a
           href={servicesHref}
           id="services-tab-link"
-          class={`nav-tab nav-tab--services-main ${activePage === 'servicios' ? 'active' : ''}`}
-          aria-current={activePage === 'servicios' ? 'page' : undefined}
-          data-en="B2B Services" data-es="Servicios B2B"
-        >Servicios B2B</a>
+          class={`nav-tab nav-tab--services-main ${activePage === "servicios" ? "active" : ""}`}
+          aria-current={activePage === "servicios" ? "page" : undefined}
+          data-en="B2B Services"
+          data-es="Servicios B2B">Servicios B2B</a
+        >
         <button
           type="button"
-          class={`nav-tab nav-tab--dropdown-chevron ${activePage === 'servicios' ? 'active' : ''}`}
+          class={`nav-tab nav-tab--dropdown-chevron ${activePage === "servicios" ? "active" : ""}`}
           id="services-menu-btn"
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="services-menu"
           aria-label="Abrir submenú de servicios B2B"
-        ><span class="dropdown-arrow" aria-hidden="true">▾</span></button>
-        <div id="services-menu" class="services-menu" role="menu" aria-labelledby="services-tab-link" hidden>
+          ><span class="dropdown-arrow" aria-hidden="true">▾</span></button
+        >
+        <div
+          id="services-menu"
+          class="services-menu"
+          role="menu"
+          aria-labelledby="services-tab-link"
+          hidden
+        >
           <a role="menuitem" href={servicesAiHref} class="services-item">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><circle cx="12" cy="12" r="3"></circle><path
+                d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
+              ></path></svg
+            >
             Chatbots IA
           </a>
           <a role="menuitem" href={servicesEcommerceHref} class="services-item">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><circle cx="9" cy="21" r="1"></circle><circle
+                cx="20"
+                cy="21"
+                r="1"></circle><path
+                d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+              ></path></svg
+            >
             E-commerce
           </a>
-          <a role="menuitem" href={servicesAutomationHref} class="services-item">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          <a
+            role="menuitem"
+            href={servicesAutomationHref}
+            class="services-item"
+          >
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><polyline points="16 3 21 3 21 8"></polyline><line
+                x1="4"
+                y1="20"
+                x2="21"
+                y2="3"></line><polyline points="21 16 21 21 16 21"
+              ></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg
+            >
             Automatización
           </a>
           <a role="menuitem" href={templatesHref} class="services-item">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><rect x="3" y="3" width="18" height="18" rx="2"></rect><path
+                d="M3 9h18M9 21V9"></path></svg
+            >
             Sitios web
           </a>
         </div>
       </li>
 
-      <li><a
-        href={blogHref}
-        class={`nav-tab ${activePage === 'blog' ? 'active' : ''}`}
-        aria-current={activePage === 'blog' ? 'page' : undefined}
-        data-en="Blog" data-es="Blog"
-      >Blog</a></li>
+      <li>
+        <a
+          href={blogHref}
+          class={`nav-tab ${activePage === "blog" ? "active" : ""}`}
+          aria-current={activePage === "blog" ? "page" : undefined}
+          data-en="Blog"
+          data-es="Blog">Blog</a
+        >
+      </li>
 
-      <li><a
-        href={talentHref}
-        class={`nav-tab ${activePage === 'talento' ? 'active' : ''}`}
-        aria-current={activePage === 'talento' ? 'page' : undefined}
-        data-en="Profile" data-es="Perfil profesional"
-      >Perfil profesional</a></li>
+      <li>
+        <a
+          href={talentHref}
+          class={`nav-tab ${activePage === "talento" ? "active" : ""}`}
+          aria-current={activePage === "talento" ? "page" : undefined}
+          data-en="Profile"
+          data-es="Perfil profesional">Perfil profesional</a
+        >
+      </li>
     </ul>
 
     <!-- Derecha desktop: controles + CTA -->
@@ -102,16 +181,16 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class="ctrl-btn"
           data-action="theme-toggle"
           aria-label="Cambiar tema claro/oscuro"
-          title="Tema"
-        >◑ Dark</button>
+          title="Tema">◑ Dark</button
+        >
 
         <a
           id="lang-btn"
           class="ctrl-btn"
           href={languageSwitchHref}
-          aria-label={isEnglish ? 'Cambiar a español' : 'Switch to English'}
-          title="Language / Idioma"
-        >{isEnglish ? 'ES' : 'EN'}</a>
+          aria-label={isEnglish ? "Cambiar a español" : "Switch to English"}
+          title="Language / Idioma">{isEnglish ? "ES" : "EN"}</a
+        >
 
         <button
           id="a11y-btn"
@@ -120,8 +199,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           aria-label="Opciones de accesibilidad"
           aria-expanded="false"
           aria-controls="a11y-panel"
-          title="Accesibilidad"
-        >☰ Accesibilidad</button>
+          title="Accesibilidad">☰ Accesibilidad</button
+        >
       </div>
 
       <!-- CTA desktop -->
@@ -130,8 +209,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
         class="btn-primary btn-primary--sm btn-primary--glow"
         data-en="Free diagnosis →"
         data-es="Diagnóstico gratis →"
-        aria-label="Solicitar diagnóstico gratuito"
-      >Diagnóstico gratis →</a>
+        aria-label="Solicitar diagnóstico gratuito">Diagnóstico gratis →</a
+      >
     </div>
 
     <!-- Mobile right: CTA compacto + hamburguesa -->
@@ -141,8 +220,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
         class="btn-primary btn-primary--sm btn-primary--glow btn-primary--compact"
         data-en="Diagnosis →"
         data-es="Diagnóstico →"
-        aria-label="Solicitar diagnóstico gratuito"
-      >Diagnóstico →</a>
+        aria-label="Solicitar diagnóstico gratuito">Diagnóstico →</a
+      >
 
       <button
         class="nav-burger"
@@ -156,7 +235,6 @@ const languageSwitchHref = getAlternatePathname(pathname);
         <span></span>
       </button>
     </div>
-
   </nav>
 
   <!-- Drawer mobile — todos los links en el DOM, visibles para crawlers -->
@@ -167,54 +245,78 @@ const languageSwitchHref = getAlternatePathname(pathname);
     aria-hidden="true"
   >
     <ul class="drawer-links">
-      <li><a
-        href={homeHref}
-        class={`drawer-link ${activePage === 'home' ? 'active' : ''}`}
-        aria-current={activePage === 'home' ? 'page' : undefined}
-        data-en="Home" data-es="Inicio"
-      >Inicio</a></li>
+      <li>
+        <a
+          href={homeHref}
+          class={`drawer-link ${activePage === "home" ? "active" : ""}`}
+          aria-current={activePage === "home" ? "page" : undefined}
+          data-en="Home"
+          data-es="Inicio">Inicio</a
+        >
+      </li>
 
-      <li><a
-        href={servicesHref}
-        class={`drawer-link ${activePage === 'servicios' ? 'active' : ''}`}
-        aria-current={activePage === 'servicios' ? 'page' : undefined}
-        data-en="B2B Services" data-es="Servicios B2B"
-      >Servicios B2B</a></li>
+      <li>
+        <a
+          href={servicesHref}
+          class={`drawer-link ${activePage === "servicios" ? "active" : ""}`}
+          aria-current={activePage === "servicios" ? "page" : undefined}
+          data-en="B2B Services"
+          data-es="Servicios B2B">Servicios B2B</a
+        >
+      </li>
 
-      <li><a
-        href={servicesAiHref}
-        class="drawer-link drawer-link--sub"
-        data-en="AI chatbots" data-es="Chatbots IA"
-      >Chatbots IA</a></li>
-      <li><a
-        href={servicesEcommerceHref}
-        class="drawer-link drawer-link--sub"
-        data-en="E-commerce" data-es="E-commerce"
-      >E-commerce</a></li>
-      <li><a
-        href={servicesAutomationHref}
-        class="drawer-link drawer-link--sub"
-        data-en="Automation" data-es="Automatización"
-      >Automatización</a></li>
-      <li><a
-        href={templatesHref}
-        class="drawer-link drawer-link--sub"
-        data-en="Websites" data-es="Sitios web"
-      >Sitios web</a></li>
+      <li>
+        <a
+          href={servicesAiHref}
+          class="drawer-link drawer-link--sub"
+          data-en="AI chatbots"
+          data-es="Chatbots IA">Chatbots IA</a
+        >
+      </li>
+      <li>
+        <a
+          href={servicesEcommerceHref}
+          class="drawer-link drawer-link--sub"
+          data-en="E-commerce"
+          data-es="E-commerce">E-commerce</a
+        >
+      </li>
+      <li>
+        <a
+          href={servicesAutomationHref}
+          class="drawer-link drawer-link--sub"
+          data-en="Automation"
+          data-es="Automatización">Automatización</a
+        >
+      </li>
+      <li>
+        <a
+          href={templatesHref}
+          class="drawer-link drawer-link--sub"
+          data-en="Websites"
+          data-es="Sitios web">Sitios web</a
+        >
+      </li>
 
-      <li><a
-        href={blogHref}
-        class={`drawer-link ${activePage === 'blog' ? 'active' : ''}`}
-        aria-current={activePage === 'blog' ? 'page' : undefined}
-        data-en="Blog" data-es="Blog"
-      >Blog</a></li>
+      <li>
+        <a
+          href={blogHref}
+          class={`drawer-link ${activePage === "blog" ? "active" : ""}`}
+          aria-current={activePage === "blog" ? "page" : undefined}
+          data-en="Blog"
+          data-es="Blog">Blog</a
+        >
+      </li>
 
-      <li><a
-        href={talentHref}
-        class={`drawer-link ${activePage === 'talento' ? 'active' : ''}`}
-        aria-current={activePage === 'talento' ? 'page' : undefined}
-        data-en="Profile" data-es="Perfil profesional"
-      >Perfil profesional</a></li>
+      <li>
+        <a
+          href={talentHref}
+          class={`drawer-link ${activePage === "talento" ? "active" : ""}`}
+          aria-current={activePage === "talento" ? "page" : undefined}
+          data-en="Profile"
+          data-es="Perfil profesional">Perfil profesional</a
+        >
+      </li>
     </ul>
 
     <!-- Controles dentro del drawer -->
@@ -222,14 +324,15 @@ const languageSwitchHref = getAlternatePathname(pathname);
       <button
         class="ctrl-btn"
         data-action="theme-toggle"
-        aria-label="Cambiar tema claro/oscuro"
-      >◑ Dark</button>
+        aria-label="Cambiar tema claro/oscuro">◑ Dark</button
+      >
 
       <a
         class="ctrl-btn"
         href={languageSwitchHref}
-        aria-label={isEnglish ? 'Cambiar a español' : 'Switch to English'}
-      >{isEnglish ? 'ES' : 'EN'}</a>
+        aria-label={isEnglish ? "Cambiar a español" : "Switch to English"}
+        >{isEnglish ? "ES" : "EN"}</a
+      >
 
       <button
         id="drawer-a11y-toggle"
@@ -237,8 +340,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
         type="button"
         aria-label="Opciones de accesibilidad"
         aria-expanded="false"
-        aria-controls="drawer-a11y-panel"
-      >☰ Accesibilidad</button>
+        aria-controls="drawer-a11y-panel">☰ Accesibilidad</button
+      >
 
       <div
         id="drawer-a11y-panel"
@@ -247,34 +350,76 @@ const languageSwitchHref = getAlternatePathname(pathname);
         aria-label="Panel de accesibilidad del menú móvil"
       >
         <div class="drawer-a11y-group">
-          <span class="a11y-label" id="drawer-font-size-label">Tamaño de texto</span>
-          <div class="a11y-btns" role="group" aria-labelledby="drawer-font-size-label">
-            <button class="a11y-btn a11y-fs-btn on" data-scale="1"
-              data-action="a11y-font-scale" aria-pressed="true">A</button>
-            <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
-              data-action="a11y-font-scale" aria-pressed="false">A+</button>
-            <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
-              data-action="a11y-font-scale" aria-pressed="false">A++</button>
+          <span class="a11y-label" id="drawer-font-size-label"
+            >Tamaño de texto</span
+          >
+          <div
+            class="a11y-btns"
+            role="group"
+            aria-labelledby="drawer-font-size-label"
+          >
+            <button
+              class="a11y-btn a11y-fs-btn on"
+              data-scale="1"
+              data-action="a11y-font-scale"
+              aria-pressed="true">A</button
+            >
+            <button
+              class="a11y-btn a11y-fs-btn"
+              data-scale="1.15"
+              data-action="a11y-font-scale"
+              aria-pressed="false">A+</button
+            >
+            <button
+              class="a11y-btn a11y-fs-btn"
+              data-scale="1.3"
+              data-action="a11y-font-scale"
+              aria-pressed="false">A++</button
+            >
           </div>
         </div>
 
         <div class="drawer-a11y-group">
           <span class="a11y-label" id="drawer-contrast-label">Contraste</span>
-          <div class="a11y-btns" role="group" aria-labelledby="drawer-contrast-label">
-            <button class="a11y-btn on"
-              data-action="a11y-high-contrast" data-value="off" aria-pressed="false">Normal</button>
-            <button class="a11y-btn"
-              data-action="a11y-high-contrast" data-value="on" aria-pressed="false">Alto contraste</button>
+          <div
+            class="a11y-btns"
+            role="group"
+            aria-labelledby="drawer-contrast-label"
+          >
+            <button
+              class="a11y-btn on"
+              data-action="a11y-high-contrast"
+              data-value="off"
+              aria-pressed="false">Normal</button
+            >
+            <button
+              class="a11y-btn"
+              data-action="a11y-high-contrast"
+              data-value="on"
+              aria-pressed="false">Alto contraste</button
+            >
           </div>
         </div>
 
         <div class="drawer-a11y-group">
           <span class="a11y-label" id="drawer-motion-label">Movimiento</span>
-          <div class="a11y-btns" role="group" aria-labelledby="drawer-motion-label">
-            <button class="a11y-btn on"
-              data-action="a11y-reduced-motion" data-value="off" aria-pressed="true">Activado</button>
-            <button class="a11y-btn"
-              data-action="a11y-reduced-motion" data-value="on" aria-pressed="false">Reducido</button>
+          <div
+            class="a11y-btns"
+            role="group"
+            aria-labelledby="drawer-motion-label"
+          >
+            <button
+              class="a11y-btn on"
+              data-action="a11y-reduced-motion"
+              data-value="off"
+              aria-pressed="true">Activado</button
+            >
+            <button
+              class="a11y-btn"
+              data-action="a11y-reduced-motion"
+              data-value="on"
+              aria-pressed="false">Reducido</button
+            >
           </div>
         </div>
       </div>
@@ -285,28 +430,81 @@ const languageSwitchHref = getAlternatePathname(pathname);
       class="btn-primary btn-primary--lg mt-2 w-full shrink-0 text-center font-bold"
       data-en="Request free diagnosis →"
       data-es="Solicitar diagnóstico gratuito →"
-    >Solicitar diagnóstico gratuito →</a>
+      >Solicitar diagnóstico gratuito →</a
+    >
 
     <!-- Iconos sociales — solo visibles en mobile drawer -->
     <div class="drawer-social">
-      <a href="https://github.com/Nicolasgh91" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Nicolás Hruszczak">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+      <a
+        href="https://github.com/Nicolasgh91"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub de Nicolás Hruszczak"
+      >
+        <svg
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"
+          ></path>
         </svg>
       </a>
-      <a href="https://linkedin.com/in/nicolasgh91" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Nicolás Hruszczak">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      <a
+        href="https://linkedin.com/in/nicolasgh91"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn de Nicolás Hruszczak"
+      >
+        <svg
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+          ></path>
         </svg>
       </a>
-      <a href="https://x.com/nicolasgh91" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) de Nicolás Hruszczak">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      <a
+        href="https://x.com/nicolasgh91"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="X (Twitter) de Nicolás Hruszczak"
+      >
+        <svg
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+          ></path>
         </svg>
       </a>
-      <a href="https://instagram.com/nicolasgh91" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Nicolás Hruszczak">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+      <a
+        href="https://instagram.com/nicolasgh91"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram de Nicolás Hruszczak"
+      >
+        <svg
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
+          ></path>
         </svg>
       </a>
     </div>
@@ -322,39 +520,70 @@ const languageSwitchHref = getAlternatePathname(pathname);
     <div class="a11y-group">
       <span class="a11y-label" id="font-size-label">Tamaño de texto</span>
       <div class="a11y-btns" role="group" aria-labelledby="font-size-label">
-        <button class="a11y-btn a11y-fs-btn on" data-scale="1"
-          data-action="a11y-font-scale" aria-pressed="true">A</button>
-        <button class="a11y-btn a11y-fs-btn" data-scale="1.15"
-          data-action="a11y-font-scale" aria-pressed="false">A+</button>
-        <button class="a11y-btn a11y-fs-btn" data-scale="1.3"
-          data-action="a11y-font-scale" aria-pressed="false">A++</button>
+        <button
+          class="a11y-btn a11y-fs-btn on"
+          data-scale="1"
+          data-action="a11y-font-scale"
+          aria-pressed="true">A</button
+        >
+        <button
+          class="a11y-btn a11y-fs-btn"
+          data-scale="1.15"
+          data-action="a11y-font-scale"
+          aria-pressed="false">A+</button
+        >
+        <button
+          class="a11y-btn a11y-fs-btn"
+          data-scale="1.3"
+          data-action="a11y-font-scale"
+          aria-pressed="false">A++</button
+        >
       </div>
     </div>
 
     <div class="a11y-group">
       <span class="a11y-label" id="contrast-label">Contraste</span>
       <div class="a11y-btns" role="group" aria-labelledby="contrast-label">
-        <button class="a11y-btn on" id="hc-off"
-          data-action="a11y-high-contrast" data-value="off" aria-pressed="false">Normal</button>
-        <button class="a11y-btn" id="hc-on"
-          data-action="a11y-high-contrast" data-value="on" aria-pressed="false">Alto contraste</button>
+        <button
+          class="a11y-btn on"
+          id="hc-off"
+          data-action="a11y-high-contrast"
+          data-value="off"
+          aria-pressed="false">Normal</button
+        >
+        <button
+          class="a11y-btn"
+          id="hc-on"
+          data-action="a11y-high-contrast"
+          data-value="on"
+          aria-pressed="false">Alto contraste</button
+        >
       </div>
     </div>
 
     <div class="a11y-group">
       <span class="a11y-label" id="motion-label">Movimiento</span>
       <div class="a11y-btns" role="group" aria-labelledby="motion-label">
-        <button class="a11y-btn on" id="mot-on"
-          data-action="a11y-reduced-motion" data-value="off" aria-pressed="true">Activado</button>
-        <button class="a11y-btn" id="mot-off"
-          data-action="a11y-reduced-motion" data-value="on" aria-pressed="false">Reducido</button>
+        <button
+          class="a11y-btn on"
+          id="mot-on"
+          data-action="a11y-reduced-motion"
+          data-value="off"
+          aria-pressed="true">Activado</button
+        >
+        <button
+          class="a11y-btn"
+          id="mot-off"
+          data-action="a11y-reduced-motion"
+          data-value="on"
+          aria-pressed="false">Reducido</button
+        >
       </div>
     </div>
   </div>
 </header>
 
 <style>
-
   /* ─────────────────────────────────────────
      NAV BASE — split layout: logo | tabs | right
   ───────────────────────────────────────── */
@@ -386,7 +615,9 @@ const languageSwitchHref = getAlternatePathname(pathname);
     flex-shrink: 0;
     margin-right: 8px;
   }
-  .nav-logo span { color: var(--accent); }
+  .nav-logo span {
+    color: var(--accent);
+  }
 
   /* ─────────────────────────────────────────
      TABS CENTRO — crecen para ocupar espacio disponible
@@ -493,7 +724,9 @@ const languageSwitchHref = getAlternatePathname(pathname);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     text-decoration: none;
-    transition: color 0.12s ease, background 0.12s ease;
+    transition:
+      color 0.12s ease,
+      background 0.12s ease;
   }
   .services-item:hover,
   .services-item:focus {
@@ -603,7 +836,9 @@ const languageSwitchHref = getAlternatePathname(pathname);
     height: 1.5px;
     background: var(--nav-text-idle);
     border-radius: 1px;
-    transition: transform 0.25s ease, opacity 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      opacity 0.25s ease;
   }
 
   /* Hamburguesa → X cuando está abierto */
@@ -765,9 +1000,15 @@ const languageSwitchHref = getAlternatePathname(pathname);
     flex-wrap: wrap;
     align-items: center;
   }
-  .a11y-panel.open { display: flex; }
+  .a11y-panel.open {
+    display: flex;
+  }
 
-  .a11y-group { display: flex; align-items: center; gap: var(--sp-sm); }
+  .a11y-group {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+  }
   .a11y-label {
     font-size: var(--text-xs);
     color: var(--nav-text-idle);
@@ -775,7 +1016,10 @@ const languageSwitchHref = getAlternatePathname(pathname);
     text-transform: uppercase;
     white-space: nowrap;
   }
-  .a11y-btns { display: flex; gap: 4px; }
+  .a11y-btns {
+    display: flex;
+    gap: 4px;
+  }
   .a11y-btn {
     height: 32px;
     display: inline-flex;
@@ -808,118 +1052,164 @@ const languageSwitchHref = getAlternatePathname(pathname);
 
   /* Tablet: ocultar controles de accesibilidad, mantener tabs y CTA */
   @media (max-width: 900px) {
-    #a11y-btn { display: none; }
+    #a11y-btn {
+      display: none;
+    }
   }
 
   /* Mobile: mostrar hamburguesa, ocultar tabs y controles desktop */
   @media (max-width: 680px) {
-    .nav-tabs    { display: none; }
-    .nav-right   { display: none; }
-    .nav-mobile-right { display: flex; }
+    .nav-tabs {
+      display: none;
+    }
+    .nav-right {
+      display: none;
+    }
+    .nav-mobile-right {
+      display: flex;
+    }
   }
-
 </style>
 
 <script>
   /* ── Dropdown de servicios ── */
-  const servicesMenuBtn = document.getElementById('services-menu-btn') as HTMLButtonElement | null;
-  const servicesTabLink = document.getElementById('services-tab-link') as HTMLAnchorElement | null;
-  const servicesMenu = document.getElementById('services-menu') as HTMLElement | null;
+  const servicesMenuBtn = document.getElementById(
+    "services-menu-btn",
+  ) as HTMLButtonElement | null;
+  const servicesTabLink = document.getElementById(
+    "services-tab-link",
+  ) as HTMLAnchorElement | null;
+  const servicesMenu = document.getElementById(
+    "services-menu",
+  ) as HTMLElement | null;
 
   function openServices() {
-    servicesMenu?.removeAttribute('hidden');
-    servicesMenuBtn?.setAttribute('aria-expanded', 'true');
+    servicesMenu?.removeAttribute("hidden");
+    servicesMenuBtn?.setAttribute("aria-expanded", "true");
   }
   function closeServices() {
-    servicesMenu?.setAttribute('hidden', '');
-    servicesMenuBtn?.setAttribute('aria-expanded', 'false');
+    servicesMenu?.setAttribute("hidden", "");
+    servicesMenuBtn?.setAttribute("aria-expanded", "false");
   }
 
-  servicesMenuBtn?.addEventListener('click', (e) => {
+  servicesMenuBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
-    servicesMenu?.hasAttribute('hidden') ? openServices() : closeServices();
+    if (servicesMenu?.hasAttribute("hidden")) {
+      openServices();
+    } else {
+      closeServices();
+    }
   });
 
-  servicesTabLink?.addEventListener('click', () => {
+  servicesTabLink?.addEventListener("click", () => {
     closeServices();
   });
 
-  document.addEventListener('click', () => closeServices());
+  document.addEventListener("click", () => closeServices());
 
-  servicesMenuBtn?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Escape') { closeServices(); servicesMenuBtn.focus(); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); openServices(); }
+  servicesMenuBtn?.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      closeServices();
+      servicesMenuBtn.focus();
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      openServices();
+    }
   });
 
-  servicesTabLink?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); openServices(); }
-    if (e.key === 'Escape' && !servicesMenu?.hasAttribute('hidden')) {
+  servicesTabLink?.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      openServices();
+    }
+    if (e.key === "Escape" && !servicesMenu?.hasAttribute("hidden")) {
       e.preventDefault();
       closeServices();
       servicesMenuBtn?.focus();
     }
   });
 
-  servicesMenu?.addEventListener('keydown', (e: KeyboardEvent) => {
+  servicesMenu?.addEventListener("keydown", (e: KeyboardEvent) => {
     const items = Array.from(
-      servicesMenu.querySelectorAll<HTMLElement>('[role="menuitem"]')
+      servicesMenu.querySelectorAll<HTMLElement>('[role="menuitem"]'),
     );
     const idx = items.indexOf(document.activeElement as HTMLElement);
-    if (e.key === 'ArrowDown') { e.preventDefault(); items[(idx + 1) % items.length]?.focus(); }
-    if (e.key === 'ArrowUp')   { e.preventDefault(); items[(idx - 1 + items.length) % items.length]?.focus(); }
-    if (e.key === 'Escape')    { closeServices(); servicesMenuBtn?.focus(); }
-    if (e.key === 'Tab')       { closeServices(); }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      items[(idx + 1) % items.length]?.focus();
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      items[(idx - 1 + items.length) % items.length]?.focus();
+    }
+    if (e.key === "Escape") {
+      closeServices();
+      servicesMenuBtn?.focus();
+    }
+    if (e.key === "Tab") {
+      closeServices();
+    }
   });
 
   /* ── Drawer mobile ── */
-  const burger  = document.getElementById('nav-burger');
-  const drawer  = document.getElementById('nav-drawer');
-  const drawerA11yToggle = document.getElementById('drawer-a11y-toggle') as HTMLButtonElement | null;
-  const drawerA11yPanel = document.getElementById('drawer-a11y-panel') as HTMLElement | null;
+  const burger = document.getElementById("nav-burger");
+  const drawer = document.getElementById("nav-drawer");
+  const drawerA11yToggle = document.getElementById(
+    "drawer-a11y-toggle",
+  ) as HTMLButtonElement | null;
+  const drawerA11yPanel = document.getElementById(
+    "drawer-a11y-panel",
+  ) as HTMLElement | null;
 
   function closeDrawer() {
-    if (!drawer?.classList.contains('open')) return;
-    drawer.classList.remove('open');
-    burger?.setAttribute('aria-expanded', 'false');
-    drawer.setAttribute('aria-hidden', 'true');
-    drawerA11yPanel?.classList.remove('open');
-    drawerA11yToggle?.setAttribute('aria-expanded', 'false');
+    if (!drawer?.classList.contains("open")) return;
+    drawer.classList.remove("open");
+    burger?.setAttribute("aria-expanded", "false");
+    drawer.setAttribute("aria-hidden", "true");
+    drawerA11yPanel?.classList.remove("open");
+    drawerA11yToggle?.setAttribute("aria-expanded", "false");
   }
 
-  burger?.addEventListener('click', () => {
-    const isOpen = drawer?.classList.contains('open');
+  burger?.addEventListener("click", () => {
+    const isOpen = drawer?.classList.contains("open");
 
     if (isOpen) {
       closeDrawer();
     } else {
-      drawer?.classList.add('open');
-      burger.setAttribute('aria-expanded', 'true');
-      drawer?.setAttribute('aria-hidden', 'false');
+      drawer?.classList.add("open");
+      burger.setAttribute("aria-expanded", "true");
+      drawer?.setAttribute("aria-hidden", "false");
     }
   });
 
-  drawerA11yToggle?.addEventListener('click', () => {
-    const isOpen = drawerA11yPanel?.classList.contains('open');
-    drawerA11yPanel?.classList.toggle('open', !isOpen);
-    drawerA11yToggle.setAttribute('aria-expanded', String(!isOpen));
+  drawerA11yToggle?.addEventListener("click", () => {
+    const isOpen = drawerA11yPanel?.classList.contains("open");
+    drawerA11yPanel?.classList.toggle("open", !isOpen);
+    drawerA11yToggle.setAttribute("aria-expanded", String(!isOpen));
   });
 
   // Cerrar drawer al hacer click en cualquier link interno
-  drawer?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
+  drawer?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
       closeDrawer();
     });
   });
 
   // Cerrar drawer con Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && drawer?.classList.contains('open')) {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer?.classList.contains("open")) {
       closeDrawer();
       burger?.focus();
     }
   });
 
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 10 && drawer?.classList.contains('open')) closeDrawer();
-  }, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (window.scrollY > 10 && drawer?.classList.contains("open"))
+        closeDrawer();
+    },
+    { passive: true },
+  );
 </script>

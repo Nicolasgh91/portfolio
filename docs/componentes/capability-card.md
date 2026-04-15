@@ -6,21 +6,21 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `capability` | objeto | Sí | Datos de la capacidad o skill. |
+| Prop         | Tipo   | Requerida | Descripción                    |
+| ------------ | ------ | --------- | ------------------------------ |
+| `capability` | objeto | Sí        | Datos de la capacidad o skill. |
 
 **`capability`**
 
-| Campo | Tipo | Requerida | Descripción |
-|-------|------|-----------|-------------|
-| `title` | `string` | Sí | Nombre de la capacidad. |
-| `titleEn` | `string` | No | Título EN. |
-| `description` | `string` | Sí | Texto descriptivo. |
-| `descriptionEn` | `string` | No | Descripción EN. |
-| `icon` | `string` | No | Contenido mostrado en el recuadro de icono (ej. emoji). |
-| `level` | `number` | No | 0–100 para barra visual; default 80 si ausente. |
-| `tags` | `string[]` | No | Chips opcionales bajo la tarjeta. |
+| Campo           | Tipo       | Requerida | Descripción                                             |
+| --------------- | ---------- | --------- | ------------------------------------------------------- |
+| `title`         | `string`   | Sí        | Nombre de la capacidad.                                 |
+| `titleEn`       | `string`   | No        | Título EN.                                              |
+| `description`   | `string`   | Sí        | Texto descriptivo.                                      |
+| `descriptionEn` | `string`   | No        | Descripción EN.                                         |
+| `icon`          | `string`   | No        | Contenido mostrado en el recuadro de icono (ej. emoji). |
+| `level`         | `number`   | No        | 0–100 para barra visual; default 80 si ausente.         |
+| `tags`          | `string[]` | No        | Chips opcionales bajo la tarjeta.                       |
 
 ## Comportamiento
 

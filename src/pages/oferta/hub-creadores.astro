@@ -1,10 +1,10 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
 
-const title = 'Hub de contenido para creadores — bio, FAQ, videos y links';
+const title = "Hub de contenido para creadores — bio, FAQ, videos y links";
 const description =
-  'Plantilla one-page: biografía, preguntas frecuentes en acordeón, espacio para videos y enlaces categorizados. Base para marca personal y monetización.';
+  "Plantilla one-page: biografía, preguntas frecuentes en acordeón, espacio para videos y enlaces categorizados. Base para marca personal y monetización.";
 ---
 
 <Layout {title} {description} ogImage="/og-desktop.png">
@@ -13,51 +13,74 @@ const description =
   <main id="main-content">
     <div class="page-container py-12">
       <article class="mx-auto max-w-2xl">
-        <h1 class="mb-4 font-display text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-4xl">
+        <h1
+          class="mb-4 font-display text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-4xl"
+        >
           Hub de contenido para creadores
         </h1>
         <p class="mb-10 text-base leading-relaxed text-[var(--text-secondary)]">
-          Ejemplo de estructura de producto empaquetado: una sola página rápida con todo lo que tus seguidores
-          necesitan — sin depender solo de Linktree genérico.
+          Ejemplo de estructura de producto empaquetado: una sola página rápida
+          con todo lo que tus seguidores necesitan — sin depender solo de
+          Linktree genérico.
         </p>
 
         <section class="mb-12" aria-labelledby="bio-heading">
-          <h2 id="bio-heading" class="mb-3 text-lg font-bold text-[var(--text-primary)]">
+          <h2
+            id="bio-heading"
+            class="mb-3 text-lg font-bold text-[var(--text-primary)]"
+          >
             Bio
           </h2>
           <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-            Nicolás Hruszczak — analista funcional y desarrollador full stack. Ayudo a pymes a ordenar procesos,
-            automatizar con IA y tener presencia web que convierta. Este bloque en tu hub sería tu historia y
-            propuesta en 2–3 párrafos.
+            Nicolás Hruszczak — analista funcional y desarrollador full stack.
+            Ayudo a pymes a ordenar procesos, automatizar con IA y tener
+            presencia web que convierta. Este bloque en tu hub sería tu historia
+            y propuesta en 2–3 párrafos.
           </p>
         </section>
 
         <section class="mb-12" aria-labelledby="faq-heading">
-          <h2 id="faq-heading" class="mb-4 text-lg font-bold text-[var(--text-primary)]">
+          <h2
+            id="faq-heading"
+            class="mb-4 text-lg font-bold text-[var(--text-primary)]"
+          >
             Preguntas frecuentes
           </h2>
           <div class="space-y-2">
-            <details class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3">
-              <summary class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]">
+            <details
+              class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3"
+            >
+              <summary
+                class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
+              >
                 ¿Qué incluye el hub?
               </summary>
               <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                Bio, enlaces por categoría, FAQ expandible y bloque para videos o reels embebidos.
+                Bio, enlaces por categoría, FAQ expandible y bloque para videos
+                o reels embebidos.
               </p>
             </details>
-            <details class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3">
-              <summary class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]">
+            <details
+              class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3"
+            >
+              <summary
+                class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
+              >
                 ¿Puedo sumar chatbot después?
               </summary>
               <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                Sí. El mismo stack modular permite agregar widget de IA sin rehacer la landing.
+                Sí. El mismo stack modular permite agregar widget de IA sin
+                rehacer la landing.
               </p>
             </details>
           </div>
         </section>
 
         <section class="mb-12" aria-labelledby="videos-heading">
-          <h2 id="videos-heading" class="mb-4 text-lg font-bold text-[var(--text-primary)]">
+          <h2
+            id="videos-heading"
+            class="mb-4 text-lg font-bold text-[var(--text-primary)]"
+          >
             Videos destacados
           </h2>
           <div class="grid gap-3 sm:grid-cols-2" role="list">
@@ -79,30 +102,48 @@ const description =
         </section>
 
         <section aria-labelledby="links-heading">
-          <h2 id="links-heading" class="mb-4 text-lg font-bold text-[var(--text-primary)]">
+          <h2
+            id="links-heading"
+            class="mb-4 text-lg font-bold text-[var(--text-primary)]"
+          >
             Links por categoría
           </h2>
           <div class="space-y-6">
             <div>
-              <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+              <h3
+                class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]"
+              >
                 Recursos
               </h3>
               <ul class="space-y-2 text-sm">
                 <li>
-                  <a href="/blog" class="text-[var(--accent-text)] underline-offset-2 hover:underline">Blog técnico</a>
+                  <a
+                    href="/blog"
+                    class="text-[var(--accent-text)] underline-offset-2 hover:underline"
+                    >Blog técnico</a
+                  >
                 </li>
                 <li>
-                  <a href="/talento" class="text-[var(--accent-text)] underline-offset-2 hover:underline">Perfil y proyectos</a>
+                  <a
+                    href="/talento"
+                    class="text-[var(--accent-text)] underline-offset-2 hover:underline"
+                    >Perfil y proyectos</a
+                  >
                 </li>
               </ul>
             </div>
             <div>
-              <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+              <h3
+                class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]"
+              >
                 Contacto
               </h3>
               <ul class="space-y-2 text-sm">
                 <li>
-                  <a href="/servicios#contacto" class="text-[var(--accent-text)] underline-offset-2 hover:underline">
+                  <a
+                    href="/servicios#contacto"
+                    class="text-[var(--accent-text)] underline-offset-2 hover:underline"
+                  >
                     Formulario B2B
                   </a>
                 </li>

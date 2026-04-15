@@ -3,14 +3,14 @@
  * Carrusel de marcas/stack; SVG vía `?raw` + `set:html`, color vía `currentColor` en el root del SVG.
  * Pausa en hover. Sin `<Image>` (raster); ver docs/componentes/LogoMarquee.md.
  */
-import astroSvg from '../assets/marquee/astro.svg?raw';
-import reactSvg from '../assets/marquee/react.svg?raw';
-import typescriptSvg from '../assets/marquee/typescript.svg?raw';
-import tailwindSvg from '../assets/marquee/tailwind.svg?raw';
-import vercelSvg from '../assets/marquee/vercel.svg?raw';
-import pythonSvg from '../assets/marquee/python.svg?raw';
-import nodejsSvg from '../assets/marquee/nodejs.svg?raw';
-import supabaseSvg from '../assets/marquee/supabase.svg?raw';
+import astroSvg from "../assets/marquee/astro.svg?raw";
+import reactSvg from "../assets/marquee/react.svg?raw";
+import typescriptSvg from "../assets/marquee/typescript.svg?raw";
+import tailwindSvg from "../assets/marquee/tailwind.svg?raw";
+import vercelSvg from "../assets/marquee/vercel.svg?raw";
+import pythonSvg from "../assets/marquee/python.svg?raw";
+import nodejsSvg from "../assets/marquee/nodejs.svg?raw";
+import supabaseSvg from "../assets/marquee/supabase.svg?raw";
 
 /** Orden alineado a roadmap RD-3.3 (monocromo + filtro tipo SquareBlack). */
 const logoSvgs = [
@@ -24,25 +24,34 @@ const logoSvgs = [
   nodejsSvg,
 ] as const;
 
-const SVG_DENY = /<script|on\w+\s*=|javascript:|<foreignObject|<embed|<object|<iframe/i;
+const SVG_DENY =
+  /<script|on\w+\s*=|javascript:|<foreignObject|<embed|<object|<iframe/i;
 for (const svg of logoSvgs) {
   if (SVG_DENY.test(svg)) {
-    throw new Error('Marquee SVG contains potentially dangerous content. Aborting build.');
+    throw new Error(
+      "Marquee SVG contains potentially dangerous content. Aborting build.",
+    );
   }
 }
 
-const logoSlotClass = 'logo-marquee__slot';
+const logoSlotClass = "logo-marquee__slot";
 ---
 
 <div
   class="logo-marquee--accent overflow-hidden rounded-2xl px-5 py-10 md:px-8 md:py-16"
 >
-  <div class="mx-auto mb-8 flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between md:mb-10">
-    <p class="text-center text-xs font-bold uppercase tracking-widest sm:text-left">
+  <div
+    class="mx-auto mb-8 flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between md:mb-10"
+  >
+    <p
+      class="text-center text-xs font-bold uppercase tracking-widest sm:text-left"
+    >
       <span data-es>Stack y herramientas</span>
       <span data-en class="hidden">Stack &amp; tools</span>
     </p>
-    <p class="text-center text-[0.65rem] font-bold uppercase tracking-[0.2em] sm:text-right">
+    <p
+      class="text-center text-[0.65rem] font-bold uppercase tracking-[0.2em] sm:text-right"
+    >
       <span data-es>Stack principal</span>
       <span data-en class="hidden">Core stack</span>
     </p>
@@ -52,11 +61,7 @@ const logoSlotClass = 'logo-marquee__slot';
     class="hidden list-none flex-wrap items-center justify-center gap-x-12 gap-y-8 motion-reduce:flex"
     aria-label="Stack y herramientas"
   >
-    {
-      logoSvgs.map((svg) => (
-        <li class={logoSlotClass} set:html={svg} />
-      ))
-    }
+    {logoSvgs.map((svg) => <li class={logoSlotClass} set:html={svg} />)}
   </ul>
 
   <div

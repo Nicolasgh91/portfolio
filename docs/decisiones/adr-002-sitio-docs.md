@@ -14,10 +14,12 @@ Mantener documentación en Markdown dentro del repo por ahora. No montar Starlig
 ## Consecuencias
 
 ### Positivas
+
 - Coste de mantenimiento bajo.
 - Documentación cerca del código y del flujo diario del equipo.
 
 ### Negativas
+
 - Sin motor de búsqueda/documentación dedicado.
 - Navegación limitada frente a un portal docs completo.
 

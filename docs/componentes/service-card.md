@@ -6,29 +6,29 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `headingId` | `string` | Sí | `id` del `<h3>` del servicio; usado en `aria-labelledby` del enlace overlay (tarjeta clicable completa) o del enlace superior en flujo “Consultar”. Debe ser único en la página (p. ej. `service-heading-${slug}`). |
-| `imageSide` | `'left' \| 'right'` | No | Default `left`. Desde `md:` define zig-zag: imagen a la izquierda o a la derecha; en móvil la imagen va siempre arriba (orden DOM fijo). |
-| `service` | objeto | Sí | Ver subcampos. |
+| Prop        | Tipo                | Requerida | Descripción                                                                                                                                                                                                         |
+| ----------- | ------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `headingId` | `string`            | Sí        | `id` del `<h3>` del servicio; usado en `aria-labelledby` del enlace overlay (tarjeta clicable completa) o del enlace superior en flujo “Consultar”. Debe ser único en la página (p. ej. `service-heading-${slug}`). |
+| `imageSide` | `'left' \| 'right'` | No        | Default `left`. Desde `md:` define zig-zag: imagen a la izquierda o a la derecha; en móvil la imagen va siempre arriba (orden DOM fijo).                                                                            |
+| `service`   | objeto              | Sí        | Ver subcampos.                                                                                                                                                                                                      |
 
 **`service`**
 
-| Campo | Tipo | Requerida | Descripción |
-|-------|------|-----------|-------------|
-| `title` | `string` | Sí | Título (ES). |
-| `titleEn` | `string` | No | Título EN (`data-en`). |
-| `shortDescription` | `string` | Sí | Resumen para la tarjeta. |
-| `shortDescriptionEn` | `string` | No | Resumen EN. |
-| `roiFocus` / `roiFocusEn` | `string` | No | Línea ROI; color `var(--text-muted)` para jerarquía bajo el cuerpo. |
-| `href` | `string` | No | URL interna o externa. |
-| `coverImage` | `ImageMetadata` | No | Prioridad sobre `imageKey`. |
-| `imageKey` | `'human-ai' \| 'cloud-servers' \| 'satellite'` | No | Respaldo raster. |
-| `featured` | `boolean` | No | Chip “Más elegido” sobre la imagen. |
-| `price` | `string` | No | Valor o literal `Consultar` (pie con enlaces a contacto / WhatsApp). |
-| `priceUnit` | `string` | No | Unidad (ej. `ARS`). |
-| `pricePrefix` | `string` | No | Default `"$"`; `""` para ARS u otro. |
-| `tags` | `string[]` | No | Pills bajo la descripción; las dos primeras también en overlay sobre la imagen (esquina inferior izquierda). Origen: frontmatter `tags` en colección `services` ([`config.ts`](../../src/content/config.ts)). |
+| Campo                     | Tipo                                           | Requerida | Descripción                                                                                                                                                                                                   |
+| ------------------------- | ---------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`                   | `string`                                       | Sí        | Título (ES).                                                                                                                                                                                                  |
+| `titleEn`                 | `string`                                       | No        | Título EN (`data-en`).                                                                                                                                                                                        |
+| `shortDescription`        | `string`                                       | Sí        | Resumen para la tarjeta.                                                                                                                                                                                      |
+| `shortDescriptionEn`      | `string`                                       | No        | Resumen EN.                                                                                                                                                                                                   |
+| `roiFocus` / `roiFocusEn` | `string`                                       | No        | Línea ROI; color `var(--text-muted)` para jerarquía bajo el cuerpo.                                                                                                                                           |
+| `href`                    | `string`                                       | No        | URL interna o externa.                                                                                                                                                                                        |
+| `coverImage`              | `ImageMetadata`                                | No        | Prioridad sobre `imageKey`.                                                                                                                                                                                   |
+| `imageKey`                | `'human-ai' \| 'cloud-servers' \| 'satellite'` | No        | Respaldo raster.                                                                                                                                                                                              |
+| `featured`                | `boolean`                                      | No        | Chip “Más elegido” sobre la imagen.                                                                                                                                                                           |
+| `price`                   | `string`                                       | No        | Valor o literal `Consultar` (pie con enlaces a contacto / WhatsApp).                                                                                                                                          |
+| `priceUnit`               | `string`                                       | No        | Unidad (ej. `ARS`).                                                                                                                                                                                           |
+| `pricePrefix`             | `string`                                       | No        | Default `"$"`; `""` para ARS u otro.                                                                                                                                                                          |
+| `tags`                    | `string[]`                                     | No        | Pills bajo la descripción; las dos primeras también en overlay sobre la imagen (esquina inferior izquierda). Origen: frontmatter `tags` en colección `services` ([`config.ts`](../../src/content/config.ts)). |
 
 ## Comportamiento
 

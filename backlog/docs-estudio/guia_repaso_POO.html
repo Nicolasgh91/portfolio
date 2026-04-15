@@ -1,858 +1,2209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guía de Repaso — Programación Orientada a Objetos</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guía de Repaso — Programación Orientada a Objetos</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap");
 
-  :root {
-    --bg: #0d0f14;
-    --surface: #141720;
-    --surface2: #1c2030;
-    --border: #2a2f42;
-    --border2: #353c55;
-    --text: #e8eaf0;
-    --muted: #7a82a0;
-    --accent: #6c8fff;
-    --accent2: #4ecca3;
-    --accent3: #f8a84b;
-    --accent4: #e06c8c;
-    --accent5: #a78bfa;
-    --code-bg: #0a0c12;
-    --radius: 10px;
-    --radius-lg: 16px;
-  }
+      :root {
+        --bg: #0d0f14;
+        --surface: #141720;
+        --surface2: #1c2030;
+        --border: #2a2f42;
+        --border2: #353c55;
+        --text: #e8eaf0;
+        --muted: #7a82a0;
+        --accent: #6c8fff;
+        --accent2: #4ecca3;
+        --accent3: #f8a84b;
+        --accent4: #e06c8c;
+        --accent5: #a78bfa;
+        --code-bg: #0a0c12;
+        --radius: 10px;
+        --radius-lg: 16px;
+      }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  body {
-    font-family: 'Sora', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    font-size: 15px;
-  }
+      body {
+        font-family: "Sora", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        font-size: 15px;
+      }
 
-  /* HEADER */
-  header {
-    background: linear-gradient(135deg, #0d0f14 0%, #141c30 50%, #0d0f14 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 56px 40px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    top: -80px; left: 50%; transform: translateX(-50%);
-    width: 600px; height: 300px;
-    background: radial-gradient(ellipse, rgba(108,143,255,0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  header h1 {
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #a5b8ff, #6c8fff 40%, #4ecca3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-  }
-  header p {
-    color: var(--muted);
-    font-size: 0.95rem;
-    font-weight: 300;
-    letter-spacing: 0.04em;
-  }
-  .uva-pills {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 8px; margin-top: 24px;
-  }
-  .uva-pill {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-  .uva-pill:hover { border-color: var(--accent); color: var(--accent); }
+      /* HEADER */
+      header {
+        background: linear-gradient(
+          135deg,
+          #0d0f14 0%,
+          #141c30 50%,
+          #0d0f14 100%
+        );
+        border-bottom: 1px solid var(--border);
+        padding: 56px 40px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 300px;
+        background: radial-gradient(
+          ellipse,
+          rgba(108, 143, 255, 0.12) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      header h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, #a5b8ff, #6c8fff 40%, #4ecca3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+      }
+      header p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-weight: 300;
+        letter-spacing: 0.04em;
+      }
+      .uva-pills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .uva-pill {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 5px 14px;
+        font-size: 0.78rem;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .uva-pill:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
 
-  /* LAYOUT */
-  main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+      /* LAYOUT */
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+      }
 
-  /* SECTIONS */
-  .section {
-    margin-bottom: 60px;
-    scroll-margin-top: 20px;
-  }
-  .section-header {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 28px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-num {
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.08em;
-  }
-  .section-header h2 {
-    font-size: 1.35rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
+      /* SECTIONS */
+      .section {
+        margin-bottom: 60px;
+        scroll-margin-top: 20px;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .section-num {
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.08em;
+      }
+      .section-header h2 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
 
-  /* CARDS */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
-  .card-icon {
-    font-size: 1.6rem; margin-bottom: 10px;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--surface2);
-    border-radius: 10px;
-    margin-bottom: 12px;
-  }
-  .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
-  .card p { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
-  .card .tag {
-    display: inline-block;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-top: 10px;
-  }
+      /* CARDS */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .card:hover {
+        border-color: var(--border2);
+        transform: translateY(-1px);
+      }
+      .card-icon {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface2);
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+      .card h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .card p {
+        font-size: 0.83rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .card .tag {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
 
-  /* CODE */
-  pre, code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-  }
-  pre {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    overflow-x: auto;
-    margin: 16px 0;
-    line-height: 1.7;
-  }
-  .kw { color: #c084fc; }
-  .ty { color: #67e8f9; }
-  .st { color: #86efac; }
-  .cm { color: #4a5070; font-style: italic; }
-  .fn { color: #93c5fd; }
-  .num { color: #fca5a5; }
+      /* CODE */
+      pre,
+      code {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.8rem;
+      }
+      pre {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        overflow-x: auto;
+        margin: 16px 0;
+        line-height: 1.7;
+      }
+      .kw {
+        color: #c084fc;
+      }
+      .ty {
+        color: #67e8f9;
+      }
+      .st {
+        color: #86efac;
+      }
+      .cm {
+        color: #4a5070;
+        font-style: italic;
+      }
+      .fn {
+        color: #93c5fd;
+      }
+      .num {
+        color: #fca5a5;
+      }
 
-  /* DIAGRAM WRAPPER */
-  .diagram-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    margin: 16px 0;
-    overflow-x: auto;
-  }
+      /* DIAGRAM WRAPPER */
+      .diagram-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin: 16px 0;
+        overflow-x: auto;
+      }
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; margin: 16px 0; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.84rem;
-  }
-  th {
-    background: var(--surface2);
-    color: var(--muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--surface2); }
-  .check { color: var(--accent2); font-weight: 700; }
-  .cross { color: var(--accent4); font-weight: 700; }
+      /* TABLE */
+      .table-wrap {
+        overflow-x: auto;
+        margin: 16px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.84rem;
+      }
+      th {
+        background: var(--surface2);
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 10px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr:hover td {
+        background: var(--surface2);
+      }
+      .check {
+        color: var(--accent2);
+        font-weight: 700;
+      }
+      .cross {
+        color: var(--accent4);
+        font-weight: 700;
+      }
 
-  /* BADGE */
-  .badge {
-    display: inline-flex; align-items: center;
-    font-size: 0.72rem; font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 5px;
-    letter-spacing: 0.04em;
-    margin-right: 6px;
-  }
-  .badge-blue  { background: rgba(108,143,255,0.15); color: #93b4ff; border: 1px solid rgba(108,143,255,0.3); }
-  .badge-green { background: rgba(78,204,163,0.15); color: #7de8c8; border: 1px solid rgba(78,204,163,0.3); }
-  .badge-amber { background: rgba(248,168,75,0.15);  color: #fbc474; border: 1px solid rgba(248,168,75,0.3); }
-  .badge-red   { background: rgba(224,108,140,0.15); color: #f08ea8; border: 1px solid rgba(224,108,140,0.3); }
-  .badge-purple{ background: rgba(167,139,250,0.15); color: #c4aff9; border: 1px solid rgba(167,139,250,0.3); }
+      /* BADGE */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 5px;
+        letter-spacing: 0.04em;
+        margin-right: 6px;
+      }
+      .badge-blue {
+        background: rgba(108, 143, 255, 0.15);
+        color: #93b4ff;
+        border: 1px solid rgba(108, 143, 255, 0.3);
+      }
+      .badge-green {
+        background: rgba(78, 204, 163, 0.15);
+        color: #7de8c8;
+        border: 1px solid rgba(78, 204, 163, 0.3);
+      }
+      .badge-amber {
+        background: rgba(248, 168, 75, 0.15);
+        color: #fbc474;
+        border: 1px solid rgba(248, 168, 75, 0.3);
+      }
+      .badge-red {
+        background: rgba(224, 108, 140, 0.15);
+        color: #f08ea8;
+        border: 1px solid rgba(224, 108, 140, 0.3);
+      }
+      .badge-purple {
+        background: rgba(167, 139, 250, 0.15);
+        color: #c4aff9;
+        border: 1px solid rgba(167, 139, 250, 0.3);
+      }
 
-  /* ACCORDION */
-  details {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-  summary {
-    padding: 14px 18px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    list-style: none;
-    display: flex; align-items: center; justify-content: space-between;
-    transition: background 0.15s;
-  }
-  summary:hover { background: var(--surface2); }
-  summary::after { content: '＋'; color: var(--accent); font-size: 1rem; }
-  details[open] summary::after { content: '－'; }
-  .details-body { padding: 0 18px 16px; font-size: 0.87rem; color: var(--muted); }
-  .details-body p { margin-top: 10px; line-height: 1.65; }
+      /* ACCORDION */
+      details {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 10px;
+        overflow: hidden;
+      }
+      summary {
+        padding: 14px 18px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background 0.15s;
+      }
+      summary:hover {
+        background: var(--surface2);
+      }
+      summary::after {
+        content: "＋";
+        color: var(--accent);
+        font-size: 1rem;
+      }
+      details[open] summary::after {
+        content: "－";
+      }
+      .details-body {
+        padding: 0 18px 16px;
+        font-size: 0.87rem;
+        color: var(--muted);
+      }
+      .details-body p {
+        margin-top: 10px;
+        line-height: 1.65;
+      }
 
-  /* UML RELATION VISUAL */
-  .rel-row {
-    display: flex; align-items: center; gap: 16px;
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-    transition: border-color 0.2s;
-  }
-  .rel-row:hover { border-color: var(--border2); }
-  .rel-symbol { font-size: 1.4rem; width: 30px; text-align: center; }
-  .rel-name { font-weight: 600; font-size: 0.9rem; min-width: 110px; }
-  .rel-desc { font-size: 0.83rem; color: var(--muted); }
+      /* UML RELATION VISUAL */
+      .rel-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 8px;
+        transition: border-color 0.2s;
+      }
+      .rel-row:hover {
+        border-color: var(--border2);
+      }
+      .rel-symbol {
+        font-size: 1.4rem;
+        width: 30px;
+        text-align: center;
+      }
+      .rel-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        min-width: 110px;
+      }
+      .rel-desc {
+        font-size: 0.83rem;
+        color: var(--muted);
+      }
 
-  /* SOLID / GRASP GRID */
-  .principles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-  }
-  .principle-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 18px;
-  }
-  .principle-card .letter {
-    font-size: 2rem; font-weight: 700;
-    line-height: 1; margin-bottom: 6px;
-  }
-  .principle-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 5px; }
-  .principle-card p  { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+      /* SOLID / GRASP GRID */
+      .principles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+      }
+      .principle-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+      }
+      .principle-card .letter {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+      .principle-card h4 {
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .principle-card p {
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
 
-  /* COLLECTION TABLE accent */
-  .col-ideal { font-size: 0.78rem; color: var(--muted); }
+      /* COLLECTION TABLE accent */
+      .col-ideal {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
 
-  /* EXCEPTION TREE */
-  .exc-tree {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    line-height: 1.9;
-    color: var(--muted);
-  }
-  .exc-tree .node-checked { color: var(--accent2); }
-  .exc-tree .node-unchecked { color: var(--accent3); }
-  .exc-tree .node-error { color: var(--accent4); }
-  .exc-tree .node-root { color: var(--accent5); font-weight: 600; }
+      /* EXCEPTION TREE */
+      .exc-tree {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.78rem;
+        line-height: 1.9;
+        color: var(--muted);
+      }
+      .exc-tree .node-checked {
+        color: var(--accent2);
+      }
+      .exc-tree .node-unchecked {
+        color: var(--accent3);
+      }
+      .exc-tree .node-error {
+        color: var(--accent4);
+      }
+      .exc-tree .node-root {
+        color: var(--accent5);
+        font-weight: 600;
+      }
 
-  /* QUIZ */
-  .quiz-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-top: 20px;
-  }
-  .quiz-q { font-weight: 600; margin-bottom: 14px; font-size: 0.95rem; }
-  .quiz-opt {
-    display: block;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.15s;
-    text-align: left;
-    color: var(--text);
-  }
-  .quiz-opt:hover:not(:disabled) { border-color: var(--accent); }
-  .quiz-opt.correct { border-color: var(--accent2); background: rgba(78,204,163,0.1); color: var(--accent2); }
-  .quiz-opt.wrong   { border-color: var(--accent4); background: rgba(224,108,140,0.1); color: var(--accent4); }
-  .quiz-fb { font-size: 0.83rem; margin-top: 12px; padding: 10px 14px; border-radius: var(--radius); display: none; }
-  .quiz-fb.show { display: block; }
-  .quiz-fb.ok { background: rgba(78,204,163,0.1); color: var(--accent2); border: 1px solid rgba(78,204,163,0.3); }
-  .quiz-fb.fail { background: rgba(224,108,140,0.1); color: var(--accent4); border: 1px solid rgba(224,108,140,0.3); }
-  .quiz-nav { display: flex; gap: 10px; margin-top: 16px; }
-  .btn {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius);
-    color: var(--text);
-    padding: 8px 18px;
-    font-family: 'Sora', sans-serif;
-    font-size: 0.83rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #5575e8; border-color: #5575e8; color: #fff; }
-  .quiz-score { font-size: 0.85rem; color: var(--muted); margin-left: auto; padding-top: 6px; }
+      /* QUIZ */
+      .quiz-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-top: 20px;
+      }
+      .quiz-q {
+        font-weight: 600;
+        margin-bottom: 14px;
+        font-size: 0.95rem;
+      }
+      .quiz-opt {
+        display: block;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.15s;
+        text-align: left;
+        color: var(--text);
+      }
+      .quiz-opt:hover:not(:disabled) {
+        border-color: var(--accent);
+      }
+      .quiz-opt.correct {
+        border-color: var(--accent2);
+        background: rgba(78, 204, 163, 0.1);
+        color: var(--accent2);
+      }
+      .quiz-opt.wrong {
+        border-color: var(--accent4);
+        background: rgba(224, 108, 140, 0.1);
+        color: var(--accent4);
+      }
+      .quiz-fb {
+        font-size: 0.83rem;
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: var(--radius);
+        display: none;
+      }
+      .quiz-fb.show {
+        display: block;
+      }
+      .quiz-fb.ok {
+        background: rgba(78, 204, 163, 0.1);
+        color: var(--accent2);
+        border: 1px solid rgba(78, 204, 163, 0.3);
+      }
+      .quiz-fb.fail {
+        background: rgba(224, 108, 140, 0.1);
+        color: var(--accent4);
+        border: 1px solid rgba(224, 108, 140, 0.3);
+      }
+      .quiz-nav {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .btn {
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: var(--radius);
+        color: var(--text);
+        padding: 8px 18px;
+        font-family: "Sora", sans-serif;
+        font-size: 0.83rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .btn-primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #5575e8;
+        border-color: #5575e8;
+        color: #fff;
+      }
+      .quiz-score {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-left: auto;
+        padding-top: 6px;
+      }
 
-  /* THREAD STATE */
-  .state-flow {
-    display: flex; align-items: center; flex-wrap: wrap; gap: 0;
-    margin: 16px 0;
-  }
-  .state-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .state-arrow { color: var(--muted); padding: 0 8px; font-size: 1rem; }
+      /* THREAD STATE */
+      .state-flow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0;
+        margin: 16px 0;
+      }
+      .state-box {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .state-arrow {
+        color: var(--muted);
+        padding: 0 8px;
+        font-size: 1rem;
+      }
 
-  /* STICKY TOC */
-  .toc {
-    position: fixed; top: 20px; right: 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    width: 180px;
-    z-index: 100;
-    display: none;
-  }
-  @media (min-width: 1140px) { .toc { display: block; } }
-  .toc-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; }
-  .toc a { display: block; font-size: 0.78rem; color: var(--muted); text-decoration: none; padding: 3px 0; transition: color 0.15s; }
-  .toc a:hover { color: var(--accent); }
+      /* STICKY TOC */
+      .toc {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        width: 180px;
+        z-index: 100;
+        display: none;
+      }
+      @media (min-width: 1140px) {
+        .toc {
+          display: block;
+        }
+      }
+      .toc-title {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+      }
+      .toc a {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 3px 0;
+        transition: color 0.15s;
+      }
+      .toc a:hover {
+        color: var(--accent);
+      }
 
-  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 40px 0;
+      }
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 600px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
 
-  .info-row { display: flex; gap: 8px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .info-row:last-child { border-bottom: none; }
-  .info-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); min-width: 110px; }
-  .info-val { font-size: 0.84rem; }
-</style>
-</head>
-<body>
+      .info-row {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+        min-width: 110px;
+      }
+      .info-val {
+        font-size: 0.84rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="toc">
+      <div class="toc-title">Contenido</div>
+      <a href="#uva1">UVA 1 · OOP y UML</a>
+      <a href="#uva2">UVA 2 · JVM y Java</a>
+      <a href="#uva3">UVA 3 · SOLID y GRASP</a>
+      <a href="#uva4">UVA 4 · Colecciones</a>
+      <a href="#uva5">UVA 5 · Excepciones</a>
+      <a href="#uva6">UVA 6 · GUI e Hilos</a>
+      <a href="#quiz">Quiz de repaso</a>
+    </nav>
 
-<nav class="toc">
-  <div class="toc-title">Contenido</div>
-  <a href="#uva1">UVA 1 · OOP y UML</a>
-  <a href="#uva2">UVA 2 · JVM y Java</a>
-  <a href="#uva3">UVA 3 · SOLID y GRASP</a>
-  <a href="#uva4">UVA 4 · Colecciones</a>
-  <a href="#uva5">UVA 5 · Excepciones</a>
-  <a href="#uva6">UVA 6 · GUI e Hilos</a>
-  <a href="#quiz">Quiz de repaso</a>
-</nav>
-
-<header>
-  <h1>Programación Orientada a Objetos</h1>
-  <p>Guía visual de repaso · UVA 1 → 6</p>
-  <div class="uva-pills">
-    <a href="#uva1" class="uva-pill">UVA 1 · OOP &amp; UML</a>
-    <a href="#uva2" class="uva-pill">UVA 2 · JVM</a>
-    <a href="#uva3" class="uva-pill">UVA 3 · SOLID · GRASP</a>
-    <a href="#uva4" class="uva-pill">UVA 4 · Colecciones</a>
-    <a href="#uva5" class="uva-pill">UVA 5 · Excepciones</a>
-    <a href="#uva6" class="uva-pill">UVA 6 · Swing · Hilos</a>
-    <a href="#quiz" class="uva-pill">🧠 Quiz</a>
-  </div>
-</header>
-
-<main>
-
-<!-- ══════════════════════ UVA 1 ══════════════════════ -->
-<section class="section" id="uva1">
-  <div class="section-header">
-    <span class="section-num">UVA 1</span>
-    <h2>Introducción a OOP y UML</h2>
-  </div>
-
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-icon">📦</div>
-      <h3>Clase</h3>
-      <p>Plantilla o molde que define atributos y comportamientos de un conjunto de objetos.</p>
-      <span class="tag badge-blue badge">Template</span>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔵</div>
-      <h3>Objeto</h3>
-      <p>Instancia concreta de una clase, con valores específicos en sus atributos.</p>
-      <span class="tag badge-green badge">Instancia</span>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔒</div>
-      <h3>Encapsulamiento</h3>
-      <p>Protege el acceso a los datos. Usa <code>private</code> + métodos <code>get/set</code>.</p>
-      <span class="tag badge-amber badge">Principio</span>
-    </div>
-    <div class="card">
-      <div class="card-icon">🎭</div>
-      <h3>Polimorfismo</h3>
-      <p>Una acción puede comportarse de distintas formas según el tipo de objeto receptor.</p>
-      <span class="tag badge-purple badge">Principio</span>
-    </div>
-    <div class="card">
-      <div class="card-icon">🧬</div>
-      <h3>Herencia</h3>
-      <p>Permite crear nuevas clases a partir de otras existentes reutilizando su definición.</p>
-      <span class="tag badge-blue badge">Principio</span>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔭</div>
-      <h3>Abstracción</h3>
-      <p>Se modelan solo los aspectos relevantes del objeto para el problema en cuestión.</p>
-      <span class="tag badge-amber badge">Principio</span>
-    </div>
-  </div>
-
-  <h3 style="margin:32px 0 16px;font-size:1rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Relaciones UML</h3>
-
-  <div class="rel-row">
-    <div class="rel-symbol">—</div>
-    <div class="rel-name">Asociación</div>
-    <div class="rel-desc">Vínculo simple. Ambos objetos <b>pueden existir de forma independiente</b>. Ej: Cliente compra Producto.</div>
-  </div>
-  <div class="rel-row">
-    <div class="rel-symbol">◇</div>
-    <div class="rel-name">Agregación</div>
-    <div class="rel-desc">Relación <b>todo–parte débil</b>. La parte sobrevive sin el todo. Rombo blanco en el lado del todo. Ej: Equipo ◇ Jugadores.</div>
-  </div>
-  <div class="rel-row">
-    <div class="rel-symbol">◆</div>
-    <div class="rel-name">Composición</div>
-    <div class="rel-desc">Relación <b>todo–parte fuerte</b>. La parte NO existe sin el todo. Ej: Casa ◆ Habitaciones.</div>
-  </div>
-  <div class="rel-row">
-    <div class="rel-symbol">▷</div>
-    <div class="rel-name">Herencia</div>
-    <div class="rel-desc">La subclase <b>"es un tipo de"</b> la superclase. Flecha con triángulo vacío hacia el padre. Ej: Perro ▷ Animal.</div>
-  </div>
-
-  <!-- Diagrama UML SVG -->
-  <h3 style="margin:32px 0 14px;font-size:1rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Cardinalidad UML</h3>
-  <div class="diagram-box">
-    <svg width="100%" viewBox="0 0 680 130">
-      <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M2 1L8 5L2 9" fill="none" stroke="#6c8fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-      </defs>
-      <g>
-        <!-- boxes -->
-        <rect x="20" y="40" width="120" height="50" rx="8" fill="#1c2030" stroke="#2a2f42" stroke-width="0.5"/>
-        <text x="80" y="70" text-anchor="middle" font-family="Sora,sans-serif" font-size="13" font-weight="600" fill="#e8eaf0">1</text>
-        <text x="80" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7a82a0">obligatorio</text>
-
-        <rect x="160" y="40" width="120" height="50" rx="8" fill="#1c2030" stroke="#2a2f42" stroke-width="0.5"/>
-        <text x="220" y="70" text-anchor="middle" font-family="Sora,sans-serif" font-size="13" font-weight="600" fill="#e8eaf0">0..1</text>
-        <text x="220" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7a82a0">cero o uno</text>
-
-        <rect x="300" y="40" width="120" height="50" rx="8" fill="#1c2030" stroke="#2a2f42" stroke-width="0.5"/>
-        <text x="360" y="70" text-anchor="middle" font-family="Sora,sans-serif" font-size="13" font-weight="600" fill="#e8eaf0">0..*</text>
-        <text x="360" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7a82a0">cero o muchos</text>
-
-        <rect x="440" y="40" width="120" height="50" rx="8" fill="#1c2030" stroke="#2a2f42" stroke-width="0.5"/>
-        <text x="500" y="70" text-anchor="middle" font-family="Sora,sans-serif" font-size="13" font-weight="600" fill="#e8eaf0">1..*</text>
-        <text x="500" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7a82a0">uno o más</text>
-
-        <text x="340" y="18" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" fill="#4a5070" letter-spacing="0.1em">CARDINALIDAD</text>
-
-        <!-- color indicators -->
-        <rect x="20" y="93" width="120" height="3" rx="2" fill="#6c8fff" opacity="0.7"/>
-        <rect x="160" y="93" width="120" height="3" rx="2" fill="#4ecca3" opacity="0.7"/>
-        <rect x="300" y="93" width="120" height="3" rx="2" fill="#f8a84b" opacity="0.7"/>
-        <rect x="440" y="93" width="120" height="3" rx="2" fill="#a78bfa" opacity="0.7"/>
-      </g>
-    </svg>
-  </div>
-</section>
-
-<hr>
-
-<!-- ══════════════════════ UVA 2 ══════════════════════ -->
-<section class="section" id="uva2">
-  <div class="section-header">
-    <span class="section-num" style="background:var(--accent2);">UVA 2</span>
-    <h2>Funcionamiento de Java y JVM</h2>
-  </div>
-
-  <!-- JVM Diagram -->
-  <div class="diagram-box">
-    <svg width="100%" viewBox="0 0 680 220">
-      <defs>
-        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M2 1L8 5L2 9" fill="none" stroke="#4ecca3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-      </defs>
-
-      <!-- .java box -->
-      <rect x="30" y="80" width="110" height="50" rx="8" fill="#141c2e" stroke="#2a3a55" stroke-width="0.5"/>
-      <text x="85" y="100" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="500" fill="#93c5fd">.java</text>
-      <text x="85" y="116" text-anchor="middle" font-family="Sora,sans-serif" font-size="10" fill="#7a82a0">código fuente</text>
-
-      <!-- arrow: compile -->
-      <line x1="140" y1="105" x2="186" y2="105" stroke="#4ecca3" stroke-width="1" marker-end="url(#arr2)"/>
-      <text x="163" y="98" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">javac</text>
-
-      <!-- .class box -->
-      <rect x="188" y="80" width="110" height="50" rx="8" fill="#141c2e" stroke="#2a3a55" stroke-width="0.5"/>
-      <text x="243" y="100" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="500" fill="#c084fc">.class</text>
-      <text x="243" y="116" text-anchor="middle" font-family="Sora,sans-serif" font-size="10" fill="#7a82a0">bytecode</text>
-
-      <!-- arrow: interpret -->
-      <line x1="298" y1="105" x2="344" y2="105" stroke="#4ecca3" stroke-width="1" marker-end="url(#arr2)"/>
-      <text x="321" y="98" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">JVM</text>
-
-      <!-- JVM container -->
-      <rect x="346" y="30" width="300" height="170" rx="12" fill="#0d1520" stroke="#2a3a55" stroke-width="0.5" stroke-dasharray="4 3"/>
-      <text x="496" y="22" text-anchor="middle" font-family="Sora,sans-serif" font-size="10" fill="#4a5070" letter-spacing="0.08em">JAVA VIRTUAL MACHINE</text>
-
-      <!-- JVM components -->
-      <rect x="360" y="46" width="120" height="36" rx="6" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="420" y="64" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#93b4ff">ClassLoader</text>
-      <text x="420" y="77" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">carga clases</text>
-
-      <rect x="498" y="46" width="128" height="36" rx="6" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="562" y="64" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#93b4ff">JIT Compiler</text>
-      <text x="562" y="77" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">optimiza en runtime</text>
-
-      <rect x="360" y="100" width="120" height="36" rx="6" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="420" y="118" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#7de8c8">Heap</text>
-      <text x="420" y="131" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">objetos / instancias</text>
-
-      <rect x="498" y="100" width="128" height="36" rx="6" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="562" y="118" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#7de8c8">Stack</text>
-      <text x="562" y="131" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">vars locales / llamadas</text>
-
-      <rect x="360" y="154" width="266" height="34" rx="6" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="493" y="172" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#fbc474">Garbage Collector</text>
-      <text x="493" y="183" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">libera memoria sin referencias</text>
-    </svg>
-  </div>
-
-  <h3 style="margin:28px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Modificadores de acceso</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Modificador</th><th>Clase</th><th>Paquete</th><th>Subclases</th><th>Externas</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code class="kw">public</code></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td><code style="color:#4ecca3">protected</code></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
-        <tr><td><span style="color:#7a82a0">default</span></td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-        <tr><td><code style="color:#f08ea8">private</code></td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3 style="margin:28px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Tipos primitivos vs referencia</h3>
-  <div class="two-col">
-    <div class="card">
-      <h3 style="margin-bottom:10px;">Primitivos</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        <span class="badge badge-blue">byte</span><span class="badge badge-blue">short</span><span class="badge badge-blue">int</span><span class="badge badge-blue">long</span>
-        <span class="badge badge-amber">float</span><span class="badge badge-amber">double</span><span class="badge badge-green">char</span><span class="badge badge-purple">boolean</span>
+    <header>
+      <h1>Programación Orientada a Objetos</h1>
+      <p>Guía visual de repaso · UVA 1 → 6</p>
+      <div class="uva-pills">
+        <a href="#uva1" class="uva-pill">UVA 1 · OOP &amp; UML</a>
+        <a href="#uva2" class="uva-pill">UVA 2 · JVM</a>
+        <a href="#uva3" class="uva-pill">UVA 3 · SOLID · GRASP</a>
+        <a href="#uva4" class="uva-pill">UVA 4 · Colecciones</a>
+        <a href="#uva5" class="uva-pill">UVA 5 · Excepciones</a>
+        <a href="#uva6" class="uva-pill">UVA 6 · Swing · Hilos</a>
+        <a href="#quiz" class="uva-pill">🧠 Quiz</a>
       </div>
-      <p style="margin-top:10px;font-size:0.8rem;color:var(--muted);">Se almacenan en el Stack. No son objetos.</p>
-    </div>
-    <div class="card">
-      <h3 style="margin-bottom:10px;">Referencia</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        <span class="badge badge-green">String</span><span class="badge badge-green">Integer</span><span class="badge badge-green">Arrays</span><span class="badge badge-green">Clases propias</span>
-      </div>
-      <p style="margin-top:10px;font-size:0.8rem;color:var(--muted);">Se almacenan en el Heap. Pueden ser <code>null</code>. Soportan autoboxing.</p>
-    </div>
-  </div>
-</section>
+    </header>
 
-<hr>
+    <main>
+      <!-- ══════════════════════ UVA 1 ══════════════════════ -->
+      <section class="section" id="uva1">
+        <div class="section-header">
+          <span class="section-num">UVA 1</span>
+          <h2>Introducción a OOP y UML</h2>
+        </div>
 
-<!-- ══════════════════════ UVA 3 ══════════════════════ -->
-<section class="section" id="uva3">
-  <div class="section-header">
-    <span class="section-num" style="background:var(--accent5);">UVA 3</span>
-    <h2>Clases, SOLID y GRASP</h2>
-  </div>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>Clase</h3>
+            <p>
+              Plantilla o molde que define atributos y comportamientos de un
+              conjunto de objetos.
+            </p>
+            <span class="tag badge-blue badge">Template</span>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔵</div>
+            <h3>Objeto</h3>
+            <p>
+              Instancia concreta de una clase, con valores específicos en sus
+              atributos.
+            </p>
+            <span class="tag badge-green badge">Instancia</span>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Encapsulamiento</h3>
+            <p>
+              Protege el acceso a los datos. Usa <code>private</code> + métodos
+              <code>get/set</code>.
+            </p>
+            <span class="tag badge-amber badge">Principio</span>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎭</div>
+            <h3>Polimorfismo</h3>
+            <p>
+              Una acción puede comportarse de distintas formas según el tipo de
+              objeto receptor.
+            </p>
+            <span class="tag badge-purple badge">Principio</span>
+          </div>
+          <div class="card">
+            <div class="card-icon">🧬</div>
+            <h3>Herencia</h3>
+            <p>
+              Permite crear nuevas clases a partir de otras existentes
+              reutilizando su definición.
+            </p>
+            <span class="tag badge-blue badge">Principio</span>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔭</div>
+            <h3>Abstracción</h3>
+            <p>
+              Se modelan solo los aspectos relevantes del objeto para el
+              problema en cuestión.
+            </p>
+            <span class="tag badge-amber badge">Principio</span>
+          </div>
+        </div>
 
-  <h3 style="margin-bottom:16px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Principios SOLID</h3>
-  <div class="principles-grid">
-    <div class="principle-card">
-      <div class="letter" style="color:#6c8fff;">S</div>
-      <h4>Single Responsibility</h4>
-      <p>Una clase debe tener <b>una sola razón para cambiar</b>. Una responsabilidad por clase.</p>
-    </div>
-    <div class="principle-card">
-      <div class="letter" style="color:#4ecca3;">O</div>
-      <h4>Open / Closed</h4>
-      <p>Abierta a la <b>extensión</b>, cerrada a la <b>modificación</b>. Extender sin romper.</p>
-    </div>
-    <div class="principle-card">
-      <div class="letter" style="color:#f8a84b;">L</div>
-      <h4>Liskov Substitution</h4>
-      <p>Las subclases deben poder reemplazar a sus superclases sin romper el programa.</p>
-    </div>
-    <div class="principle-card">
-      <div class="letter" style="color:#e06c8c;">I</div>
-      <h4>Interface Segregation</h4>
-      <p>No forzar a implementar métodos innecesarios. Interfaces pequeñas y específicas.</p>
-    </div>
-    <div class="principle-card">
-      <div class="letter" style="color:#a78bfa;">D</div>
-      <h4>Dependency Inversion</h4>
-      <p>Depender de <b>abstracciones</b>, no de implementaciones concretas.</p>
-    </div>
-  </div>
+        <h3
+          style="
+            margin: 32px 0 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Relaciones UML
+        </h3>
 
-  <h3 style="margin:32px 0 16px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Patrones GRASP (9 principios)</h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">
-    <details>
-      <summary>1 · Information Expert</summary>
-      <div class="details-body"><p>Asignar la responsabilidad a la clase que tiene la información necesaria para cumplirla.</p></div>
-    </details>
-    <details>
-      <summary>2 · Creator</summary>
-      <div class="details-body"><p>La clase que usa/agrega/registra a B es responsable de crear instancias de B.</p></div>
-    </details>
-    <details>
-      <summary>3 · Controller</summary>
-      <div class="details-body"><p>Un objeto que no es de UI recibe y coordina los eventos del sistema.</p></div>
-    </details>
-    <details>
-      <summary>4 · Low Coupling</summary>
-      <div class="details-body"><p>Minimizar dependencias entre clases. Cambios en una no afectan a las demás.</p></div>
-    </details>
-    <details>
-      <summary>5 · High Cohesion</summary>
-      <div class="details-body"><p>Mantener clases enfocadas: las responsabilidades deben estar fuertemente relacionadas.</p></div>
-    </details>
-    <details>
-      <summary>6 · Polymorphism</summary>
-      <div class="details-body"><p>Usar interfaces/herencia para delegar comportamientos variables al tipo específico.</p></div>
-    </details>
-    <details>
-      <summary>7 · Pure Fabrication</summary>
-      <div class="details-body"><p>Crear una clase artificial cuando ninguna real es adecuada para mantener bajo acoplamiento.</p></div>
-    </details>
-    <details>
-      <summary>8 · Indirection</summary>
-      <div class="details-body"><p>Introducir un intermediario para evitar el acoplamiento directo entre dos clases.</p></div>
-    </details>
-    <details>
-      <summary>9 · Protected Variations</summary>
-      <div class="details-body"><p>Aislar puntos de variación con interfaces, wrappers o adaptadores para proteger el sistema de cambios.</p></div>
-    </details>
-  </div>
+        <div class="rel-row">
+          <div class="rel-symbol">—</div>
+          <div class="rel-name">Asociación</div>
+          <div class="rel-desc">
+            Vínculo simple. Ambos objetos
+            <b>pueden existir de forma independiente</b>. Ej: Cliente compra
+            Producto.
+          </div>
+        </div>
+        <div class="rel-row">
+          <div class="rel-symbol">◇</div>
+          <div class="rel-name">Agregación</div>
+          <div class="rel-desc">
+            Relación <b>todo–parte débil</b>. La parte sobrevive sin el todo.
+            Rombo blanco en el lado del todo. Ej: Equipo ◇ Jugadores.
+          </div>
+        </div>
+        <div class="rel-row">
+          <div class="rel-symbol">◆</div>
+          <div class="rel-name">Composición</div>
+          <div class="rel-desc">
+            Relación <b>todo–parte fuerte</b>. La parte NO existe sin el todo.
+            Ej: Casa ◆ Habitaciones.
+          </div>
+        </div>
+        <div class="rel-row">
+          <div class="rel-symbol">▷</div>
+          <div class="rel-name">Herencia</div>
+          <div class="rel-desc">
+            La subclase <b>"es un tipo de"</b> la superclase. Flecha con
+            triángulo vacío hacia el padre. Ej: Perro ▷ Animal.
+          </div>
+        </div>
 
-  <!-- Comparable vs Comparator -->
-  <h3 style="margin:32px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Comparable vs Comparator</h3>
-  <div class="two-col">
-    <div class="card">
-      <span class="badge badge-blue" style="margin-bottom:10px;display:inline-block;">Comparable</span>
-      <div class="info-row"><div class="info-label">Ubicación</div><div class="info-val">Dentro de la clase</div></div>
-      <div class="info-row"><div class="info-label">Método</div><div class="info-val"><code>compareTo(T o)</code></div></div>
-      <div class="info-row"><div class="info-label">Criterios</div><div class="info-val">Uno solo (orden natural)</div></div>
-      <div class="info-row"><div class="info-label">Modificación</div><div class="info-val">Requiere editar la clase</div></div>
-    </div>
-    <div class="card">
-      <span class="badge badge-green" style="margin-bottom:10px;display:inline-block;">Comparator</span>
-      <div class="info-row"><div class="info-label">Ubicación</div><div class="info-val">Clase externa</div></div>
-      <div class="info-row"><div class="info-label">Método</div><div class="info-val"><code>compare(T o1, T o2)</code></div></div>
-      <div class="info-row"><div class="info-label">Criterios</div><div class="info-val">Múltiples posibles</div></div>
-      <div class="info-row"><div class="info-label">Modificación</div><div class="info-val">Sin tocar la clase original</div></div>
-    </div>
-  </div>
-</section>
+        <!-- Diagrama UML SVG -->
+        <h3
+          style="
+            margin: 32px 0 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Cardinalidad UML
+        </h3>
+        <div class="diagram-box">
+          <svg width="100%" viewBox="0 0 680 130">
+            <defs>
+              <marker
+                id="arr"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path
+                  d="M2 1L8 5L2 9"
+                  fill="none"
+                  stroke="#6c8fff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </marker>
+            </defs>
+            <g>
+              <!-- boxes -->
+              <rect
+                x="20"
+                y="40"
+                width="120"
+                height="50"
+                rx="8"
+                fill="#1c2030"
+                stroke="#2a2f42"
+                stroke-width="0.5"
+              />
+              <text
+                x="80"
+                y="70"
+                text-anchor="middle"
+                font-family="Sora,sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="#e8eaf0"
+              >
+                1
+              </text>
+              <text
+                x="80"
+                y="84"
+                text-anchor="middle"
+                font-family="IBM Plex Mono,monospace"
+                font-size="11"
+                fill="#7a82a0"
+              >
+                obligatorio
+              </text>
 
-<hr>
+              <rect
+                x="160"
+                y="40"
+                width="120"
+                height="50"
+                rx="8"
+                fill="#1c2030"
+                stroke="#2a2f42"
+                stroke-width="0.5"
+              />
+              <text
+                x="220"
+                y="70"
+                text-anchor="middle"
+                font-family="Sora,sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="#e8eaf0"
+              >
+                0..1
+              </text>
+              <text
+                x="220"
+                y="84"
+                text-anchor="middle"
+                font-family="IBM Plex Mono,monospace"
+                font-size="11"
+                fill="#7a82a0"
+              >
+                cero o uno
+              </text>
 
-<!-- ══════════════════════ UVA 4 ══════════════════════ -->
-<section class="section" id="uva4">
-  <div class="section-header">
-    <span class="section-num" style="background:var(--accent3);">UVA 4</span>
-    <h2>Colecciones en Java</h2>
-  </div>
+              <rect
+                x="300"
+                y="40"
+                width="120"
+                height="50"
+                rx="8"
+                fill="#1c2030"
+                stroke="#2a2f42"
+                stroke-width="0.5"
+              />
+              <text
+                x="360"
+                y="70"
+                text-anchor="middle"
+                font-family="Sora,sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="#e8eaf0"
+              >
+                0..*
+              </text>
+              <text
+                x="360"
+                y="84"
+                text-anchor="middle"
+                font-family="IBM Plex Mono,monospace"
+                font-size="11"
+                fill="#7a82a0"
+              >
+                cero o muchos
+              </text>
 
-  <!-- Collections hierarchy diagram -->
-  <div class="diagram-box">
-    <svg width="100%" viewBox="0 0 680 200">
-      <defs>
-        <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M2 1L8 5L2 9" fill="none" stroke="#353c55" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-      </defs>
-      <!-- Iterable -->
-      <rect x="270" y="10" width="140" height="34" rx="8" fill="#1c2030" stroke="#353c55" stroke-width="0.5"/>
-      <text x="340" y="32" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="#a78bfa">Iterable</text>
+              <rect
+                x="440"
+                y="40"
+                width="120"
+                height="50"
+                rx="8"
+                fill="#1c2030"
+                stroke="#2a2f42"
+                stroke-width="0.5"
+              />
+              <text
+                x="500"
+                y="70"
+                text-anchor="middle"
+                font-family="Sora,sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="#e8eaf0"
+              >
+                1..*
+              </text>
+              <text
+                x="500"
+                y="84"
+                text-anchor="middle"
+                font-family="IBM Plex Mono,monospace"
+                font-size="11"
+                fill="#7a82a0"
+              >
+                uno o más
+              </text>
 
-      <!-- Collection -->
-      <rect x="270" y="68" width="140" height="34" rx="8" fill="#141c2e" stroke="#353c55" stroke-width="0.5"/>
-      <text x="340" y="90" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="#a78bfa">Collection</text>
-      <line x1="340" y1="44" x2="340" y2="66" stroke="#353c55" stroke-width="0.5" marker-end="url(#arr3)"/>
+              <text
+                x="340"
+                y="18"
+                text-anchor="middle"
+                font-family="Sora,sans-serif"
+                font-size="11"
+                fill="#4a5070"
+                letter-spacing="0.1em"
+              >
+                CARDINALIDAD
+              </text>
 
-      <!-- List -->
-      <rect x="80" y="130" width="110" height="34" rx="7" fill="#141c2e" stroke="#2a3a55" stroke-width="0.5"/>
-      <text x="135" y="152" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#93b4ff">List</text>
-      <line x1="280" y1="98" x2="190" y2="128" stroke="#353c55" stroke-width="0.5" marker-end="url(#arr3)"/>
+              <!-- color indicators -->
+              <rect
+                x="20"
+                y="93"
+                width="120"
+                height="3"
+                rx="2"
+                fill="#6c8fff"
+                opacity="0.7"
+              />
+              <rect
+                x="160"
+                y="93"
+                width="120"
+                height="3"
+                rx="2"
+                fill="#4ecca3"
+                opacity="0.7"
+              />
+              <rect
+                x="300"
+                y="93"
+                width="120"
+                height="3"
+                rx="2"
+                fill="#f8a84b"
+                opacity="0.7"
+              />
+              <rect
+                x="440"
+                y="93"
+                width="120"
+                height="3"
+                rx="2"
+                fill="#a78bfa"
+                opacity="0.7"
+              />
+            </g>
+          </svg>
+        </div>
+      </section>
 
-      <!-- Set -->
-      <rect x="285" y="130" width="110" height="34" rx="7" fill="#141c2e" stroke="#2a3a55" stroke-width="0.5"/>
-      <text x="340" y="152" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#93b4ff">Set</text>
-      <line x1="340" y1="102" x2="340" y2="128" stroke="#353c55" stroke-width="0.5" marker-end="url(#arr3)"/>
+      <hr />
 
-      <!-- Map -->
-      <rect x="490" y="68" width="110" height="34" rx="7" fill="#141c2e" stroke="#2a3a55" stroke-width="0.5"/>
-      <text x="545" y="90" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="600" fill="#7de8c8">Map</text>
-      <text x="545" y="112" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" fill="#4a5070">clave → valor</text>
+      <!-- ══════════════════════ UVA 2 ══════════════════════ -->
+      <section class="section" id="uva2">
+        <div class="section-header">
+          <span class="section-num" style="background: var(--accent2)"
+            >UVA 2</span
+          >
+          <h2>Funcionamiento de Java y JVM</h2>
+        </div>
 
-      <!-- list impls -->
-      <text x="25"  y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">ArrayList</text>
-      <text x="80"  y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">LinkedList</text>
-      <text x="150" y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">Vector</text>
-      <line x1="135" y1="164" x2="135" y2="176" stroke="#353c55" stroke-width="0.5"/>
+        <!-- JVM Diagram -->
+        <div class="diagram-box">
+          <svg width="100%" viewBox="0 0 680 220">
+            <defs>
+              <marker
+                id="arr2"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path
+                  d="M2 1L8 5L2 9"
+                  fill="none"
+                  stroke="#4ecca3"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </marker>
+            </defs>
 
-      <!-- set impls -->
-      <text x="252" y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">HashSet</text>
-      <text x="302" y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">TreeSet</text>
-      <text x="352" y="185" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6c8fff">LinkedHashSet</text>
-      <line x1="340" y1="164" x2="340" y2="176" stroke="#353c55" stroke-width="0.5"/>
+            <!-- .java box -->
+            <rect
+              x="30"
+              y="80"
+              width="110"
+              height="50"
+              rx="8"
+              fill="#141c2e"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+            />
+            <text
+              x="85"
+              y="100"
+              text-anchor="middle"
+              font-family="IBM Plex Mono,monospace"
+              font-size="12"
+              font-weight="500"
+              fill="#93c5fd"
+            >
+              .java
+            </text>
+            <text
+              x="85"
+              y="116"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="10"
+              fill="#7a82a0"
+            >
+              código fuente
+            </text>
 
-      <!-- map impls -->
-      <text x="460" y="130" font-family="IBM Plex Mono,monospace" font-size="9" fill="#4ecca3">HashMap</text>
-      <text x="460" y="148" font-family="IBM Plex Mono,monospace" font-size="9" fill="#4ecca3">TreeMap</text>
-      <text x="460" y="166" font-family="IBM Plex Mono,monospace" font-size="9" fill="#4ecca3">LinkedHashMap</text>
-      <line x1="545" y1="102" x2="545" y2="120" stroke="#353c55" stroke-width="0.5" marker-end="url(#arr3)"/>
-    </svg>
-  </div>
+            <!-- arrow: compile -->
+            <line
+              x1="140"
+              y1="105"
+              x2="186"
+              y2="105"
+              stroke="#4ecca3"
+              stroke-width="1"
+              marker-end="url(#arr2)"
+            />
+            <text
+              x="163"
+              y="98"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              javac
+            </text>
 
-  <h3 style="margin:24px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Tabla comparativa de colecciones</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Colección</th><th>Orden</th><th>Duplicados</th><th>Hilo seguro</th><th>Ideal para</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code style="color:#6c8fff">ArrayList</code></td><td>Sí (índice)</td><td class="check">✓</td><td class="cross">✗</td><td class="col-ideal">Acceso rápido por índice</td></tr>
-        <tr><td><code style="color:#6c8fff">LinkedList</code></td><td>Sí (doble enlace)</td><td class="check">✓</td><td class="cross">✗</td><td class="col-ideal">Inserciones/eliminaciones frecuentes</td></tr>
-        <tr><td><code style="color:#6c8fff">Vector</code></td><td>Sí</td><td class="check">✓</td><td class="check">✓</td><td class="col-ideal">Entornos multi-hilo (legado)</td></tr>
-        <tr><td><code style="color:#a78bfa">HashSet</code></td><td>No</td><td class="cross">✗</td><td class="cross">✗</td><td class="col-ideal">Sin orden ni duplicados</td></tr>
-        <tr><td><code style="color:#a78bfa">TreeSet</code></td><td>Natural/Comparator</td><td class="cross">✗</td><td class="cross">✗</td><td class="col-ideal">Set ordenado automáticamente</td></tr>
-        <tr><td><code style="color:#4ecca3">HashMap</code></td><td>No</td><td>Claves únicas</td><td class="cross">✗</td><td class="col-ideal">Búsquedas rápidas</td></tr>
-        <tr><td><code style="color:#4ecca3">TreeMap</code></td><td>Por clave</td><td>Claves únicas</td><td class="cross">✗</td><td class="col-ideal">Mapa ordenado</td></tr>
-      </tbody>
-    </table>
-  </div>
+            <!-- .class box -->
+            <rect
+              x="188"
+              y="80"
+              width="110"
+              height="50"
+              rx="8"
+              fill="#141c2e"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+            />
+            <text
+              x="243"
+              y="100"
+              text-anchor="middle"
+              font-family="IBM Plex Mono,monospace"
+              font-size="12"
+              font-weight="500"
+              fill="#c084fc"
+            >
+              .class
+            </text>
+            <text
+              x="243"
+              y="116"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="10"
+              fill="#7a82a0"
+            >
+              bytecode
+            </text>
 
-  <h3 style="margin:24px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Cursores (Iteradores)</h3>
-  <div class="two-col">
-    <div class="card">
-      <h3 style="margin-bottom:10px;"><code style="color:#6c8fff">Iterator</code></h3>
-      <p style="font-size:0.82rem;color:var(--muted);">Todas las colecciones. Solo hacia adelante. Métodos: <code>hasNext()</code>, <code>next()</code>, <code>remove()</code>.</p>
-    </div>
-    <div class="card">
-      <h3 style="margin-bottom:10px;"><code style="color:#4ecca3">ListIterator</code></h3>
-      <p style="font-size:0.82rem;color:var(--muted);">Solo para <code>List</code>. Adelante y atrás. Agrega: <code>hasPrevious()</code>, <code>previous()</code>, <code>add()</code>, <code>set()</code>.</p>
-    </div>
-  </div>
-</section>
+            <!-- arrow: interpret -->
+            <line
+              x1="298"
+              y1="105"
+              x2="344"
+              y2="105"
+              stroke="#4ecca3"
+              stroke-width="1"
+              marker-end="url(#arr2)"
+            />
+            <text
+              x="321"
+              y="98"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              JVM
+            </text>
 
-<hr>
+            <!-- JVM container -->
+            <rect
+              x="346"
+              y="30"
+              width="300"
+              height="170"
+              rx="12"
+              fill="#0d1520"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+              stroke-dasharray="4 3"
+            />
+            <text
+              x="496"
+              y="22"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="10"
+              fill="#4a5070"
+              letter-spacing="0.08em"
+            >
+              JAVA VIRTUAL MACHINE
+            </text>
 
-<!-- ══════════════════════ UVA 5 ══════════════════════ -->
-<section class="section" id="uva5">
-  <div class="section-header">
-    <span class="section-num" style="background:var(--accent4);">UVA 5</span>
-    <h2>Manejo de Excepciones</h2>
-  </div>
+            <!-- JVM components -->
+            <rect
+              x="360"
+              y="46"
+              width="120"
+              height="36"
+              rx="6"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="420"
+              y="64"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#93b4ff"
+            >
+              ClassLoader
+            </text>
+            <text
+              x="420"
+              y="77"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              carga clases
+            </text>
 
-  <!-- Exception Hierarchy -->
-  <div class="diagram-box">
-    <div class="exc-tree">
-      <div><span class="node-root">Throwable</span></div>
-      <div>&nbsp;&nbsp;├─ <span class="node-error">Error</span> <span style="color:#4a5070;font-size:0.9em;">(no se manejan)</span></div>
-      <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ OutOfMemoryError</div>
-      <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ StackOverflowError</div>
-      <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└─ VirtualMachineError</div>
-      <div>&nbsp;&nbsp;└─ <span class="node-checked">Exception</span></div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="node-checked">Checked</span> <span style="color:#4a5070;font-size:0.9em;">(deben capturarse)</span></div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ IOException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ SQLException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└─ FileNotFoundException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="node-unchecked">Unchecked</span> <span style="color:#4a5070;font-size:0.9em;">(RuntimeException)</span></div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ NullPointerException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ ArithmeticException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ IndexOutOfBoundsException</div>
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ IllegalArgumentException</div>
-    </div>
-  </div>
+            <rect
+              x="498"
+              y="46"
+              width="128"
+              height="36"
+              rx="6"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="562"
+              y="64"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#93b4ff"
+            >
+              JIT Compiler
+            </text>
+            <text
+              x="562"
+              y="77"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              optimiza en runtime
+            </text>
 
-  <h3 style="margin:24px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">throw vs throws vs Throwable</h3>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Elemento</th><th>¿Qué es?</th><th>¿Dónde?</th><th>Ejemplo</th></tr></thead>
-      <tbody>
-        <tr><td><code class="kw">throw</code></td><td>Lanza una excepción</td><td>Dentro del método</td><td><code>throw new IOException()</code></td></tr>
-        <tr><td><code class="kw">throws</code></td><td>Declara posibles errores</td><td>Firma del método</td><td><code>void x() throws Y</code></td></tr>
-        <tr><td><code class="ty">Throwable</code></td><td>Superclase de excepciones</td><td>Jerarquía de clases</td><td><code>Throwable e = new Exception()</code></td></tr>
-      </tbody>
-    </table>
-  </div>
+            <rect
+              x="360"
+              y="100"
+              width="120"
+              height="36"
+              rx="6"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="420"
+              y="118"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#7de8c8"
+            >
+              Heap
+            </text>
+            <text
+              x="420"
+              y="131"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              objetos / instancias
+            </text>
 
-  <h3 style="margin:24px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Estructuras try-catch-finally</h3>
-  <pre><span class="kw">try</span> {
+            <rect
+              x="498"
+              y="100"
+              width="128"
+              height="36"
+              rx="6"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="562"
+              y="118"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#7de8c8"
+            >
+              Stack
+            </text>
+            <text
+              x="562"
+              y="131"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              vars locales / llamadas
+            </text>
+
+            <rect
+              x="360"
+              y="154"
+              width="266"
+              height="34"
+              rx="6"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="493"
+              y="172"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#fbc474"
+            >
+              Garbage Collector
+            </text>
+            <text
+              x="493"
+              y="183"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              libera memoria sin referencias
+            </text>
+          </svg>
+        </div>
+
+        <h3
+          style="
+            margin: 28px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Modificadores de acceso
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Modificador</th>
+                <th>Clase</th>
+                <th>Paquete</th>
+                <th>Subclases</th>
+                <th>Externas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="kw">public</code></td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+              </tr>
+              <tr>
+                <td><code style="color: #4ecca3">protected</code></td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+              </tr>
+              <tr>
+                <td><span style="color: #7a82a0">default</span></td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+                <td class="cross">✗</td>
+              </tr>
+              <tr>
+                <td><code style="color: #f08ea8">private</code></td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+                <td class="cross">✗</td>
+                <td class="cross">✗</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3
+          style="
+            margin: 28px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Tipos primitivos vs referencia
+        </h3>
+        <div class="two-col">
+          <div class="card">
+            <h3 style="margin-bottom: 10px">Primitivos</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="badge badge-blue">byte</span
+              ><span class="badge badge-blue">short</span
+              ><span class="badge badge-blue">int</span
+              ><span class="badge badge-blue">long</span>
+              <span class="badge badge-amber">float</span
+              ><span class="badge badge-amber">double</span
+              ><span class="badge badge-green">char</span
+              ><span class="badge badge-purple">boolean</span>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--muted)">
+              Se almacenan en el Stack. No son objetos.
+            </p>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: 10px">Referencia</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="badge badge-green">String</span
+              ><span class="badge badge-green">Integer</span
+              ><span class="badge badge-green">Arrays</span
+              ><span class="badge badge-green">Clases propias</span>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--muted)">
+              Se almacenan en el Heap. Pueden ser <code>null</code>. Soportan
+              autoboxing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- ══════════════════════ UVA 3 ══════════════════════ -->
+      <section class="section" id="uva3">
+        <div class="section-header">
+          <span class="section-num" style="background: var(--accent5)"
+            >UVA 3</span
+          >
+          <h2>Clases, SOLID y GRASP</h2>
+        </div>
+
+        <h3
+          style="
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Principios SOLID
+        </h3>
+        <div class="principles-grid">
+          <div class="principle-card">
+            <div class="letter" style="color: #6c8fff">S</div>
+            <h4>Single Responsibility</h4>
+            <p>
+              Una clase debe tener <b>una sola razón para cambiar</b>. Una
+              responsabilidad por clase.
+            </p>
+          </div>
+          <div class="principle-card">
+            <div class="letter" style="color: #4ecca3">O</div>
+            <h4>Open / Closed</h4>
+            <p>
+              Abierta a la <b>extensión</b>, cerrada a la <b>modificación</b>.
+              Extender sin romper.
+            </p>
+          </div>
+          <div class="principle-card">
+            <div class="letter" style="color: #f8a84b">L</div>
+            <h4>Liskov Substitution</h4>
+            <p>
+              Las subclases deben poder reemplazar a sus superclases sin romper
+              el programa.
+            </p>
+          </div>
+          <div class="principle-card">
+            <div class="letter" style="color: #e06c8c">I</div>
+            <h4>Interface Segregation</h4>
+            <p>
+              No forzar a implementar métodos innecesarios. Interfaces pequeñas
+              y específicas.
+            </p>
+          </div>
+          <div class="principle-card">
+            <div class="letter" style="color: #a78bfa">D</div>
+            <h4>Dependency Inversion</h4>
+            <p>
+              Depender de <b>abstracciones</b>, no de implementaciones
+              concretas.
+            </p>
+          </div>
+        </div>
+
+        <h3
+          style="
+            margin: 32px 0 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Patrones GRASP (9 principios)
+        </h3>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+          "
+        >
+          <details>
+            <summary>1 · Information Expert</summary>
+            <div class="details-body">
+              <p>
+                Asignar la responsabilidad a la clase que tiene la información
+                necesaria para cumplirla.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>2 · Creator</summary>
+            <div class="details-body">
+              <p>
+                La clase que usa/agrega/registra a B es responsable de crear
+                instancias de B.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>3 · Controller</summary>
+            <div class="details-body">
+              <p>
+                Un objeto que no es de UI recibe y coordina los eventos del
+                sistema.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>4 · Low Coupling</summary>
+            <div class="details-body">
+              <p>
+                Minimizar dependencias entre clases. Cambios en una no afectan a
+                las demás.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>5 · High Cohesion</summary>
+            <div class="details-body">
+              <p>
+                Mantener clases enfocadas: las responsabilidades deben estar
+                fuertemente relacionadas.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>6 · Polymorphism</summary>
+            <div class="details-body">
+              <p>
+                Usar interfaces/herencia para delegar comportamientos variables
+                al tipo específico.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>7 · Pure Fabrication</summary>
+            <div class="details-body">
+              <p>
+                Crear una clase artificial cuando ninguna real es adecuada para
+                mantener bajo acoplamiento.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>8 · Indirection</summary>
+            <div class="details-body">
+              <p>
+                Introducir un intermediario para evitar el acoplamiento directo
+                entre dos clases.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>9 · Protected Variations</summary>
+            <div class="details-body">
+              <p>
+                Aislar puntos de variación con interfaces, wrappers o
+                adaptadores para proteger el sistema de cambios.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Comparable vs Comparator -->
+        <h3
+          style="
+            margin: 32px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Comparable vs Comparator
+        </h3>
+        <div class="two-col">
+          <div class="card">
+            <span
+              class="badge badge-blue"
+              style="margin-bottom: 10px; display: inline-block"
+              >Comparable</span
+            >
+            <div class="info-row">
+              <div class="info-label">Ubicación</div>
+              <div class="info-val">Dentro de la clase</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Método</div>
+              <div class="info-val"><code>compareTo(T o)</code></div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Criterios</div>
+              <div class="info-val">Uno solo (orden natural)</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Modificación</div>
+              <div class="info-val">Requiere editar la clase</div>
+            </div>
+          </div>
+          <div class="card">
+            <span
+              class="badge badge-green"
+              style="margin-bottom: 10px; display: inline-block"
+              >Comparator</span
+            >
+            <div class="info-row">
+              <div class="info-label">Ubicación</div>
+              <div class="info-val">Clase externa</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Método</div>
+              <div class="info-val"><code>compare(T o1, T o2)</code></div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Criterios</div>
+              <div class="info-val">Múltiples posibles</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Modificación</div>
+              <div class="info-val">Sin tocar la clase original</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- ══════════════════════ UVA 4 ══════════════════════ -->
+      <section class="section" id="uva4">
+        <div class="section-header">
+          <span class="section-num" style="background: var(--accent3)"
+            >UVA 4</span
+          >
+          <h2>Colecciones en Java</h2>
+        </div>
+
+        <!-- Collections hierarchy diagram -->
+        <div class="diagram-box">
+          <svg width="100%" viewBox="0 0 680 200">
+            <defs>
+              <marker
+                id="arr3"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path
+                  d="M2 1L8 5L2 9"
+                  fill="none"
+                  stroke="#353c55"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </marker>
+            </defs>
+            <!-- Iterable -->
+            <rect
+              x="270"
+              y="10"
+              width="140"
+              height="34"
+              rx="8"
+              fill="#1c2030"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="340"
+              y="32"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="12"
+              font-weight="600"
+              fill="#a78bfa"
+            >
+              Iterable
+            </text>
+
+            <!-- Collection -->
+            <rect
+              x="270"
+              y="68"
+              width="140"
+              height="34"
+              rx="8"
+              fill="#141c2e"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+            <text
+              x="340"
+              y="90"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="12"
+              font-weight="600"
+              fill="#a78bfa"
+            >
+              Collection
+            </text>
+            <line
+              x1="340"
+              y1="44"
+              x2="340"
+              y2="66"
+              stroke="#353c55"
+              stroke-width="0.5"
+              marker-end="url(#arr3)"
+            />
+
+            <!-- List -->
+            <rect
+              x="80"
+              y="130"
+              width="110"
+              height="34"
+              rx="7"
+              fill="#141c2e"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+            />
+            <text
+              x="135"
+              y="152"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#93b4ff"
+            >
+              List
+            </text>
+            <line
+              x1="280"
+              y1="98"
+              x2="190"
+              y2="128"
+              stroke="#353c55"
+              stroke-width="0.5"
+              marker-end="url(#arr3)"
+            />
+
+            <!-- Set -->
+            <rect
+              x="285"
+              y="130"
+              width="110"
+              height="34"
+              rx="7"
+              fill="#141c2e"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+            />
+            <text
+              x="340"
+              y="152"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#93b4ff"
+            >
+              Set
+            </text>
+            <line
+              x1="340"
+              y1="102"
+              x2="340"
+              y2="128"
+              stroke="#353c55"
+              stroke-width="0.5"
+              marker-end="url(#arr3)"
+            />
+
+            <!-- Map -->
+            <rect
+              x="490"
+              y="68"
+              width="110"
+              height="34"
+              rx="7"
+              fill="#141c2e"
+              stroke="#2a3a55"
+              stroke-width="0.5"
+            />
+            <text
+              x="545"
+              y="90"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="#7de8c8"
+            >
+              Map
+            </text>
+            <text
+              x="545"
+              y="112"
+              text-anchor="middle"
+              font-family="Sora,sans-serif"
+              font-size="9"
+              fill="#4a5070"
+            >
+              clave → valor
+            </text>
+
+            <!-- list impls -->
+            <text
+              x="25"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              ArrayList
+            </text>
+            <text
+              x="80"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              LinkedList
+            </text>
+            <text
+              x="150"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              Vector
+            </text>
+            <line
+              x1="135"
+              y1="164"
+              x2="135"
+              y2="176"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+
+            <!-- set impls -->
+            <text
+              x="252"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              HashSet
+            </text>
+            <text
+              x="302"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              TreeSet
+            </text>
+            <text
+              x="352"
+              y="185"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#6c8fff"
+            >
+              LinkedHashSet
+            </text>
+            <line
+              x1="340"
+              y1="164"
+              x2="340"
+              y2="176"
+              stroke="#353c55"
+              stroke-width="0.5"
+            />
+
+            <!-- map impls -->
+            <text
+              x="460"
+              y="130"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#4ecca3"
+            >
+              HashMap
+            </text>
+            <text
+              x="460"
+              y="148"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#4ecca3"
+            >
+              TreeMap
+            </text>
+            <text
+              x="460"
+              y="166"
+              font-family="IBM Plex Mono,monospace"
+              font-size="9"
+              fill="#4ecca3"
+            >
+              LinkedHashMap
+            </text>
+            <line
+              x1="545"
+              y1="102"
+              x2="545"
+              y2="120"
+              stroke="#353c55"
+              stroke-width="0.5"
+              marker-end="url(#arr3)"
+            />
+          </svg>
+        </div>
+
+        <h3
+          style="
+            margin: 24px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Tabla comparativa de colecciones
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Colección</th>
+                <th>Orden</th>
+                <th>Duplicados</th>
+                <th>Hilo seguro</th>
+                <th>Ideal para</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code style="color: #6c8fff">ArrayList</code></td>
+                <td>Sí (índice)</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Acceso rápido por índice</td>
+              </tr>
+              <tr>
+                <td><code style="color: #6c8fff">LinkedList</code></td>
+                <td>Sí (doble enlace)</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Inserciones/eliminaciones frecuentes</td>
+              </tr>
+              <tr>
+                <td><code style="color: #6c8fff">Vector</code></td>
+                <td>Sí</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="col-ideal">Entornos multi-hilo (legado)</td>
+              </tr>
+              <tr>
+                <td><code style="color: #a78bfa">HashSet</code></td>
+                <td>No</td>
+                <td class="cross">✗</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Sin orden ni duplicados</td>
+              </tr>
+              <tr>
+                <td><code style="color: #a78bfa">TreeSet</code></td>
+                <td>Natural/Comparator</td>
+                <td class="cross">✗</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Set ordenado automáticamente</td>
+              </tr>
+              <tr>
+                <td><code style="color: #4ecca3">HashMap</code></td>
+                <td>No</td>
+                <td>Claves únicas</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Búsquedas rápidas</td>
+              </tr>
+              <tr>
+                <td><code style="color: #4ecca3">TreeMap</code></td>
+                <td>Por clave</td>
+                <td>Claves únicas</td>
+                <td class="cross">✗</td>
+                <td class="col-ideal">Mapa ordenado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3
+          style="
+            margin: 24px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Cursores (Iteradores)
+        </h3>
+        <div class="two-col">
+          <div class="card">
+            <h3 style="margin-bottom: 10px">
+              <code style="color: #6c8fff">Iterator</code>
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--muted)">
+              Todas las colecciones. Solo hacia adelante. Métodos:
+              <code>hasNext()</code>, <code>next()</code>,
+              <code>remove()</code>.
+            </p>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: 10px">
+              <code style="color: #4ecca3">ListIterator</code>
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--muted)">
+              Solo para <code>List</code>. Adelante y atrás. Agrega:
+              <code>hasPrevious()</code>, <code>previous()</code>,
+              <code>add()</code>, <code>set()</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- ══════════════════════ UVA 5 ══════════════════════ -->
+      <section class="section" id="uva5">
+        <div class="section-header">
+          <span class="section-num" style="background: var(--accent4)"
+            >UVA 5</span
+          >
+          <h2>Manejo de Excepciones</h2>
+        </div>
+
+        <!-- Exception Hierarchy -->
+        <div class="diagram-box">
+          <div class="exc-tree">
+            <div><span class="node-root">Throwable</span></div>
+            <div>
+              &nbsp;&nbsp;├─ <span class="node-error">Error</span>
+              <span style="color: #4a5070; font-size: 0.9em"
+                >(no se manejan)</span
+              >
+            </div>
+            <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ OutOfMemoryError</div>
+            <div>
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─ StackOverflowError
+            </div>
+            <div>
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└─ VirtualMachineError
+            </div>
+            <div>
+              &nbsp;&nbsp;└─ <span class="node-checked">Exception</span>
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─
+              <span class="node-checked">Checked</span>
+              <span style="color: #4a5070; font-size: 0.9em"
+                >(deben capturarse)</span
+              >
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─
+              IOException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├─
+              SQLException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└─
+              FileNotFoundException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─
+              <span class="node-unchecked">Unchecked</span>
+              <span style="color: #4a5070; font-size: 0.9em"
+                >(RuntimeException)</span
+              >
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─
+              NullPointerException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─
+              ArithmeticException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─
+              IndexOutOfBoundsException
+            </div>
+            <div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─
+              IllegalArgumentException
+            </div>
+          </div>
+        </div>
+
+        <h3
+          style="
+            margin: 24px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          throw vs throws vs Throwable
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>¿Qué es?</th>
+                <th>¿Dónde?</th>
+                <th>Ejemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="kw">throw</code></td>
+                <td>Lanza una excepción</td>
+                <td>Dentro del método</td>
+                <td><code>throw new IOException()</code></td>
+              </tr>
+              <tr>
+                <td><code class="kw">throws</code></td>
+                <td>Declara posibles errores</td>
+                <td>Firma del método</td>
+                <td><code>void x() throws Y</code></td>
+              </tr>
+              <tr>
+                <td><code class="ty">Throwable</code></td>
+                <td>Superclase de excepciones</td>
+                <td>Jerarquía de clases</td>
+                <td><code>Throwable e = new Exception()</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3
+          style="
+            margin: 24px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Estructuras try-catch-finally
+        </h3>
+        <pre><span class="kw">try</span> {
     <span class="cm">// código que puede fallar</span>
     <span class="ty">int</span> resultado = <span class="num">10</span> / <span class="num">0</span>;
 } <span class="kw">catch</span> (<span class="ty">ArithmeticException</span> e) {
@@ -863,225 +2214,357 @@
 } <span class="kw">finally</span> {
     <span class="cm">// siempre se ejecuta (cierre de recursos)</span>
 }</pre>
-</section>
+      </section>
 
-<hr>
+      <hr />
 
-<!-- ══════════════════════ UVA 6 ══════════════════════ -->
-<section class="section" id="uva6">
-  <div class="section-header">
-    <span class="section-num" style="background:#2a9d8f;">UVA 6</span>
-    <h2>GUI Swing e Hilos</h2>
-  </div>
+      <!-- ══════════════════════ UVA 6 ══════════════════════ -->
+      <section class="section" id="uva6">
+        <div class="section-header">
+          <span class="section-num" style="background: #2a9d8f">UVA 6</span>
+          <h2>GUI Swing e Hilos</h2>
+        </div>
 
-  <div class="two-col" style="margin-bottom:20px;">
-    <div class="card">
-      <h3 style="margin-bottom:12px;">Componentes Swing</h3>
-      <div class="info-row"><div class="info-label"><code style="color:#6c8fff">JFrame</code></div><div class="info-val" style="font-size:0.82rem">Ventana principal</div></div>
-      <div class="info-row"><div class="info-label"><code style="color:#6c8fff">JPanel</code></div><div class="info-val" style="font-size:0.82rem">Panel contenedor</div></div>
-      <div class="info-row"><div class="info-label"><code style="color:#6c8fff">JButton</code></div><div class="info-val" style="font-size:0.82rem">Botón clickeable</div></div>
-      <div class="info-row"><div class="info-label"><code style="color:#6c8fff">JTextField</code></div><div class="info-val" style="font-size:0.82rem">Entrada de texto</div></div>
-      <div class="info-row"><div class="info-label"><code style="color:#6c8fff">JTable</code></div><div class="info-val" style="font-size:0.82rem">Tabla de datos</div></div>
-    </div>
-    <div class="card">
-      <h3 style="margin-bottom:12px;">ExecutorService (pools)</h3>
-      <div class="info-row"><div class="info-label" style="min-width:140px;font-size:0.73rem"><code>newSingleThread()</code></div><div class="info-val" style="font-size:0.78rem">Una tarea a la vez</div></div>
-      <div class="info-row"><div class="info-label" style="min-width:140px;font-size:0.73rem"><code>newFixedPool(n)</code></div><div class="info-val" style="font-size:0.78rem">Hasta n simultáneas</div></div>
-      <div class="info-row"><div class="info-label" style="min-width:140px;font-size:0.73rem"><code>newCachedPool()</code></div><div class="info-val" style="font-size:0.78rem">Crea hilos si se necesita</div></div>
-      <div class="info-row"><div class="info-label" style="min-width:140px;font-size:0.73rem"><code>newScheduledPool()</code></div><div class="info-val" style="font-size:0.78rem">Tareas periódicas</div></div>
-    </div>
-  </div>
+        <div class="two-col" style="margin-bottom: 20px">
+          <div class="card">
+            <h3 style="margin-bottom: 12px">Componentes Swing</h3>
+            <div class="info-row">
+              <div class="info-label">
+                <code style="color: #6c8fff">JFrame</code>
+              </div>
+              <div class="info-val" style="font-size: 0.82rem">
+                Ventana principal
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">
+                <code style="color: #6c8fff">JPanel</code>
+              </div>
+              <div class="info-val" style="font-size: 0.82rem">
+                Panel contenedor
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">
+                <code style="color: #6c8fff">JButton</code>
+              </div>
+              <div class="info-val" style="font-size: 0.82rem">
+                Botón clickeable
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">
+                <code style="color: #6c8fff">JTextField</code>
+              </div>
+              <div class="info-val" style="font-size: 0.82rem">
+                Entrada de texto
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">
+                <code style="color: #6c8fff">JTable</code>
+              </div>
+              <div class="info-val" style="font-size: 0.82rem">
+                Tabla de datos
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: 12px">ExecutorService (pools)</h3>
+            <div class="info-row">
+              <div
+                class="info-label"
+                style="min-width: 140px; font-size: 0.73rem"
+              >
+                <code>newSingleThread()</code>
+              </div>
+              <div class="info-val" style="font-size: 0.78rem">
+                Una tarea a la vez
+              </div>
+            </div>
+            <div class="info-row">
+              <div
+                class="info-label"
+                style="min-width: 140px; font-size: 0.73rem"
+              >
+                <code>newFixedPool(n)</code>
+              </div>
+              <div class="info-val" style="font-size: 0.78rem">
+                Hasta n simultáneas
+              </div>
+            </div>
+            <div class="info-row">
+              <div
+                class="info-label"
+                style="min-width: 140px; font-size: 0.73rem"
+              >
+                <code>newCachedPool()</code>
+              </div>
+              <div class="info-val" style="font-size: 0.78rem">
+                Crea hilos si se necesita
+              </div>
+            </div>
+            <div class="info-row">
+              <div
+                class="info-label"
+                style="min-width: 140px; font-size: 0.73rem"
+              >
+                <code>newScheduledPool()</code>
+              </div>
+              <div class="info-val" style="font-size: 0.78rem">
+                Tareas periódicas
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <h3 style="margin-bottom:14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Estados de un hilo</h3>
-  <div class="state-flow">
-    <div class="state-box" style="border-color:#353c55;color:#7a82a0">NEW</div>
-    <div class="state-arrow">→</div>
-    <div class="state-box" style="border-color:#2a3a55;color:#93b4ff">RUNNABLE</div>
-    <div class="state-arrow">→</div>
-    <div class="state-box" style="border-color:#2a4a30;color:#7de8c8">RUNNING</div>
-    <div class="state-arrow">→</div>
-    <div class="state-box" style="border-color:#3a2a20;color:#fbc474">WAITING/<br>BLOCKED</div>
-    <div class="state-arrow">→</div>
-    <div class="state-box" style="border-color:#353c55;color:#7a82a0">TERMINATED</div>
-  </div>
+        <h3
+          style="
+            margin-bottom: 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Estados de un hilo
+        </h3>
+        <div class="state-flow">
+          <div class="state-box" style="border-color: #353c55; color: #7a82a0">
+            NEW
+          </div>
+          <div class="state-arrow">→</div>
+          <div class="state-box" style="border-color: #2a3a55; color: #93b4ff">
+            RUNNABLE
+          </div>
+          <div class="state-arrow">→</div>
+          <div class="state-box" style="border-color: #2a4a30; color: #7de8c8">
+            RUNNING
+          </div>
+          <div class="state-arrow">→</div>
+          <div class="state-box" style="border-color: #3a2a20; color: #fbc474">
+            WAITING/<br />BLOCKED
+          </div>
+          <div class="state-arrow">→</div>
+          <div class="state-box" style="border-color: #353c55; color: #7a82a0">
+            TERMINATED
+          </div>
+        </div>
 
-  <h3 style="margin:24px 0 14px;font-size:0.9rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;">Formas de crear hilos</h3>
-  <div class="two-col">
-    <pre><span class="cm">// A. Extender Thread</span>
+        <h3
+          style="
+            margin: 24px 0 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+          "
+        >
+          Formas de crear hilos
+        </h3>
+        <div class="two-col">
+          <pre><span class="cm">// A. Extender Thread</span>
 <span class="kw">class</span> <span class="ty">MiHilo</span> <span class="kw">extends</span> <span class="ty">Thread</span> {
   <span class="kw">public void</span> <span class="fn">run</span>() {
     <span class="cm">// lógica del hilo</span>
   }
 }
 <span class="kw">new</span> <span class="ty">MiHilo</span>().<span class="fn">start</span>();</pre>
-    <pre><span class="cm">// B. Implementar Runnable</span>
+          <pre><span class="cm">// B. Implementar Runnable</span>
 <span class="kw">class</span> <span class="ty">Tarea</span> <span class="kw">implements</span> <span class="ty">Runnable</span> {
   <span class="kw">public void</span> <span class="fn">run</span>() {
     <span class="cm">// lógica del hilo</span>
   }
 }
 <span class="kw">new</span> <span class="ty">Thread</span>(<span class="kw">new</span> <span class="ty">Tarea</span>()).<span class="fn">start</span>();</pre>
-  </div>
-</section>
+        </div>
+      </section>
 
-<hr>
+      <hr />
 
-<!-- ══════════════════════ QUIZ ══════════════════════ -->
-<section class="section" id="quiz">
-  <div class="section-header">
-    <span class="section-num" style="background:#e06c8c;">QUIZ</span>
-    <h2>Quiz de repaso</h2>
-  </div>
+      <!-- ══════════════════════ QUIZ ══════════════════════ -->
+      <section class="section" id="quiz">
+        <div class="section-header">
+          <span class="section-num" style="background: #e06c8c">QUIZ</span>
+          <h2>Quiz de repaso</h2>
+        </div>
 
-  <div class="quiz-box">
-    <div id="quiz-container"></div>
-    <div class="quiz-nav">
-      <button class="btn" id="prev-btn" onclick="prevQ()" disabled>← Anterior</button>
-      <button class="btn btn-primary" id="next-btn" onclick="nextQ()" disabled>Siguiente →</button>
-      <span class="quiz-score" id="score-display"></span>
-    </div>
-  </div>
-</section>
+        <div class="quiz-box">
+          <div id="quiz-container"></div>
+          <div class="quiz-nav">
+            <button class="btn" id="prev-btn" onclick="prevQ()" disabled>
+              ← Anterior
+            </button>
+            <button
+              class="btn btn-primary"
+              id="next-btn"
+              onclick="nextQ()"
+              disabled
+            >
+              Siguiente →
+            </button>
+            <span class="quiz-score" id="score-display"></span>
+          </div>
+        </div>
+      </section>
+    </main>
 
-</main>
+    <script>
+      const quizData = [
+        {
+          q: "¿Qué tipo de relación UML usa rombo negro (◆)?",
+          opts: ["Asociación", "Agregación", "Composición", "Herencia"],
+          ans: 2,
+          fb: "Composición (◆) indica que la parte NO puede existir sin el todo. Por ejemplo, las habitaciones de una casa.",
+        },
+        {
+          q: "En Java, ¿qué componente de la JVM libera memoria de objetos sin referencias?",
+          opts: ["ClassLoader", "JIT Compiler", "Stack", "Garbage Collector"],
+          ans: 3,
+          fb: "El Garbage Collector libera automáticamente la memoria del Heap cuando un objeto ya no tiene referencias activas.",
+        },
+        {
+          q: "¿Cuál es la diferencia entre sobrecarga (overload) y sobrescritura (override)?",
+          opts: [
+            "Son sinónimos en Java",
+            "Sobrecarga: mismo nombre distinto parámetros; Override: redefinir en subclase",
+            "Override: mismo nombre distintos parámetros; Sobrecarga: redefinir en subclase",
+            "Solo la sobrescritura usa @Override",
+          ],
+          ans: 1,
+          fb: "Sobrecarga = mismo método, distintos parámetros (misma clase). Override = redefinir un método heredado en la subclase con @Override.",
+        },
+        {
+          q: "¿Qué colección es la más adecuada para búsquedas rápidas por clave sin importar el orden?",
+          opts: ["TreeMap", "LinkedHashMap", "ArrayList", "HashMap"],
+          ans: 3,
+          fb: "HashMap usa tabla hash, lo que permite búsquedas e inserciones en O(1) promedio, sin garantía de orden.",
+        },
+        {
+          q: "El principio SOLID 'O' (Open/Closed) establece que las clases deben ser...",
+          opts: [
+            "Abiertas a modificación y cerradas a extensión",
+            "Abiertas a extensión y cerradas a modificación",
+            "Cerradas a extensión y abiertas a herencia",
+            "Siempre abstractas",
+          ],
+          ans: 1,
+          fb: "Open/Closed: abierta a EXTENSIÓN (nuevas funcionalidades) pero cerrada a MODIFICACIÓN del código existente.",
+        },
+        {
+          q: "¿Qué palabra clave se usa para declarar que un método puede lanzar una excepción verificada?",
+          opts: ["throw", "throws", "Throwable", "catch"],
+          ans: 1,
+          fb: "'throws' va en la firma del método para declarar que puede propagar una checked exception. 'throw' la lanza dentro del cuerpo.",
+        },
+        {
+          q: "¿Cuál es la diferencia entre Comparable y Comparator?",
+          opts: [
+            "No hay diferencia funcional",
+            "Comparable es para números, Comparator para Strings",
+            "Comparable define orden natural dentro de la clase; Comparator es externo y permite múltiples criterios",
+            "Comparator solo funciona con TreeSet",
+          ],
+          ans: 2,
+          fb: "Comparable (dentro de la clase, un criterio) vs Comparator (clase externa, múltiples criterios, sin modificar la clase original).",
+        },
+        {
+          q: "¿Qué patrón GRASP sugiere asignar la responsabilidad a la clase que tiene la información necesaria?",
+          opts: [
+            "Creator",
+            "Controller",
+            "Information Expert",
+            "Pure Fabrication",
+          ],
+          ans: 2,
+          fb: "Information Expert: la clase que tiene los datos necesarios para una operación es quien debe tener esa responsabilidad.",
+        },
+      ];
 
-<script>
-const quizData = [
-  {
-    q: "¿Qué tipo de relación UML usa rombo negro (◆)?",
-    opts: ["Asociación", "Agregación", "Composición", "Herencia"],
-    ans: 2,
-    fb: "Composición (◆) indica que la parte NO puede existir sin el todo. Por ejemplo, las habitaciones de una casa."
-  },
-  {
-    q: "En Java, ¿qué componente de la JVM libera memoria de objetos sin referencias?",
-    opts: ["ClassLoader", "JIT Compiler", "Stack", "Garbage Collector"],
-    ans: 3,
-    fb: "El Garbage Collector libera automáticamente la memoria del Heap cuando un objeto ya no tiene referencias activas."
-  },
-  {
-    q: "¿Cuál es la diferencia entre sobrecarga (overload) y sobrescritura (override)?",
-    opts: [
-      "Son sinónimos en Java",
-      "Sobrecarga: mismo nombre distinto parámetros; Override: redefinir en subclase",
-      "Override: mismo nombre distintos parámetros; Sobrecarga: redefinir en subclase",
-      "Solo la sobrescritura usa @Override"
-    ],
-    ans: 1,
-    fb: "Sobrecarga = mismo método, distintos parámetros (misma clase). Override = redefinir un método heredado en la subclase con @Override."
-  },
-  {
-    q: "¿Qué colección es la más adecuada para búsquedas rápidas por clave sin importar el orden?",
-    opts: ["TreeMap", "LinkedHashMap", "ArrayList", "HashMap"],
-    ans: 3,
-    fb: "HashMap usa tabla hash, lo que permite búsquedas e inserciones en O(1) promedio, sin garantía de orden."
-  },
-  {
-    q: "El principio SOLID 'O' (Open/Closed) establece que las clases deben ser...",
-    opts: [
-      "Abiertas a modificación y cerradas a extensión",
-      "Abiertas a extensión y cerradas a modificación",
-      "Cerradas a extensión y abiertas a herencia",
-      "Siempre abstractas"
-    ],
-    ans: 1,
-    fb: "Open/Closed: abierta a EXTENSIÓN (nuevas funcionalidades) pero cerrada a MODIFICACIÓN del código existente."
-  },
-  {
-    q: "¿Qué palabra clave se usa para declarar que un método puede lanzar una excepción verificada?",
-    opts: ["throw", "throws", "Throwable", "catch"],
-    ans: 1,
-    fb: "'throws' va en la firma del método para declarar que puede propagar una checked exception. 'throw' la lanza dentro del cuerpo."
-  },
-  {
-    q: "¿Cuál es la diferencia entre Comparable y Comparator?",
-    opts: [
-      "No hay diferencia funcional",
-      "Comparable es para números, Comparator para Strings",
-      "Comparable define orden natural dentro de la clase; Comparator es externo y permite múltiples criterios",
-      "Comparator solo funciona con TreeSet"
-    ],
-    ans: 2,
-    fb: "Comparable (dentro de la clase, un criterio) vs Comparator (clase externa, múltiples criterios, sin modificar la clase original)."
-  },
-  {
-    q: "¿Qué patrón GRASP sugiere asignar la responsabilidad a la clase que tiene la información necesaria?",
-    opts: ["Creator", "Controller", "Information Expert", "Pure Fabrication"],
-    ans: 2,
-    fb: "Information Expert: la clase que tiene los datos necesarios para una operación es quien debe tener esa responsabilidad."
-  }
-];
+      let current = 0;
+      let answered = Array(quizData.length).fill(null);
+      let scores = 0;
 
-let current = 0;
-let answered = Array(quizData.length).fill(null);
-let scores = 0;
+      function renderQ(idx) {
+        const q = quizData[idx];
+        const cont = document.getElementById("quiz-container");
+        const selectedAnswer = answered[idx];
+        const isAnswered = selectedAnswer !== null;
 
-function renderQ(idx) {
-  const q = quizData[idx];
-  const cont = document.getElementById('quiz-container');
-  const selectedAnswer = answered[idx];
-  const isAnswered = selectedAnswer !== null;
-
-  cont.innerHTML = `
+        cont.innerHTML = `
     <div style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;">
       Pregunta ${idx + 1} de ${quizData.length}
       &nbsp;·&nbsp;
-      <span style="display:inline-block;width:${((idx+1)/quizData.length*100).toFixed(0)}%;height:4px;background:var(--accent);border-radius:2px;vertical-align:middle;max-width:120px;"></span>
+      <span style="display:inline-block;width:${(((idx + 1) / quizData.length) * 100).toFixed(0)}%;height:4px;background:var(--accent);border-radius:2px;vertical-align:middle;max-width:120px;"></span>
     </div>
     <div class="quiz-q">${q.q}</div>
-    ${q.opts.map((o, i) => `
-      <button class="quiz-opt ${isAnswered ? (i === q.ans ? 'correct' : (i === selectedAnswer ? 'wrong' : '')) : ''}"
-        onclick="${isAnswered ? '' : `answerQ(${i})`}"
-        ${isAnswered ? 'disabled' : ''}>
-        <span style="color:var(--muted);margin-right:8px;">${String.fromCharCode(65+i)}.</span>${o}
+    ${q.opts
+      .map(
+        (o, i) => `
+      <button class="quiz-opt ${isAnswered ? (i === q.ans ? "correct" : i === selectedAnswer ? "wrong" : "") : ""}"
+        onclick="${isAnswered ? "" : `answerQ(${i})`}"
+        ${isAnswered ? "disabled" : ""}>
+        <span style="color:var(--muted);margin-right:8px;">${String.fromCharCode(65 + i)}.</span>${o}
       </button>
-    `).join('')}
-    <div class="quiz-fb ${isAnswered ? 'show ' + (selectedAnswer === q.ans ? 'ok' : 'fail') : ''}">
-      ${isAnswered ? (selectedAnswer === q.ans ? '✓ Correcto — ' : '✗ Incorrecto — ') + q.fb : ''}
+    `,
+      )
+      .join("")}
+    <div class="quiz-fb ${isAnswered ? "show " + (selectedAnswer === q.ans ? "ok" : "fail") : ""}">
+      ${isAnswered ? (selectedAnswer === q.ans ? "✓ Correcto — " : "✗ Incorrecto — ") + q.fb : ""}
     </div>
   `;
 
-  document.getElementById('prev-btn').disabled = idx === 0;
-  document.getElementById('next-btn').disabled = !isAnswered && idx < quizData.length - 1;
+        document.getElementById("prev-btn").disabled = idx === 0;
+        document.getElementById("next-btn").disabled =
+          !isAnswered && idx < quizData.length - 1;
 
-  const nextBtn = document.getElementById('next-btn');
-  if (idx === quizData.length - 1 && isAnswered) {
-    nextBtn.textContent = '📊 Ver resultado';
-    nextBtn.disabled = false;
-    nextBtn.onclick = showResult;
-  } else {
-    nextBtn.textContent = 'Siguiente →';
-    nextBtn.onclick = nextQ;
-    nextBtn.disabled = !isAnswered;
-  }
-  updateScore();
-}
+        const nextBtn = document.getElementById("next-btn");
+        if (idx === quizData.length - 1 && isAnswered) {
+          nextBtn.textContent = "📊 Ver resultado";
+          nextBtn.disabled = false;
+          nextBtn.onclick = showResult;
+        } else {
+          nextBtn.textContent = "Siguiente →";
+          nextBtn.onclick = nextQ;
+          nextBtn.disabled = !isAnswered;
+        }
+        updateScore();
+      }
 
-function answerQ(i) {
-  if (answered[current] !== null) return;
-  answered[current] = i;
-  if (i === quizData[current].ans) scores++;
-  renderQ(current);
-}
+      function answerQ(i) {
+        if (answered[current] !== null) return;
+        answered[current] = i;
+        if (i === quizData[current].ans) scores++;
+        renderQ(current);
+      }
 
-function nextQ() {
-  if (current < quizData.length - 1) { current++; renderQ(current); }
-}
-function prevQ() {
-  if (current > 0) { current--; renderQ(current); }
-}
+      function nextQ() {
+        if (current < quizData.length - 1) {
+          current++;
+          renderQ(current);
+        }
+      }
+      function prevQ() {
+        if (current > 0) {
+          current--;
+          renderQ(current);
+        }
+      }
 
-function updateScore() {
-  const done = answered.filter(a => a !== null).length;
-  const correct = answered.filter((a, i) => a === quizData[i].ans).length;
-  document.getElementById('score-display').textContent = done > 0 ? `${correct}/${done} correctas` : '';
-}
+      function updateScore() {
+        const done = answered.filter((a) => a !== null).length;
+        const correct = answered.filter((a, i) => a === quizData[i].ans).length;
+        document.getElementById("score-display").textContent =
+          done > 0 ? `${correct}/${done} correctas` : "";
+      }
 
-function showResult() {
-  const correct = answered.filter((a, i) => a === quizData[i].ans).length;
-  const pct = Math.round(correct / quizData.length * 100);
-  const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '📚' : '💪';
-  document.getElementById('quiz-container').innerHTML = `
+      function showResult() {
+        const correct = answered.filter((a, i) => a === quizData[i].ans).length;
+        const pct = Math.round((correct / quizData.length) * 100);
+        const emoji = pct >= 80 ? "🎉" : pct >= 60 ? "📚" : "💪";
+        document.getElementById("quiz-container").innerHTML = `
     <div style="text-align:center;padding:30px 0;">
       <div style="font-size:3rem;margin-bottom:16px;">${emoji}</div>
       <div style="font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:8px;">${correct} / ${quizData.length}</div>
@@ -1089,19 +2572,20 @@ function showResult() {
       <button class="btn btn-primary" onclick="resetQuiz()">Reiniciar quiz</button>
     </div>
   `;
-  document.getElementById('next-btn').style.display = 'none';
-  document.getElementById('prev-btn').style.display = 'none';
-}
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("prev-btn").style.display = "none";
+      }
 
-function resetQuiz() {
-  current = 0; scores = 0;
-  answered = Array(quizData.length).fill(null);
-  document.getElementById('next-btn').style.display = '';
-  document.getElementById('prev-btn').style.display = '';
-  renderQ(0);
-}
+      function resetQuiz() {
+        current = 0;
+        scores = 0;
+        answered = Array(quizData.length).fill(null);
+        document.getElementById("next-btn").style.display = "";
+        document.getElementById("prev-btn").style.display = "";
+        renderQ(0);
+      }
 
-renderQ(0);
-</script>
-</body>
+      renderQ(0);
+    </script>
+  </body>
 </html>

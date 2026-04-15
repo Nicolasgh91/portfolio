@@ -1,4 +1,4 @@
-import type { LandingTemplate } from '../schemas';
+import type { LandingTemplate } from "../schemas";
 
 /**
  * Resuelve la URL pública de demo para una plantilla.
@@ -11,11 +11,11 @@ export function resolveTemplateDemoUrl(
   if (template.demoUrl === undefined) return null;
   const { demoUrl } = template;
 
-  if (demoUrl.startsWith('/')) {
-    const base = templatePymeBase.endsWith('/')
+  if (demoUrl.startsWith("/")) {
+    const base = templatePymeBase.endsWith("/")
       ? templatePymeBase
       : `${templatePymeBase}/`;
-    return new URL(demoUrl.replace(/^\//, ''), base).href;
+    return new URL(demoUrl.replace(/^\//, ""), base).href;
   }
 
   return demoUrl;

@@ -9,22 +9,22 @@
 
 <script>
   (() => {
-    const button = document.querySelector('[data-back-to-top]');
+    const button = document.querySelector("[data-back-to-top]");
     if (!(button instanceof HTMLButtonElement)) return;
 
     const threshold = 300;
 
     const syncVisibility = () => {
       const isVisible = window.scrollY > threshold;
-      button.classList.toggle('opacity-0', !isVisible);
-      button.classList.toggle('pointer-events-none', !isVisible);
+      button.classList.toggle("opacity-0", !isVisible);
+      button.classList.toggle("pointer-events-none", !isVisible);
     };
 
-    button.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    button.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    window.addEventListener('scroll', syncVisibility, { passive: true });
+    window.addEventListener("scroll", syncVisibility, { passive: true });
     syncVisibility();
   })();
 </script>

@@ -6,10 +6,10 @@ Los posts de la colección `blog` pueden incluir en el frontmatter un bloque opc
 
 ### Campos
 
-| Campo | Rol |
-|-------|-----|
-| `src` | Debe coincidir **exactamente** con el nombre de la carpeta bajo `src/assets/slides/<src>/`. |
-| `alt` | Texto accesible para el conjunto; cada imagen genera un `alt` del tipo «{alt} - pagina N de M». |
+| Campo        | Rol                                                                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`        | Debe coincidir **exactamente** con el nombre de la carpeta bajo `src/assets/slides/<src>/`.                                                                                                                   |
+| `alt`        | Texto accesible para el conjunto; cada imagen genera un `alt` del tipo «{alt} - pagina N de M».                                                                                                               |
 | `sourceType` | Solo metadato editorial (`pdf` o `pptx`): indica de qué tipo de fuente se exportaron las imágenes. El sitio en runtime **no** sirve PDF ni PPTX; solo archivos **WebP** optimizados por el pipeline de Astro. |
 
 ### Convención de archivos

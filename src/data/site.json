@@ -6,10 +6,19 @@
     "whatsapp": null
   },
   "social": {
-    "github":    "https://github.com/Nicolasgh91",
-    "linkedin":  "https://www.linkedin.com/in/nicolasghruszczak/",
-    "twitter":   "https://x.com/nicogabrielh",
+    "github": "https://github.com/Nicolasgh91",
+    "linkedin": "https://www.linkedin.com/in/nicolasghruszczak/",
+    "twitter": "https://x.com/nicogabrielh",
     "instagram": "https://www.instagram.com/nicogabh/"
   },
-  "stack": ["Python", "Astro", "Next.js", "React", "Node.js", "PostgreSQL", "n8n", "Claude AI"]
+  "stack": [
+    "Python",
+    "Astro",
+    "Next.js",
+    "React",
+    "Node.js",
+    "PostgreSQL",
+    "n8n",
+    "Claude AI"
+  ]
 }

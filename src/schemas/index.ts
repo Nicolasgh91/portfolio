@@ -2,9 +2,9 @@ export {
   landingTemplateSchema,
   landingTemplatesSchema,
   type LandingTemplate,
-} from './landing-template';
+} from "./landing-template";
 export {
   pricingPlanSchema,
   pricingPlansSchema,
   type PricingPlan,
-} from './pricing-plan';
+} from "./pricing-plan";

@@ -6,10 +6,10 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `title` | `string` | Sí | Texto prellenado para compartir (X, LinkedIn, WhatsApp). |
-| `url` | `string` | Sí | URL absoluta o canónica del artículo. |
+| Prop    | Tipo     | Requerida | Descripción                                              |
+| ------- | -------- | --------- | -------------------------------------------------------- |
+| `title` | `string` | Sí        | Texto prellenado para compartir (X, LinkedIn, WhatsApp). |
+| `url`   | `string` | Sí        | URL absoluta o canónica del artículo.                    |
 
 ## Comportamiento
 

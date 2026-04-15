@@ -6,13 +6,13 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `src` | `string` | Sí | Ruta base **sin extensión**; se cargan `<source>` `${src}.webm` y `${src}.mp4`. |
-| `title` | `string` | Sí | `aria-label` y `title` del `<video>`. |
-| `poster` | `string` | No | Imagen poster (recomendado WebP). |
-| `width` / `height` | `number` | No | Dimensiones del video. |
-| `autoplay` | `boolean` | No | Default `true`; siempre `muted`, `loop`, `playsinline`. |
+| Prop               | Tipo      | Requerida | Descripción                                                                     |
+| ------------------ | --------- | --------- | ------------------------------------------------------------------------------- |
+| `src`              | `string`  | Sí        | Ruta base **sin extensión**; se cargan `<source>` `${src}.webm` y `${src}.mp4`. |
+| `title`            | `string`  | Sí        | `aria-label` y `title` del `<video>`.                                           |
+| `poster`           | `string`  | No        | Imagen poster (recomendado WebP).                                               |
+| `width` / `height` | `number`  | No        | Dimensiones del video.                                                          |
+| `autoplay`         | `boolean` | No        | Default `true`; siempre `muted`, `loop`, `playsinline`.                         |
 
 ## Comportamiento
 

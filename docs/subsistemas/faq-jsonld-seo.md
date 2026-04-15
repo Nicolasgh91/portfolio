@@ -7,10 +7,10 @@
 
 ## Páginas que inyectan FAQPage
 
-| Ruta | Head | Contenido visible |
-|------|------|-------------------|
-| `/servicios` | [`servicios.astro`](../../src/pages/servicios.astro) — `buildFaqPageJsonLd(faqEntries)` en `slot="head"` | `FAQAccordion` |
-| `/plantillas` | [`plantillas.astro`](../../src/pages/plantillas.astro) — `buildFaqPageJsonLd(catalogFaqEntries)` | `FaqSection` |
+| Ruta          | Head                                                                                                     | Contenido visible |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ----------------- |
+| `/servicios`  | [`servicios.astro`](../../src/pages/servicios.astro) — `buildFaqPageJsonLd(faqEntries)` en `slot="head"` | `FAQAccordion`    |
+| `/plantillas` | [`plantillas.astro`](../../src/pages/plantillas.astro) — `buildFaqPageJsonLd(catalogFaqEntries)`         | `FaqSection`      |
 
 ## Validación en CI
 

@@ -1,11 +1,11 @@
-export type Locale = 'es' | 'en';
+export type Locale = "es" | "en";
 
 const PATH_TRANSLATIONS: Record<string, string> = {
-  '/': '/en',
-  '/servicios': '/en/services',
-  '/talento': '/en/talent',
-  '/blog': '/en/blog',
-  '/plantillas': '/en/templates',
+  "/": "/en",
+  "/servicios": "/en/services",
+  "/talento": "/en/talent",
+  "/blog": "/en/blog",
+  "/plantillas": "/en/templates",
 };
 
 const REVERSE_TRANSLATIONS = Object.fromEntries(
@@ -13,18 +13,22 @@ const REVERSE_TRANSLATIONS = Object.fromEntries(
 ) as Record<string, string>;
 
 export function localeFromPathname(pathname: string): Locale {
-  return pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es';
+  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
 }
 
 function swapBlogPost(pathname: string): string | null {
-  if (pathname.startsWith('/blog/')) return pathname.replace('/blog/', '/en/blog/');
-  if (pathname.startsWith('/en/blog/')) return pathname.replace('/en/blog/', '/blog/');
+  if (pathname.startsWith("/blog/"))
+    return pathname.replace("/blog/", "/en/blog/");
+  if (pathname.startsWith("/en/blog/"))
+    return pathname.replace("/en/blog/", "/blog/");
   return null;
 }
 
 function swapTemplateDetail(pathname: string): string | null {
-  if (pathname.startsWith('/plantillas/')) return pathname.replace('/plantillas/', '/en/templates/');
-  if (pathname.startsWith('/en/templates/')) return pathname.replace('/en/templates/', '/plantillas/');
+  if (pathname.startsWith("/plantillas/"))
+    return pathname.replace("/plantillas/", "/en/templates/");
+  if (pathname.startsWith("/en/templates/"))
+    return pathname.replace("/en/templates/", "/plantillas/");
   return null;
 }
 

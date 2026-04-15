@@ -5,7 +5,17 @@ description: "De los principios de Sam Newman al código real. Qué son, para qu
 descriptionEn: "From Sam Newman's principles to real code. What they are, what they're for, when not to use them, and which design patterns separate an architecture that scales from one that collapses."
 pubDate: 2026-04-10
 category: "arquitectura"
-tags: ["microservicios", "arquitectura", "DDD", "event-driven", "escalabilidad", "patrones de diseño", "CI/CD", "observabilidad"]
+tags:
+  [
+    "microservicios",
+    "arquitectura",
+    "DDD",
+    "event-driven",
+    "escalabilidad",
+    "patrones de diseño",
+    "CI/CD",
+    "observabilidad",
+  ]
 draft: false
 readingTime: 25
 coverImage: "../../assets/blog/thumbnails/diseniar-sistemas-a-escala.webp"
@@ -15,11 +25,11 @@ pillarSlug: null
 vertical: "general"
 ---
 
-import PdfSlider from '../../components/PdfSlider.astro';
+import PdfSlider from "../../components/PdfSlider.astro";
 
 Hay una pregunta que aparece siempre que un sistema empieza a crecer: ¿cuándo dejo de agregar código al monolito y empiezo a dividirlo? La respuesta honesta es que la mayoría de los equipos lo hacen demasiado tarde o, peor, demasiado pronto.
 
-Los microservicios no son una arquitectura. Son una *decisión organizacional* que tiene consecuencias técnicas. Si no entendés eso antes de escribir la primera línea, vas a construir un monolito distribuido: lo peor de los dos mundos.
+Los microservicios no son una arquitectura. Son una _decisión organizacional_ que tiene consecuencias técnicas. Si no entendés eso antes de escribir la primera línea, vas a construir un monolito distribuido: lo peor de los dos mundos.
 
 Esta guía condensa cuatro pasadas de análisis crítico sobre "Building Microservices" de Sam Newman y experiencia aplicada. No es un resumen del libro. Es una destilación completa de todo lo que importa cuando tenés que tomar decisiones reales.
 
@@ -42,7 +52,7 @@ Las ventajas que justifican esa complejidad adicional son concretas:
 
 Newman lo dice sin rodeos: **si no entendés bien tu dominio de negocio, no uses microservicios**. Construí primero un monolito. Aprendé dónde están las fronteras naturales. Después dividí.
 
-Una descomposición prematura genera lo que los arquitectos llaman *chatty services*: servicios que se llaman entre sí en cada operación, con latencias acumuladas y sin la cohesión que justifica la separación. El costo de refactorizar una arquitectura mal dividida es exponencialmente mayor que refactorizar un monolito.
+Una descomposición prematura genera lo que los arquitectos llaman _chatty services_: servicios que se llaman entre sí en cada operación, con latencias acumuladas y sin la cohesión que justifica la separación. El costo de refactorizar una arquitectura mal dividida es exponencialmente mayor que refactorizar un monolito.
 
 **La heurística de Newman para el tamaño correcto:** un servicio debería poder ser reescrito por un equipo pequeño en no más de dos semanas. Si lleva más, está haciendo demasiado. Si lleva menos de un día, probablemente no justifica el overhead de ser un servicio independiente.
 
@@ -50,7 +60,7 @@ Una descomposición prematura genera lo que los arquitectos llaman *chatty servi
 
 ## El rol del arquitecto: de ingeniero a urbanista
 
-En un ecosistema de microservicios, el rol del arquitecto cambia radicalmente. Ya no es el responsable de diseñar cada componente interno ni de generar diagramas cerrados al inicio del proyecto. Pasa a ser, en palabras de Newman, un *urbanista*: alguien que define las zonas, las rutas de interacción y los estándares de convivencia, pero que delega las decisiones de detalle a cada equipo.
+En un ecosistema de microservicios, el rol del arquitecto cambia radicalmente. Ya no es el responsable de diseñar cada componente interno ni de generar diagramas cerrados al inicio del proyecto. Pasa a ser, en palabras de Newman, un _urbanista_: alguien que define las zonas, las rutas de interacción y los estándares de convivencia, pero que delega las decisiones de detalle a cada equipo.
 
 Lo que el arquitecto evolutivo controla con rigor son los puntos donde los servicios interactúan entre sí: los estándares de comunicación (HTTP, mensajería), el formato de los logs, la estrategia de monitoreo centralizado. Lo que deliberadamente no controla es la tecnología interna de cada servicio: qué lenguaje usa, qué base de datos elige, cómo organiza su código interno.
 
@@ -60,7 +70,7 @@ Esta delegación es la que hace posible la heterogeneidad tecnológica. Y es tam
 
 ## Cómo encontrar las fronteras correctas: Bounded Contexts y DDD
 
-El concepto más valioso que el libro toma prestado de Domain-Driven Design (DDD) es el de *Bounded Context* (contexto delimitado). Un bounded context es una frontera semántica dentro de la cual un modelo de negocio tiene significado consistente.
+El concepto más valioso que el libro toma prestado de Domain-Driven Design (DDD) es el de _Bounded Context_ (contexto delimitado). Un bounded context es una frontera semántica dentro de la cual un modelo de negocio tiene significado consistente.
 
 Ejemplo concreto: la palabra "cliente" significa cosas distintas en el área de ventas (un lead con probabilidad de conversión), en facturación (un sujeto legal con CUIT) y en soporte (un ticket abierto con historial). Si construís un único servicio `ClienteService` que intenta satisfacer a los tres, terminás con un objeto anémico lleno de campos opcionales que nadie entiende.
 
@@ -87,7 +97,7 @@ Hay dos formas de recibir trabajo:
 
 ### Proceso
 
-El servicio no debería ser un wrapper de CRUD. Debería exponer *intenciones de negocio*: `AprobarPedido()`, `CancelarPedido()`, `AplicarDescuento()`. Newman desaconseja totalmente los servicios anémicos que solo envuelven operaciones de base de datos sin lógica propia. La lógica que diferencia tu negocio vive acá, encapsulada, sin filtrarse hacia los consumidores.
+El servicio no debería ser un wrapper de CRUD. Debería exponer _intenciones de negocio_: `AprobarPedido()`, `CancelarPedido()`, `AplicarDescuento()`. Newman desaconseja totalmente los servicios anémicos que solo envuelven operaciones de base de datos sin lógica propia. La lógica que diferencia tu negocio vive acá, encapsulada, sin filtrarse hacia los consumidores.
 
 ### Salida
 
@@ -108,7 +118,7 @@ Esta es probablemente la decisión de diseño más importante de todo el sistema
 
 **Coreografía:** cada servicio conoce solo su propia responsabilidad y reacciona a eventos. Cuando el servicio de pagos publica `PagoConfirmado`, el servicio de envíos lo escucha y empieza a preparar el paquete. Nadie le dijo que lo hiciera: simplemente sabe que ese es su trabajo cuando ese evento ocurre. Este modelo provee un nivel excelente de desacoplamiento y autonomía, ideal para el crecimiento independiente por parte de cada equipo.
 
-Newman recomienda enfáticamente la coreografía. El costo: necesitás invertir en *Correlation IDs* y en herramientas de monitoreo distribuido. Sin eso, depurar un error en un sistema coreografiado es prácticamente imposible.
+Newman recomienda enfáticamente la coreografía. El costo: necesitás invertir en _Correlation IDs_ y en herramientas de monitoreo distribuido. Sin eso, depurar un error en un sistema coreografiado es prácticamente imposible.
 
 ---
 
@@ -152,9 +162,9 @@ El patrón Strangler consiste en interceptar las llamadas al monolito en su fron
 
 Un servicio que depende de otro hereda su fragilidad. Si el servicio de notificaciones tarda 30 segundos en responder, tu servicio de pedidos también tarda 30 segundos. Con 100 pedidos simultáneos, tenés 100 hilos esperando una respuesta que quizás nunca llegue.
 
-El *circuit breaker* detecta un número configurable de fallos consecutivos y "abre el circuito": en lugar de intentar llamar al servicio caído, devuelve inmediatamente un error o un fallback predefinido. Después de un tiempo, intenta una llamada de prueba (estado HALF_OPEN). Si la prueba pasa, cierra el circuito; si no, lo mantiene abierto.
+El _circuit breaker_ detecta un número configurable de fallos consecutivos y "abre el circuito": en lugar de intentar llamar al servicio caído, devuelve inmediatamente un error o un fallback predefinido. Después de un tiempo, intenta una llamada de prueba (estado HALF_OPEN). Si la prueba pasa, cierra el circuito; si no, lo mantiene abierto.
 
-Junto con *timeouts* y *bulkheads* (aislamiento de pools de recursos por servicio), forman lo que Newman llama las "medidas de seguridad arquitectónica": el conjunto mínimo que separa un sistema que falla graciosamente de uno que falla catastróficamente.
+Junto con _timeouts_ y _bulkheads_ (aislamiento de pools de recursos por servicio), forman lo que Newman llama las "medidas de seguridad arquitectónica": el conjunto mínimo que separa un sistema que falla graciosamente de uno que falla catastróficamente.
 
 ### Backend for Frontend (BFF)
 
@@ -184,7 +194,7 @@ En un sistema distribuido donde los servicios pueden moverse entre hosts y escal
 
 ## Testing: por qué las pruebas E2E no escalan
 
-Las pruebas End-to-End en microservicios se vuelven frágiles y lentas. Requieren orquestar el despliegue de múltiples servicios simultáneamente, lo que genera interdependencias falsas, aumenta masivamente el tiempo de feedback y promueve compilaciones intermitentes (*flaky tests*).
+Las pruebas End-to-End en microservicios se vuelven frágiles y lentas. Requieren orquestar el despliegue de múltiples servicios simultáneamente, lo que genera interdependencias falsas, aumenta masivamente el tiempo de feedback y promueve compilaciones intermitentes (_flaky tests_).
 
 Newman propone reemplazarlas progresivamente por **Consumer-Driven Contracts (CDCs)**, usando herramientas como Pact. Las expectativas de los consumidores sobre una API se codifican como pruebas que el servicio proveedor debe cumplir antes de desplegarse. Si el servicio de pagos quiere cambiar el formato de su respuesta, las pruebas de contrato fallan antes de que ese cambio llegue a producción y rompa a sus consumidores. La verificación es rápida, independiente y no requiere levantar múltiples servicios al mismo tiempo.
 
@@ -277,7 +287,7 @@ Esto es lo que pocos artículos dicen, pero Newman dedica páginas enteras a exp
 
 No uses microservicios si:
 
-- **Tu dominio no está claro.** Proyectos *greenfield* o áreas de negocio que todavía están definiendo qué hacen no tienen las fronteras estables que requiere una buena descomposición. Empezá con un monolito bien modularizado. Las fronteras internas (módulos) pueden convertirse en servicios cuando el dominio lo justifique.
+- **Tu dominio no está claro.** Proyectos _greenfield_ o áreas de negocio que todavía están definiendo qué hacen no tienen las fronteras estables que requiere una buena descomposición. Empezá con un monolito bien modularizado. Las fronteras internas (módulos) pueden convertirse en servicios cuando el dominio lo justifique.
 - **Tu equipo es pequeño.** La complejidad operativa de microservicios requiere madurez en CI/CD, observabilidad, service discovery e infraestructura. Un equipo de tres personas tiene otras prioridades.
 - **El sistema no necesita escalar en partes independientes.** Si todo el sistema crece o decrece uniformemente, el overhead de los microservicios no se justifica.
 - **No tenés cultura de automatización.** Sin CI/CD maduro, los microservicios se convierten en una pesadilla operativa. El despliegue manual de 20 servicios es inmanejable.
@@ -334,15 +344,15 @@ No todos los microservicios son iguales. Según la responsabilidad que tengan en
 
 ## Resumen de decisiones arquitectónicas
 
-| Decisión | Opción A | Opción B | Recomendación de Newman |
-|---|---|---|---|
-| Coordinación de flujos | Orquestación | Coreografía | Coreografía |
-| Comunicación | Síncrona (REST) | Asíncrona (eventos) | Asíncrona cuando sea posible |
-| Service discovery | DNS | Registro dinámico (Consul) | Registro dinámico en sistemas grandes |
-| Testing de integración | E2E | Consumer-Driven Contracts | CDCs |
-| Despliegue | Múltiples servicios por pipeline | Un servicio por pipeline | Un servicio por pipeline |
-| Infraestructura | Servidor compartido | Contenedor por servicio | Contenedor por servicio |
-| Código compartido | Librerías centralizadas | Service templates | Service templates |
+| Decisión               | Opción A                         | Opción B                   | Recomendación de Newman               |
+| ---------------------- | -------------------------------- | -------------------------- | ------------------------------------- |
+| Coordinación de flujos | Orquestación                     | Coreografía                | Coreografía                           |
+| Comunicación           | Síncrona (REST)                  | Asíncrona (eventos)        | Asíncrona cuando sea posible          |
+| Service discovery      | DNS                              | Registro dinámico (Consul) | Registro dinámico en sistemas grandes |
+| Testing de integración | E2E                              | Consumer-Driven Contracts  | CDCs                                  |
+| Despliegue             | Múltiples servicios por pipeline | Un servicio por pipeline   | Un servicio por pipeline              |
+| Infraestructura        | Servidor compartido              | Contenedor por servicio    | Contenedor por servicio               |
+| Código compartido      | Librerías centralizadas          | Service templates          | Service templates                     |
 
 ---
 

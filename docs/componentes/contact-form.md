@@ -6,9 +6,9 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| — | — | — | Sin `Props`; usa `import.meta.env.PUBLIC_WEB3FORMS_KEY` (fallback placeholder si falta). |
+| Prop | Tipo | Requerida | Descripción                                                                              |
+| ---- | ---- | --------- | ---------------------------------------------------------------------------------------- |
+| —    | —    | —         | Sin `Props`; usa `import.meta.env.PUBLIC_WEB3FORMS_KEY` (fallback placeholder si falta). |
 
 ## Comportamiento
 

@@ -1,5 +1,5 @@
 ---
-import { randomUUID } from 'node:crypto';
+import { randomUUID } from "node:crypto";
 
 interface Props {
   title: string;
@@ -20,7 +20,9 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
   role="group"
   aria-label="Compartir articulo"
 >
-  <span class="mr-1 text-xs font-medium text-[var(--text-muted)]">Compartir</span>
+  <span class="mr-1 text-xs font-medium text-[var(--text-muted)]"
+    >Compartir</span
+  >
 
   <a
     href={xShareUrl}
@@ -33,7 +35,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
       <path
         fill="currentColor"
         d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.633 7.584H.479l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.29 19.492h2.04L6.486 3.24H4.298l13.313 17.405z"
-      />
+      ></path>
     </svg>
   </a>
 
@@ -48,7 +50,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
       <path
         fill="currentColor"
         d="M20.447 20.452h-3.554v-5.569c0-1.329-.024-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.939v5.667H9.352V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.369-1.85 3.6 0 4.266 2.368 4.266 5.455v6.286zM5.337 7.433a2.063 2.063 0 11.001-4.126 2.063 2.063 0 01-.001 4.126zM7.114 20.452H3.558V9h3.556v11.452z"
-      />
+      ></path>
     </svg>
   </a>
 
@@ -63,7 +65,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
       <path
         fill="currentColor"
         d="M12.04 2c-5.52 0-10 4.476-10 10a9.94 9.94 0 001.352 5.03L2 22l5.128-1.343A10.005 10.005 0 0012.04 22c5.52 0 10-4.477 10-10s-4.48-10-10-10zm0 18.182a8.154 8.154 0 01-4.155-1.136l-.297-.177-3.042.798.812-2.968-.194-.305A8.13 8.13 0 013.87 12c0-4.505 3.664-8.182 8.17-8.182 4.503 0 8.17 3.677 8.17 8.182s-3.667 8.182-8.17 8.182zm4.48-6.136c-.245-.123-1.45-.714-1.673-.796-.223-.082-.386-.123-.549.123-.162.245-.63.796-.772.959-.141.163-.284.184-.528.061-.245-.122-1.032-.38-1.966-1.21-.726-.647-1.216-1.446-1.359-1.691-.141-.245-.015-.377.107-.498.11-.11.245-.286.367-.428.122-.143.162-.245.245-.408.082-.163.04-.306-.02-.428-.061-.123-.55-1.324-.752-1.814-.198-.476-.4-.411-.549-.418l-.468-.008c-.163 0-.428.061-.653.306-.224.245-.857.837-.857 2.04s.878 2.368 1 2.53c.122.163 1.724 2.633 4.178 3.693.584.253 1.04.404 1.395.517.586.187 1.12.161 1.54.098.47-.07 1.45-.592 1.654-1.164.205-.571.205-1.061.143-1.163-.062-.102-.225-.163-.47-.286z"
-      />
+      ></path>
     </svg>
   </a>
 
@@ -77,25 +79,28 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
       <path
         fill="currentColor"
         d="M16 1H6C4.9 1 4 1.9 4 3v12h2V3h10V1zm3 4H10c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H10V7h9v14z"
-      />
+      ></path>
     </svg>
   </button>
 </div>
 
 <script>
   // CSP-005: sin `define:vars`; cada ShareBar resuelve su raíz via `data-share-bar`.
-  document.querySelectorAll('[data-share-bar]').forEach((root) => {
-    const button = root.querySelector('[data-copy-url]');
+  document.querySelectorAll("[data-share-bar]").forEach((root) => {
+    const button = root.querySelector("[data-copy-url]");
     if (!(button instanceof HTMLButtonElement)) return;
 
-    button.addEventListener('click', async () => {
-      const shareUrl = button.getAttribute('data-copy-url');
+    button.addEventListener("click", async () => {
+      const shareUrl = button.getAttribute("data-copy-url");
       if (!shareUrl) return;
 
       try {
         await navigator.clipboard.writeText(shareUrl);
-        button.classList.add('text-[var(--color-success)]');
-        setTimeout(() => button.classList.remove('text-[var(--color-success)]'), 2000);
+        button.classList.add("text-[var(--color-success)]");
+        setTimeout(
+          () => button.classList.remove("text-[var(--color-success)]"),
+          2000,
+        );
       } catch {
         // fail-silent: no bloquea lectura del articulo
       }

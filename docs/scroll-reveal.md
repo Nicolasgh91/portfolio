@@ -4,10 +4,10 @@ Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--
 
 ## Partición por ruta
 
-| Rutas | Mecanismo | Marcado típico | Notas |
-|-------|-----------|----------------|--------|
-| `/`, `/servicios`, `/talento` | **Alt B** | `data-alt-reveal` en `<section>` (p. ej. vía [`SectionWrapper`](./componentes/section-wrapper.md) `revealAlt`) + clases iniciales `opacity-0 translate-y-4` y finales `opacity-100 translate-y-0` aplicadas por `IntersectionObserver` | No usar `.reveal` en estas páginas. El observer solo consulta nodos si `pathname` es una de estas tres rutas (normalizada sin barra final). |
-| Blog (índice, categoría, etiqueta, `[slug]`) y **plantillas** | **`.reveal` / `.reveal--scale`** | `class="reveal reveal--scale"` (+ opcional `--reveal-delay`) | Sin cambio respecto al subsistema auditado (umbrales, prose largo, stagger). No mezclar Alt B aquí. |
+| Rutas                                                         | Mecanismo                        | Marcado típico                                                                                                                                                                                                                         | Notas                                                                                                                                       |
+| ------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`, `/servicios`, `/talento`                                 | **Alt B**                        | `data-alt-reveal` en `<section>` (p. ej. vía [`SectionWrapper`](./componentes/section-wrapper.md) `revealAlt`) + clases iniciales `opacity-0 translate-y-4` y finales `opacity-100 translate-y-0` aplicadas por `IntersectionObserver` | No usar `.reveal` en estas páginas. El observer solo consulta nodos si `pathname` es una de estas tres rutas (normalizada sin barra final). |
+| Blog (índice, categoría, etiqueta, `[slug]`) y **plantillas** | **`.reveal` / `.reveal--scale`** | `class="reveal reveal--scale"` (+ opcional `--reveal-delay`)                                                                                                                                                                           | Sin cambio respecto al subsistema auditado (umbrales, prose largo, stagger). No mezclar Alt B aquí.                                         |
 
 ### Contrato Alt B (landings)
 
@@ -23,11 +23,11 @@ Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--
 
 ## Clases `.reveal`
 
-| Clase | Rol |
-|-------|-----|
-| `.reveal` | Estado base: `opacity: 0`, transición en `opacity` y `transform`, `transition-delay: var(--reveal-delay, 0ms)`. |
-| `.reveal--scale` | Entrada desde `scale(0.92)`. **Única variante en uso** en blog y plantillas. |
-| `.reveal.is-visible` | Añadida por JS al intersectar (fire-once); `opacity: 1`, `transform: none`. |
+| Clase                | Rol                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `.reveal`            | Estado base: `opacity: 0`, transición en `opacity` y `transform`, `transition-delay: var(--reveal-delay, 0ms)`. |
+| `.reveal--scale`     | Entrada desde `scale(0.92)`. **Única variante en uso** en blog y plantillas.                                    |
+| `.reveal.is-visible` | Añadida por JS al intersectar (fire-once); `opacity: 1`, `transform: none`.                                     |
 
 **Artículo (`blog/[slug].astro`):** conviene partir en bloques (ShareBar, slides, prose, etc.); un único wrapper gigante agrava el problema de ratio. El `IntersectionObserver` en Layout usa **`threshold: 0`** (intersección no nula): con `threshold: 0.15`, incluso el solo bloque `<article class="prose">` puede ser tan alto que la ratio visible/total **nunca** llega al 15% y el texto no se muestra. Mapeo actual (header con `<h1>` sin reveal): ShareBar `0ms`; slides `100ms`; `<article class="prose">` `200ms`; `ArticleFooter` `300ms`; pie con CTAs `350ms`; bloque “relacionados” `400ms` (un solo `.reveal` en la `<section>`, sin reveal por tarjeta).
 
@@ -49,7 +49,7 @@ Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--
 
 1. **No animar el hero** (primera sección con H1 / LCP): no añadir `.reveal` ahí.
 2. Bloques siguientes: `class="reveal reveal--scale"`, opcional `style="--reveal-delay: Nms"`.
-3. **Blog — listados:** envolver cada tarjeta en un `<div class="reveal reveal--scale">` con `style={\`--reveal-delay: ${Math.min(i * 100, 600)}ms\`}`; no modificar `BlogCard.astro` para reveal.
+3. **Blog — listados:** envolver cada tarjeta en un `<div class="reveal reveal--scale">` con `style={\`--reveal-delay: ${Math.min(i \* 100, 600)}ms\`}`; no modificar `BlogCard.astro` para reveal.
 4. Stagger máximo efectivo recomendado: **600 ms** por ítem (`Math.min(i * 100, 600)`).
 
 ### Landings home / servicios / talento (Alt B)

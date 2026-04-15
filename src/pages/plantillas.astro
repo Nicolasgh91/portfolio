@@ -1,23 +1,23 @@
 ---
-import { Fragment } from 'astro/jsx-runtime';
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import PlantillaCarouselCard from '../components/PlantillaCarouselCard.astro';
-import PricingCard from '../components/PricingCard.astro';
-import FaqSection from '../components/FaqSection.astro';
-import type { FaqItem } from '../components/FaqSection.astro';
-import { buildFaqPageJsonLd } from '../lib/faq-jsonld';
+import { Fragment } from "astro/jsx-runtime";
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PlantillaCarouselCard from "../components/PlantillaCarouselCard.astro";
+import PricingCard from "../components/PricingCard.astro";
+import FaqSection from "../components/FaqSection.astro";
+import type { FaqItem } from "../components/FaqSection.astro";
+import { buildFaqPageJsonLd } from "../lib/faq-jsonld";
 import {
   landingTemplates,
   VERTICAL_LABELS,
   VERTICAL_ORDER,
-} from '../data/landing-templates';
-import { pricingPlans } from '../data/pricing-plans';
-import { resolveTemplateDemoUrl } from '../lib/resolve-template-demo-url';
-import site from '../data/site.json';
+} from "../data/landing-templates";
+import { pricingPlans } from "../data/pricing-plans";
+import { resolveTemplateDemoUrl } from "../lib/resolve-template-demo-url";
+import site from "../data/site.json";
 const templatePymeBase =
   import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
-  'https://template-pyme.escalatunegocioconia.com';
+  "https://template-pyme.escalatunegocioconia.com";
 
 /** Una sola lista ordenada para carrusel y JSON-LD ItemList (position 1-indexed = orden visual). */
 const sortedTemplatesWithDemo = [...landingTemplates]
@@ -30,7 +30,7 @@ const sortedTemplatesWithDemo = [...landingTemplates]
     const demoB = Boolean(b.resolvedDemoUrl);
     if (demoA !== demoB) return demoA ? -1 : 1;
     if (b.priority !== a.priority) return b.priority - a.priority;
-    return a.title.localeCompare(b.title, 'es');
+    return a.title.localeCompare(b.title, "es");
   });
 
 const presentVerticals = [
@@ -41,15 +41,15 @@ const presentVerticals = [
     VERTICAL_ORDER.indexOf(b as (typeof VERTICAL_ORDER)[number]),
 );
 
-const siteUrl = site.author.siteUrl ?? 'https://escalatunegocioconia.com';
+const siteUrl = site.author.siteUrl ?? "https://escalatunegocioconia.com";
 
 const catalogJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
+  "@context": "https://schema.org",
+  "@type": "ItemList",
   itemListElement: sortedTemplatesWithDemo
-    .filter((t) => t.status === 'available')
+    .filter((t) => t.status === "available")
     .map((t, i) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: i + 1,
       name: t.title,
       description: t.description,
@@ -57,73 +57,83 @@ const catalogJsonLd = {
     })),
 };
 
-const plansOrdered = ['basico', 'plantilla', 'full'] as const;
-const plansById = Object.fromEntries(pricingPlans.map((p) => [p.id, p])) as Record<
-  (typeof plansOrdered)[number],
-  (typeof pricingPlans)[0]
->;
+const plansOrdered = ["basico", "plantilla", "full"] as const;
+const plansById = Object.fromEntries(
+  pricingPlans.map((p) => [p.id, p]),
+) as Record<(typeof plansOrdered)[number], (typeof pricingPlans)[0]>;
 const orderedPricing = plansOrdered.map((id) => plansById[id]);
 
 const planOrderClass: Record<(typeof plansOrdered)[number], string> = {
-  basico: 'md:order-1',
-  plantilla: 'md:order-2',
-  full: 'md:order-3',
+  basico: "md:order-1",
+  plantilla: "md:order-2",
+  full: "md:order-3",
 };
 
 const catalogFaqEntries: FaqItem[] = [
   {
     order: 1,
-    category: 'comercial',
-    question: '¿Qué diferencia hay entre los planes?',
-    questionEn: 'What is the difference between plans?',
+    category: "comercial",
+    question: "¿Qué diferencia hay entre los planes?",
+    questionEn: "What is the difference between plans?",
     answer:
-      'El plan básico es una landing one-page con contacto y SEO esencial. El plan plantilla disponible incluye diseño listo para personalizar con catálogo visual, chatbot IA y datos estructurados, más el primer mes de mantenimiento. El plan full es un sitio a medida con mantenimiento mensual, carga de contenido, mejoras continuas y soporte prioritario.',
+      "El plan básico es una landing one-page con contacto y SEO esencial. El plan plantilla disponible incluye diseño listo para personalizar con catálogo visual, chatbot IA y datos estructurados, más el primer mes de mantenimiento. El plan full es un sitio a medida con mantenimiento mensual, carga de contenido, mejoras continuas y soporte prioritario.",
     answerEn:
-      'The basic plan is a one-page landing with contact and essential SEO. The available template plan includes a ready-to-customize design with visual catalog, AI chatbot and structured data, plus the first month of maintenance included. The full plan is a custom site with monthly maintenance, content loading, ongoing improvements and priority support.',
+      "The basic plan is a one-page landing with contact and essential SEO. The available template plan includes a ready-to-customize design with visual catalog, AI chatbot and structured data, plus the first month of maintenance included. The full plan is a custom site with monthly maintenance, content loading, ongoing improvements and priority support.",
   },
   {
     order: 2,
-    category: 'proceso',
-    question: '¿Cuánto tarda la entrega?',
-    questionEn: 'How long does delivery take?',
+    category: "proceso",
+    question: "¿Cuánto tarda la entrega?",
+    questionEn: "How long does delivery take?",
     answer:
-      'En la mayoría de los casos entre 1 y 2 semanas desde el kickoff, según contenidos y revisiones acordadas.',
+      "En la mayoría de los casos entre 1 y 2 semanas desde el kickoff, según contenidos y revisiones acordadas.",
     answerEn:
-      'In most cases between 1 and 2 weeks from kickoff, depending on content and review rounds.',
+      "In most cases between 1 and 2 weeks from kickoff, depending on content and review rounds.",
   },
   {
     order: 3,
-    category: 'soporte',
-    question: '¿Puedo cambiar el contenido después?',
-    questionEn: 'Can I change the content later?',
+    category: "soporte",
+    question: "¿Puedo cambiar el contenido después?",
+    questionEn: "Can I change the content later?",
     answer:
-      'Sí. Las plantillas están pensadas para que puedas actualizar textos e imágenes; el alcance de soporte y mantenimiento depende del plan (básico, plantilla disponible o full).',
+      "Sí. Las plantillas están pensadas para que puedas actualizar textos e imágenes; el alcance de soporte y mantenimiento depende del plan (básico, plantilla disponible o full).",
     answerEn:
-      'Yes. Templates are designed so you can update copy and images; support and maintenance scope depends on your plan (basic, available template or full).',
+      "Yes. Templates are designed so you can update copy and images; support and maintenance scope depends on your plan (basic, available template or full).",
   },
   {
     order: 4,
-    category: 'tecnico',
-    question: '¿Necesito contratar hosting aparte?',
-    questionEn: 'Do I need separate hosting?',
+    category: "tecnico",
+    question: "¿Necesito contratar hosting aparte?",
+    questionEn: "Do I need separate hosting?",
     answer:
-      'No para el deploy en Vercel incluido en los planes listados; dominio y correo pueden gestionarse aparte si lo preferís.',
+      "No para el deploy en Vercel incluido en los planes listados; dominio y correo pueden gestionarse aparte si lo preferís.",
     answerEn:
-      'Not for the Vercel deploy included in these plans; domain and email can be handled separately if you prefer.',
+      "Not for the Vercel deploy included in these plans; domain and email can be handled separately if you prefer.",
   },
 ];
 
-const pageTitle = 'Plantillas de landing page para pymes | Escalá tu negocio con IA';
+const pageTitle =
+  "Plantillas de landing page para pymes | Escalá tu negocio con IA";
 const pageDescription =
-  'Catálogo de plantillas profesionales optimizadas para SEO. Menú digital, portfolio, hub de contenido.';
+  "Catálogo de plantillas profesionales optimizadas para SEO. Menú digital, portfolio, hub de contenido.";
 
 const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
 ---
 
-<Layout title={pageTitle} description={pageDescription} ogImage="/og-desktop.png">
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogImage="/og-desktop.png"
+>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(catalogJsonLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(catalogFaqJsonLd)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(catalogJsonLd)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(catalogFaqJsonLd)}
+    />
   </Fragment>
   <Nav activePage="servicios" />
   <main id="main-content">
@@ -142,7 +152,8 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
           data-es="Plantillas profesionales optimizadas para SEO y diseñadas para convertir."
           data-en="Professional templates optimized for SEO and designed to convert."
         >
-          Plantillas profesionales optimizadas para SEO y diseñadas para convertir.
+          Plantillas profesionales optimizadas para SEO y diseñadas para
+          convertir.
         </p>
       </section>
 
@@ -203,8 +214,12 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
                     data-selected="false"
                     aria-pressed="false"
                     class="taxonomy__pill"
-                    data-es={VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].es}
-                    data-en={VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].en}
+                    data-es={
+                      VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].es
+                    }
+                    data-en={
+                      VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].en
+                    }
                   >
                     {VERTICAL_LABELS[v as keyof typeof VERTICAL_LABELS].es}
                   </button>
@@ -239,7 +254,10 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
                   class="relative z-0 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] md:gap-6 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
                 >
                   {sortedTemplatesWithDemo.map((t) => (
-                    <PlantillaCarouselCard template={t} resolvedDemoUrl={t.resolvedDemoUrl} />
+                    <PlantillaCarouselCard
+                      template={t}
+                      resolvedDemoUrl={t.resolvedDemoUrl}
+                    />
                   ))}
                 </div>
                 <button
@@ -291,20 +309,37 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
         style="--reveal-delay: 0ms"
         aria-labelledby="social-heading"
       >
-        <h2 id="social-heading" class="sr-only" data-es="Métricas" data-en="Metrics">
+        <h2
+          id="social-heading"
+          class="sr-only"
+          data-es="Métricas"
+          data-en="Metrics"
+        >
           Métricas
         </h2>
         <div class="grid gap-8 md:grid-cols-3 md:gap-6">
           <div class="text-center md:text-left">
-            <p class="text-sm text-[var(--text-secondary)]" data-es="Plantillas entregadas" data-en="Templates delivered">
+            <p
+              class="text-sm text-[var(--text-secondary)]"
+              data-es="Plantillas entregadas"
+              data-en="Templates delivered"
+            >
               Plantillas entregadas
             </p>
-            <p class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]" data-es="50+" data-en="50+">
+            <p
+              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
+              data-es="50+"
+              data-en="50+"
+            >
               50+
             </p>
           </div>
           <div class="text-center md:text-left">
-            <p class="text-sm text-[var(--text-secondary)]" data-es="Tiempo de entrega" data-en="Delivery time">
+            <p
+              class="text-sm text-[var(--text-secondary)]"
+              data-es="Tiempo de entrega"
+              data-en="Delivery time"
+            >
               Tiempo de entrega
             </p>
             <p
@@ -316,7 +351,11 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             </p>
           </div>
           <div class="text-center md:text-left">
-            <p class="text-sm text-[var(--text-secondary)]" data-es="Visibilidad en buscadores" data-en="Search visibility">
+            <p
+              class="text-sm text-[var(--text-secondary)]"
+              data-es="Visibilidad en buscadores"
+              data-en="Search visibility"
+            >
               Visibilidad en buscadores
             </p>
             <p
@@ -357,7 +396,8 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             data-es="Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos."
             data-en="Each plan includes what you need to get started. No surprises or hidden costs."
           >
-            Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos.
+            Cada plan incluye lo necesario para comenzar. Sin sorpresas ni
+            costos ocultos.
           </p>
         </div>
         <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -398,7 +438,8 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
           <div
             class="pointer-events-none absolute bottom-[-100px] left-1/2 h-[300px] w-[500px] -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(232,160,32,0.10)_0%,transparent_65%)]"
             aria-hidden="true"
-          />
+          >
+          </div>
           <p
             class="relative mb-3 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
             data-es="Listo para empezar"
@@ -419,7 +460,8 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             data-es="30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla."
             data-en="30 minutes. No strings attached. We show you exactly where you're losing value and how to fix it."
           >
-            30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.
+            30 minutos. Sin compromiso. Te decimos exactamente dónde está la
+            pérdida y cómo resolverla.
           </p>
           <a
             href="/servicios#contacto"
@@ -447,30 +489,30 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
   // (asset inline limit 0 en astro.config.mjs) para que CSP script-src 'self'
   // lo permita.
   (function () {
-    const carousel = document.getElementById('catalog-carousel');
+    const carousel = document.getElementById("catalog-carousel");
 
     function initFilters() {
       if (!carousel) return;
-      const cards = carousel.querySelectorAll('.plantilla-card');
-      const chips = document.querySelectorAll('#catalog-filters [data-filter]');
+      const cards = carousel.querySelectorAll(".plantilla-card");
+      const chips = document.querySelectorAll("#catalog-filters [data-filter]");
 
       function applyFilter(filter) {
         chips.forEach(function (chip) {
-          var active = chip.getAttribute('data-filter') === filter;
-          chip.setAttribute('data-selected', active ? 'true' : 'false');
-          chip.setAttribute('aria-pressed', active ? 'true' : 'false');
-          chip.classList.toggle('taxonomy__pill--active', active);
+          const active = chip.getAttribute("data-filter") === filter;
+          chip.setAttribute("data-selected", active ? "true" : "false");
+          chip.setAttribute("aria-pressed", active ? "true" : "false");
+          chip.classList.toggle("taxonomy__pill--active", active);
         });
         cards.forEach(function (card) {
-          var v = card.getAttribute('data-vertical');
-          var show = filter === 'todos' || v === filter;
-          card.setAttribute('data-filtered', show ? 'false' : 'true');
+          const v = card.getAttribute("data-vertical");
+          const show = filter === "todos" || v === filter;
+          card.setAttribute("data-filtered", show ? "false" : "true");
         });
       }
 
       chips.forEach(function (chip) {
-        chip.addEventListener('click', function () {
-          applyFilter(chip.getAttribute('data-filter') || 'todos');
+        chip.addEventListener("click", function () {
+          applyFilter(chip.getAttribute("data-filter") || "todos");
         });
       });
     }
@@ -481,21 +523,21 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
         return Math.min(carousel.clientWidth * 0.85, 420);
       }
       function scrollPrev() {
-        carousel.scrollBy({ left: -step(), behavior: 'smooth' });
+        carousel.scrollBy({ left: -step(), behavior: "smooth" });
       }
       function scrollNext() {
-        carousel.scrollBy({ left: step(), behavior: 'smooth' });
+        carousel.scrollBy({ left: step(), behavior: "smooth" });
       }
-      ['btn-prev', 'btn-prev-mobile'].forEach(function (id) {
-        document.getElementById(id)?.addEventListener('click', scrollPrev);
+      ["btn-prev", "btn-prev-mobile"].forEach(function (id) {
+        document.getElementById(id)?.addEventListener("click", scrollPrev);
       });
-      ['btn-next', 'btn-next-mobile'].forEach(function (id) {
-        document.getElementById(id)?.addEventListener('click', scrollNext);
+      ["btn-next", "btn-next-mobile"].forEach(function (id) {
+        document.getElementById(id)?.addEventListener("click", scrollNext);
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
         initFilters();
         initCarouselNav();
       });
