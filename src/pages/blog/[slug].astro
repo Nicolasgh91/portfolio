@@ -1,42 +1,42 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
-import { getCollection } from 'astro:content';
-import { getImage } from 'astro:assets';
-import TableOfContents from '../../components/blog/TableOfContents.astro';
-import ArticleFooter from '../../components/blog/ArticleFooter.astro';
-import ShareBar from '../../components/blog/ShareBar.astro';
-import TableWrapper from '../../components/mdx/TableWrapper.astro';
-import SlideViewer from '../../components/SlideViewer.astro';
-import SectionSpacer from '../../components/SectionSpacer.astro';
-import { filterTocHeadings } from '../../lib/toc';
-import { localeFromPathname } from '../../lib/locale-path';
-import humanAi from '../../assets/blog/human-ai.webp';
-import satellite from '../../assets/blog/satellite.webp';
-import cloudServers from '../../assets/blog/cloud-servers.webp';
-import ogHuellaDelFuego from '../../assets/open-graphs/og-huella-del-fuego.webp';
-import thumbArquitecturaGranEscala from '../../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp';
-import thumbMicroservicies from '../../assets/blog/thumbnails/thumb-microservicies.webp';
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import TableOfContents from "../../components/blog/TableOfContents.astro";
+import ArticleFooter from "../../components/blog/ArticleFooter.astro";
+import ShareBar from "../../components/blog/ShareBar.astro";
+import TableWrapper from "../../components/mdx/TableWrapper.astro";
+import SlideViewer from "../../components/SlideViewer.astro";
+import SectionSpacer from "../../components/SectionSpacer.astro";
+import { filterTocHeadings } from "../../lib/toc";
+import { localeFromPathname } from "../../lib/locale-path";
+import humanAi from "../../assets/blog/human-ai.webp";
+import satellite from "../../assets/blog/satellite.webp";
+import cloudServers from "../../assets/blog/cloud-servers.webp";
+import ogHuellaDelFuego from "../../assets/open-graphs/og-huella-del-fuego.webp";
+import thumbArquitecturaGranEscala from "../../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp";
+import thumbMicroservicies from "../../assets/blog/thumbnails/thumb-microservicies.webp";
 
 type CoverImageKey =
-  | 'human-ai'
-  | 'cloud-servers'
-  | 'satellite'
-  | 'huella-del-fuego'
-  | 'arquitectura-gran-escala'
-  | 'microservicios-urban-blueprint';
+  | "human-ai"
+  | "cloud-servers"
+  | "satellite"
+  | "huella-del-fuego"
+  | "arquitectura-gran-escala"
+  | "microservicios-urban-blueprint";
 
 const coverByKey: Record<CoverImageKey, typeof humanAi> = {
-  'human-ai': humanAi,
+  "human-ai": humanAi,
   satellite,
-  'cloud-servers': cloudServers,
-  'huella-del-fuego': ogHuellaDelFuego,
-  'arquitectura-gran-escala': thumbArquitecturaGranEscala,
-  'microservicios-urban-blueprint': thumbMicroservicies,
+  "cloud-servers": cloudServers,
+  "huella-del-fuego": ogHuellaDelFuego,
+  "arquitectura-gran-escala": thumbArquitecturaGranEscala,
+  "microservicios-urban-blueprint": thumbMicroservicies,
 };
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -46,16 +46,16 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
 const tocHeadings = filterTocHeadings(headings);
-const isEnglish = localeFromPathname(Astro.url.pathname) === 'en';
-const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const blogBaseHref = isEnglish ? "/en/blog" : "/blog";
 
 // Datos para JSON-LD
-const siteUrl = 'https://escalatunegocioconia.com';
+const siteUrl = "https://escalatunegocioconia.com";
 const postUrl = `${siteUrl}${blogBaseHref}/${post.slug}`;
-const authorName = 'Nicolás Hruszczak';
+const authorName = "Nicolás Hruszczak";
 const pubDateISO = post.data.pubDate.toISOString();
 
-let ogImagePath = '/og-desktop.png';
+let ogImagePath = "/og-desktop.png";
 let articleImageAbsolute: string | undefined;
 let ogImageWidth: string | undefined;
 let ogImageHeight: string | undefined;
@@ -68,35 +68,33 @@ if (post.data.coverImageKey) {
   articleImageAbsolute = new URL(optimized.src, siteUrl).href;
   const w = optimized.attributes.width as number | undefined;
   const h = optimized.attributes.height as number | undefined;
-  const fallbackH =
-    h ??
-    Math.round((coverSrc.height * 1200) / coverSrc.width);
+  const fallbackH = h ?? Math.round((coverSrc.height * 1200) / coverSrc.width);
   ogImageWidth = String(w ?? 1200);
   ogImageHeight = String(fallbackH);
-  ogImageType = 'image/webp';
+  ogImageType = "image/webp";
 }
 
 // JSON-LD: TechArticle (dateModified = pubDate hasta que exista updatedDate en Zod del blog)
 const jsonLdArticle = {
-  '@context': 'https://schema.org',
-  '@type': 'TechArticle',
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
   headline: post.data.title,
   description: post.data.description,
   datePublished: pubDateISO,
   dateModified: pubDateISO,
   author: {
-    '@type': 'Person',
+    "@type": "Person",
     name: authorName,
     url: siteUrl,
   },
   publisher: {
-    '@type': 'Organization',
-    name: 'escalatunegocioconia.com',
+    "@type": "Organization",
+    name: "escalatunegocioconia.com",
     url: siteUrl,
   },
   url: postUrl,
-  inLanguage: 'es-AR',
-  keywords: post.data.tags.join(', '),
+  inLanguage: "es-AR",
+  keywords: post.data.tags.join(", "),
   ...(post.data.readingTime != null && {
     timeRequired: `PT${post.data.readingTime}M`,
   }),
@@ -107,23 +105,23 @@ const jsonLdArticle = {
 
 // JSON-LD: BreadcrumbList schema
 const breadcrumbJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
   itemListElement: [
     {
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: 1,
-      name: 'Inicio',
+      name: "Inicio",
       item: siteUrl,
     },
     {
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: 2,
-      name: 'Blog',
+      name: "Blog",
       item: `${siteUrl}${blogBaseHref}`,
     },
     {
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: 3,
       name: post.data.title,
       item: postUrl,
@@ -133,14 +131,14 @@ const breadcrumbJsonLd = {
 
 // Formatear fecha
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-AR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return date.toLocaleDateString("es-AR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const related = allPosts
   .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
@@ -157,28 +155,45 @@ const related = allPosts
 >
   <!-- JSON-LD inyectado en el <head> via slot -->
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdArticle)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbJsonLd)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLdArticle)}
+    />
     <!-- Open Graph adicionales para artículos -->
     <meta property="og:type" content="article" />
     <meta property="article:published_time" content={pubDateISO} />
     <meta property="article:author" content={authorName} />
     <meta property="article:section" content={post.data.category} />
-    {post.data.tags.map((tag) => (
-      <meta property="article:tag" content={tag} />
-    ))}
+    {post.data.tags.map((tag) => <meta property="article:tag" content={tag} />)}
   </Fragment>
 
   <Nav activePage="blog" />
 
   <main id="main-content">
     <div class="mx-auto max-w-6xl px-4 py-12 lg:px-6">
-      <nav class="mb-8 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]" aria-label="Ruta de navegación">
-        <a href="/" class="transition-colors hover:text-[var(--color-accent-400)]">Inicio</a>
+      <nav
+        class="mb-8 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]"
+        aria-label="Ruta de navegación"
+      >
+        <a
+          href="/"
+          class="transition-colors hover:text-[var(--color-accent-400)]"
+          >Inicio</a
+        >
         <span aria-hidden="true" class="opacity-40">/</span>
-        <a href={blogBaseHref} class="transition-colors hover:text-[var(--color-accent-400)]">Blog</a>
+        <a
+          href={blogBaseHref}
+          class="transition-colors hover:text-[var(--color-accent-400)]">Blog</a
+        >
         <span aria-hidden="true" class="opacity-40">/</span>
-        <a href={`/blog/categoria/${encodeURIComponent(post.data.category)}`} class="transition-colors hover:text-[var(--color-accent-400)]">
+        <a
+          href={`/blog/categoria/${encodeURIComponent(post.data.category)}`}
+          class="transition-colors hover:text-[var(--color-accent-400)]"
+        >
           {post.data.category}
         </a>
         <span aria-hidden="true" class="opacity-40">/</span>
@@ -188,7 +203,9 @@ const related = allPosts
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
         <article class="min-w-0">
           <header class="mb-8">
-            <div class="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+            <div
+              class="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]"
+            >
               <a
                 href={`/blog/categoria/${encodeURIComponent(post.data.category)}`}
                 class="rounded-full border border-[color:var(--accent-border)] bg-[var(--accent-bg)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--accent-text)] no-underline"
@@ -196,11 +213,16 @@ const related = allPosts
                 {post.data.category}
               </a>
               <time datetime={pubDateISO}>{formatDate(post.data.pubDate)}</time>
-              {post.data.readingTime && (
-                <span data-en={`${post.data.readingTime} min read`} data-es={`${post.data.readingTime} min de lectura`}>
-                  · {post.data.readingTime} min de lectura
-                </span>
-              )}
+              {
+                post.data.readingTime && (
+                  <span
+                    data-en={`${post.data.readingTime} min read`}
+                    data-es={`${post.data.readingTime} min de lectura`}
+                  >
+                    · {post.data.readingTime} min de lectura
+                  </span>
+                )
+              }
             </div>
 
             <h1
@@ -224,11 +246,17 @@ const related = allPosts
             <ShareBar title={post.data.title} url={postUrl} />
           </div>
 
-          {post.data.slides && (
-            <div class="reveal reveal--scale" style="--reveal-delay: 100ms">
-              <SlideViewer src={post.data.slides.src} alt={post.data.slides.alt} class="my-8" />
-            </div>
-          )}
+          {
+            post.data.slides && (
+              <div class="reveal reveal--scale" style="--reveal-delay: 100ms">
+                <SlideViewer
+                  src={post.data.slides.src}
+                  alt={post.data.slides.alt}
+                  class="my-8"
+                />
+              </div>
+            )
+          }
 
           <div class="reveal reveal--scale" style="--reveal-delay: 200ms">
             <article
@@ -240,11 +268,17 @@ const related = allPosts
           </div>
 
           <div class="reveal reveal--scale" style="--reveal-delay: 300ms">
-            <ArticleFooter tags={post.data.tags} category={post.data.category} />
+            <ArticleFooter
+              tags={post.data.tags}
+              category={post.data.category}
+            />
           </div>
           <SectionSpacer size="xl" />
 
-          <footer class="reveal reveal--scale flex flex-wrap items-center justify-between gap-6" style="--reveal-delay: 350ms">
+          <footer
+            class="reveal reveal--scale flex flex-wrap items-center justify-between gap-6"
+            style="--reveal-delay: 350ms"
+          >
             <div class="flex items-center gap-3">
               <div
                 class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md border border-[color:var(--accent-border)] bg-[var(--accent-bg)] font-semibold text-[var(--accent-text)]"
@@ -253,7 +287,9 @@ const related = allPosts
                 NH
               </div>
               <div>
-                <p class="text-sm font-semibold text-[var(--text-primary)]">{authorName}</p>
+                <p class="text-sm font-semibold text-[var(--text-primary)]">
+                  {authorName}
+                </p>
                 <p
                   class="text-xs text-[var(--text-muted)]"
                   data-en="Functional analyst & full stack developer"
@@ -264,7 +300,12 @@ const related = allPosts
               </div>
             </div>
             <div class="flex flex-wrap gap-2">
-              <a href={blogBaseHref} class="btn-secondary" data-en="← Back to blog" data-es="← Volver al blog">
+              <a
+                href={blogBaseHref}
+                class="btn-secondary"
+                data-en="← Back to blog"
+                data-es="← Volver al blog"
+              >
                 ← Volver al blog
               </a>
               <a href="/servicios#contacto" class="btn-primary btn-bounce">
@@ -275,40 +316,52 @@ const related = allPosts
             </div>
           </footer>
 
-          {related.length > 0 && (
-            <section
-              class="mt-12 reveal reveal--scale"
-              style="--reveal-delay: 400ms"
-              aria-labelledby="related-heading"
-            >
-              <h2
-                id="related-heading"
-                class="mb-6 text-xl font-semibold text-[var(--text-primary)]"
-                data-en="Related articles"
-                data-es="Artículos relacionados"
+          {
+            related.length > 0 && (
+              <section
+                class="mt-12 reveal reveal--scale"
+                style="--reveal-delay: 400ms"
+                aria-labelledby="related-heading"
               >
-                Artículos relacionados
-              </h2>
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {related.map((r) => (
-                  <a
-                    href={`${blogBaseHref}/${r.slug}`}
-                    class="group btn-bounce flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
-                  >
-                    <span class="text-xs font-semibold uppercase tracking-wide text-[var(--accent-text)]">{r.data.category}</span>
-                    <h3 class="text-base font-semibold leading-6 text-[var(--text-primary)]" data-en={r.data.titleEn ?? r.data.title} data-es={r.data.title}>
-                      {r.data.title}
-                    </h3>
-                    <span class="mt-auto inline-flex items-center gap-1 text-xs text-[var(--color-accent-400)]">
-                      <span data-es>Leer</span>
-                      <span data-en class="hidden">Read</span>
-                      <span class="arrow" aria-hidden="true">→</span>
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </section>
-          )}
+                <h2
+                  id="related-heading"
+                  class="mb-6 text-xl font-semibold text-[var(--text-primary)]"
+                  data-en="Related articles"
+                  data-es="Artículos relacionados"
+                >
+                  Artículos relacionados
+                </h2>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {related.map((r) => (
+                    <a
+                      href={`${blogBaseHref}/${r.slug}`}
+                      class="group btn-bounce flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-6 no-underline transition duration-200 hover:-translate-y-1 hover:border-[color:var(--accent-border)]"
+                    >
+                      <span class="text-xs font-semibold uppercase tracking-wide text-[var(--accent-text)]">
+                        {r.data.category}
+                      </span>
+                      <h3
+                        class="text-base font-semibold leading-6 text-[var(--text-primary)]"
+                        data-en={r.data.titleEn ?? r.data.title}
+                        data-es={r.data.title}
+                      >
+                        {r.data.title}
+                      </h3>
+                      <span class="mt-auto inline-flex items-center gap-1 text-xs text-[var(--color-accent-400)]">
+                        <span data-es>Leer</span>
+                        <span data-en class="hidden">
+                          Read
+                        </span>
+                        <span class="arrow" aria-hidden="true">
+                          →
+                        </span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )
+          }
         </article>
 
         <aside class="hidden lg:block" aria-label="Índice del artículo">
@@ -316,83 +369,101 @@ const related = allPosts
         </aside>
       </div>
 
-      {tocHeadings.length > 0 && (
-        <div class="lg:hidden">
-          <button
-            type="button"
-            data-mobile-toc-open
-            aria-controls="mobile-toc-drawer"
-            aria-expanded="false"
-            class="btn-secondary btn-secondary--sm fixed bottom-24 right-4 z-40 rounded-full border border-white/15 bg-black/55 px-4 py-2 font-medium text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md hover:border-[color:var(--color-accent-400)]/40 hover:bg-black/65"
-          >
-            Índice
-          </button>
-
-          <div id="mobile-toc-drawer" data-mobile-toc-drawer class="pointer-events-none fixed inset-0 z-50 opacity-0 transition-opacity">
+      {
+        tocHeadings.length > 0 && (
+          <div class="lg:hidden">
             <button
               type="button"
-              aria-label="Cerrar indice"
-              data-mobile-toc-close
-              class="absolute inset-0 bg-black/50"
-            ></button>
-            <div class="absolute bottom-0 left-0 right-0 max-h-[72vh] overflow-y-auto rounded-t-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] p-5">
-              <div class="mb-4 flex items-center justify-between">
-                <p class="text-sm font-semibold uppercase tracking-widest text-[var(--text-muted)]">Índice</p>
-                <button
-                  type="button"
-                  aria-label="Cerrar índice"
-                  data-mobile-toc-close
-                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-normal)] bg-[var(--bg-tertiary)]/70 text-black transition-colors hover:border-[color:var(--color-accent-400)]/40"
-                >
-                  <span aria-hidden="true" class="text-base leading-none">&times;</span>
-                </button>
-              </div>
+              data-mobile-toc-open
+              aria-controls="mobile-toc-drawer"
+              aria-expanded="false"
+              class="btn-secondary btn-secondary--sm fixed bottom-24 right-4 z-40 rounded-full border border-white/15 bg-black/55 px-4 py-2 font-medium text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md hover:border-[color:var(--color-accent-400)]/40 hover:bg-black/65"
+            >
+              Índice
+            </button>
 
-              <ul class="list-none space-y-2 pl-0 text-sm">
-                {tocHeadings.map((heading) => (
-                  <li class={heading.depth === 3 ? 'ml-4' : ''}>
-                    <a
-                      href={`#${heading.slug}`}
-                      data-mobile-toc-link
-                      class="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--color-accent-400)]"
-                    >
-                      {heading.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div
+              id="mobile-toc-drawer"
+              data-mobile-toc-drawer
+              class="pointer-events-none fixed inset-0 z-50 opacity-0 transition-opacity"
+            >
+              <button
+                type="button"
+                aria-label="Cerrar indice"
+                data-mobile-toc-close
+                class="absolute inset-0 bg-black/50"
+              />
+              <div class="absolute bottom-0 left-0 right-0 max-h-[72vh] overflow-y-auto rounded-t-2xl border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] p-5">
+                <div class="mb-4 flex items-center justify-between">
+                  <p class="text-sm font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+                    Índice
+                  </p>
+                  <button
+                    type="button"
+                    aria-label="Cerrar índice"
+                    data-mobile-toc-close
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-normal)] bg-[var(--bg-tertiary)]/70 text-black transition-colors hover:border-[color:var(--color-accent-400)]/40"
+                  >
+                    <span aria-hidden="true" class="text-base leading-none">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+
+                <ul class="list-none space-y-2 pl-0 text-sm">
+                  {tocHeadings.map((heading) => (
+                    <li class={heading.depth === 3 ? "ml-4" : ""}>
+                      <a
+                        href={`#${heading.slug}`}
+                        data-mobile-toc-link
+                        class="text-[var(--text-secondary)] no-underline transition-colors hover:text-[var(--color-accent-400)]"
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </div>
   </main>
 </Layout>
 
 <script>
   (() => {
-    const openButton = document.querySelector('[data-mobile-toc-open]');
-    const drawer = document.querySelector('[data-mobile-toc-drawer]');
-    if (!(openButton instanceof HTMLButtonElement) || !(drawer instanceof HTMLElement)) return;
+    const openButton = document.querySelector("[data-mobile-toc-open]");
+    const drawer = document.querySelector("[data-mobile-toc-drawer]");
+    if (
+      !(openButton instanceof HTMLButtonElement) ||
+      !(drawer instanceof HTMLElement)
+    )
+      return;
 
-    const closeButtons = Array.from(document.querySelectorAll('[data-mobile-toc-close]'));
-    const closeLinks = Array.from(document.querySelectorAll('[data-mobile-toc-link]'));
+    const closeButtons = Array.from(
+      document.querySelectorAll("[data-mobile-toc-close]"),
+    );
+    const closeLinks = Array.from(
+      document.querySelectorAll("[data-mobile-toc-link]"),
+    );
 
     const open = () => {
-      drawer.classList.remove('pointer-events-none', 'opacity-0');
-      openButton.setAttribute('aria-expanded', 'true');
+      drawer.classList.remove("pointer-events-none", "opacity-0");
+      openButton.setAttribute("aria-expanded", "true");
     };
 
     const close = () => {
-      drawer.classList.add('pointer-events-none', 'opacity-0');
-      openButton.setAttribute('aria-expanded', 'false');
+      drawer.classList.add("pointer-events-none", "opacity-0");
+      openButton.setAttribute("aria-expanded", "false");
     };
 
-    openButton.addEventListener('click', open);
-    closeButtons.forEach((button) => button.addEventListener('click', close));
-    closeLinks.forEach((link) => link.addEventListener('click', close));
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') close();
+    openButton.addEventListener("click", open);
+    closeButtons.forEach((button) => button.addEventListener("click", close));
+    closeLinks.forEach((link) => link.addEventListener("click", close));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") close();
     });
   })();
 </script>

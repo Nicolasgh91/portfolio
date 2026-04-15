@@ -1,14 +1,14 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
+import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: 'https://escalatunegocioconia.com',
-  trailingSlash: 'never',
+  site: "https://escalatunegocioconia.com",
+  trailingSlash: "never",
   i18n: {
-    defaultLocale: 'es',
-    locales: ['es', 'en'],
+    defaultLocale: "es",
+    locales: ["es", "en"],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -17,7 +17,7 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
     mdx(),
     sitemap({
-      filter: (page) => !page.includes('/dev/'),
+      filter: (page) => !page.includes("/dev/"),
     }),
   ],
   vite: {

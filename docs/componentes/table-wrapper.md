@@ -6,9 +6,9 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| *spread* | atributos HTML | — | Todas las props se reenvían al `<table>` nativo (`class` se fusiona con clases base). |
+| Prop     | Tipo           | Requerida | Descripción                                                                           |
+| -------- | -------------- | --------- | ------------------------------------------------------------------------------------- |
+| _spread_ | atributos HTML | —         | Todas las props se reenvían al `<table>` nativo (`class` se fusiona con clases base). |
 
 ## Comportamiento
 

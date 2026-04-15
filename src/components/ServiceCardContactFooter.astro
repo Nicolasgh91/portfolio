@@ -25,16 +25,18 @@ const { whatsappHref } = Astro.props;
   >
     Consultar precio
   </a>
-  {whatsappHref && (
-    <a
-      href={whatsappHref}
-      class="text-sm font-medium text-[var(--text-secondary)] underline-offset-2 hover:text-[var(--text-primary)] hover:underline"
-      target="_blank"
-      rel="noopener noreferrer"
-      data-en="WhatsApp"
-      data-es="WhatsApp"
-    >
-      WhatsApp
-    </a>
-  )}
+  {
+    whatsappHref && (
+      <a
+        href={whatsappHref}
+        class="text-sm font-medium text-[var(--text-secondary)] underline-offset-2 hover:text-[var(--text-primary)] hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-en="WhatsApp"
+        data-es="WhatsApp"
+      >
+        WhatsApp
+      </a>
+    )
+  }
 </div>

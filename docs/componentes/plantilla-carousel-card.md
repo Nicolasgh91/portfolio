@@ -6,10 +6,10 @@ Tarjeta del carrusel del catálogo de plantillas.
 
 ## Props
 
-| Prop | Tipo | Descripción |
-|------|------|-------------|
-| `template` | `LandingTemplate` | Datos validados (Zod), incl. `status` |
-| `resolvedDemoUrl` | `string \| null` | URL final de demo; `null` si no hay `demoUrl` |
+| Prop              | Tipo              | Descripción                                   |
+| ----------------- | ----------------- | --------------------------------------------- |
+| `template`        | `LandingTemplate` | Datos validados (Zod), incl. `status`         |
+| `resolvedDemoUrl` | `string \| null`  | URL final de demo; `null` si no hay `demoUrl` |
 
 ## Estructura
 

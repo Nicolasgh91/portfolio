@@ -14,13 +14,13 @@ Guía de identidad y comunicación del sitio **escalatunegocioconia.com**. Los v
 
 ## Identidad visual (resumen)
 
-| Elemento | Regla |
-|----------|--------|
-| Acento | Dorado (`--accent-h` / `--color-accent-*` en tokens). No sustituir por otro acento en UI principal sin actualizar tokens. |
-| Fondos y texto | Escala oscura/clara y neutros fríos definidos en tokens (`--bg-*`, `--text-*`). |
-| Tipografía titulares | `Outfit Variable` (`--font-display`). |
-| Tipografía cuerpo / UI | `Inter Variable` (`--font-body`). |
-| Código / mono | `JetBrains Mono`, `Fira Code`, `monospace` por orden (`--font-mono`): fuentes del sistema si están instaladas; no hay paquete `@fontsource` de mono en el proyecto. |
+| Elemento               | Regla                                                                                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Acento                 | Dorado (`--accent-h` / `--color-accent-*` en tokens). No sustituir por otro acento en UI principal sin actualizar tokens.                                           |
+| Fondos y texto         | Escala oscura/clara y neutros fríos definidos en tokens (`--bg-*`, `--text-*`).                                                                                     |
+| Tipografía titulares   | `Outfit Variable` (`--font-display`).                                                                                                                               |
+| Tipografía cuerpo / UI | `Inter Variable` (`--font-body`).                                                                                                                                   |
+| Código / mono          | `JetBrains Mono`, `Fira Code`, `monospace` por orden (`--font-mono`): fuentes del sistema si están instaladas; no hay paquete `@fontsource` de mono en el proyecto. |
 
 Detalle técnico (Tailwind, tema, a11y): [`sistema-diseno.md`](sistema-diseno.md).
 

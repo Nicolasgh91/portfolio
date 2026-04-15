@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets';
-import { getSlideImageFromGlobModule } from '../lib/slides';
+import { Image } from "astro:assets";
+import { getSlideImageFromGlobModule } from "../lib/slides";
 
 interface Props {
   src: string;
@@ -12,7 +12,7 @@ const { src, alt, class: className } = Astro.props;
 
 // Lazy glob: avoids eagerly loading every slide in the project. We filter by
 // folder needle first, then await only the loaders that match this viewer.
-const slideModules = import.meta.glob('../assets/slides/**/slide-*.webp');
+const slideModules = import.meta.glob("../assets/slides/**/slide-*.webp");
 const folderNeedle = `/slides/${src}/`;
 
 const matchingEntries = Object.entries(slideModules).filter(([path]) =>
@@ -36,7 +36,7 @@ const orderedSlides = loadedSlides.sort((a, b) => a.page - b.page);
 const renderedTotalPages = orderedSlides.length;
 const hasSlides = renderedTotalPages > 0;
 const hasMultipleSlides = renderedTotalPages > 1;
-const viewerId = `slide-viewer-${src.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+const viewerId = `slide-viewer-${src.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
 ---
 
@@ -48,29 +48,32 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
       role="region"
       aria-label={`Visor de presentación: ${alt}`}
       tabindex="0"
-      class:list={['not-prose max-w-none outline-none', className]}
+      class:list={["not-prose max-w-none outline-none", className]}
     >
       <div data-slide-host>
         <div
           data-slide-surface
           class="w-full max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-subtle)] bg-[hsla(0,0%,100%,0.82)] dark:bg-[hsla(240,13%,10%,0.80)] backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]"
         >
-          <div data-slide-media-wrapper class="relative aspect-video w-full select-none">
+          <div
+            data-slide-media-wrapper
+            class="relative aspect-video w-full select-none"
+          >
             {orderedSlides.map((slide, index) => (
               <div
                 data-slide-frame
                 data-slide
                 data-index={index}
                 class:list={[
-                  'absolute inset-0 transition-opacity duration-200',
-                  index === 0 ? 'opacity-100' : 'pointer-events-none opacity-0',
+                  "absolute inset-0 transition-opacity duration-200",
+                  index === 0 ? "opacity-100" : "pointer-events-none opacity-0",
                 ]}
-                aria-hidden={index === 0 ? 'false' : 'true'}
+                aria-hidden={index === 0 ? "false" : "true"}
               >
                 <Image
                   src={slide.image}
                   alt={`${alt} - pagina ${index + 1} de ${renderedTotalPages}`}
-                  loading={index === 0 ? 'eager' : 'lazy'}
+                  loading={index === 0 ? "eager" : "lazy"}
                   class="h-full w-full object-contain"
                 />
               </div>
@@ -84,7 +87,13 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
               class="btn-primary btn-primary--icon-only btn-primary--sm absolute left-2 top-2 z-20 opacity-90 shadow-sm sm:left-4 sm:top-3"
             >
               <span data-slide-fs-icon-expand class="block" aria-hidden="true">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -92,8 +101,18 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
                   />
                 </svg>
               </span>
-              <span data-slide-fs-icon-collapse class="hidden" aria-hidden="true">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <span
+                data-slide-fs-icon-collapse
+                class="hidden"
+                aria-hidden="true"
+              >
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -149,228 +168,236 @@ const fullscreenBtnId = `${viewerId}-fullscreen-btn`;
           class="flex h-full w-full items-center justify-center overflow-hidden p-2 box-border"
         />
       </div>
-
-      <script>
-        // CSP-005: sin `define:vars` (que siempre emite inline). Iteramos
-        // todas las instancias del componente en la página; cada viewer
-        // resuelve su UI via atributos `data-slide-*` ya presentes en el markup.
-        document.querySelectorAll('[data-slide-viewer]').forEach((viewer) => {
-        if (!(viewer instanceof HTMLElement)) return;
-
-        const fsBtn = viewer.querySelector('[data-slide-fullscreen]');
-        const iconExpand = viewer.querySelector('[data-slide-fs-icon-expand]');
-        const iconCollapse = viewer.querySelector('[data-slide-fs-icon-collapse]');
-
-        const total = viewer.querySelectorAll('[data-slide]').length;
-        if (!Number.isFinite(total) || total <= 0) return;
-
-        const frames = Array.from(viewer.querySelectorAll('[data-slide-frame]'));
-        const prevBtn = viewer.querySelector('[data-slide-prev]');
-        const nextBtn = viewer.querySelector('[data-slide-next]');
-        const indicator = viewer.querySelector('[data-slide-indicator]');
-        const surface = viewer.querySelector('[data-slide-surface]');
-        const mediaWrapper = viewer.querySelector('[data-slide-media-wrapper]');
-        const surfaceHost = viewer.querySelector('[data-slide-host]');
-        const overlay = viewer.querySelector('[data-slide-overlay]');
-        const overlayInner = viewer.querySelector('[data-slide-overlay-inner]');
-        let current = 0;
-        let startX = 0;
-        let endX = 0;
-        const swipeThreshold = 40;
-
-        const render = () => {
-          frames.forEach((frame, index) => {
-            const active = index === current;
-            frame.classList.toggle('opacity-100', active);
-            frame.classList.toggle('opacity-0', !active);
-            frame.classList.toggle('pointer-events-none', !active);
-            frame.setAttribute('aria-hidden', active ? 'false' : 'true');
-          });
-          if (indicator) indicator.textContent = `${current + 1} / ${total}`;
-          if (prevBtn) {
-            const isFirst = current === 0;
-            prevBtn.toggleAttribute('disabled', isFirst);
-            prevBtn.classList.toggle('invisible', isFirst);
-          }
-          if (nextBtn) {
-            const isLast = current === total - 1;
-            nextBtn.toggleAttribute('disabled', isLast);
-            nextBtn.classList.toggle('invisible', isLast);
-          }
-        };
-
-        const goPrev = () => {
-          if (current === 0) return;
-          current -= 1;
-          render();
-        };
-
-        const goNext = () => {
-          if (current >= total - 1) return;
-          current += 1;
-          render();
-        };
-
-        const setFullscreenUi = (expanded) => {
-          if (fsBtn) {
-            fsBtn.setAttribute(
-              'aria-label',
-              expanded ? 'Salir de pantalla completa' : 'Ver en pantalla completa',
-            );
-          }
-          if (iconExpand instanceof HTMLElement) iconExpand.classList.toggle('hidden', expanded);
-          if (iconCollapse instanceof HTMLElement) iconCollapse.classList.toggle('hidden', !expanded);
-        };
-
-        const setFullscreenLayout = (expanded) => {
-          if (surface instanceof HTMLElement) {
-            // Evita alto 0 del wrapper cuando `aspect-video` se desactiva en fullscreen.
-            surface.classList.toggle('h-full', expanded);
-          }
-
-          if (!(mediaWrapper instanceof HTMLElement)) return;
-
-          // En fullscreen quitamos la restricción del ratio para que el wrapper pueda llenar la viewport.
-          // Esto permite que la imagen `object-contain` respete el tamaño disponible.
-          if (expanded) {
-            mediaWrapper.classList.remove('aspect-video');
-            mediaWrapper.classList.add('h-full');
-          } else {
-            mediaWrapper.classList.add('aspect-video');
-            mediaWrapper.classList.remove('h-full');
-          }
-        };
-
-        const getFullscreenDom = () => {
-          if (
-            !(overlay instanceof HTMLElement) ||
-            !(overlayInner instanceof HTMLElement) ||
-            !(surface instanceof HTMLElement)
-          )
-            return null;
-
-          return { overlay, overlayInner, surface };
-        };
-
-        const setOverlayVisibility = (overlayEl, expanded) => {
-          overlayEl.classList.toggle('hidden', !expanded);
-          overlayEl.setAttribute('aria-hidden', expanded ? 'false' : 'true');
-          overlayEl.toggleAttribute('inert', !expanded);
-        };
-
-        const collapseFullscreen = () => {
-          const fullscreenDom = getFullscreenDom();
-          if (!fullscreenDom) return;
-          const { overlay: overlayEl, surface: surfaceEl } = fullscreenDom;
-          if (overlayEl.classList.contains('hidden')) return;
-
-          // Restaurar el árbol original.
-          if (surfaceHost instanceof HTMLElement) {
-            surfaceHost.appendChild(surfaceEl);
-          }
-          setOverlayVisibility(overlayEl, false);
-          document.body.classList.remove('overflow-hidden');
-          setFullscreenUi(false);
-          setFullscreenLayout(false);
-          fsBtn?.focus();
-        };
-
-        const expandFullscreen = () => {
-          const fullscreenDom = getFullscreenDom();
-          if (!fullscreenDom) return;
-          const { overlay: overlayEl, overlayInner: overlayInnerEl, surface: surfaceEl } = fullscreenDom;
-
-          // Fallback de viewport units para Safari móvil.
-          let heightValue = '100vh';
-          if (CSS.supports('height: 100dvh')) heightValue = '100dvh';
-          else if (CSS.supports('height: 100svh')) heightValue = '100svh';
-
-          overlayEl.style.height = heightValue;
-
-          // Mover el contenedor visual al overlay dedicado.
-          overlayInnerEl.appendChild(surfaceEl);
-
-          setOverlayVisibility(overlayEl, true);
-          document.body.classList.add('overflow-hidden');
-          setFullscreenUi(true);
-          setFullscreenLayout(true);
-          viewer.focus();
-        };
-
-        const toggleFullscreen = () => {
-          const fullscreenDom = getFullscreenDom();
-          if (!fullscreenDom) return;
-          if (fullscreenDom.overlay.classList.contains('hidden')) expandFullscreen();
-          else collapseFullscreen();
-        };
-
-        fsBtn?.addEventListener('click', toggleFullscreen);
-
-        prevBtn?.addEventListener('click', goPrev);
-        nextBtn?.addEventListener('click', goNext);
-
-        viewer.addEventListener('keydown', (event) => {
-          if (event.key === 'ArrowLeft') {
-            event.preventDefault();
-            goPrev();
-          }
-          if (event.key === 'ArrowRight') {
-            event.preventDefault();
-            goNext();
-          }
-        });
-
-        viewer.addEventListener(
-          'touchstart',
-          (event) => {
-            startX = event.changedTouches[0]?.clientX ?? 0;
-            endX = startX;
-          },
-          { passive: true },
-        );
-
-        viewer.addEventListener(
-          'touchmove',
-          (event) => {
-            endX = event.changedTouches[0]?.clientX ?? startX;
-          },
-          { passive: true },
-        );
-
-        viewer.addEventListener('touchend', () => {
-          const delta = endX - startX;
-          if (Math.abs(delta) < swipeThreshold) return;
-          if (delta > 0) goPrev();
-          else goNext();
-        });
-
-        // L-14: AbortController por instancia del viewer. Reemplaza el flag
-        // global `window.__slideEscBound` por un teardown determinista. Si en
-        // el futuro Astro view transitions nos pide liberar listeners, basta
-        // con llamar `controller.abort()`.
-        const controller = new AbortController();
-        document.addEventListener(
-          'keydown',
-          (e) => {
-            if (e.key === 'Escape') collapseFullscreen();
-          },
-          { signal: controller.signal },
-        );
-
-        render();
-        });
-      </script>
     </section>
   ) : (
     <section
       role="region"
       aria-label={`Visor de presentación: ${alt}`}
       class:list={[
-        'not-prose max-w-none rounded-[var(--radius-lg)] border border-dashed border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] p-4 text-sm text-[var(--text-secondary)]',
+        "not-prose max-w-none rounded-[var(--radius-lg)] border border-dashed border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] p-4 text-sm text-[var(--text-secondary)]",
         className,
       ]}
     >
-      Slides no disponibles para <strong class="text-[var(--text-primary)]">{src}</strong>.
+      Slides no disponibles para{" "}
+      <strong class="text-[var(--text-primary)]">{src}</strong>.
     </section>
   )
 }
+
+<script>
+  // CSP-005: sin `define:vars` (que siempre emite inline). Iteramos
+  // todas las instancias del componente en la página; cada viewer
+  // resuelve su UI via atributos `data-slide-*` ya presentes en el markup.
+  document.querySelectorAll("[data-slide-viewer]").forEach((viewer) => {
+    if (!(viewer instanceof HTMLElement)) return;
+
+    const fsBtn = viewer.querySelector("[data-slide-fullscreen]");
+    const iconExpand = viewer.querySelector("[data-slide-fs-icon-expand]");
+    const iconCollapse = viewer.querySelector("[data-slide-fs-icon-collapse]");
+
+    const total = viewer.querySelectorAll("[data-slide]").length;
+    if (!Number.isFinite(total) || total <= 0) return;
+
+    const frames = Array.from(viewer.querySelectorAll("[data-slide-frame]"));
+    const prevBtn = viewer.querySelector("[data-slide-prev]");
+    const nextBtn = viewer.querySelector("[data-slide-next]");
+    const indicator = viewer.querySelector("[data-slide-indicator]");
+    const surface = viewer.querySelector("[data-slide-surface]");
+    const mediaWrapper = viewer.querySelector("[data-slide-media-wrapper]");
+    const surfaceHost = viewer.querySelector("[data-slide-host]");
+    const overlay = viewer.querySelector("[data-slide-overlay]");
+    const overlayInner = viewer.querySelector("[data-slide-overlay-inner]");
+    let current = 0;
+    let startX = 0;
+    let endX = 0;
+    const swipeThreshold = 40;
+
+    const render = () => {
+      frames.forEach((frame, index) => {
+        const active = index === current;
+        frame.classList.toggle("opacity-100", active);
+        frame.classList.toggle("opacity-0", !active);
+        frame.classList.toggle("pointer-events-none", !active);
+        frame.setAttribute("aria-hidden", active ? "false" : "true");
+      });
+      if (indicator) indicator.textContent = `${current + 1} / ${total}`;
+      if (prevBtn) {
+        const isFirst = current === 0;
+        prevBtn.toggleAttribute("disabled", isFirst);
+        prevBtn.classList.toggle("invisible", isFirst);
+      }
+      if (nextBtn) {
+        const isLast = current === total - 1;
+        nextBtn.toggleAttribute("disabled", isLast);
+        nextBtn.classList.toggle("invisible", isLast);
+      }
+    };
+
+    const goPrev = () => {
+      if (current === 0) return;
+      current -= 1;
+      render();
+    };
+
+    const goNext = () => {
+      if (current >= total - 1) return;
+      current += 1;
+      render();
+    };
+
+    const setFullscreenUi = (expanded) => {
+      if (fsBtn) {
+        fsBtn.setAttribute(
+          "aria-label",
+          expanded ? "Salir de pantalla completa" : "Ver en pantalla completa",
+        );
+      }
+      if (iconExpand instanceof HTMLElement)
+        iconExpand.classList.toggle("hidden", expanded);
+      if (iconCollapse instanceof HTMLElement)
+        iconCollapse.classList.toggle("hidden", !expanded);
+    };
+
+    const setFullscreenLayout = (expanded) => {
+      if (surface instanceof HTMLElement) {
+        // Evita alto 0 del wrapper cuando `aspect-video` se desactiva en fullscreen.
+        surface.classList.toggle("h-full", expanded);
+      }
+
+      if (!(mediaWrapper instanceof HTMLElement)) return;
+
+      // En fullscreen quitamos la restricción del ratio para que el wrapper pueda llenar la viewport.
+      // Esto permite que la imagen `object-contain` respete el tamaño disponible.
+      if (expanded) {
+        mediaWrapper.classList.remove("aspect-video");
+        mediaWrapper.classList.add("h-full");
+      } else {
+        mediaWrapper.classList.add("aspect-video");
+        mediaWrapper.classList.remove("h-full");
+      }
+    };
+
+    const getFullscreenDom = () => {
+      if (
+        !(overlay instanceof HTMLElement) ||
+        !(overlayInner instanceof HTMLElement) ||
+        !(surface instanceof HTMLElement)
+      )
+        return null;
+
+      return { overlay, overlayInner, surface };
+    };
+
+    const setOverlayVisibility = (overlayEl, expanded) => {
+      overlayEl.classList.toggle("hidden", !expanded);
+      overlayEl.setAttribute("aria-hidden", expanded ? "false" : "true");
+      overlayEl.toggleAttribute("inert", !expanded);
+    };
+
+    const collapseFullscreen = () => {
+      const fullscreenDom = getFullscreenDom();
+      if (!fullscreenDom) return;
+      const { overlay: overlayEl, surface: surfaceEl } = fullscreenDom;
+      if (overlayEl.classList.contains("hidden")) return;
+
+      // Restaurar el árbol original.
+      if (surfaceHost instanceof HTMLElement) {
+        surfaceHost.appendChild(surfaceEl);
+      }
+      setOverlayVisibility(overlayEl, false);
+      document.body.classList.remove("overflow-hidden");
+      setFullscreenUi(false);
+      setFullscreenLayout(false);
+      fsBtn?.focus();
+    };
+
+    const expandFullscreen = () => {
+      const fullscreenDom = getFullscreenDom();
+      if (!fullscreenDom) return;
+      const {
+        overlay: overlayEl,
+        overlayInner: overlayInnerEl,
+        surface: surfaceEl,
+      } = fullscreenDom;
+
+      // Fallback de viewport units para Safari móvil.
+      let heightValue = "100vh";
+      if (CSS.supports("height: 100dvh")) heightValue = "100dvh";
+      else if (CSS.supports("height: 100svh")) heightValue = "100svh";
+
+      overlayEl.style.height = heightValue;
+
+      // Mover el contenedor visual al overlay dedicado.
+      overlayInnerEl.appendChild(surfaceEl);
+
+      setOverlayVisibility(overlayEl, true);
+      document.body.classList.add("overflow-hidden");
+      setFullscreenUi(true);
+      setFullscreenLayout(true);
+      viewer.focus();
+    };
+
+    const toggleFullscreen = () => {
+      const fullscreenDom = getFullscreenDom();
+      if (!fullscreenDom) return;
+      if (fullscreenDom.overlay.classList.contains("hidden"))
+        expandFullscreen();
+      else collapseFullscreen();
+    };
+
+    fsBtn?.addEventListener("click", toggleFullscreen);
+
+    prevBtn?.addEventListener("click", goPrev);
+    nextBtn?.addEventListener("click", goNext);
+
+    viewer.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrev();
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext();
+      }
+    });
+
+    viewer.addEventListener(
+      "touchstart",
+      (event) => {
+        startX = event.changedTouches[0]?.clientX ?? 0;
+        endX = startX;
+      },
+      { passive: true },
+    );
+
+    viewer.addEventListener(
+      "touchmove",
+      (event) => {
+        endX = event.changedTouches[0]?.clientX ?? startX;
+      },
+      { passive: true },
+    );
+
+    viewer.addEventListener("touchend", () => {
+      const delta = endX - startX;
+      if (Math.abs(delta) < swipeThreshold) return;
+      if (delta > 0) goPrev();
+      else goNext();
+    });
+
+    // L-14: AbortController por instancia del viewer. Reemplaza el flag
+    // global `window.__slideEscBound` por un teardown determinista. Si en
+    // el futuro Astro view transitions nos pide liberar listeners, basta
+    // con llamar `controller.abort()`.
+    const controller = new AbortController();
+    document.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key === "Escape") collapseFullscreen();
+      },
+      { signal: controller.signal },
+    );
+
+    render();
+  });
+</script>

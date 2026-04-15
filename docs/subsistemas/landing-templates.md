@@ -26,42 +26,42 @@
 - **Layout:** mobile — `flex` horizontal, `overflow-x-auto`, `snap-x` / `snap-mandatory` / `snap-start` por ítem, sin flechas; desktop — `md:grid md:grid-cols-3` (1–2 ítems ocupan columnas naturales sin huecos forzados).
 - **CTA:** enlace “Ver demo” + flecha SVG con `group-hover:translate-x-1`; demos absolutas abren en nueva pestaña.
 
-| Slug | Archivo en repo |
-|------|-----------------|
-| `menu-digital-viandas` | `viandas.webp` |
-| `menu-digital-congelados` | `congelados.webp` |
-| `portfolio-profesional` | `portfolio.webp` |
-| `hub-creador-contenido` | `hub-creador-contenido.webp` |
-| `catalogo-productos` | `ecommerce.webp` |
-| `landing-inmobiliaria` | `inmobiliaria.webp` |
-| `landing-dietetica` | `healthy-food.webp` |
-| `landing-consultora` | `consultora.webp` |
+| Slug                      | Archivo en repo              |
+| ------------------------- | ---------------------------- |
+| `menu-digital-viandas`    | `viandas.webp`               |
+| `menu-digital-congelados` | `congelados.webp`            |
+| `portfolio-profesional`   | `portfolio.webp`             |
+| `hub-creador-contenido`   | `hub-creador-contenido.webp` |
+| `catalogo-productos`      | `ecommerce.webp`             |
+| `landing-inmobiliaria`    | `inmobiliaria.webp`          |
+| `landing-dietetica`       | `healthy-food.webp`          |
+| `landing-consultora`      | `consultora.webp`            |
 
 ## Contrato Zod (resumen)
 
-| Campo | Notas |
-|-------|--------|
-| `slug`, `title`, `description` | Obligatorios |
-| `titleEn`, `descriptionEn` | Opcionales (i18n en tarjetas) |
-| `vertical` | `gastronomia` \| `profesionales` \| `contenido` \| `ecommerce` \| `salud` \| `inmobiliaria` — display solo vía `VERTICAL_LABELS` |
-| `status` | `available` \| `coming_soon` — solo `available` entra en JSON-LD `ItemList` del índice; ambas se listan en UI |
-| `type` | `landing` \| `menu-digital` \| `hub-contenido` \| `catalogo` |
-| `features` | Array mínimo 1 string |
-| `thumbnail` | Opcional; `/public` u URL absoluta (otros usos). Carrusel: ver `template-carousel-images.ts` + assets en `src/assets/templates/` |
-| `cardBackground` | `dark` \| `light` \| `warm` — fondo de tarjeta en carrusel |
-| `demoUrl` | Opcional; URL absoluta o path `/...` (resolución solo en la página) |
-| `priceGroup` | `basico` \| `plantilla` \| `full` — alineado a planes del catálogo |
-| `priceLabel` | Opcional; no se muestra en la tarjeta del carrusel (puede usarse para lógica futura) |
-| `priority` | 0–1; orden en catálogo (mayor primero) |
-| `tags` | Opcional |
+| Campo                          | Notas                                                                                                                            |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `slug`, `title`, `description` | Obligatorios                                                                                                                     |
+| `titleEn`, `descriptionEn`     | Opcionales (i18n en tarjetas)                                                                                                    |
+| `vertical`                     | `gastronomia` \| `profesionales` \| `contenido` \| `ecommerce` \| `salud` \| `inmobiliaria` — display solo vía `VERTICAL_LABELS` |
+| `status`                       | `available` \| `coming_soon` — solo `available` entra en JSON-LD `ItemList` del índice; ambas se listan en UI                    |
+| `type`                         | `landing` \| `menu-digital` \| `hub-contenido` \| `catalogo`                                                                     |
+| `features`                     | Array mínimo 1 string                                                                                                            |
+| `thumbnail`                    | Opcional; `/public` u URL absoluta (otros usos). Carrusel: ver `template-carousel-images.ts` + assets en `src/assets/templates/` |
+| `cardBackground`               | `dark` \| `light` \| `warm` — fondo de tarjeta en carrusel                                                                       |
+| `demoUrl`                      | Opcional; URL absoluta o path `/...` (resolución solo en la página)                                                              |
+| `priceGroup`                   | `basico` \| `plantilla` \| `full` — alineado a planes del catálogo                                                               |
+| `priceLabel`                   | Opcional; no se muestra en la tarjeta del carrusel (puede usarse para lógica futura)                                             |
+| `priority`                     | 0–1; orden en catálogo (mayor primero)                                                                                           |
+| `tags`                         | Opcional                                                                                                                         |
 
 ### Sugerencia de `cardBackground` por vertical (orientativa)
 
-| Vertical | Suele usarse |
-|----------|----------------|
-| Gastronomía | `dark`, `warm` |
-| Profesionales | `light` |
-| Contenido | `dark` |
+| Vertical                         | Suele usarse                   |
+| -------------------------------- | ------------------------------ |
+| Gastronomía                      | `dark`, `warm`                 |
+| Profesionales                    | `light`                        |
+| Contenido                        | `dark`                         |
 | Ecommerce / salud / inmobiliaria | según branding de la plantilla |
 
 ## Resolución por entorno

@@ -6,9 +6,9 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| — | — | — | Ninguna; datos vía `getCollection('services')` y `getCollection('blog')` + `site.json`. |
+| Prop | Tipo | Requerida | Descripción                                                                             |
+| ---- | ---- | --------- | --------------------------------------------------------------------------------------- |
+| —    | —    | —         | Ninguna; datos vía `getCollection('services')` y `getCollection('blog')` + `site.json`. |
 
 ## Comportamiento
 

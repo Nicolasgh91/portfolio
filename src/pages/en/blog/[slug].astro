@@ -1,9 +1,9 @@
 ---
-import BlogPostPage from '../../blog/[slug].astro';
-import { getCollection } from 'astro:content';
+import BlogPostPage from "../../blog/[slug].astro";
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },

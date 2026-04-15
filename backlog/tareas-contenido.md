@@ -1,8 +1,8 @@
 # Tareas técnicas de contenido — escalatunegocioconia.com
 
-*Tarjetas de servicios, proyectos, talento y artículos derivados del roadmap consolidado. Cada tarea indica: tipo de contenido, archivo, frontmatter, estructura del body, CTA y relación con otros contenidos.*
+_Tarjetas de servicios, proyectos, talento y artículos derivados del roadmap consolidado. Cada tarea indica: tipo de contenido, archivo, frontmatter, estructura del body, CTA y relación con otros contenidos._
 
-*Última actualización: 2026-03-20*
+_Última actualización: 2026-03-20_
 
 ---
 
@@ -15,44 +15,42 @@ Bloque C — 13 artículos de blog: organizados por prioridad (6 prioridad 1, 2 
 Prerrequisito bloqueante: la tarea 0.1 del roadmap (actualizar config.ts con los campos priority, pillarSlug y vertical) debe ejecutarse antes de publicar cualquier artículo nuevo, porque los frontmatter de los 13 artículos usan esos campos y Zod los va a rechazar si no están en el schema.
 El calendario sugiere 12 semanas de publicación, intercalando servicios + blog + talento para mantener ritmo y diversidad.
 
-
-
 ## Inventario actual vs. necesario
 
 ### Servicios (MDX en `src/content/services/`)
 
-| Servicio existente | Archivo | Cubre módulo del roadmap |
-|---|---|---|
-| Agentes de IA y chatbots avanzados | `ia-agents.mdx` | Chatbot IA (parcial — enfoque técnico, falta enfoque ROI) |
+| Servicio existente                  | Archivo                   | Cubre módulo del roadmap                                  |
+| ----------------------------------- | ------------------------- | --------------------------------------------------------- |
+| Agentes de IA y chatbots avanzados  | `ia-agents.mdx`           | Chatbot IA (parcial — enfoque técnico, falta enfoque ROI) |
 | E-commerce y plataformas de gestión | `ecommerce-platforms.mdx` | Carrito + stock (parcial — genérico, falta caso concreto) |
-| LLMs locales | `local-llms.mdx` | No corresponde a módulo del roadmap (nicho específico) |
-| Automatización de flujos de trabajo | `workflow-automation.mdx` | Automatizaciones (ok, mantener) |
-| *(falta)* | — | SEO/GEO mensual |
-| *(falta)* | — | CRM + seguimiento |
-| *(falta)* | — | Sistema de turnos |
-| *(falta)* | — | Dashboard de métricas |
-| *(falta)* | — | Landing page / menú digital |
+| LLMs locales                        | `local-llms.mdx`          | No corresponde a módulo del roadmap (nicho específico)    |
+| Automatización de flujos de trabajo | `workflow-automation.mdx` | Automatizaciones (ok, mantener)                           |
+| _(falta)_                           | —                         | SEO/GEO mensual                                           |
+| _(falta)_                           | —                         | CRM + seguimiento                                         |
+| _(falta)_                           | —                         | Sistema de turnos                                         |
+| _(falta)_                           | —                         | Dashboard de métricas                                     |
+| _(falta)_                           | —                         | Landing page / menú digital                               |
 
 ### Proyectos / talento (MDX en `src/content/projects/`)
 
-| Proyecto existente | Archivo | Estado |
-|---|---|---|
-| ForestGuard | `forestguard.mdx` | Publicado. Microservicios + PostGIS. |
-| Double Click™ | `double-click.mdx` | En progreso. Gestión para pilates. |
-| *(falta)* | — | Caso de estudio del chatbot widget |
-| *(falta)* | — | Demo "menú digital" para viandas |
+| Proyecto existente | Archivo            | Estado                               |
+| ------------------ | ------------------ | ------------------------------------ |
+| ForestGuard        | `forestguard.mdx`  | Publicado. Microservicios + PostGIS. |
+| Double Click™      | `double-click.mdx` | En progreso. Gestión para pilates.   |
+| _(falta)_          | —                  | Caso de estudio del chatbot widget   |
+| _(falta)_          | —                  | Demo "menú digital" para viandas     |
 
 ### Blog (MDX en `src/content/blog/`)
 
-| Artículo existente | Archivo | Vertical |
-|---|---|---|
-| Agentes IA | `ia-agents.mdx` (blog) | Técnico/transversal |
-| Local LLMs | `local-llms.mdx` (blog) | Técnico/infraestructura |
-| Workflow automation | `workflow-automation.mdx` (blog) | Automatización |
-| Analista funcional en era IA | `analista-funcional-era-ia.mdx` | Gestión tecnología |
-| Caso ForestGuard | `caso-forestguard.mdx` | Arquitectura |
-| IA local vs cloud | `ia-local-vs-cloud.mdx` | Infraestructura |
-| *(faltan 13 artículos del roadmap fase 3)* | — | — |
+| Artículo existente                         | Archivo                          | Vertical                |
+| ------------------------------------------ | -------------------------------- | ----------------------- |
+| Agentes IA                                 | `ia-agents.mdx` (blog)           | Técnico/transversal     |
+| Local LLMs                                 | `local-llms.mdx` (blog)          | Técnico/infraestructura |
+| Workflow automation                        | `workflow-automation.mdx` (blog) | Automatización          |
+| Analista funcional en era IA               | `analista-funcional-era-ia.mdx`  | Gestión tecnología      |
+| Caso ForestGuard                           | `caso-forestguard.mdx`           | Arquitectura            |
+| IA local vs cloud                          | `ia-local-vs-cloud.mdx`          | Infraestructura         |
+| _(faltan 13 artículos del roadmap fase 3)_ | —                                | —                       |
 
 ---
 
@@ -75,10 +73,10 @@ href: string (opcional — link a página de detalle)
 **Campos adicionales recomendados (agregar a `config.ts` en fase 0.1):**
 
 ```yaml
-shortDescription: string   # resumen de 1 línea para tarjeta
-roiFocus: string            # beneficio económico principal
-module: string              # módulo del roadmap que representa
-priceFrom: string           # precio base visible en tarjeta
+shortDescription: string # resumen de 1 línea para tarjeta
+roiFocus: string # beneficio económico principal
+module: string # módulo del roadmap que representa
+priceFrom: string # precio base visible en tarjeta
 ```
 
 **Estructura estándar del body:**
@@ -1044,29 +1042,29 @@ vertical: "b2b"
 
 ## Resumen de entregables
 
-| Tipo | Nuevos | Actualizar | Total |
-|---|---|---|---|
-| Servicios MDX | 5 (SVC-002 a SVC-006) | 2 (SVC-001, SVC-ECO) | 7 |
-| Proyectos MDX | 2 (PRJ-001, PRJ-002) | 0 | 2 |
-| Blog MDX | 13 (ART-001 a ART-013) | 0 | 13 |
-| **Total** | **20** | **2** | **22** |
+| Tipo          | Nuevos                 | Actualizar           | Total  |
+| ------------- | ---------------------- | -------------------- | ------ |
+| Servicios MDX | 5 (SVC-002 a SVC-006)  | 2 (SVC-001, SVC-ECO) | 7      |
+| Proyectos MDX | 2 (PRJ-001, PRJ-002)   | 0                    | 2      |
+| Blog MDX      | 13 (ART-001 a ART-013) | 0                    | 13     |
+| **Total**     | **20**                 | **2**                | **22** |
 
 ## Calendario de publicación sugerido
 
-| Semana | Contenido | Tipo |
-|---|---|---|
-| 1 | SVC-001 (chatbot actualizado) + SVC-003 (landing) | Servicios |
-| 2 | SVC-ECO (carrito actualizado) + SVC-002 (SEO/GEO) | Servicios |
-| 3 | PRJ-001 (caso chatbot) + ART-001 (viandas WhatsApp) | Talento + blog |
-| 4 | ART-002 (menú digital vs PDF) + ART-003 (automatizar pedidos) | Blog |
-| 5 | ART-004 (ventas 3 AM) + ART-005 (CRM pymes) | Blog |
-| 6 | ART-006 (ERP) + SVC-004 (CRM servicio) | Blog + servicio |
-| 7 | ART-007 (lead scoring) + SVC-005 (turnos) | Blog + servicio |
-| 8 | ART-008 (turnos clínicas) + PRJ-002 (demo viandas) | Blog + talento |
-| 9 | ART-009 (ciclo venta) + SVC-006 (dashboard) | Blog + servicio |
-| 10 | ART-010 (APIs) + ART-011 (RAG) | Blog |
-| 11 | ART-012 (comparativa IA — pillar page) | Blog |
-| 12 | ART-013 (embudo B2B) | Blog |
+| Semana | Contenido                                                     | Tipo            |
+| ------ | ------------------------------------------------------------- | --------------- |
+| 1      | SVC-001 (chatbot actualizado) + SVC-003 (landing)             | Servicios       |
+| 2      | SVC-ECO (carrito actualizado) + SVC-002 (SEO/GEO)             | Servicios       |
+| 3      | PRJ-001 (caso chatbot) + ART-001 (viandas WhatsApp)           | Talento + blog  |
+| 4      | ART-002 (menú digital vs PDF) + ART-003 (automatizar pedidos) | Blog            |
+| 5      | ART-004 (ventas 3 AM) + ART-005 (CRM pymes)                   | Blog            |
+| 6      | ART-006 (ERP) + SVC-004 (CRM servicio)                        | Blog + servicio |
+| 7      | ART-007 (lead scoring) + SVC-005 (turnos)                     | Blog + servicio |
+| 8      | ART-008 (turnos clínicas) + PRJ-002 (demo viandas)            | Blog + talento  |
+| 9      | ART-009 (ciclo venta) + SVC-006 (dashboard)                   | Blog + servicio |
+| 10     | ART-010 (APIs) + ART-011 (RAG)                                | Blog            |
+| 11     | ART-012 (comparativa IA — pillar page)                        | Blog            |
+| 12     | ART-013 (embudo B2B)                                          | Blog            |
 
 ## Prerrequisito transversal
 

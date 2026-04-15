@@ -3,9 +3,9 @@
  * Hero de página: imagen fullscreen + capas (gradiente, ruido, glow) y copy en columna única.
  * Reutilizable en rutas que no usen el mock de dashboard de la home.
  */
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-import SectionLabel from './SectionLabel.astro';
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import SectionLabel from "./SectionLabel.astro";
 
 interface Props {
   image: ImageMetadata;
@@ -29,8 +29,11 @@ const {
 } = Astro.props;
 
 const showLabel = Boolean(labelText?.trim() || labelTextEn?.trim());
-const labelEs = (labelText ?? labelTextEn ?? '').trim();
-const labelEn = (labelTextEn ?? labelText ?? '').trim();
+const labelEs = (labelText ?? labelTextEn ?? "").trim();
+const labelEn = (labelTextEn ?? labelText ?? "").trim();
+
+const heroNoiseBg =
+  'url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%20opacity%3D%220.04%22/%3E%3C/svg%3E")';
 ---
 
 <section
@@ -64,7 +67,7 @@ const labelEn = (labelTextEn ?? labelText ?? '').trim();
   <div
     class="pointer-events-none absolute inset-0 z-[2] opacity-[0.35] motion-reduce:hidden"
     aria-hidden="true"
-    style="background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\");"
+    style={`background-image:${heroNoiseBg}`}
   >
   </div>
   <div
@@ -80,7 +83,11 @@ const labelEn = (labelTextEn ?? labelText ?? '').trim();
     <div class="w-full max-w-5xl" aria-label="Propuesta de valor">
       {
         showLabel && (
-          <SectionLabel text={labelEs} textEn={labelEn} colorClass="text-[var(--accent-text)]" />
+          <SectionLabel
+            text={labelEs}
+            textEn={labelEn}
+            colorClass="text-[var(--accent-text)]"
+          />
         )
       }
       <h1

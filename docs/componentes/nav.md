@@ -6,9 +6,9 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `activePage` | `'home' \| 'servicios' \| 'talento' \| 'blog'` | No | Resalta pestaña y `aria-current="page"`; default `'home'`. |
+| Prop         | Tipo                                           | Requerida | Descripción                                                |
+| ------------ | ---------------------------------------------- | --------- | ---------------------------------------------------------- |
+| `activePage` | `'home' \| 'servicios' \| 'talento' \| 'blog'` | No        | Resalta pestaña y `aria-current="page"`; default `'home'`. |
 
 ## Comportamiento
 
@@ -20,6 +20,7 @@
 - Variante mobile: menú hamburguesa que abre un drawer con enlaces, controles (tema/idioma + panel inline de accesibilidad), CTA completo e **íconos sociales** (GitHub, LinkedIn, X, Instagram).
 - **Drawer mobile — fondo:** `.nav-drawer` usa capa propia con alfa **0.92**: dark `hsla(240, 10%, 6%, 0.92)`, light `hsla(0, 0%, 100%, 0.92)` vía `:root.light`. No emplea `--nav-bg` para no acoplar el drawer al glass de `.nav` ni tocar el token global.
 - **Drawer mobile — scroll:** si el menú está abierto y `window.scrollY > 10`, el drawer se cierra por completo (misma rutina que `Escape` y click en links del drawer), patrón habitual en apps móviles.
+- **Dropdown servicios (click en el botón):** alterna abrir/cerrar con `if (servicesMenu?.hasAttribute("hidden")) { openServices(); } else { closeServices(); }`. Se evita un ternario como sentencia suelta porque `@typescript-eslint/no-unused-expressions` lo rechaza (valor del ternario descartado).
 - **Keyboard nav — dropdown servicios:** `ArrowUp`/`ArrowDown` para navegar ítems, `Escape` para cerrar y devolver foco al botón, `Tab` para cerrar y continuar.
 - **Keyboard nav — drawer mobile:** `Escape` cierra el drawer y devuelve foco al burger. Links dentro del drawer cierran el drawer al hacer click.
 
@@ -41,4 +42,4 @@
 
 ## Estado
 
-Documentado — Última auditoría: 2026-04-05
+Documentado — Última auditoría: 2026-04-14

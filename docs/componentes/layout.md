@@ -6,22 +6,22 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `title` | `string` | Sí | `<title>` y Open Graph / Twitter. |
-| `description` | `string` | Sí | Meta description y OG/Twitter. |
-| `lang` | `'es' \| 'en'` | No | `lang` del `<html>`; default `'es'`. |
-| `ogImage` | `string` | No | Ruta OG; default `/og-desktop.png`. |
-| `ogImageType` | `string` | No | MIME OG; si falta, se infiere por extensión. |
-| `ogImageWidth` | `string \| number` | No | Default 1366. |
-| `ogImageHeight` | `string \| number` | No | Default 768. |
+| Prop            | Tipo               | Requerida | Descripción                                  |
+| --------------- | ------------------ | --------- | -------------------------------------------- |
+| `title`         | `string`           | Sí        | `<title>` y Open Graph / Twitter.            |
+| `description`   | `string`           | Sí        | Meta description y OG/Twitter.               |
+| `lang`          | `'es' \| 'en'`     | No        | `lang` del `<html>`; default `'es'`.         |
+| `ogImage`       | `string`           | No        | Ruta OG; default `/og-desktop.png`.          |
+| `ogImageType`   | `string`           | No        | MIME OG; si falta, se infiere por extensión. |
+| `ogImageWidth`  | `string \| number` | No        | Default 1366.                                |
+| `ogImageHeight` | `string \| number` | No        | Default 768.                                 |
 
 ## Slots
 
-| Slot | Uso |
-|------|-----|
-| default | Cuerpo de la página. |
-| `head` | JSON-LD extra, meta (`robots`, etc.), título no sustituye el del layout (el `<title>` está después del slot en el archivo). |
+| Slot    | Uso                                                                                                                         |
+| ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| default | Cuerpo de la página.                                                                                                        |
+| `head`  | JSON-LD extra, meta (`robots`, etc.), título no sustituye el del layout (el `<title>` está después del slot en el archivo). |
 
 ## Comportamiento
 

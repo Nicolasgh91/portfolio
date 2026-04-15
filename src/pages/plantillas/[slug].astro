@@ -1,31 +1,34 @@
 ---
-import { Fragment } from 'astro/jsx-runtime';
-import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
-import { landingTemplates, VERTICAL_LABELS } from '../../data/landing-templates';
-import { resolveTemplateDemoUrl } from '../../lib/resolve-template-demo-url';
-import site from '../../data/site.json';
+import { Fragment } from "astro/jsx-runtime";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import {
+  landingTemplates,
+  VERTICAL_LABELS,
+} from "../../data/landing-templates";
+import { resolveTemplateDemoUrl } from "../../lib/resolve-template-demo-url";
+import site from "../../data/site.json";
 
 export const getStaticPaths = () =>
   landingTemplates.map((t) => ({ params: { slug: t.slug } }));
 
 const { slug } = Astro.params;
 if (!slug) {
-  return Astro.redirect('/plantillas');
+  return Astro.redirect("/plantillas");
 }
 
 const template = landingTemplates.find((t) => t.slug === slug);
 if (!template) {
-  return Astro.redirect('/plantillas');
+  return Astro.redirect("/plantillas");
 }
 
 const templatePymeBase =
   import.meta.env.PUBLIC_TEMPLATE_PYME_URL ??
-  'https://template-pyme.escalatunegocioconia.com';
+  "https://template-pyme.escalatunegocioconia.com";
 
 const resolvedDemoUrl = resolveTemplateDemoUrl(template, templatePymeBase);
 
-const siteUrl = site.author.siteUrl ?? 'https://escalatunegocioconia.com';
+const siteUrl = site.author.siteUrl ?? "https://escalatunegocioconia.com";
 const canonicalUrl = `${siteUrl}/plantillas/${template.slug}`;
 
 const vertical = VERTICAL_LABELS[template.vertical];
@@ -34,15 +37,19 @@ const pageTitle = `${template.title} | Plantilla`;
 const pageDescription = template.description;
 
 const pageJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
+  "@context": "https://schema.org",
+  "@type": "WebPage",
   name: template.title,
   description: template.description,
   url: canonicalUrl,
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} ogImage="/og-desktop.png">
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogImage="/og-desktop.png"
+>
   <Fragment slot="head">
     <link rel="canonical" href={canonicalUrl} />
     <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
@@ -84,15 +91,24 @@ const pageJsonLd = {
         {template.description}
       </p>
 
-      <h2 class="mt-10 text-xl font-semibold text-[var(--text-primary)]" data-es="Incluye" data-en="Includes">
+      <h2
+        class="mt-10 text-xl font-semibold text-[var(--text-primary)]"
+        data-es="Incluye"
+        data-en="Includes"
+      >
         Incluye
       </h2>
-      <ul class="mt-4 list-disc space-y-2 pl-6 text-[var(--text-secondary)]" role="list">
-        {template.features.map((f) => (
-          <li data-es={f} data-en={f}>
-            {f}
-          </li>
-        ))}
+      <ul
+        class="mt-4 list-disc space-y-2 pl-6 text-[var(--text-secondary)]"
+        role="list"
+      >
+        {
+          template.features.map((f) => (
+            <li data-es={f} data-en={f}>
+              {f}
+            </li>
+          ))
+        }
       </ul>
 
       <div class="mt-10 flex flex-wrap gap-4">

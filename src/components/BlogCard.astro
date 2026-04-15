@@ -3,22 +3,22 @@
 // Renderiza miniatura de artículo con hover overlay-reveal
 // Uso: <BlogCard post={post} />
 
-import { Image } from 'astro:assets';
-import humanAi from '../assets/blog/human-ai.webp';
-import satellite from '../assets/blog/satellite.webp';
-import cloudServers from '../assets/blog/cloud-servers.webp';
-import ogHuellaDelFuego from '../assets/open-graphs/og-huella-del-fuego.webp';
-import thumbArquitecturaGranEscala from '../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp';
-import thumbMicroservicies from '../assets/blog/thumbnails/thumb-microservicies.webp';
-import { localeFromPathname } from '../lib/locale-path';
+import { Image } from "astro:assets";
+import humanAi from "../assets/blog/human-ai.webp";
+import satellite from "../assets/blog/satellite.webp";
+import cloudServers from "../assets/blog/cloud-servers.webp";
+import ogHuellaDelFuego from "../assets/open-graphs/og-huella-del-fuego.webp";
+import thumbArquitecturaGranEscala from "../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp";
+import thumbMicroservicies from "../assets/blog/thumbnails/thumb-microservicies.webp";
+import { localeFromPathname } from "../lib/locale-path";
 
 type CoverImageKey =
-  | 'human-ai'
-  | 'cloud-servers'
-  | 'satellite'
-  | 'huella-del-fuego'
-  | 'arquitectura-gran-escala'
-  | 'microservicios-urban-blueprint';
+  | "human-ai"
+  | "cloud-servers"
+  | "satellite"
+  | "huella-del-fuego"
+  | "arquitectura-gran-escala"
+  | "microservicios-urban-blueprint";
 
 interface Props {
   post: {
@@ -31,7 +31,12 @@ interface Props {
       pubDate: Date;
       category: string;
       tags: string[];
-      vertical?: 'alimentos' | 'inmobiliaria' | 'salud' | 'ecommerce' | 'transversal';
+      vertical?:
+        | "alimentos"
+        | "inmobiliaria"
+        | "salud"
+        | "ecommerce"
+        | "transversal";
       readingTime?: number;
       coverImageKey?: CoverImageKey;
       coverAlt?: string;
@@ -40,15 +45,16 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const blogBaseHref = localeFromPathname(Astro.url.pathname) === 'en' ? '/en/blog' : '/blog';
+const blogBaseHref =
+  localeFromPathname(Astro.url.pathname) === "en" ? "/en/blog" : "/blog";
 
 const coverByKey: Record<CoverImageKey, typeof humanAi> = {
-  'human-ai': humanAi,
+  "human-ai": humanAi,
   satellite,
-  'cloud-servers': cloudServers,
-  'huella-del-fuego': ogHuellaDelFuego,
-  'arquitectura-gran-escala': thumbArquitecturaGranEscala,
-  'microservicios-urban-blueprint': thumbMicroservicies,
+  "cloud-servers": cloudServers,
+  "huella-del-fuego": ogHuellaDelFuego,
+  "arquitectura-gran-escala": thumbArquitecturaGranEscala,
+  "microservicios-urban-blueprint": thumbMicroservicies,
 };
 
 const categoryCover = {
@@ -65,10 +71,10 @@ const coverSrc = post.data.coverImageKey
   : fallbackCover;
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-AR', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  return date.toLocaleDateString("es-AR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 
@@ -76,7 +82,6 @@ const readLabel = `Leer artículo: ${post.data.title}`;
 ---
 
 <article class="blog-card">
-
   <!-- ── IMAGEN ── -->
   <div class="blog-card__cover">
     <Image
@@ -109,7 +114,8 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     </span>
     <span class="blog-card__cta-btn" aria-hidden="true">
       <svg
-        width="13" height="13"
+        width="13"
+        height="13"
         viewBox="0 0 24 24"
         fill="none"
         stroke="#111"
@@ -117,46 +123,47 @@ const readLabel = `Leer artículo: ${post.data.title}`;
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        <path d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
       </svg>
     </span>
   </a>
 
   <!-- ── CUERPO ── -->
   <div class="blog-card__body">
-
     <!-- Meta: fecha · tiempo de lectura -->
     <div class="blog-card__meta">
-      <time
-        datetime={post.data.pubDate.toISOString()}
-        class="blog-card__date"
-      >
+      <time datetime={post.data.pubDate.toISOString()} class="blog-card__date">
         {formatDate(post.data.pubDate)}
       </time>
 
-      {post.data.readingTime && (
-        <>
-          <span class="blog-card__sep" aria-hidden="true">&bull;</span>
-          <span
-            class="blog-card__time"
-            data-en={`${post.data.readingTime} min read`}
-            data-es={`${post.data.readingTime} min`}
-          >
-            <svg
-              width="11" height="11"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
+      {
+        post.data.readingTime && (
+          <>
+            <span class="blog-card__sep" aria-hidden="true">
+              &bull;
+            </span>
+            <span
+              class="blog-card__time"
+              data-en={`${post.data.readingTime} min read`}
+              data-es={`${post.data.readingTime} min`}
             >
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            {post.data.readingTime} min
-          </span>
-        </>
-      )}
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              {post.data.readingTime} min
+            </span>
+          </>
+        )
+      }
     </div>
 
     <!-- Título -->
@@ -179,7 +186,6 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     >
       {post.data.description}
     </p>
-
   </div>
 </article>
 
@@ -208,7 +214,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     transform: translateY(-6px);
     box-shadow:
       0 24px 48px -10px rgba(251, 191, 36, 0.13),
-      0 0 0 1px rgba(251, 191, 36, 0.10);
+      0 0 0 1px rgba(251, 191, 36, 0.1);
   }
 
   /* ─────────────────────────────────────────
@@ -387,5 +393,4 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     margin-bottom: 16px;
     flex: 1;
   }
-
 </style>

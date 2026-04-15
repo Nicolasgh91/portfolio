@@ -1,103 +1,103 @@
 ---
-import { Fragment } from 'astro/jsx-runtime';
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import PageHeroSection from '../components/PageHeroSection.astro';
-import SectionWrapper from '../components/SectionWrapper.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import LogoMarquee from '../components/LogoMarquee.astro';
-import { getCollection } from 'astro:content';
-import bannerTalentoNaranja from '../assets/talento/banner-talento-naranja.webp';
+import { Fragment } from "astro/jsx-runtime";
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHeroSection from "../components/PageHeroSection.astro";
+import SectionWrapper from "../components/SectionWrapper.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import LogoMarquee from "../components/LogoMarquee.astro";
+import { getCollection } from "astro:content";
+import bannerTalentoNaranja from "../assets/talento/banner-talento-naranja.webp";
 
-const GITHUB_REPOS_URL = 'https://github.com/Nicolasgh91?tab=repositories';
+const GITHUB_REPOS_URL = "https://github.com/Nicolasgh91?tab=repositories";
 
-const allProjects = await getCollection('projects');
+const allProjects = await getCollection("projects");
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
 
-function statusLabel(status: string, lang = 'es') {
+function statusLabel(status: string, lang = "es") {
   const map: Record<string, { es: string; en: string }> = {
-    live: { es: 'En producción', en: 'Live' },
-    'in-progress': { es: 'En progreso', en: 'In progress' },
-    completed: { es: 'Completado', en: 'Completed' },
+    live: { es: "En producción", en: "Live" },
+    "in-progress": { es: "En progreso", en: "In progress" },
+    completed: { es: "Completado", en: "Completed" },
   };
-  return map[status]?.[lang as 'es' | 'en'] ?? status;
+  return map[status]?.[lang as "es" | "en"] ?? status;
 }
 
 const capabilities = [
   {
-    title: 'Arquitectura de agentes IA',
-    titleEn: 'AI agent architecture',
+    title: "Arquitectura de agentes IA",
+    titleEn: "AI agent architecture",
     description:
-      'Diseño de sistemas multi-agente con memoria persistente, herramientas y planificación autónoma.',
+      "Diseño de sistemas multi-agente con memoria persistente, herramientas y planificación autónoma.",
     descriptionEn:
-      'Design of multi-agent systems with persistent memory, tools and autonomous planning.',
+      "Design of multi-agent systems with persistent memory, tools and autonomous planning.",
   },
   {
-    title: 'Infraestructura y DevOps',
-    titleEn: 'Infrastructure & DevOps',
+    title: "Infraestructura y DevOps",
+    titleEn: "Infrastructure & DevOps",
     description:
-      'Despliegue de servicios en cloud y on-premise, CI/CD, contenedores y monitoreo de producción.',
+      "Despliegue de servicios en cloud y on-premise, CI/CD, contenedores y monitoreo de producción.",
     descriptionEn:
-      'Cloud and on-premise service deployment, CI/CD, containers and production monitoring.',
+      "Cloud and on-premise service deployment, CI/CD, containers and production monitoring.",
   },
   {
-    title: 'Sistemas geoespaciales',
-    titleEn: 'Geospatial systems',
+    title: "Sistemas geoespaciales",
+    titleEn: "Geospatial systems",
     description:
-      'Análisis y visualización de datos geográficos integrados en plataformas de gestión operativa.',
+      "Análisis y visualización de datos geográficos integrados en plataformas de gestión operativa.",
     descriptionEn:
-      'Analysis and visualization of geographic data integrated into operational management platforms.',
+      "Analysis and visualization of geographic data integrated into operational management platforms.",
   },
 ];
 
 const softSkills = [
   {
-    title: 'Comunicación efectiva',
-    titleEn: 'Effective communication',
+    title: "Comunicación efectiva",
+    titleEn: "Effective communication",
     description:
-      'Síntesis clara entre contexto técnico y negocio, y documentación acorde a cada audiencia.',
+      "Síntesis clara entre contexto técnico y negocio, y documentación acorde a cada audiencia.",
     descriptionEn:
-      'Clear synthesis between technical and business context, with documentation suited to each audience.',
+      "Clear synthesis between technical and business context, with documentation suited to each audience.",
   },
   {
-    title: 'Liderazgo técnico',
-    titleEn: 'Technical leadership',
+    title: "Liderazgo técnico",
+    titleEn: "Technical leadership",
     description:
-      'Dirección de decisiones de arquitectura, priorización y calidad sin perder velocidad de entrega.',
+      "Dirección de decisiones de arquitectura, priorización y calidad sin perder velocidad de entrega.",
     descriptionEn:
-      'Guiding architecture choices, prioritization, and quality without sacrificing delivery speed.',
+      "Guiding architecture choices, prioritization, and quality without sacrificing delivery speed.",
   },
   {
-    title: 'Mentoría y facilitación',
-    titleEn: 'Mentoring and facilitation',
+    title: "Mentoría y facilitación",
+    titleEn: "Mentoring and facilitation",
     description:
-      'Acompañamiento a perfiles en formación y dinámicas que alinean al equipo en objetivos comunes.',
+      "Acompañamiento a perfiles en formación y dinámicas que alinean al equipo en objetivos comunes.",
     descriptionEn:
-      'Support for early-career profiles and facilitation that keeps teams aligned on shared goals.',
+      "Support for early-career profiles and facilitation that keeps teams aligned on shared goals.",
   },
   {
-    title: 'Resolución de conflictos',
-    titleEn: 'Conflict resolution',
+    title: "Resolución de conflictos",
+    titleEn: "Conflict resolution",
     description:
-      'Negociación empática y foco en acuerdos accionables cuando hay tensión técnica u operativa.',
+      "Negociación empática y foco en acuerdos accionables cuando hay tensión técnica u operativa.",
     descriptionEn:
-      'Empathetic negotiation and actionable agreements when technical or operational tension arises.',
+      "Empathetic negotiation and actionable agreements when technical or operational tension arises.",
   },
   {
-    title: 'Pensamiento sistémico',
-    titleEn: 'Systems thinking',
+    title: "Pensamiento sistémico",
+    titleEn: "Systems thinking",
     description:
-      'Visión integral de dependencias, riesgos y efectos colaterales antes de comprometer cambios.',
+      "Visión integral de dependencias, riesgos y efectos colaterales antes de comprometer cambios.",
     descriptionEn:
-      'Holistic view of dependencies, risks, and side effects before committing to change.',
+      "Holistic view of dependencies, risks, and side effects before committing to change.",
   },
   {
-    title: 'Gestión de stakeholders',
-    titleEn: 'Stakeholder management',
+    title: "Gestión de stakeholders",
+    titleEn: "Stakeholder management",
     description:
-      'Expectativas alineadas, seguimiento de compromisos y comunicación predecible con negocio.',
+      "Expectativas alineadas, seguimiento de compromisos y comunicación predecible con negocio.",
     descriptionEn:
-      'Aligned expectations, commitment tracking, and predictable communication with the business.',
+      "Aligned expectations, commitment tracking, and predictable communication with the business.",
   },
 ];
 ---
@@ -122,26 +122,35 @@ const softSkills = [
       <Fragment slot="heading">Nicolás Hruszczak</Fragment>
       <p>
         <span data-es
-          >Analista desarrollador de <em class="not-italic text-[var(--accent-text)]"
+          >Analista desarrollador de <em
+            class="not-italic text-[var(--accent-text)]"
             >soluciones full stack o funcionales</em
           >
-          para cualquier aplicación de Software. <em class="not-italic text-[var(--accent-text)]"
+          para cualquier aplicación de Software. <em
+            class="not-italic text-[var(--accent-text)]"
             >Análisis de necesidades y puntos de dolor</em
-          >, con <em class="not-italic text-[var(--accent-text)]">propuestas de mejora eficientes</em> y acorde al
-          alcance establecido. <em class="not-italic text-[var(--accent-text)]"
+          >, con <em class="not-italic text-[var(--accent-text)]"
+            >propuestas de mejora eficientes</em
+          > y acorde al alcance establecido. <em
+            class="not-italic text-[var(--accent-text)]"
             >Comunicación clara con negocio y stakeholders</em
-          >, mentoría a perfiles en formación y criterio de producto para priorizar entregas con impacto.</span
+          >, mentoría a perfiles en formación y criterio de producto para
+          priorizar entregas con impacto.</span
         >
         <span data-en class="hidden"
           >Analyst-developer of <em class="not-italic text-[var(--accent-text)]"
             >full-stack or functional solutions</em
           >
-          for any software application. <em class="not-italic text-[var(--accent-text)]"
+          for any software application. <em
+            class="not-italic text-[var(--accent-text)]"
             >Analysis of needs and pain points</em
-          >, with <em class="not-italic text-[var(--accent-text)]">efficient improvement proposals</em> aligned with
-          the agreed scope. <em class="not-italic text-[var(--accent-text)]"
+          >, with <em class="not-italic text-[var(--accent-text)]"
+            >efficient improvement proposals</em
+          > aligned with the agreed scope. <em
+            class="not-italic text-[var(--accent-text)]"
             >Clear communication with business and stakeholders</em
-          >, mentoring for early-career profiles and product judgment to prioritize high-impact delivery.</span
+          >, mentoring for early-career profiles and product judgment to
+          prioritize high-impact delivery.</span
         >
       </p>
       <div class="mt-8 flex justify-center md:justify-start">
@@ -166,7 +175,9 @@ const softSkills = [
         data-alt-reveal
       >
         <header class="mb-10 md:mb-12">
-          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]">
+          <p
+            class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
+          >
             <span data-es>Capacidades</span>
             <span data-en class="hidden">Capabilities</span>
           </p>
@@ -184,11 +195,15 @@ const softSkills = [
               <div class="service-card-shell-bg shell-hover rounded-2xl p-6 md:p-8">
                 <h3 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)] md:text-2xl">
                   <span data-es>{cap.title}</span>
-                  <span data-en class="hidden">{cap.titleEn}</span>
+                  <span data-en class="hidden">
+                    {cap.titleEn}
+                  </span>
                 </h3>
                 <p class="mt-3 text-base font-normal leading-relaxed text-[var(--text-secondary)]">
                   <span data-es>{cap.description}</span>
-                  <span data-en class="hidden">{cap.descriptionEn}</span>
+                  <span data-en class="hidden">
+                    {cap.descriptionEn}
+                  </span>
                 </p>
               </div>
             ))
@@ -196,7 +211,11 @@ const softSkills = [
         </div>
       </section>
 
-      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
+      <div
+        class="my-12 h-px bg-[var(--border-subtle)] md:my-16"
+        aria-hidden="true"
+      >
+      </div>
 
       <!-- Roles -->
       <section
@@ -206,18 +225,21 @@ const softSkills = [
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
-            <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
+            <div
+              class="h-px w-8 shrink-0 bg-[var(--accent)]"
+              aria-hidden="true"
+            >
+            </div>
             <span
               class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Professional background"
-              data-es="Trayectoria profesional"
-              >Trayectoria profesional</span
+              data-es="Trayectoria profesional">Trayectoria profesional</span
             >
           </div>
           <h2
             id="roles-heading"
             class="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-3xl"
-            data-en="Roles &amp; experience"
+            data-en="Roles & experience"
             data-es="Roles y experiencia"
           >
             Roles y experiencia
@@ -225,15 +247,18 @@ const softSkills = [
         </header>
 
         <div class="grid gap-6 sm:grid-cols-2">
-          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 sm:col-span-2 md:p-10">
+          <article
+            class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 sm:col-span-2 md:p-10"
+          >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
-            ></div>
+            >
+            </div>
             <div class="relative">
               <h3
                 class="mb-3 font-display text-xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-2xl"
-                data-en="Developer &amp; software architect"
+                data-en="Developer & software architect"
                 data-es="Desarrollador y arquitecto de software"
               >
                 Desarrollador y arquitecto de software
@@ -243,16 +268,21 @@ const softSkills = [
                 data-en="Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
                 data-es="Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
               >
-                Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube.
+                Diseño e implementación de arquitecturas escalables (Huella del
+                fuego en Argentina), creación de microservicios con FastAPI,
+                desarrollo full stack y despliegue en la nube.
               </p>
             </div>
           </article>
 
-          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
+          <article
+            class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10"
+          >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
-            ></div>
+            >
+            </div>
             <div class="relative">
               <h3
                 class="mb-3 font-display text-xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-2xl"
@@ -266,16 +296,21 @@ const softSkills = [
                 data-en="Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
                 data-es="Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
               >
-                Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog.
+                Ingeniería de requerimientos bajo marco Scrum (Finnegans),
+                documentación de workflows (MRM), modelado BPMN y soporte al
+                Product Owner en la gestión del backlog.
               </p>
             </div>
           </article>
 
-          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
+          <article
+            class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10"
+          >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
-            ></div>
+            >
+            </div>
             <div class="relative">
               <h3
                 class="mb-3 font-display text-xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-2xl"
@@ -289,20 +324,25 @@ const softSkills = [
                 data-en="Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
                 data-es="Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
               >
-                Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final.
+                Redacción técnica y de producto, estructura de documentación y
+                criterios editoriales alineados a SEO y claridad para el usuario
+                final.
               </p>
             </div>
           </article>
 
-          <article class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10">
+          <article
+            class="service-card-shell-bg relative overflow-hidden rounded-2xl p-8 md:p-10"
+          >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsla(var(--accent-h),var(--accent-s),56%,0.12)_0%,_transparent_55%)]"
               aria-hidden="true"
-            ></div>
+            >
+            </div>
             <div class="relative">
               <h3
                 class="mb-3 font-display text-xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-2xl"
-                data-en="Mentor &amp; technical facilitator"
+                data-en="Mentor & technical facilitator"
                 data-es="Mentor y facilitador técnico"
               >
                 Mentor y facilitador técnico
@@ -312,18 +352,27 @@ const softSkills = [
                 data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
                 data-es="Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
               >
-                Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos.
+                Experiencia como ayudante de cátedra y tutor para Programación
+                Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros
+                pasos técnicos.
               </p>
             </div>
           </article>
         </div>
       </section>
 
-      <div class="mb-6 opacity-0 translate-y-4 transition-all duration-700 md:mb-8" data-alt-reveal>
+      <div
+        class="mb-6 opacity-0 translate-y-4 transition-all duration-700 md:mb-8"
+        data-alt-reveal
+      >
         <LogoMarquee />
       </div>
 
-      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
+      <div
+        class="my-12 h-px bg-[var(--border-subtle)] md:my-16"
+        aria-hidden="true"
+      >
+      </div>
 
       <!-- Habilidades interpersonales -->
       <section
@@ -333,12 +382,15 @@ const softSkills = [
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
-            <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
+            <div
+              class="h-px w-8 shrink-0 bg-[var(--accent)]"
+              aria-hidden="true"
+            >
+            </div>
             <span
               class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Profile"
-              data-es="Perfil"
-              >Perfil</span
+              data-es="Perfil">Perfil</span
             >
           </div>
           <h2
@@ -356,11 +408,15 @@ const softSkills = [
               <div class="service-card-shell-bg shell-hover rounded-2xl p-5 md:p-6">
                 <h3 class="font-display text-lg font-semibold tracking-tight text-[var(--text-primary)]">
                   <span data-es>{item.title}</span>
-                  <span data-en class="hidden">{item.titleEn}</span>
+                  <span data-en class="hidden">
+                    {item.titleEn}
+                  </span>
                 </h3>
                 <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
                   <span data-es>{item.description}</span>
-                  <span data-en class="hidden">{item.descriptionEn}</span>
+                  <span data-en class="hidden">
+                    {item.descriptionEn}
+                  </span>
                 </p>
               </div>
             ))
@@ -368,7 +424,11 @@ const softSkills = [
         </div>
       </section>
 
-      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
+      <div
+        class="my-12 h-px bg-[var(--border-subtle)] md:my-16"
+        aria-hidden="true"
+      >
+      </div>
 
       <!-- Formación -->
       <section
@@ -378,12 +438,15 @@ const softSkills = [
       >
         <header class="mb-8 md:mb-10">
           <div class="mb-2 flex items-center gap-3">
-            <div class="h-px w-8 shrink-0 bg-[var(--accent)]" aria-hidden="true"></div>
+            <div
+              class="h-px w-8 shrink-0 bg-[var(--accent)]"
+              aria-hidden="true"
+            >
+            </div>
             <span
               class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Education"
-              data-es="Formación"
-              >Formación</span
+              data-es="Formación">Formación</span
             >
           </div>
           <h2
@@ -406,8 +469,7 @@ const softSkills = [
                   <span
                     class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
                     data-en="In progress"
-                    data-es="En curso"
-                    >En curso</span
+                    data-es="En curso">En curso</span
                   >
                   <span
                     class="text-sm font-bold text-[var(--text-primary)]"
@@ -417,7 +479,11 @@ const softSkills = [
                     Licenciatura en gestión de tecnología de la información
                   </span>
                 </div>
-                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UADE · 2024–2028" data-es="UADE · 2024–2028">
+                <div
+                  class="mt-1 text-xs text-[var(--text-muted)]"
+                  data-en="UADE · 2024–2028"
+                  data-es="UADE · 2024–2028"
+                >
                   UADE · 2024–2028
                 </div>
               </div>
@@ -437,8 +503,7 @@ const softSkills = [
                   <span
                     class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
                     data-en="Completed"
-                    data-es="Completado"
-                    >Completado</span
+                    data-es="Completado">Completado</span
                   >
                   <span
                     class="text-sm font-bold text-[var(--text-primary)]"
@@ -448,7 +513,11 @@ const softSkills = [
                     Tecnicatura en Programación Informática
                   </span>
                 </div>
-                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UTN · 2023–2024" data-es="UTN · 2023–2024">
+                <div
+                  class="mt-1 text-xs text-[var(--text-muted)]"
+                  data-en="UTN · 2023–2024"
+                  data-es="UTN · 2023–2024"
+                >
                   UTN · 2023–2024
                 </div>
               </div>
@@ -468,8 +537,7 @@ const softSkills = [
                   <span
                     class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.1)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--accent-text)]"
                     data-en="Completed"
-                    data-es="Completado"
-                    >Completado</span
+                    data-es="Completado">Completado</span
                   >
                   <span
                     class="text-sm font-bold text-[var(--text-primary)]"
@@ -479,7 +547,11 @@ const softSkills = [
                     Diplomatura en Análisis de Negocios
                   </span>
                 </div>
-                <div class="mt-1 text-xs text-[var(--text-muted)]" data-en="UTN FRBA · 2024" data-es="UTN FRBA · 2024">
+                <div
+                  class="mt-1 text-xs text-[var(--text-muted)]"
+                  data-en="UTN FRBA · 2024"
+                  data-es="UTN FRBA · 2024"
+                >
                   UTN FRBA · 2024
                 </div>
               </div>
@@ -493,7 +565,11 @@ const softSkills = [
         </ul>
       </section>
 
-      <div class="my-12 h-px bg-[var(--border-subtle)] md:my-16" aria-hidden="true"></div>
+      <div
+        class="my-12 h-px bg-[var(--border-subtle)] md:my-16"
+        aria-hidden="true"
+      >
+      </div>
 
       <!-- Proyectos -->
       <section
@@ -502,7 +578,9 @@ const softSkills = [
         data-alt-reveal
       >
         <header class="mb-10 md:mb-12">
-          <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]">
+          <p
+            class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
+          >
             <span data-es>Ingeniería</span>
             <span data-en class="hidden">Engineering</span>
           </p>
@@ -521,7 +599,7 @@ const softSkills = [
               <div id={project.slug}>
                 <ProjectCard
                   headingId={`project-card-${project.slug}`}
-                  direction={i % 2 === 0 ? 'left' : 'right'}
+                  direction={i % 2 === 0 ? "left" : "right"}
                   title={project.data.title}
                   titleEn={project.data.title}
                   description={project.data.description}
@@ -532,21 +610,25 @@ const softSkills = [
                   href={
                     project.data.url
                       ? project.data.url
-                      : project.slug === 'huelladelfuego'
-                        ? '/blog/caso-huelladelfuego'
+                      : project.slug === "huelladelfuego"
+                        ? "/blog/caso-huelladelfuego"
                         : `/talento#${project.slug}`
                   }
                   badge={
-                    project.data.status === 'live' || project.data.status === 'in-progress'
-                      ? statusLabel(project.data.status, 'es')
+                    project.data.status === "live" ||
+                    project.data.status === "in-progress"
+                      ? statusLabel(project.data.status, "es")
                       : undefined
                   }
                   badgeEn={
-                    project.data.status === 'live' || project.data.status === 'in-progress'
-                      ? statusLabel(project.data.status, 'en')
+                    project.data.status === "live" ||
+                    project.data.status === "in-progress"
+                      ? statusLabel(project.data.status, "en")
                       : undefined
                   }
-                  badgeVariant={project.data.status === 'live' ? 'live' : 'in-progress'}
+                  badgeVariant={
+                    project.data.status === "live" ? "live" : "in-progress"
+                  }
                   external={Boolean(project.data.url)}
                 />
               </div>
@@ -565,18 +647,25 @@ const softSkills = [
           innerClass="text-center"
           revealAlt
         >
-          <h2 class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl">
+          <h2
+            class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl"
+          >
             <span data-es>¿Hablamos?</span>
             <span data-en class="hidden">Let&apos;s talk</span>
           </h2>
-          <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90">
+          <p
+            class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90"
+          >
             <span data-es
-              >Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría,
-              el pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado.</span
+              >Si tenés dudas sobre mi perfil, querés consultar referencias o
+              explorar una colaboración de consultoría, el pie del sitio incluye
+              el formulario de contacto si preferís dejar un mensaje
+              estructurado.</span
             >
             <span data-en class="hidden"
-              >If you have questions about my background, want to check references, or explore a consulting engagement,
-              the site footer includes the contact form if you prefer a structured message.</span
+              >If you have questions about my background, want to check
+              references, or explore a consulting engagement, the site footer
+              includes the contact form if you prefer a structured message.</span
             >
           </p>
           <p class="mt-8">

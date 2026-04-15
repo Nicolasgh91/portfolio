@@ -1,21 +1,18 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import TaxonomyFilter from '../../components/TaxonomyFilter.astro';
-import { getCollection } from 'astro:content';
-import { localeFromPathname } from '../../lib/locale-path';
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import TaxonomyFilter from "../../components/TaxonomyFilter.astro";
+import { getCollection } from "astro:content";
 
 // Filtra donde draft NO es true
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const posts = allPosts.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
 
 const categories = [...new Set(posts.map((p) => p.data.category))].sort();
 const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
-const isEnglish = localeFromPathname(Astro.url.pathname) === 'en';
-const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
 ---
 
 <Layout
@@ -27,20 +24,28 @@ const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
 
   <main id="main-content">
     <div class="page-container">
-
       <section class="hero" aria-label="Blog técnico">
-        <div class="badge"
+        <div
+          class="badge"
           data-en="Technical articles"
           data-es="Artículos técnicos"
-        >Artículos técnicos</div>
+        >
+          Artículos técnicos
+        </div>
         <h1
-          data-en="Architecture, AI &amp; automation"
+          data-en="Architecture, AI & automation"
           data-es="Arquitectura, IA y automatización"
-        >Arquitectura, IA y automatización</h1>
-        <p class="hero-sub"
+        >
+          Arquitectura, IA y automatización
+        </h1>
+        <p
+          class="hero-sub"
           data-en="Practical perspective on software, artificial intelligence and process optimization. No empty theory."
           data-es="Perspectiva práctica sobre software, inteligencia artificial y optimización de procesos. Sin teoría vacía."
-        >Perspectiva práctica sobre software, inteligencia artificial y optimización de procesos. Sin teoría vacía.</p>
+        >
+          Perspectiva práctica sobre software, inteligencia artificial y
+          optimización de procesos. Sin teoría vacía.
+        </p>
       </section>
 
       <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
@@ -48,48 +53,61 @@ const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
       </div>
 
       <section class="section" aria-labelledby="posts-heading">
-        <div class="section-header reveal reveal--scale" style="--reveal-delay: 0ms">
-          <span class="label">{posts.length} artículo{posts.length !== 1 ? 's' : ''}</span>
+        <div
+          class="section-header reveal reveal--scale"
+          style="--reveal-delay: 0ms"
+        >
+          <span class="label"
+            >{posts.length} artículo{posts.length !== 1 ? "s" : ""}</span
+          >
           <h2 id="posts-heading" class="sr-only">Artículos</h2>
         </div>
 
-        {posts.length === 0 ? (
-          <p class="empty">Próximamente...</p>
-        ) : (
-          <div class="posts-grid">
-            {posts.map((post, i) => (
-              <div
-                class="reveal reveal--scale"
-                style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
-              >
-                <BlogCard post={post} />
-              </div>
-            ))}
-          </div>
-        )}
+        {
+          posts.length === 0 ? (
+            <p class="empty">Próximamente...</p>
+          ) : (
+            <div class="posts-grid">
+              {posts.map((post, i) => (
+                <div
+                  class="reveal reveal--scale"
+                  style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
+                >
+                  <BlogCard post={post} />
+                </div>
+              ))}
+            </div>
+          )
+        }
       </section>
 
-      {tags.length > 0 && (
-        <section class="section reveal reveal--scale" style="--reveal-delay: 0ms" aria-labelledby="blog-tags-heading">
-          <div class="section-header">
-            <h2 id="blog-tags-heading" class="label">Etiquetas</h2>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <a
-                href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
-                class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
-
+      {
+        tags.length > 0 && (
+          <section
+            class="section reveal reveal--scale"
+            style="--reveal-delay: 0ms"
+            aria-labelledby="blog-tags-heading"
+          >
+            <div class="section-header">
+              <h2 id="blog-tags-heading" class="label">
+                Etiquetas
+              </h2>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <a
+                  href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
+                  class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
     </div>
   </main>
-
 </Layout>
 
 <style>
@@ -106,10 +124,12 @@ const blogBaseHref = isEnglish ? '/en/blog' : '/blog';
   /* Clase utilitaria para h2 accesible pero invisible */
   .sr-only {
     position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
   }

@@ -1,11 +1,13 @@
 # Sistema de diseño
 
 ## Fuente de verdad
+
 - Tokens globales: `src/styles/tokens.css` (único archivo de tokens en el build; no existe copia activa bajo `public/`).
 - Se importan en `src/layouts/Layout.astro`.
 - Chatbot consume tokens del parent + fallbacks en `public/chatbot/widget/chat.css`.
 
 ## Tokens principales
+
 - Color/acento: `--accent-*`, `--color-accent-*`.
 - Superficies/textos: `--bg-*`, `--text-*`, `--border-*`.
 - **Capas tonales (catálogo servicios):** `--bg-surface-container-low` (franja padre del listado) y `--bg-surface-container-lowest` (base opaca de la tarjeta en modo claro). En oscuro, el shell de la tarjeta usa la clase **`.service-card-shell-bg`** en `tokens.css` (`@layer components`): fondo `--bg-card` + `backdrop-filter: blur(12px)` solo cuando **`:root:not(.light)`** (alineado con `nhTheme`, no con `dark:` de Tailwind). Para hover sin duplicar utilidades Tailwind en la página, la clase plana **`.shell-hover`** (mismo nodo que el shell) aplica `transition` de `background-color` y, en hover, **`var(--bg-tertiary)`** con **`:root.light`** y **`hsla(0, 0%, 100%, 0.1)`** con **`:root:not(.light)`** (p. ej. grids en `/talento`).
@@ -17,15 +19,18 @@
 - **Pasos con número monumental (`/servicios`, "Cómo trabajamos"):** los dígitos son **texto** (`01`…`03`) con `font-size: var(--text-6xl)`, no imágenes. Si el número va `absolute` sobre el bloque, el calce del título no debe depender solo de `mt-*` fijo en `rem`: `--text-6xl` ya multiplica por `--font-scale` (panel a11y) y el margen fijo no, lo que provoca solapamiento. Reservar altura con el mismo token en el contenedor (p. ej. `padding-top: calc(var(--text-6xl) * 1)` vía utilidad arbitraria Tailwind) y el `h3` con `mt-0` respecto a ese padding.
 
 ## Tema y a11y
+
 - `nhTheme`: alterna clase `light`.
 - `nhLang`: cambia textos `data-en/data-es`.
 - `nhA11y`: escala, alto contraste y motion reduction.
 
 ## Ancho de layout
+
 - **`.page-container`** (`tokens.css`): `max-width: 960px`, centrado; pensado para listados, talento y lectura de blog donde conviene acotar la línea de texto. Padding horizontal `var(--sp-lg)` (equivalente a `1.5rem` / `px-6` con `rem` por defecto).
 - **Footer** (`Footer.astro`): no usa `.page-container`; usa **`max-w-7xl` + `mx-auto` + `px-6`** para alinearse con `SectionWrapper` en páginas anchas. La grilla de enlaces del pie se beneficia del ancho extra sin forzar artículos a 1280px.
 
 ## Tailwind y tokens
+
 - `tokens.css` incluye `@tailwind components` + `@layer components` para **sistema de botones**, FAQ y utilidades asociadas, y `@tailwind utilities` al final.
 - Tailwind convive con CSS tradicional en el mismo archivo.
 - Variables CSS son usadas tanto por utilidades como por estilos scoped.
@@ -37,6 +42,7 @@
 Ver subsistema dedicado: [`botones.md`](botones.md) (incluye `.btn-bounce` / `bounce-right` en `tokens.css`).
 
 ## Catálogo de landings (excepciones en `tokens.css`)
+
 - Carrusel en `/plantillas`: scrollbar oculto vía utilidades en el track (`[scrollbar-width:none]`, `[&::-webkit-scrollbar]:hidden`); la clase `.catalog-scroll-hide` puede seguir existiendo por compatibilidad.
 - `.plantilla-card[data-filtered]`: colapsa tarjetas filtradas sin `position: absolute` (compatibilidad con `scroll-snap`).
 - `.catalog-carousel__nav`: vidrio + blur sobre `.btn-secondary--sm` en flechas del carrusel; contraste con `html.light`.
@@ -44,12 +50,15 @@ Ver subsistema dedicado: [`botones.md`](botones.md) (incluye `.btn-bounce` / `bo
 - `#catalog-filters button[data-selected]`: estado activo/inactivo de chips de filtro.
 
 ## Chatbot
+
 - `index.html` inyecta tokens del padre en `:root`.
 - `chat.css` define variables propias `--chat-*` para glassmorphism.
 
 ## Riesgos/deuda
+
 - Mezcla extensa Tailwind + `<style>` scoped en varios componentes.
 - Clases dinámicas en scripts requieren control de purga/safelist.
 
 ## Estado
+
 ✅ Documentado

@@ -16,11 +16,11 @@ Las tarjetas del catálogo (`ServiceCard`) compartían con la franja del listado
 
 ## Alternativas descartadas
 
-| Alternativa | Motivo |
-|-------------|--------|
-| Glass también en modo claro | Sobre fondos claros el blur apenas se percibe; no mejora la jerarquía frente a dos capas opacas bien separadas. |
-| Solo subir el borde / sombra sin capas | Mejora marginal; no resuelve el “mismo blanco sobre blanco” del catálogo en light. |
-| Reorganizar el catálogo en layout tipo **bento** | Mayor refactor de layout y contenido; fuera del alcance de endurecer lectura y consistencia con la home. |
+| Alternativa                                      | Motivo                                                                                                          |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Glass también en modo claro                      | Sobre fondos claros el blur apenas se percibe; no mejora la jerarquía frente a dos capas opacas bien separadas. |
+| Solo subir el borde / sombra sin capas           | Mejora marginal; no resuelve el “mismo blanco sobre blanco” del catálogo en light.                              |
+| Reorganizar el catálogo en layout tipo **bento** | Mayor refactor de layout y contenido; fuera del alcance de endurecer lectura y consistencia con la home.        |
 
 ## Consecuencias
 

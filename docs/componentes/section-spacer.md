@@ -6,9 +6,9 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | No | Margen vertical (`my-*` Tailwind); default `'lg'`. |
+| Prop   | Tipo                           | Requerida | Descripción                                        |
+| ------ | ------------------------------ | --------- | -------------------------------------------------- |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | No        | Margen vertical (`my-*` Tailwind); default `'lg'`. |
 
 ## Comportamiento
 

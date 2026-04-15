@@ -1,12 +1,12 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import Nav from '../../../components/Nav.astro';
-import BlogCard from '../../../components/BlogCard.astro';
-import TaxonomyFilter from '../../../components/TaxonomyFilter.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../../../layouts/Layout.astro";
+import Nav from "../../../components/Nav.astro";
+import BlogCard from "../../../components/BlogCard.astro";
+import TaxonomyFilter from "../../../components/TaxonomyFilter.astro";
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   // Extraer etiquetas únicas
   const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 
 // Para el filtro lateral
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const allCategories = [...new Set(allPosts.map((p) => p.data.category))].sort();
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 ---
@@ -38,14 +38,12 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 
   <main id="main-content">
     <div class="page-container">
-
       <section class="hero" aria-label={`Etiqueta: ${tag}`}>
-        <div class="badge"
-          data-en="Tag"
-          data-es="Etiqueta"
-        >Etiqueta</div>
+        <div class="badge" data-en="Tag" data-es="Etiqueta">Etiqueta</div>
         <h1>#{tag}</h1>
-        <p class="hero-sub">{posts.length} artículo{posts.length !== 1 ? 's' : ''} con esta etiqueta.</p>
+        <p class="hero-sub">
+          {posts.length} artículo{posts.length !== 1 ? "s" : ""} con esta etiqueta.
+        </p>
       </section>
 
       <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
@@ -63,22 +61,24 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
           style="--reveal-delay: 0ms"
           data-en={`Articles tagged #${tag}`}
           data-es={`Artículos con #${tag}`}
-        >Artículos con #{tag}</h2>
+        >
+          Artículos con #{tag}
+        </h2>
         <div class="posts-grid">
-          {posts.map((post, i) => (
-            <div
-              class="reveal reveal--scale"
-              style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
-            >
-              <BlogCard post={post} />
-            </div>
-          ))}
+          {
+            posts.map((post, i) => (
+              <div
+                class="reveal reveal--scale"
+                style={`--reveal-delay: ${Math.min(i * 100, 600)}ms`}
+              >
+                <BlogCard post={post} />
+              </div>
+            ))
+          }
         </div>
       </section>
-
     </div>
   </main>
-
 </Layout>
 
 <style>
@@ -88,5 +88,9 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
     letter-spacing: -0.5px;
     margin-bottom: var(--sp-lg);
   }
-  .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--sp-md); }
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--sp-md);
+  }
 </style>

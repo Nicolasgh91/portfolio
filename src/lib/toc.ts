@@ -7,6 +7,10 @@ export interface TocHeading {
   text: string;
 }
 
-export function filterTocHeadings<T extends { depth: number }>(headings: T[]): T[] {
-  return headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+export function filterTocHeadings<T extends { depth: number }>(
+  headings: T[],
+): T[] {
+  return headings.filter(
+    (heading) => heading.depth === 2 || heading.depth === 3,
+  );
 }

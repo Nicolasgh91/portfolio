@@ -1,6 +1,7 @@
 Las 14 tareas de seguridad + los 2 templates están implementados. Resumen de lo que se hizo:
 
 **Sprint 0 — 8 tareas (4 archivos modificados):**
+
 - **SEC-001**: `buildSystemPrompt()` movido al server. El cliente ya no envía `systemPrompt` en el body. Se carga y cachea server-side.
 - **SEC-002**: Rate limiting mejorado a 10 req/min con headers `Retry-After`, `X-RateLimit-Limit` y `X-RateLimit-Remaining`.
 - **SEC-003**: Límites de input (2000 chars, `maxlength` en textarea), history truncado a 20 msgs, roles sanitizados a `user`|`model`, body >50KB devuelve 413.
@@ -11,6 +12,7 @@ Las 14 tareas de seguridad + los 2 templates están implementados. Resumen de lo
 - **SEC-008**: Textarea deshabilitado durante carga con placeholder "Esperando respuesta...".
 
 **Sprint 1 — 6 tareas (12 archivos nuevos):**
+
 - **SEC-009**: Validación de `window.parent.origin` en los 2 scripts del `<head>` del iframe.
 - **SEC-010**: `lib/circuit-breaker.js` — módulo reutilizable (CLOSED→OPEN→HALF_OPEN). Integrado en `api/chat.js` para Gemini.
 - **SEC-011**: `lib/fetch-with-timeout.js` — wrapper con AbortController (10s para Gemini). Integrado en `api/chat.js`.

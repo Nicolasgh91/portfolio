@@ -6,19 +6,19 @@
 
 ## Props
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `headingId` | `string` | Sí | `id` del `<h3>`; debe ser único en la página. Usar p. ej. `project-card-${slug}` para no chocar con anclas (`#slug` en el mismo documento). |
-| `title` / `titleEn` | `string` | Sí | Título bilingüe. |
-| `description` / `descriptionEn` | `string` | Sí | Resumen bilingüe. |
-| `image` | `ImageMetadata` | No | Portada desde colección (`coverImage` resuelto). |
-| `href` | `string` | Sí | URL del proyecto. |
-| `badge` / `badgeEn` | `string` | No | Chip opcional. |
-| `badgeVariant` | `'live' \| 'in-progress'` | No | Solo si hay `badge`: verde fijo (`live`) o amarillo fijo (`in-progress`). Default `in-progress`. |
-| `external` | `boolean` | No | Añade `target="_blank"` y `rel`. |
-| `coverPosition` | `'top' \| 'center' \| 'bottom'` | No | Anclaje vertical de la portada con `object-cover`: **`md:` y superior** usa `md:object-top` / `md:object-center` / `md:object-bottom` según valor. **Por debajo de `md`** el componente fuerza **`max-md:object-center`** (crop centrado en móvil). Default alineado al schema: `top`. |
-| `direction` | `'left' \| 'right'` | No | Desktop: gradiente lateral y alineación del bloque de texto (izquierda vs derecha). Default `left`. En mobile el gradiente es siempre vertical inferior; el texto va abajo (`justify-end`). |
-| `tags` | `string[]` | No | Etiquetas de stack desde el frontmatter de la colección `projects`; se muestran como pills bajo la descripción si el array no está vacío. Default `[]`. |
+| Prop                            | Tipo                            | Requerida | Descripción                                                                                                                                                                                                                                                                            |
+| ------------------------------- | ------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `headingId`                     | `string`                        | Sí        | `id` del `<h3>`; debe ser único en la página. Usar p. ej. `project-card-${slug}` para no chocar con anclas (`#slug` en el mismo documento).                                                                                                                                            |
+| `title` / `titleEn`             | `string`                        | Sí        | Título bilingüe.                                                                                                                                                                                                                                                                       |
+| `description` / `descriptionEn` | `string`                        | Sí        | Resumen bilingüe.                                                                                                                                                                                                                                                                      |
+| `image`                         | `ImageMetadata`                 | No        | Portada desde colección (`coverImage` resuelto).                                                                                                                                                                                                                                       |
+| `href`                          | `string`                        | Sí        | URL del proyecto.                                                                                                                                                                                                                                                                      |
+| `badge` / `badgeEn`             | `string`                        | No        | Chip opcional.                                                                                                                                                                                                                                                                         |
+| `badgeVariant`                  | `'live' \| 'in-progress'`       | No        | Solo si hay `badge`: verde fijo (`live`) o amarillo fijo (`in-progress`). Default `in-progress`.                                                                                                                                                                                       |
+| `external`                      | `boolean`                       | No        | Añade `target="_blank"` y `rel`.                                                                                                                                                                                                                                                       |
+| `coverPosition`                 | `'top' \| 'center' \| 'bottom'` | No        | Anclaje vertical de la portada con `object-cover`: **`md:` y superior** usa `md:object-top` / `md:object-center` / `md:object-bottom` según valor. **Por debajo de `md`** el componente fuerza **`max-md:object-center`** (crop centrado en móvil). Default alineado al schema: `top`. |
+| `direction`                     | `'left' \| 'right'`             | No        | Desktop: gradiente lateral y alineación del bloque de texto (izquierda vs derecha). Default `left`. En mobile el gradiente es siempre vertical inferior; el texto va abajo (`justify-end`).                                                                                            |
+| `tags`                          | `string[]`                      | No        | Etiquetas de stack desde el frontmatter de la colección `projects`; se muestran como pills bajo la descripción si el array no está vacío. Default `[]`.                                                                                                                                |
 
 **Schema (SSOT):** `coverPosition`, `coverImage`, `status` y `tags` en [`src/content/config.ts`](../../src/content/config.ts), colección `projects`.
 
@@ -37,12 +37,12 @@
 
 ## Stacking (solo dentro del `article`)
 
-| Capa | z-index | Notas |
-|------|---------|--------|
-| Imagen / fallback | — | Primero en el DOM |
-| Overlays | — | Encima de la imagen |
-| Bloque texto | `z-[1]` | |
-| `<a>` overlay | `z-[2]` | Captura clic y foco |
+| Capa              | z-index | Notas               |
+| ----------------- | ------- | ------------------- |
+| Imagen / fallback | —       | Primero en el DOM   |
+| Overlays          | —       | Encima de la imagen |
+| Bloque texto      | `z-[1]` |                     |
+| `<a>` overlay     | `z-[2]` | Captura clic y foco |
 
 ## Hover / motion
 

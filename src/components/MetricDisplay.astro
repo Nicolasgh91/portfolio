@@ -6,12 +6,20 @@ interface Props {
   valueColorClass?: string;
 }
 
-const { value, label, labelEn, valueColorClass = 'text-[var(--accent)]' } = Astro.props;
+const {
+  value,
+  label,
+  labelEn,
+  valueColorClass = "text-[var(--accent)]",
+} = Astro.props;
 ---
 
 <div class="text-center">
   <p
-    class:list={['font-display font-black leading-none tracking-tighter', valueColorClass]}
+    class:list={[
+      "font-display font-black leading-none tracking-tighter",
+      valueColorClass,
+    ]}
     style="font-size: var(--text-metric);"
   >
     {value}

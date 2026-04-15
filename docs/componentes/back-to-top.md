@@ -7,8 +7,8 @@
 ## Props
 
 | Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| — | — | — | Ninguna. |
+| ---- | ---- | --------- | ----------- |
+| —    | —    | —         | Ninguna.    |
 
 ## Comportamiento
 

@@ -8,16 +8,16 @@
 
 Misma superficie que el bloque FAQ “nativo” de [`FaqSection`](./faq-section.md) **excepto** `accordionStyle`, `faqAnimatedRootId`: solo acordeón con `<details>` / `<summary>` (estilos `faq-item--native` en `tokens.css`).
 
-| Prop | Tipo | Requerida | Descripción |
-|------|------|-----------|-------------|
-| `entries` | `FaqItem[]` | Sí | Mismo shape que exporta `FaqSection.astro`. |
-| `ctaHref` | `string` | No | Default `#contacto`. |
-| `showSidebarCta` | `boolean` | No | Default `true`. Si es `false`, el grid superior pasa a una sola columna (`md:grid-cols-1`): el encabezado ocupa todo el ancho y **no queda columna vacía**; el listado de acordeones va debajo a ancho completo (p. ej. `/servicios`). |
-| `eyebrowEs` / `eyebrowEn` | `string` | No | Rótulo superior. |
-| `headingEs` / `headingEn` | `string` | No | Título del bloque. |
-| `introEs` / `introEn` | `string` | No | Intro. |
-| `class` | `string` | No | Clases del contenedor raíz (p. ej. `!mt-0` para anular el `mt-10` por defecto). |
-| `variant` | `'default' \| 'darkBand'` | No | Default `default`. En `darkBand`, colores fijos (slate/orange) para el bloque sobre fondo oscuro; evita que, con `html.light`, los tokens claros rompan contraste en FAQ incrustada en `section-dark` (p. ej. [`/servicios`](../../src/pages/servicios.astro)). |
+| Prop                      | Tipo                      | Requerida | Descripción                                                                                                                                                                                                                                                     |
+| ------------------------- | ------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `entries`                 | `FaqItem[]`               | Sí        | Mismo shape que exporta `FaqSection.astro`.                                                                                                                                                                                                                     |
+| `ctaHref`                 | `string`                  | No        | Default `#contacto`.                                                                                                                                                                                                                                            |
+| `showSidebarCta`          | `boolean`                 | No        | Default `true`. Si es `false`, el grid superior pasa a una sola columna (`md:grid-cols-1`): el encabezado ocupa todo el ancho y **no queda columna vacía**; el listado de acordeones va debajo a ancho completo (p. ej. `/servicios`).                          |
+| `eyebrowEs` / `eyebrowEn` | `string`                  | No        | Rótulo superior.                                                                                                                                                                                                                                                |
+| `headingEs` / `headingEn` | `string`                  | No        | Título del bloque.                                                                                                                                                                                                                                              |
+| `introEs` / `introEn`     | `string`                  | No        | Intro.                                                                                                                                                                                                                                                          |
+| `class`                   | `string`                  | No        | Clases del contenedor raíz (p. ej. `!mt-0` para anular el `mt-10` por defecto).                                                                                                                                                                                 |
+| `variant`                 | `'default' \| 'darkBand'` | No        | Default `default`. En `darkBand`, colores fijos (slate/orange) para el bloque sobre fondo oscuro; evita que, con `html.light`, los tokens claros rompan contraste en FAQ incrustada en `section-dark` (p. ej. [`/servicios`](../../src/pages/servicios.astro)). |
 
 ## Comportamiento
 

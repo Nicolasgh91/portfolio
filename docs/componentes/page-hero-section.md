@@ -11,23 +11,23 @@ Patrón reutilizable para rutas que necesiten imagen de fondo a pantalla complet
 
 ## Props
 
-| Prop | Tipo | Requerida | Default | Descripción |
-|------|------|-----------|---------|-------------|
-| `image` | `ImageMetadata` | Sí | — | Origen del `<Image />`; importar en la página y pasar la referencia. |
-| `alt` | `string` | Sí | — | Texto alternativo. Evaluar el asset: si es puramente ornamental tras las capas, puede ser `""`; si aporta contexto reconocible, descripción breve en el idioma adecuado. |
-| `imageWidth` | `number` | Sí | — | Ancho intrínseco del raster (p. ej. `1536` para `hero-servicios-derecha.webp` en `/servicios`). |
-| `imageHeight` | `number` | Sí | — | Alto intrínseco (p. ej. `1024`). |
-| `headingId` | `string` | Sí | — | `id` del `<h1>`; el `<section>` usa `aria-labelledby={headingId}`. |
-| `labelText` | `string` | No | — | Rótulo superior en español (tipo `SectionLabel`). |
-| `labelTextEn` | `string` | No | — | Rótulo en inglés. |
+| Prop          | Tipo            | Requerida | Default | Descripción                                                                                                                                                              |
+| ------------- | --------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `image`       | `ImageMetadata` | Sí        | —       | Origen del `<Image />`; importar en la página y pasar la referencia.                                                                                                     |
+| `alt`         | `string`        | Sí        | —       | Texto alternativo. Evaluar el asset: si es puramente ornamental tras las capas, puede ser `""`; si aporta contexto reconocible, descripción breve en el idioma adecuado. |
+| `imageWidth`  | `number`        | Sí        | —       | Ancho intrínseco del raster (p. ej. `1536` para `hero-servicios-derecha.webp` en `/servicios`).                                                                          |
+| `imageHeight` | `number`        | Sí        | —       | Alto intrínseco (p. ej. `1024`).                                                                                                                                         |
+| `headingId`   | `string`        | Sí        | —       | `id` del `<h1>`; el `<section>` usa `aria-labelledby={headingId}`.                                                                                                       |
+| `labelText`   | `string`        | No        | —       | Rótulo superior en español (tipo `SectionLabel`).                                                                                                                        |
+| `labelTextEn` | `string`        | No        | —       | Rótulo en inglés.                                                                                                                                                        |
 
 Si **ambos** `labelText` y `labelTextEn` están ausentes o en blanco, no se renderiza el rótulo. Si solo uno está definido, el otro toma el mismo valor (fallback) para mantener ambos idiomas en `SectionLabel`.
 
 ## Slots
 
-| Slot | Uso |
-|------|-----|
-| `heading` | Contenido del `<h1>` (markup bilingüe `data-es` / `data-en`, `<em>`, etc.). |
+| Slot      | Uso                                                                                   |
+| --------- | ------------------------------------------------------------------------------------- |
+| `heading` | Contenido del `<h1>` (markup bilingüe `data-es` / `data-en`, `<em>`, etc.).           |
 | `default` | Cuerpo introductorio bajo el título; suele ser un `<p>` con el mismo patrón bilingüe. |
 
 ## Comportamiento

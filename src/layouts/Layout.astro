@@ -1,15 +1,15 @@
 ---
-import '../styles/tokens.css';
-import Analytics from '@vercel/analytics/astro';
-import Footer from '../components/Footer.astro';
-import BackToTop from '../components/BackToTop.astro';
-import site from '../data/site.json';
-import { getAlternatePathname, localeFromPathname } from '../lib/locale-path';
+import "../styles/tokens.css";
+import Analytics from "@vercel/analytics/astro";
+import Footer from "../components/Footer.astro";
+import BackToTop from "../components/BackToTop.astro";
+import site from "../data/site.json";
+import { getAlternatePathname, localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   title: string;
   description: string;
-  lang?: 'es' | 'en';
+  lang?: "es" | "en";
   ogImage?: string;
   /** MIME type for og:image (e.g. image/webp). If omitted, inferred from ogImage path extension. */
   ogImageType?: string;
@@ -21,31 +21,35 @@ const {
   title,
   description,
   lang,
-  ogImage = '/og-desktop.png',
+  ogImage = "/og-desktop.png",
   ogImageType: ogImageTypeProp,
   ogImageWidth: ogImageWidthProp,
   ogImageHeight: ogImageHeightProp,
 } = Astro.props;
 
-const siteName = 'Nicolás Hruszczak';
-const siteUrl = 'https://escalatunegocioconia.com';
+const siteName = "Nicolás Hruszczak";
+const siteUrl = "https://escalatunegocioconia.com";
 const pathname = Astro.url.pathname;
 const locale = localeFromPathname(pathname);
 const alternatePathname = getAlternatePathname(pathname);
 const canonical = new URL(pathname, siteUrl).href;
-const englishHref = locale === 'en' ? canonical : new URL(alternatePathname, siteUrl).href;
-const spanishHref = locale === 'es' ? canonical : new URL(alternatePathname, siteUrl).href;
+const englishHref =
+  locale === "en" ? canonical : new URL(alternatePathname, siteUrl).href;
+const spanishHref =
+  locale === "es" ? canonical : new URL(alternatePathname, siteUrl).href;
 const xDefaultHref = spanishHref;
-const resolvedTitle = locale === 'en' ? `${title} | English` : title;
+const resolvedTitle = locale === "en" ? `${title} | English` : title;
 const resolvedDescription =
-  locale === 'en' ? `${description} English version for international audiences.` : description;
+  locale === "en"
+    ? `${description} English version for international audiences.`
+    : description;
 
 function inferOgImageType(path: string): string {
-  const lower = path.split('?')[0].toLowerCase();
-  if (lower.endsWith('.webp')) return 'image/webp';
-  if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
-  if (lower.endsWith('.gif')) return 'image/gif';
-  return 'image/png';
+  const lower = path.split("?")[0].toLowerCase();
+  if (lower.endsWith(".webp")) return "image/webp";
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+  if (lower.endsWith(".gif")) return "image/gif";
+  return "image/png";
 }
 
 const ogImageType = ogImageTypeProp ?? inferOgImageType(ogImage);
@@ -101,16 +105,20 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- JSON-LD global: Person (FT-06: sameAs y knowsAbout desde site.json) -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": site.author.name,
-      "jobTitle": "Analista Funcional y Desarrollador Full Stack",
-      "description": "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
-      "url": site.author.siteUrl,
-      "sameAs": Object.values(site.social),
-      "knowsAbout": site.stack
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: site.author.name,
+        jobTitle: "Analista Funcional y Desarrollador Full Stack",
+        description:
+          "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
+        url: site.author.siteUrl,
+        sameAs: Object.values(site.social),
+        knowsAbout: site.stack,
+      })}
+    />
 
     <!-- JSON-LD global: ProfessionalService -->
     <script type="application/ld+json">
@@ -160,53 +168,58 @@ const ogImageHeight = ogImageHeightProp ?? 768;
          desde /scripts/*.js en <head>. Ver public/scripts/ y vercel.json CSP. -->
 
     <script>
-      (function() {
+      (function () {
         function initChatWidget() {
-          const iframe = document.createElement('iframe');
-          iframe.src = '/chatbot/widget/index.html';
-          iframe.setAttribute('allowtransparency', 'true');
-          iframe.setAttribute('title', 'Asistente virtual');
-          iframe.setAttribute('aria-label', 'Chat de asistencia');
+          const iframe = document.createElement("iframe");
+          iframe.src = "/chatbot/widget/index.html";
+          iframe.setAttribute("allowtransparency", "true");
+          iframe.setAttribute("title", "Asistente virtual");
+          iframe.setAttribute("aria-label", "Chat de asistencia");
 
           iframe.style.cssText = [
-            'position:fixed',
-            'bottom:0',
-            'right:0',
-            'width:84px',
-            'height:84px',
-            'border:none',
-            'z-index:9999',
-            'background:transparent',
-          ].join(';');
+            "position:fixed",
+            "bottom:0",
+            "right:0",
+            "width:84px",
+            "height:84px",
+            "border:none",
+            "z-index:9999",
+            "background:transparent",
+          ].join(";");
           document.body.appendChild(iframe);
 
           let chatOpen = false;
 
-          window.addEventListener('message', (e) => {
+          window.addEventListener("message", (e) => {
             if (e.source !== iframe.contentWindow) return;
-            if (e.data?.chat === 'open') {
+            if (e.data?.chat === "open") {
               chatOpen = true;
-              iframe.style.width = '420px';
-              iframe.style.height = '680px';
+              iframe.style.width = "420px";
+              iframe.style.height = "680px";
             }
-            if (e.data?.chat === 'close') {
+            if (e.data?.chat === "close") {
               chatOpen = false;
-              iframe.style.width = '84px';
-              iframe.style.height = '84px';
+              iframe.style.width = "84px";
+              iframe.style.height = "84px";
             }
           });
 
           // L-14: solo notificamos "chat:close" cuando el widget está abierto.
           // Antes se posteaba en cada click del documento, independientemente
           // del estado del iframe.
-          document.addEventListener('click', () => {
+          document.addEventListener("click", () => {
             if (!chatOpen) return;
-            try { iframe.contentWindow.postMessage('chat:close', window.location.origin); } catch(e) {}
+            try {
+              iframe.contentWindow.postMessage(
+                "chat:close",
+                window.location.origin,
+              );
+            } catch {}
           });
         }
 
         // Defer chat widget until browser is idle to reduce TBT
-        if ('requestIdleCallback' in window) {
+        if ("requestIdleCallback" in window) {
           requestIdleCallback(initChatWidget, { timeout: 3500 });
         } else {
           setTimeout(initChatWidget, 3500);

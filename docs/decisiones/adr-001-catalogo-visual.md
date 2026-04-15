@@ -17,10 +17,12 @@ No incorporar Storybook en esta etapa. Mantener documentación funcional en Mark
 ## Consecuencias
 
 ### Positivas
+
 - Menor complejidad operativa inmediata.
 - Menos mantenimiento paralelo (código + stories).
 
 ### Negativas
+
 - Sin catálogo visual aislado por componente.
 - Más dependencia de páginas reales para QA de estados UI.
 
