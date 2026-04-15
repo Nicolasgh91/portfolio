@@ -5,7 +5,7 @@ import Nav from "../components/Nav.astro";
 import PageHeroSection from "../components/PageHeroSection.astro";
 import SectionWrapper from "../components/SectionWrapper.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import LogoMarquee from "../components/LogoMarquee.astro";
+import LiquidGlassMarquee from "../components/LiquidGlassMarquee.astro";
 import { getCollection } from "astro:content";
 import bannerTalentoNaranja from "../assets/talento/banner-talento-naranja.webp";
 
@@ -362,10 +362,27 @@ const softSkills = [
       </section>
 
       <div
-        class="mb-6 opacity-0 translate-y-4 transition-all duration-700 md:mb-8"
+        class="opacity-0 translate-y-4 transition-all duration-700"
         data-alt-reveal
       >
-        <LogoMarquee />
+        <LiquidGlassMarquee
+          items={[
+            "Astro",
+            "React",
+            "TypeScript",
+            "Python",
+            "FastAPI",
+            "Tailwind CSS",
+            "PostgreSQL",
+            "Docker",
+            "Vercel",
+            "Supabase",
+            "Zod",
+            "MDX",
+          ]}
+          label="Stack y herramientas"
+          labelEn="Stack & tools"
+        />
       </div>
 
       <div
