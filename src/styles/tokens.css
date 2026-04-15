@@ -803,6 +803,8 @@ html.light .catalog-carousel__nav {
 
   .liquid-glass {
     position: relative;
+    display: flex;
+    flex-direction: column;
     z-index: 1;
     width: 100%;
     flex: 1;
@@ -851,6 +853,9 @@ html.light .catalog-carousel__nav {
   .liquid-glass__track {
     position: relative;
     z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
     overflow: hidden;
     mask-image: linear-gradient(
       to right,
