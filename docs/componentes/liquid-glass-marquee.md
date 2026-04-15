@@ -33,6 +33,7 @@ Definidos en `src/styles/tokens.css` dentro de `@layer components`:
 
 También consume reglas de `.light .liquid-glass`, `@keyframes liquidGlassScroll` y `.liquid-glass:hover`.
 En esta iteración también consume ajustes de `overflow`/`border-radius` en `.liquid-glass-marquee__bg` y refinamiento de espaciado/alineación en `.liquid-glass` y `.liquid-glass__labels`.
+La capa `.liquid-glass` está dimensionada 1:1 respecto de `.liquid-glass-marquee__bg` (sin márgenes externos) para que ambas superficies tengan exactamente la misma caja visible.
 
 ## Dependencias de imágenes
 
@@ -56,6 +57,7 @@ Nota: no se usa `nh:reduced-motion` porque actualmente el sistema de accesibilid
 - El fondo mesh (`.webp`) actúa como capa de soporte visual para que el cristal no quede plano en dark/light.
 - Los items del marquee no son interactivos (`cursor: default`, `user-select: none`) y no tienen hover individual.
 - La capa de fondo debe mantenerse contenida (`overflow: hidden` + `border-radius` consistente) para evitar bleed en esquinas redondeadas.
+- El espaciado visual del contenido debe resolverse con `padding` interno de `.liquid-glass`, no con `margin` externo, para preservar el contrato de tamaño 1:1 con el fondo.
 
 ## Uso actual
 

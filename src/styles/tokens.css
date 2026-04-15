@@ -803,10 +803,11 @@ html.light .catalog-carousel__nav {
   .liquid-glass {
     position: relative;
     z-index: 1;
-    margin: 1rem;
+    width: 100%;
+    min-height: 100%;
     padding: 2.5rem 2rem;
     border: var(--lg-border);
-    border-radius: 12px;
+    border-radius: inherit;
     background: var(--lg-bg);
     -webkit-backdrop-filter: var(--lg-backdrop);
     backdrop-filter: var(--lg-backdrop);
@@ -908,7 +909,6 @@ html.light .catalog-carousel__nav {
 
   @media (max-width: 768px) {
     .liquid-glass {
-      margin: 0.75rem;
       padding: 1.75rem 1rem;
     }
     .liquid-glass__labels {
