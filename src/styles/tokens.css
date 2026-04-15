@@ -726,7 +726,7 @@ html.light .catalog-carousel__nav {
     width: auto;
   }
 
-  /* LiquidGlassMarquee (/talento): contenedor con fondo mesh + cristal translúcido */
+  /* LiquidGlassMarquee (/talento): contenedor con fondo mesh + cristal translúcido - actualizado */
   .liquid-glass {
     --lg-bg: linear-gradient(
       145deg,
