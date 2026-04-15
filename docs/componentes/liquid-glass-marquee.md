@@ -6,7 +6,7 @@
 
 ## Descripción
 
-Contenedor visual estilo liquid glass para el stack tecnológico en `/talento`. Renderiza un marquee de texto plano no interactivo, con fondo mesh por tema, blur de cristal y pausa de animación cuando el sitio está en modo reduced motion.
+Contenedor visual estilo liquid glass para el stack tecnológico en `/talento`. Renderiza un marquee de texto plano no interactivo, con fondo mesh por tema, blur de cristal y pausa de animación cuando el sitio está en modo reduced motion. La cabecera visual usa un único label superior (sin leyenda secundaria a la derecha).
 
 ## Props
 
@@ -32,6 +32,7 @@ Definidos en `src/styles/tokens.css` dentro de `@layer components`:
 - `--lg-separator`
 
 También consume reglas de `.light .liquid-glass`, `@keyframes liquidGlassScroll` y `.liquid-glass:hover`.
+En esta iteración también consume ajustes de `overflow`/`border-radius` en `.liquid-glass-marquee__bg` y refinamiento de espaciado/alineación en `.liquid-glass` y `.liquid-glass__labels`.
 
 ## Dependencias de imágenes
 
@@ -54,6 +55,7 @@ Nota: no se usa `nh:reduced-motion` porque actualmente el sistema de accesibilid
 - `backdrop-filter` requiere una capa no opaca detrás para que el efecto sea perceptible.
 - El fondo mesh (`.webp`) actúa como capa de soporte visual para que el cristal no quede plano en dark/light.
 - Los items del marquee no son interactivos (`cursor: default`, `user-select: none`) y no tienen hover individual.
+- La capa de fondo debe mantenerse contenida (`overflow: hidden` + `border-radius` consistente) para evitar bleed en esquinas redondeadas.
 
 ## Uso actual
 
