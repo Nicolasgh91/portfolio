@@ -771,6 +771,7 @@ html.light .catalog-carousel__nav {
     overflow: hidden;
     border-radius: 14px;
     min-height: 12.5rem;
+    display: flex;
   }
 
   .liquid-glass-marquee__bg {
@@ -804,7 +805,7 @@ html.light .catalog-carousel__nav {
     position: relative;
     z-index: 1;
     width: 100%;
-    min-height: 100%;
+    flex: 1;
     padding: 2.5rem 2rem;
     border: var(--lg-border);
     border-radius: inherit;
