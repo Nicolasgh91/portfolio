@@ -10,13 +10,13 @@ Contenedor visual estilo liquid glass para el stack tecnológico en `/talento`. 
 
 ## Props
 
-| Prop      | Tipo       | Default                  | Descripción                                                                            |
-| --------- | ---------- | ------------------------ | -------------------------------------------------------------------------------------- |
-| `items`   | `string[]` | —                        | Lista de tecnologías mostradas en el marquee.                                          |
-| `label`   | `string`   | `"Stack y herramientas"` | Label superior izquierdo en español.                                                   |
-| `labelEn` | `string`   | `"Stack & tools"`        | Label equivalente en inglés (`data-en`); el `aria-label` también se localiza por ruta. |
-| `speed`   | `number`   | `22`                     | Duración del ciclo completo (`liquidGlassScroll`) en segundos.                         |
-| `class`   | `string`   | `""`                     | Clase adicional para el contenedor externo.                                            |
+| Prop      | Tipo       | Default                  | Descripción                                                    |
+| --------- | ---------- | ------------------------ | -------------------------------------------------------------- |
+| `items`   | `string[]` | —                        | Lista de tecnologías mostradas en el marquee.                  |
+| `label`   | `string`   | `"Stack y herramientas"` | Label superior izquierdo en español.                           |
+| `labelEn` | `string`   | `"Stack & tools"`        | Label equivalente en inglés (`data-en`).                       |
+| `speed`   | `number`   | `22`                     | Duración del ciclo completo (`liquidGlassScroll`) en segundos. |
+| `class`   | `string`   | `""`                     | Clase adicional para el contenedor externo.                    |
 
 ## Tokens CSS consumidos
 
