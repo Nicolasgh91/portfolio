@@ -131,37 +131,51 @@ const softSkills = [
     >
       <Fragment slot="heading">Nicolás Hruszczak</Fragment>
       <p>
-        <span data-es
-          >Analista desarrollador de <em
-            class="not-italic text-[var(--accent-text)]"
-            >soluciones full stack o funcionales</em
-          >
-          para cualquier aplicación de Software. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Análisis de necesidades y puntos de dolor</em
-          >, con <em class="not-italic text-[var(--accent-text)]"
-            >propuestas de mejora eficientes</em
-          > y acorde al alcance establecido. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Comunicación clara con negocio y stakeholders</em
-          >, mentoría a perfiles en formación y criterio de producto para
-          priorizar entregas con impacto.</span
-        >
-        <span data-en class="hidden"
-          >Analyst-developer of <em class="not-italic text-[var(--accent-text)]"
-            >full-stack or functional solutions</em
-          >
-          for any software application. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Analysis of needs and pain points</em
-          >, with <em class="not-italic text-[var(--accent-text)]"
-            >efficient improvement proposals</em
-          > aligned with the agreed scope. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Clear communication with business and stakeholders</em
-          >, mentoring for early-career profiles and product judgment to
-          prioritize high-impact delivery.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Analyst-developer of{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                full-stack or functional solutions
+              </em>{" "}
+              for any software application.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Analysis of needs and pain points
+              </em>
+              , with{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                efficient improvement proposals
+              </em>{" "}
+              aligned with the agreed scope.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Clear communication with business and stakeholders
+              </em>
+              , mentoring for early-career profiles and product judgment to
+              prioritize high-impact delivery.
+            </>
+          ) : (
+            <>
+              Analista desarrollador de{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                soluciones full stack o funcionales
+              </em>{" "}
+              para cualquier aplicación de Software.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Análisis de necesidades y puntos de dolor
+              </em>
+              , con{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                propuestas de mejora eficientes
+              </em>{" "}
+              y acorde al alcance establecido.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Comunicación clara con negocio y stakeholders
+              </em>
+              , mentoría a perfiles en formación y criterio de producto para
+              priorizar entregas con impacto.
+            </>
+          )
+        }
       </p>
       <div class="mt-8 flex justify-center md:justify-start">
         <a
@@ -190,15 +204,13 @@ const softSkills = [
           <p
             class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
           >
-            <span data-es>Capacidades</span>
-            <span data-en class="hidden">Capabilities</span>
+            {isEnglish ? "Capabilities" : "Capacidades"}
           </p>
           <h2
             id="capabilities-heading"
             class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            <span data-es>Capacidades técnicas</span>
-            <span data-en class="hidden">Technical capabilities</span>
+            {isEnglish ? "Technical capabilities" : "Capacidades técnicas"}
           </h2>
         </header>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
@@ -206,16 +218,10 @@ const softSkills = [
             capabilities.map((cap) => (
               <div class="service-card-shell-bg shell-hover rounded-2xl p-6 md:p-8">
                 <h3 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)] md:text-2xl">
-                  <span data-es>{cap.title}</span>
-                  <span data-en class="hidden">
-                    {cap.titleEn}
-                  </span>
+                  {isEnglish ? cap.titleEn : cap.title}
                 </h3>
                 <p class="mt-3 text-base font-normal leading-relaxed text-[var(--text-secondary)]">
-                  <span data-es>{cap.description}</span>
-                  <span data-en class="hidden">
-                    {cap.descriptionEn}
-                  </span>
+                  {isEnglish ? cap.descriptionEn : cap.description}
                 </p>
               </div>
             ))
@@ -464,16 +470,10 @@ const softSkills = [
             softSkills.map((item) => (
               <div class="service-card-shell-bg shell-hover rounded-2xl p-5 md:p-6">
                 <h3 class="font-display text-lg font-semibold tracking-tight text-[var(--text-primary)]">
-                  <span data-es>{item.title}</span>
-                  <span data-en class="hidden">
-                    {item.titleEn}
-                  </span>
+                  {isEnglish ? item.titleEn : item.title}
                 </h3>
                 <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
-                  <span data-es>{item.description}</span>
-                  <span data-en class="hidden">
-                    {item.descriptionEn}
-                  </span>
+                  {isEnglish ? item.descriptionEn : item.description}
                 </p>
               </div>
             ))
@@ -638,15 +638,13 @@ const softSkills = [
           <p
             class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
           >
-            <span data-es>Ingeniería</span>
-            <span data-en class="hidden">Engineering</span>
+            {isEnglish ? "Engineering" : "Ingeniería"}
           </p>
           <h2
             id="projects-heading"
             class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            <span data-es>Proyectos técnicos</span>
-            <span data-en class="hidden">Technical projects</span>
+            {isEnglish ? "Technical projects" : "Proyectos técnicos"}
           </h2>
         </header>
 
@@ -709,31 +707,23 @@ const softSkills = [
           <h2
             class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl"
           >
-            <span data-es>¿Hablamos?</span>
-            <span data-en class="hidden">Let&apos;s talk</span>
+            {isEnglish ? "Let's talk" : "¿Hablamos?"}
           </h2>
           <p
             class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90"
           >
-            <span data-es
-              >Si tenés dudas sobre mi perfil, querés consultar referencias o
-              explorar una colaboración de consultoría, el pie del sitio incluye
-              el formulario de contacto si preferís dejar un mensaje
-              estructurado.</span
-            >
-            <span data-en class="hidden"
-              >If you have questions about my background, want to check
-              references, or explore a consulting engagement, the site footer
-              includes the contact form if you prefer a structured message.</span
-            >
+            {
+              isEnglish
+                ? "If you have questions about my background, want to check references, or explore a consulting engagement, the site footer includes the contact form if you prefer a structured message."
+                : "Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría, el pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado."
+            }
           </p>
           <p class="mt-8">
             <a
               href={servicesContactHref}
               class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
             >
-              <span data-es>Contactar</span>
-              <span data-en class="hidden">Contact</span>
+              <span>{isEnglish ? "Contact" : "Contactar"}</span>
               <span class="arrow" aria-hidden="true">→</span>
             </a>
           </p>

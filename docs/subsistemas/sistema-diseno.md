@@ -21,7 +21,7 @@
 ## Tema y a11y
 
 - `nhTheme`: alterna clase `light`.
-- `nhLang`: inicializa desde `<html lang>`, sincroniza textos `data-en/data-es` y alterna visibilidad de pares separados (`span data-es` / `span data-en class="hidden"`). `tokens.css` define la visibilidad inicial para evitar que `/en` pinte primero en español.
+- `nhLang`: inicializa desde `<html lang>` y sincroniza textos/placeholder de nodos interactivos con `data-en/data-es`. El contenido visible de páginas compartidas se resuelve por SSR con `localeFromPathname`; `tokens.css` ya no mantiene reglas globales de visibilidad i18n ni depende de `.hidden` para alternar idiomas.
 - `nhA11y`: escala, alto contraste y motion reduction.
 
 ## Ancho de layout

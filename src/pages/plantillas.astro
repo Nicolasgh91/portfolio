@@ -526,8 +526,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             href={servicesContactHref}
             class="btn-bounce relative mt-8 inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-lg)] bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
-            <span data-es>Agendar reunión</span>
-            <span data-en class="hidden">Book a call</span>
+            <span>{isEnglish ? "Book a call" : "Agendar reunión"}</span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
           <p

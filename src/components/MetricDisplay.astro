@@ -5,6 +5,7 @@ interface Props {
   labelEn: string;
   valueColorClass?: string;
 }
+import { localeFromPathname } from "../lib/locale-path";
 
 const {
   value,
@@ -12,6 +13,7 @@ const {
   labelEn,
   valueColorClass = "text-[var(--accent)]",
 } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div class="text-center">
@@ -27,7 +29,6 @@ const {
   <p
     class="mt-2 text-sm font-medium uppercase tracking-wider text-[var(--text-secondary)]"
   >
-    <span data-es>{label}</span>
-    <span data-en class="hidden">{labelEn}</span>
+    {isEnglish ? labelEn : label}
   </p>
 </div>

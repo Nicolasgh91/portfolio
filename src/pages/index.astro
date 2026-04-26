@@ -70,24 +70,19 @@ const templatesWithResolvedDemo = landingTemplates
           <h2
             class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            <span data-es>Para empresas y pymes</span>
-            <span data-en class="hidden">For businesses &amp; SMEs</span>
+            {isEnglish ? "For businesses & SMEs" : "Para empresas y pymes"}
           </h2>
           <p class="text-base leading-relaxed text-[var(--text-secondary)]">
-            <span data-es
-              >Diagnóstico, propuesta y ejecución. Reducción de costos fijos,
-              automatización de procesos y sistemas de gestión propietarios.</span
-            >
-            <span data-en class="hidden"
-              >Diagnosis, proposal and execution. Fixed cost reduction, process
-              automation, and proprietary management systems.</span
-            >
+            {
+              isEnglish
+                ? "Diagnosis, proposal and execution. Fixed cost reduction, process automation, and proprietary management systems."
+                : "Diagnóstico, propuesta y ejecución. Reducción de costos fijos, automatización de procesos y sistemas de gestión propietarios."
+            }
           </p>
           <span
             class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)] md:mt-3"
           >
-            <span data-es>Explorar servicios</span>
-            <span data-en class="hidden">Explore services</span>
+            <span>{isEnglish ? "Explore services" : "Explorar servicios"}</span>
             <span class="arrow" aria-hidden="true">
               <svg
                 class="h-4 w-4"
@@ -111,25 +106,21 @@ const templatesWithResolvedDemo = landingTemplates
           <h2
             class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            <span data-es>Para reclutadores</span>
-            <span data-en class="hidden">For recruiters</span>
+            {isEnglish ? "For recruiters" : "Para reclutadores"}
           </h2>
           <p class="text-base leading-relaxed text-[var(--text-secondary)]">
-            <span data-es
-              >Analista funcional, desarrollador full stack y arquitecto de
-              software. Stack actualizado, experiencia en IA y metodologías
-              ágiles.</span
-            >
-            <span data-en class="hidden"
-              >Functional analyst, full stack developer and software architect.
-              Current stack, AI expertise and agile practices.</span
-            >
+            {
+              isEnglish
+                ? "Functional analyst, full stack developer and software architect. Current stack, AI expertise and agile practices."
+                : "Analista funcional, desarrollador full stack y arquitecto de software. Stack actualizado, experiencia en IA y metodologías ágiles."
+            }
           </p>
           <span
             class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)] md:mt-3"
           >
-            <span data-es>Ver perfil técnico</span>
-            <span data-en class="hidden">View technical profile</span>
+            <span>
+              {isEnglish ? "View technical profile" : "Ver perfil técnico"}
+            </span>
             <span class="arrow" aria-hidden="true">
               <svg
                 class="h-4 w-4"
@@ -160,8 +151,7 @@ const templatesWithResolvedDemo = landingTemplates
         <h2
           class="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-4xl"
         >
-          <span data-es>Trabajo reciente</span>
-          <span data-en class="hidden">Recent work</span>
+          {isEnglish ? "Recent work" : "Trabajo reciente"}
         </h2>
       </header>
 
@@ -213,8 +203,9 @@ const templatesWithResolvedDemo = landingTemplates
           href={blogHref}
           class="btn-secondary btn-bounce inline-flex items-center gap-1.5"
         >
-          <span data-es>Leer artículos técnicos</span>
-          <span data-en class="hidden">Read technical articles</span>
+          <span>
+            {isEnglish ? "Read technical articles" : "Leer artículos técnicos"}
+          </span>
           <span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
@@ -236,8 +227,7 @@ const templatesWithResolvedDemo = landingTemplates
         <h2
           class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl"
         >
-          <span data-es>Métricas de impacto</span>
-          <span data-en class="hidden">Impact metrics</span>
+          {isEnglish ? "Impact metrics" : "Métricas de impacto"}
         </h2>
       </header>
       <div class="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
@@ -274,19 +264,14 @@ const templatesWithResolvedDemo = landingTemplates
               colorClass="text-[var(--accent)]"
             />
             <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl">
-              <span data-es>Sitios que ya están en producción</span>
-              <span data-en class="hidden">
-                Sites already in production
-              </span>
+              {isEnglish
+                ? "Sites already in production"
+                : "Sitios que ya están en producción"}
             </h2>
             <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-              <span data-es>
-                Recorré los proyectos web que nuestros clientes usan todos los
-                días.
-              </span>
-              <span data-en class="hidden">
-                Browse the web projects our clients use every day.
-              </span>
+              {isEnglish
+                ? "Browse the web projects our clients use every day."
+                : "Recorré los proyectos web que nuestros clientes usan todos los días."}
             </p>
           </header>
 
@@ -322,24 +307,15 @@ const templatesWithResolvedDemo = landingTemplates
                         />
                       ) : (
                         <div class="flex h-full w-full items-center justify-center bg-[var(--bg-tag)] text-xs font-medium text-[var(--text-muted)]">
-                          <span data-es>Vista previa</span>
-                          <span data-en class="hidden">
-                            Preview
-                          </span>
+                          {isEnglish ? "Preview" : "Vista previa"}
                         </div>
                       )}
                     </div>
                     <h3 class="mt-3 font-display text-base font-semibold tracking-tight text-[var(--text-primary)]">
-                      <span data-es>{template.title}</span>
-                      <span data-en class="hidden">
-                        {template.titleEn}
-                      </span>
+                      {isEnglish ? template.titleEn : template.title}
                     </h3>
                     <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--accent)]">
-                      <span data-es>Ir al sitio</span>
-                      <span data-en class="hidden">
-                        Visit site
-                      </span>
+                      <span>{isEnglish ? "Visit site" : "Ir al sitio"}</span>
                       <span class="arrow" aria-hidden="true">
                         →
                       </span>

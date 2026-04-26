@@ -315,16 +315,6 @@ body {
   top: var(--sp-md);
 }
 
-/* Locale visibility for shared ES/EN Astro templates.
-   This makes `/en` server-rendered routes expose translated spans before JS hydration. */
-html[lang="es"] [data-en].hidden,
-html[lang="en"] [data-es] {
-  display: none !important;
-}
-html[lang="en"] [data-en].hidden {
-  display: inline !important;
-}
-
 /* ── Tipografía ───────────────────────────────────────────── */
 h1,
 h2,

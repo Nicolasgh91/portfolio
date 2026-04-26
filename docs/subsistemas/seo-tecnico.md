@@ -40,7 +40,7 @@
 - Rutas EN activas en `src/pages/en/**`.
 - El selector de idioma del nav usa navegación por URL (anchor con `href` a la ruta alterna), no mutación de contenido via JS.
 - Navegación y footer resuelven enlaces internos por locale para reforzar descubrimiento de URLs EN.
-- Las rutas EN reutilizan plantillas Astro compartidas; `tokens.css` aplica visibilidad inicial para `data-es` / `data-en` y `controllers.js` sincroniza el DOM según `<html lang>`.
+- Las rutas EN reutilizan plantillas Astro compartidas; el copy visible se resuelve por SSR con `localeFromPathname`, evitando DOM duplicado por idioma. `controllers.js` queda limitado a sincronizar nodos interactivos con `data-es` / `data-en`.
 - El cuerpo traducido de artículos usa la colección `blog-en` (`src/content/blog-en/*`) solo para `/en/blog/:slug`, mientras `blog` conserva metadatos, taxonomía y rutas.
 
 ## 404 y señales de calidad

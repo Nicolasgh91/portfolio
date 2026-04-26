@@ -330,8 +330,7 @@ const related = allPosts
                 {isEnglish ? "← Back to blog" : "← Volver al blog"}
               </a>
               <a href={servicesContactHref} class="btn-primary btn-bounce">
-                <span data-es>Hablemos</span>
-                <span data-en class="hidden">Let&apos;s work together</span>
+                <span>{isEnglish ? "Let's work together" : "Hablemos"}</span>
                 <span class="arrow" aria-hidden="true">→</span>
               </a>
             </div>
@@ -350,7 +349,7 @@ const related = allPosts
                   data-en="Related articles"
                   data-es="Artículos relacionados"
                 >
-                  Artículos relacionados
+                  {isEnglish ? "Related articles" : "Artículos relacionados"}
                 </h2>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {related.map((r) => (
@@ -371,10 +370,7 @@ const related = allPosts
                           : r.data.title}
                       </h3>
                       <span class="mt-auto inline-flex items-center gap-1 text-xs text-[var(--color-accent-400)]">
-                        <span data-es>Leer</span>
-                        <span data-en class="hidden">
-                          Read
-                        </span>
+                        <span>{isEnglish ? "Read" : "Leer"}</span>
                         <span class="arrow" aria-hidden="true">
                           →
                         </span>

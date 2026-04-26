@@ -14,7 +14,7 @@
 
 - Inyecta JSON-LD `SiteNavigationElement` con títulos y URLs localizados de servicios (anclas `#`), posts de blog (hasta 6, no draft), CTA contacto, email.
 - Pie con enlaces a servicios (mapeo slug → id de ancla `serviceAnchorId`), artículos recientes, redes desde `site.json`, año dinámico y labels ES/EN según `localeFromPathname`.
-- CTA “Agenda una reunión” / “Book a meeting”: `btn-primary btn-bounce` con `span.arrow` para la flecha (ver [`btn-bounce.md`](./btn-bounce.md)).
+- CTA “Agenda una reunión” / “Book a meeting”: texto resuelto por SSR y `btn-primary btn-bounce` con `span.arrow` para la flecha (ver [`btn-bounce.md`](./btn-bounce.md)).
 - Estructura semántica `contentinfo` y enlaces legales/CTA según diseño actual del archivo.
 
 ## Decisiones de diseño

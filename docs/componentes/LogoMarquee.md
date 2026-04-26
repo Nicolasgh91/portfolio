@@ -19,7 +19,7 @@ Ninguna; la lista de marcas está definida en el frontmatter del componente como
 - **Fondo:** tema por defecto (sin `html.light`) → `hsl(var(--accent-h), var(--accent-s), 56%)` (equivalente a **`--color-accent-400`**). Con **`html.light`** → **`var(--color-accent-600)`**.
 - **Texto e íconos (SVG `currentColor`):** **`var(--color-on-accent)`** (`#0D0D10` en `:root`; no se redefine en `:root.light`, mismo valor por herencia). Los `<p>` del bloque usan **`color: inherit`** vía `.logo-marquee--accent p` para anular la regla global `p { color: var(--text-secondary) }`.
 - Slots de logo: **`logo-marquee__slot`** (altura de ícono fija).
-- Cabecera: rótulo “Stack y herramientas” + “Stack principal” / “Core stack” (`data-es` / `data-en`), alineación responsive como antes.
+- Cabecera: rótulo “Stack y herramientas” / “Stack & tools” + “Stack principal” / “Core stack”, resueltos por SSR con `localeFromPathname`; alineación responsive como antes.
 
 ## Comportamiento
 

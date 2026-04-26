@@ -31,12 +31,6 @@ window.nhLang = {
         el.textContent = val;
       }
     });
-    document.querySelectorAll("[data-en]:not([data-es])").forEach((el) => {
-      el.classList.toggle("hidden", !this.isEN);
-    });
-    document.querySelectorAll("[data-es]:not([data-en])").forEach((el) => {
-      el.classList.toggle("hidden", this.isEN);
-    });
     if (btn)
       btn.setAttribute(
         "aria-label",

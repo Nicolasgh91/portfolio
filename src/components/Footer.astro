@@ -98,8 +98,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
           {ctaBody}
         </p>
         <a href={`${servicesHref}#contacto`} class="btn-primary btn-bounce">
-          <span data-es>Agenda una reunión</span>
-          <span data-en class="hidden">Book a meeting</span>
+          <span>{isEnglish ? "Book a meeting" : "Agenda una reunión"}</span>
           <span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>

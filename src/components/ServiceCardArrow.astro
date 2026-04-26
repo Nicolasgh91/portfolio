@@ -3,12 +3,15 @@
  * Flecha "Ver servicio →" para las variantes de ServiceCard con href propio.
  * Pura markup sin props. Extraído de ServiceCard.astro (M-08).
  */
+import { localeFromPathname } from "../lib/locale-path";
+
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <span
   class="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]"
 >
-  <span data-en="View service" data-es="Ver servicio">Ver servicio</span>
+  <span>{isEnglish ? "View service" : "Ver servicio"}</span>
   <span class="arrow" aria-hidden="true">
     <svg
       width="14"

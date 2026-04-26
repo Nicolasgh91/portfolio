@@ -17,6 +17,7 @@
 
 - El tamaño del valor usa `style="font-size: var(--text-metric)"` para acoplarse a `--font-scale` (no utilidades `text-7xl` fijas).
 - El label usa `text-[var(--text-secondary)]` para seguir el tema sin utilidades `dark:` de Tailwind.
+- El label ES/EN se resuelve por SSR con `localeFromPathname`, sin spans duplicados ni dependencia de `.hidden`.
 
 ## Estado
 

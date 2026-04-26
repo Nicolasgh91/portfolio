@@ -185,10 +185,7 @@ const coverSrc = getTemplateCarouselImage(template.slug);
               rel="noopener noreferrer"
               class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              <span data-es>Ver demo</span>
-              <span data-en class="hidden">
-                View demo
-              </span>
+              <span>{isEnglish ? "View demo" : "Ver demo"}</span>
               <span class="arrow" aria-hidden="true">
                 →
               </span>
@@ -198,10 +195,7 @@ const coverSrc = getTemplateCarouselImage(template.slug);
               href={`${isEnglish ? "/en/templates" : "/plantillas"}/${template.slug}`}
               class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              <span data-es>Ver ficha</span>
-              <span data-en class="hidden">
-                View details
-              </span>
+              <span>{isEnglish ? "View details" : "Ver ficha"}</span>
               <span class="arrow" aria-hidden="true">
                 →
               </span>

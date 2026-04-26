@@ -8,6 +8,7 @@ import {
   FAQ_CATEGORY_LABEL,
   FAQ_CATEGORY_CLASS,
 } from "../lib/faq-taxonomy";
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   entries: FaqItem[];
@@ -46,6 +47,7 @@ const isDarkBand = variant === "darkBand";
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
 const categoryLabel = FAQ_CATEGORY_LABEL;
 const categoryTagClass = FAQ_CATEGORY_CLASS;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 const categoryTagClassDark: Record<FaqItem["category"], string> = {
   proceso: "border-orange-400/35 bg-orange-500/10 text-orange-300",
@@ -73,8 +75,7 @@ const rootToneClass = isDarkBand
           isDarkBand ? "text-orange-400" : "text-[var(--accent-text)]",
         ]}
       >
-        <span data-es>{eyebrowEs}</span>
-        <span data-en class="hidden">{eyebrowEn}</span>
+        {isEnglish ? eyebrowEn : eyebrowEs}
       </p>
       <h2
         id="faq-heading"
@@ -83,8 +84,7 @@ const rootToneClass = isDarkBand
           isDarkBand ? "text-white" : "text-[var(--text-primary)]",
         ]}
       >
-        <span data-es>{headingEs}</span>
-        <span data-en class="hidden">{headingEn}</span>
+        {isEnglish ? headingEn : headingEs}
       </h2>
       <p
         class:list={[
@@ -92,8 +92,7 @@ const rootToneClass = isDarkBand
           isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
         ]}
       >
-        <span data-es>{introEs}</span>
-        <span data-en class="hidden">{introEn}</span>
+        {isEnglish ? introEn : introEs}
       </p>
     </header>
     {
@@ -112,19 +111,13 @@ const rootToneClass = isDarkBand
               isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
             ]}
           >
-            <span data-es>
-              Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu
-              operación y te decimos si tiene sentido trabajar juntos.
-            </span>
-            <span data-en class="hidden">
-              Book a free 30-minute diagnosis. We review your operations and
-              tell you if it makes sense to work together.
-            </span>
+            {isEnglish
+              ? "Book a free 30-minute diagnosis. We review your operations and tell you if it makes sense to work together."
+              : "Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar juntos."}
           </p>
           <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
-            <span data-es>Agendar diagnóstico gratis</span>
-            <span data-en class="hidden">
-              Book free diagnosis
+            <span>
+              {isEnglish ? "Book free diagnosis" : "Agendar diagnóstico gratis"}
             </span>
             <span class="arrow" aria-hidden="true">
               →
@@ -160,7 +153,7 @@ const rootToneClass = isDarkBand
                   data-en={categoryLabel[item.category].en}
                   data-es={categoryLabel[item.category].es}
                 >
-                  {categoryLabel[item.category].es}
+                  {categoryLabel[item.category][isEnglish ? "en" : "es"]}
                 </span>
               )}
               <h3
@@ -171,9 +164,7 @@ const rootToneClass = isDarkBand
                     : "text-[var(--text-secondary)] group-open:text-[var(--accent)]",
                 ]}
               >
-                <span data-en={item.questionEn} data-es={item.question}>
-                  {item.question}
-                </span>
+                {isEnglish ? item.questionEn : item.question}
               </h3>
             </span>
             <span
@@ -194,10 +185,8 @@ const rootToneClass = isDarkBand
                 "m-0 text-sm leading-relaxed",
                 isDarkBand ? "text-slate-300" : "text-[var(--text-secondary)]",
               ]}
-              data-en={item.answerEn}
-              data-es={item.answer}
             >
-              {item.answer}
+              {isEnglish ? item.answerEn : item.answer}
             </p>
           </div>
         </details>

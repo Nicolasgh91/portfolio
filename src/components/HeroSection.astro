@@ -77,28 +77,28 @@ const activityItems = [
         class="font-display font-bold leading-[1.08] tracking-tight text-white"
         style="font-size: var(--text-5xl);"
       >
-        <span data-es
-          >Software a medida para <strong class="font-bold text-orange-400"
-            >multiplicar</strong
-          > el ROI.</span
-        >
-        <span data-en class="hidden"
-          >Custom software to <strong class="font-bold text-orange-400"
-            >multiply</strong
-          > your ROI.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Custom software to{" "}
+              <strong class="font-bold text-orange-400">multiply</strong> your
+              ROI.
+            </>
+          ) : (
+            <>
+              Software a medida para{" "}
+              <strong class="font-bold text-orange-400">multiplicar</strong> el
+              ROI.
+            </>
+          )
+        }
       </h1>
       <p class="mt-6 max-w-lg font-body text-lg leading-relaxed text-slate-300">
-        <span data-es
-          >Reducimos costos operativos con automatización, IA y sistemas de
-          gestión exclusivos. Tu negocio deja de pagar por herramientas y
-          empieza a cobrar por resultados.</span
-        >
-        <span data-en class="hidden"
-          >We cut operating costs with automation, AI and proprietary management
-          systems. Your business stops paying for tools and starts earning from
-          outcomes.</span
-        >
+        {
+          isEnglish
+            ? "We cut operating costs with automation, AI and proprietary management systems. Your business stops paying for tools and starts earning from outcomes."
+            : "Reducimos costos operativos con automatización, IA y sistemas de gestión exclusivos. Tu negocio deja de pagar por herramientas y empieza a cobrar por resultados."
+        }
       </p>
     </div>
 
