@@ -47,9 +47,6 @@ const resolvedDescription =
   locale === "en" ? (descriptionEn ?? description) : description;
 const skipLinkLabel =
   locale === "en" ? "Skip to main content" : "Saltar al contenido principal";
-const chatTitle = locale === "en" ? "Virtual assistant" : "Asistente virtual";
-const chatAriaLabel =
-  locale === "en" ? "Assistance chat" : "Chat de asistencia";
 const personJobTitle =
   locale === "en"
     ? "Functional Analyst and Full Stack Developer"
@@ -199,14 +196,25 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <!-- Controladores globales (nhTheme/nhLang/nhA11y) y reveal observer cargados
          desde /scripts/*.js en <head>. Ver public/scripts/ y vercel.json CSP. -->
 
-    <script define:vars={{ chatTitle, chatAriaLabel }}>
+    <script>
       (function () {
         function initChatWidget() {
+          if (document.querySelector("iframe[data-chatbot-widget]")) return;
+
+          const isEnglish = document.documentElement.lang === "en";
+          const chatTitle = isEnglish
+            ? "Virtual assistant"
+            : "Asistente virtual";
+          const chatAriaLabel = isEnglish
+            ? "Assistance chat"
+            : "Chat de asistencia";
+
           const iframe = document.createElement("iframe");
           iframe.src = "/chatbot/widget/index.html";
           iframe.setAttribute("allowtransparency", "true");
           iframe.setAttribute("title", chatTitle);
           iframe.setAttribute("aria-label", chatAriaLabel);
+          iframe.setAttribute("data-chatbot-widget", "");
 
           iframe.style.cssText = [
             "position:fixed",
@@ -250,11 +258,21 @@ const ogImageHeight = ogImageHeightProp ?? 768;
           });
         }
 
-        // Defer chat widget until browser is idle to reduce TBT
-        if ("requestIdleCallback" in window) {
-          requestIdleCallback(initChatWidget, { timeout: 3500 });
+        function scheduleChatWidget() {
+          // Keep injection off the critical path, but cap delay so preview does not look broken.
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(initChatWidget, { timeout: 1500 });
+          } else {
+            setTimeout(initChatWidget, 1500);
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", scheduleChatWidget, {
+            once: true,
+          });
         } else {
-          setTimeout(initChatWidget, 3500);
+          scheduleChatWidget();
         }
       })();
     </script>

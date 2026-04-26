@@ -32,16 +32,16 @@
 - Script inline **en** `<head>` (antes del primer paint): anti-flash de tema (`nh-theme` + `prefers-color-scheme`), strip de `no-js`, y clase `no-motion` según `nh-reduced-motion` / `prefers-reduced-motion` (detalle en [`docs/README.md`](../README.md) y [`docs/scroll-reveal.md`](../scroll-reveal.md)).
 - Body: skip link localizado, slot, `BackToTop`, `Footer`, Vercel Analytics + SpeedInsights.
 - Scripts globales: `nhTheme`, `nhLang`, `nhA11y` (claves `localStorage`: ver [`docs/README.md`](../README.md)).
-- Chatbot: crea `<iframe src="/chatbot/widget/index.html">`, redimensiona con `postMessage` (`chat: open/close`), click en documento intenta cerrar el widget.
+- Chatbot: script empaquetado por Astro (sin `define:vars` ni `is:inline`, compatible con CSP `script-src 'self'`) crea `<iframe src="/chatbot/widget/index.html">`, resuelve `title`/`aria-label` por `document.documentElement.lang`, redimensiona con `postMessage` (`chat: open/close`) y mantiene el click-outside-to-close en el mismo bloque para compartir estado del iframe.
 
 ## Decisiones de diseño
 
 - `<html class="dark">` por defecto; modo claro vía clase `light` en `documentElement`.
-- CSP vía meta http-equiv en el head.
+- CSP vía headers en `vercel.json`; los scripts de interacción no deben depender de inline runtime salvo hashes explícitos.
 
 ## Deuda técnica conocida
 
-- Listeners globales (`message`, `click`) para el iframe del chatbot en todas las páginas que usan Layout.
+- Listeners globales (`message`, `click`) para el iframe del chatbot en todas las páginas que usan Layout; deben permanecer junto al inyector para no perder el estado `chatOpen`.
 - `GEMINI_API_KEY` se lee en frontmatter pero el uso principal del modelo está en el widget/API, no en el shell del layout (revisar si hace falta en layout).
 
 ## Estado
