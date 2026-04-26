@@ -38,9 +38,6 @@
       });
 
       function initAltReveal() {
-        var path = window.location.pathname.replace(/\/$/, "") || "/";
-        if (path !== "/" && path !== "/servicios" && path !== "/talento")
-          return;
         var altNodes = document.querySelectorAll("[data-alt-reveal]");
         if (altNodes.length === 0) return;
         if (reduceMotionActive()) {
