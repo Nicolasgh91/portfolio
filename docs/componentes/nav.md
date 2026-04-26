@@ -14,7 +14,7 @@
 
 - Navegación principal: logo, enlaces (Inicio, Servicios B2B con submenú anclado a `/servicios#…` — p. ej. `#agentes-ia`, `#ecommerce`, `#automatizacion`; el ítem “Sitios web” enlaza a `/plantillas`, Blog, Perfil), CTA "Diagnóstico gratis".
 - **Tema:** botón que llama `nhTheme.toggle()` (definido en `Layout.astro`): alterna clase `light` en `<html>` y persiste en `localStorage`.
-- **Idioma:** `nhLang.toggle()` reemplaza textos de nodos con `data-en` / `data-es` (incl. placeholders de inputs).
+- **Idioma:** el enlace navega a la ruta alterna de `locale-path.ts`; labels, aria y submenú se resuelven por `localeFromPathname`. `nhLang` queda como sincronizador de nodos `data-en` / `data-es` cuando la página ya cargó.
 - **Accesibilidad desktop:** `nhA11y.togglePanel()` (botón `#a11y-btn`) abre/cierra `#a11y-panel` horizontal bajo el header. El panel controla escala de fuente, contraste y movimiento.
 - **Accesibilidad mobile:** dentro del drawer, el botón `☰ Accesibilidad` abre un panel inline (`#drawer-a11y-panel`) con los 3 grupos de controles (fuente, contraste, movimiento) usando los mismos handlers `nhA11y.set*` de Layout.
 - Variante mobile: menú hamburguesa que abre un drawer con enlaces, controles (tema/idioma + panel inline de accesibilidad), CTA completo e **íconos sociales** (GitHub, LinkedIn, X, Instagram).
@@ -38,7 +38,7 @@
 ## Deuda técnica conocida
 
 - Bloque `<style>` scoped extenso (~517 líneas). Ver `tasks/tech_debt.md` para items específicos y la excepción de migración a Tailwind.
-- `onclick` inline en botones de tema/idioma/a11y acoplado a `window.nh*` definidos en Layout.
+- Mantener sincronizados labels ES/EN de accesibilidad, CTA y submenú cuando cambien las rutas o el copy global.
 
 ## Estado
 

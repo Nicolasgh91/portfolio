@@ -1,13 +1,13 @@
 # Sistema scroll reveal
 
-Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--scale`** (blog y plantillas) y **Alt B** (`data-alt-reveal` + utilidades Tailwind) en las tres landings principales. Estilos globales en [`src/styles/tokens.css`](../src/styles/tokens.css); inicialización en [`src/layouts/Layout.astro`](../src/layouts/Layout.astro) (dos ramas en el mismo script inline, tras `window.nhA11y`).
+Hay **dos mecanismos** mutuamente excluyentes por página/sección: **`.reveal` / `.reveal--scale`** (blog y plantillas) y **Alt B** (`data-alt-reveal` + utilidades Tailwind) en las landings principales ES/EN. Estilos globales en [`src/styles/tokens.css`](../src/styles/tokens.css); inicialización en [`public/scripts/reveal.js`](../public/scripts/reveal.js), cargado desde [`src/layouts/Layout.astro`](../src/layouts/Layout.astro).
 
 ## Partición por ruta
 
-| Rutas                                                         | Mecanismo                        | Marcado típico                                                                                                                                                                                                                         | Notas                                                                                                                                       |
-| ------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`, `/servicios`, `/talento`                                 | **Alt B**                        | `data-alt-reveal` en `<section>` (p. ej. vía [`SectionWrapper`](./componentes/section-wrapper.md) `revealAlt`) + clases iniciales `opacity-0 translate-y-4` y finales `opacity-100 translate-y-0` aplicadas por `IntersectionObserver` | No usar `.reveal` en estas páginas. El observer solo consulta nodos si `pathname` es una de estas tres rutas (normalizada sin barra final). |
-| Blog (índice, categoría, etiqueta, `[slug]`) y **plantillas** | **`.reveal` / `.reveal--scale`** | `class="reveal reveal--scale"` (+ opcional `--reveal-delay`)                                                                                                                                                                           | Sin cambio respecto al subsistema auditado (umbrales, prose largo, stagger). No mezclar Alt B aquí.                                         |
+| Rutas                                                                                                       | Mecanismo                        | Marcado típico                                                                                                                                                                                                                         | Notas                                                                                                                            |
+| ----------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `/`, `/en`, `/servicios`, `/en/services`, `/talento`, `/en/talent` y futuras landings con `data-alt-reveal` | **Alt B**                        | `data-alt-reveal` en `<section>` (p. ej. vía [`SectionWrapper`](./componentes/section-wrapper.md) `revealAlt`) + clases iniciales `opacity-0 translate-y-4` y finales `opacity-100 translate-y-0` aplicadas por `IntersectionObserver` | No usar `.reveal` en estas páginas. El observer se activa por presencia de nodos `[data-alt-reveal]`, no por whitelist de rutas. |
+| Blog (índice, categoría, etiqueta, `[slug]`) y **plantillas**                                               | **`.reveal` / `.reveal--scale`** | `class="reveal reveal--scale"` (+ opcional `--reveal-delay`)                                                                                                                                                                           | Sin cambio respecto al subsistema auditado (umbrales, prose largo, stagger). No mezclar Alt B aquí.                              |
 
 ### Contrato Alt B (landings)
 
@@ -52,7 +52,7 @@ Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--
 3. **Blog — listados:** envolver cada tarjeta en un `<div class="reveal reveal--scale">` con `style={\`--reveal-delay: ${Math.min(i \* 100, 600)}ms\`}`; no modificar `BlogCard.astro` para reveal.
 4. Stagger máximo efectivo recomendado: **600 ms** por ítem (`Math.min(i * 100, 600)`).
 
-### Landings home / servicios / talento (Alt B)
+### Landings home / servicios / talento ES/EN (Alt B)
 
 1. Preferir `SectionWrapper` con `revealAlt={true}` en secciones posteriores al hero.
 2. No duplicar `.reveal` en el mismo nodo.
@@ -61,31 +61,40 @@ Hay **dos mecanismos** mutuamente excluyentes por ruta: **`.reveal` / `.reveal--
 
 Head: tema + strip `no-js` + decisión temprana `no-motion` → body → `nhA11y` → script reveal (`.reveal` + `initAltReveal`) → chat widget (diferido).
 
-## Comportamiento del script (`is:inline`)
+## Comportamiento del script
 
 - Tras `nhA11y`: inicialización con `DOMContentLoaded` y `requestAnimationFrame`.
 - **`.reveal`:** si aplica movimiento reducido, `is-visible` en todos; si no, `IntersectionObserver` con `threshold: 0`, `rootMargin: '0px 0px -50px 0px'`, fire-once.
-- **Alt B:** mismo umbral y fire-once; solo en `/`, `/servicios`, `/talento`; muta clases Tailwind (`opacity-0` / `translate-y-4` → `opacity-100` / `translate-y-0`).
+- **Alt B:** mismo umbral y fire-once; si no existen nodos `[data-alt-reveal]`, no hace nada. Si existen, muta clases Tailwind (`opacity-0` / `translate-y-4` → `opacity-100` / `translate-y-0`) sin depender de `pathname`.
+
+## Rollback
+
+Si Alt B vuelve a dejar secciones invisibles o anima rutas no esperadas, revertir en bloque:
+
+1. [`public/scripts/reveal.js`](../public/scripts/reveal.js)
+2. [`src/components/SectionWrapper.astro`](../src/components/SectionWrapper.astro)
+3. Este documento
 
 ## Grid y `BlogCard`
 
 El grid (p. ej. `.posts-grid`) debe tener como **hijos directos** los wrappers `<div class="reveal reveal--scale">`, no el `<article class="blog-card">`. Si alguna ruta usara utilidades de columna en el root de la tarjeta, trasladarlas al wrapper.
 
-## Validación (Fase 4)
+## Validación
 
-**Comandos (WSL, desde la raíz del repo):**
+**Comandos (VM Ubuntu, desde la raíz del repo):**
 
 ```bash
-npx astro check && npm run build
+npm run typecheck && npx astro check && npm run build
 ```
 
 **Manual (tras `npm run preview` o entorno de staging):**
 
 1. **`.reveal`:** scroll en plantillas, blog índice y un artículo; entradas al viewport sin revertir al subir.
-2. **Alt B:** scroll en home, servicios, talento; mismos criterios.
-3. **`prefers-reduced-motion`:** contenido visible sin depender de animación en ambos sistemas.
-4. **Panel de accesibilidad:** “reducir movimiento”; misma visibilidad inmediata.
-5. **Sin JS:** deshabilitar JS → contenido bajo `.reveal` y `[data-alt-reveal]` **visible**.
+2. **Alt B ES:** scroll en `/`, `/servicios`, `/talento`; mismos criterios.
+3. **Alt B EN:** scroll en `/en`, `/en/services`, `/en/talent`; las secciones deben aparecer al entrar al viewport.
+4. **`prefers-reduced-motion`:** contenido visible sin depender de animación en ambos sistemas.
+5. **Panel de accesibilidad:** “reducir movimiento”; misma visibilidad inmediata.
+6. **Sin JS:** deshabilitar JS → contenido bajo `.reveal` y `[data-alt-reveal]` **visible**.
 
 ## Deuda / extensiones
 

@@ -257,4 +257,22 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { projects, services, blog, faq };
+const blogEn = defineCollection({
+  type: "content",
+  schema: z.object({
+    sourceSlug: z
+      .string()
+      .optional()
+      .describe(
+        "Slug del artículo español equivalente; si se omite, se usa el slug del archivo.",
+      ),
+    title: z
+      .string()
+      .describe("Título editorial del cuerpo traducido al inglés."),
+    description: z
+      .string()
+      .describe("Resumen editorial del cuerpo traducido al inglés."),
+  }),
+});
+
+export const collections = { projects, services, blog, "blog-en": blogEn, faq };

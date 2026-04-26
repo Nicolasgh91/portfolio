@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import type { LandingTemplate } from "../schemas";
 import { VERTICAL_LABELS } from "../data/landing-templates";
 import { getTemplateCarouselImage } from "../data/template-carousel-images";
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   template: LandingTemplate;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const { template, resolvedDemoUrl } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 const titleEs = template.title;
 const titleEn = template.titleEn ?? template.title;
@@ -17,6 +19,10 @@ const descEs = template.description;
 const descEn = template.descriptionEn ?? template.description;
 
 const hasDemo = Boolean(resolvedDemoUrl);
+const localizedDemoUrl =
+  isEnglish && resolvedDemoUrl?.startsWith("/servicios")
+    ? resolvedDemoUrl.replace("/servicios", "/en/services")
+    : resolvedDemoUrl;
 const isComingSoon = template.status === "coming_soon";
 
 const bgClass =
@@ -140,7 +146,7 @@ const coverSrc = getTemplateCarouselImage(template.slug);
         data-es={v.es}
         data-en={v.en}
       >
-        {v.es}
+        {isEnglish ? v.en : v.es}
       </span>
       <h3
         class:list={[
@@ -150,7 +156,7 @@ const coverSrc = getTemplateCarouselImage(template.slug);
         data-es={titleEs}
         data-en={titleEn}
       >
-        {titleEs}
+        {isEnglish ? titleEn : titleEs}
       </h3>
       <p
         class:list={[
@@ -160,7 +166,7 @@ const coverSrc = getTemplateCarouselImage(template.slug);
         data-es={descEs}
         data-en={descEn}
       >
-        {descEs}
+        {isEnglish ? descEn : descEs}
       </p>
       <div class="relative flex flex-wrap items-center justify-end gap-3 pt-1">
         {
@@ -170,32 +176,26 @@ const coverSrc = getTemplateCarouselImage(template.slug);
               data-es="Próximamente"
               data-en="Coming soon"
             >
-              Próximamente
+              {isEnglish ? "Coming soon" : "Próximamente"}
             </span>
           ) : hasDemo ? (
             <a
-              href={resolvedDemoUrl!}
+              href={localizedDemoUrl!}
               target="_blank"
               rel="noopener noreferrer"
               class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              <span data-es>Ver demo</span>
-              <span data-en class="hidden">
-                View demo
-              </span>
+              <span>{isEnglish ? "View demo" : "Ver demo"}</span>
               <span class="arrow" aria-hidden="true">
                 →
               </span>
             </a>
           ) : (
             <a
-              href={`/plantillas/${template.slug}`}
+              href={`${isEnglish ? "/en/templates" : "/plantillas"}/${template.slug}`}
               class="btn-bounce inline-flex items-center gap-1 text-sm font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 transition hover:underline"
             >
-              <span data-es>Ver ficha</span>
-              <span data-en class="hidden">
-                View details
-              </span>
+              <span>{isEnglish ? "View details" : "Ver ficha"}</span>
               <span class="arrow" aria-hidden="true">
                 →
               </span>

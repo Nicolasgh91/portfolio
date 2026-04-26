@@ -30,7 +30,7 @@ Si `recommended` es true, el texto del badge sale de `plan.recommendedLabel` / `
 
 ## i18n
 
-Textos visibles con `data-es` / `data-en`; features usan `features` y `featuresEn` alineados por índice.
+Textos visibles resueltos por `localeFromPathname`; `data-es` / `data-en` quedan como metadatos para el toggle global. Features usan `features` y `featuresEn` alineados por índice. Los CTAs que apuntan a `/servicios` se localizan a `/en/services` en rutas EN, y `priceDetail` tiene equivalentes EN por `id` del plan.
 
 ## Estado
 

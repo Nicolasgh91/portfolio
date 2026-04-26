@@ -1,0 +1,156 @@
+---
+title: "Designing systems at scale: the definitive microservices guide"
+description: "From Sam Newman's principles to real code: what microservices are, when not to use them, and which patterns separate scalable architecture from distributed chaos."
+---
+
+import SectionSpacer from "../../components/SectionSpacer.astro";
+
+There is a question that appears whenever a system starts to grow: when should we stop adding code to the monolith and start splitting it? The honest answer is that most teams do it too late, or worse, too early.
+
+Microservices are not just an architecture. They are an organizational decision with technical consequences. If you do not understand that before writing the first line, you will build a distributed monolith: the worst of both worlds.
+
+This guide condenses Sam Newman's _Building Microservices_ and applied experience into practical decisions for real systems.
+
+<SectionSpacer size="xl" />
+
+## What microservices are
+
+Microservices are small autonomous services focused on one responsibility. Each service has its own lifecycle, repository, deployment pipeline, and database.
+
+The advantages that justify this complexity are concrete:
+
+- **Technology heterogeneity:** each team can choose the language and database that best solve its specific problem.
+- **Resilience through isolation:** when one service fails, the rest of the system can continue operating.
+- **Targeted scalability:** only the component under pressure needs to scale.
+- **Independent deployment:** teams can release their services without coordinating every change across the whole platform.
+
+<SectionSpacer size="xl" />
+
+## The most expensive mistake: decomposing without understanding the domain
+
+Newman is direct: if you do not understand your business domain, do not use microservices. Build a modular monolith first. Learn where the natural boundaries are. Split later.
+
+Premature decomposition creates chatty services: services that call each other constantly, accumulating latency without the cohesion that justifies separation. Refactoring a badly split architecture is far more expensive than refactoring a monolith.
+
+A useful heuristic: a service should be small enough for a small team to rewrite in no more than two weeks. If it takes longer, it probably does too much. If it takes less than a day, it may not justify the overhead of being independent.
+
+<SectionSpacer size="xl" />
+
+## The architect as urban planner
+
+In a microservices ecosystem, the architect no longer designs every internal component. The role becomes closer to an urban planner: defining zones, interaction routes, and standards of coexistence, while delegating detailed decisions to each team.
+
+An evolutionary architect controls the points where services interact: communication standards, logging format, centralized monitoring, and operational expectations. They deliberately do not control each service's internal technology.
+
+<SectionSpacer size="xl" />
+
+## Finding the right boundaries with DDD
+
+The most valuable Domain-Driven Design concept for microservices is the **Bounded Context**: a semantic boundary where a business model has a consistent meaning.
+
+For example, "customer" means different things in sales, billing, and support. A single `CustomerService` trying to satisfy all three becomes an anemic object with optional fields that nobody understands.
+
+The correct solution is separate services, each with its own model and database. Sales asks billing through an API; it does not share the table.
+
+Newman's inviolable rule: each microservice is the sole owner of its data. No other service touches its database directly.
+
+<SectionSpacer size="xl" />
+
+## Data flow: input, process, output
+
+Each service can be understood as an autonomous state machine that manages a business capability.
+
+**Input** can be synchronous, through HTTP/REST, or asynchronous, through events in a queue. Synchronous calls are simple and traceable but create temporal coupling. Asynchronous events increase resilience but require better tracing and retry strategy.
+
+**Process** should expose business intentions, not CRUD wrappers. A service should offer operations like `ApproveOrder`, `CancelOrder`, or `ApplyDiscount`. The business logic that makes the product different lives there.
+
+**Output** can be an immediate response and an event published to the bus, such as `OrderApproved` or `StockUpdated`, so other services can react without tight coupling.
+
+<SectionSpacer size="xl" />
+
+## Orchestration vs choreography
+
+**Orchestration** uses a director service that knows the process order and tells every service what to do. It is easier to visualize, but the director can become the new monolith.
+
+**Choreography** lets each service react to events. When payments publishes `PaymentConfirmed`, shipping listens and prepares the package. Nobody tells it what to do; it knows its responsibility.
+
+Newman strongly favors choreography. The cost is that you must invest in correlation IDs and distributed monitoring. Without them, debugging becomes nearly impossible.
+
+<SectionSpacer size="xl" />
+
+## API versioning and Postel's Law
+
+Distributed API changes are surgical operations. An incompatible change in one service can silently break all consumers.
+
+Postel's Law is useful here: be conservative in what you send and liberal in what you accept. Services should tolerate additional fields in incoming messages and avoid removing response fields without notice.
+
+When breaking changes are unavoidable, run old and new endpoints side by side long enough for consumers to migrate.
+
+<SectionSpacer size="xl" />
+
+## Patterns you cannot ignore
+
+### Strangler Fig
+
+If you already have a production monolith, do not rewrite it from scratch. Intercept calls at the boundary and gradually route specific capabilities to new services. The old monolith keeps running while responsibilities move out.
+
+### Circuit Breaker
+
+A service that depends on another service inherits its fragility. A circuit breaker detects repeated failures and opens the circuit, returning an error or fallback immediately instead of waiting for a dependency that may never respond.
+
+Together with timeouts and bulkheads, circuit breakers form the minimum safety layer for graceful failure.
+
+### Backend for Frontend
+
+One API designed for mobile, desktop web, and public consumers usually becomes mediocre for all of them. A BFF creates one facade per client type, reducing payloads and shaping exactly the response each interface needs.
+
+### CQRS
+
+Analytical dashboards should not JOIN across databases owned by different services. CQRS creates a separate read model updated from events. Commands go to write services; queries go to optimized read stores.
+
+<SectionSpacer size="xl" />
+
+## Service discovery, testing, and observability
+
+In distributed systems, hardcoded IPs do not work. DNS is universal but cached. Dynamic registries such as Consul or Eureka react faster but become critical infrastructure.
+
+End-to-end tests become fragile and slow when many services must be deployed together. Consumer-Driven Contracts, with tools like Pact, verify provider behavior against consumer expectations before production.
+
+Observability is non-negotiable. A minimum stack includes structured centralized logs, correlation IDs, semantic monitoring, and health checks for every service.
+
+<SectionSpacer size="xl" />
+
+## When not to use microservices
+
+Do not use microservices if:
+
+- Your domain is unclear.
+- Your team is small.
+- The system does not need to scale in independent parts.
+- You do not have a mature automation culture.
+
+In those cases, a well-modularized monolith is often the better architecture.
+
+<SectionSpacer size="xl" />
+
+## Architectural decision summary
+
+| Decision            | Option A                       | Option B                  | Newman's recommendation            |
+| ------------------- | ------------------------------ | ------------------------- | ---------------------------------- |
+| Flow coordination   | Orchestration                  | Choreography              | Choreography                       |
+| Communication       | Synchronous REST               | Asynchronous events       | Async when possible                |
+| Service discovery   | DNS                            | Dynamic registry          | Dynamic registry for large systems |
+| Integration testing | E2E                            | Consumer-Driven Contracts | CDCs                               |
+| Deployment          | Multiple services per pipeline | One pipeline per service  | One pipeline per service           |
+| Infrastructure      | Shared server                  | Container per service     | Container per service              |
+| Shared code         | Central libraries              | Service templates         | Service templates                  |
+
+<SectionSpacer size="xl" />
+
+## Next step
+
+If you are evaluating whether your current system needs architectural restructuring, or if you are designing a new one and want to avoid common mistakes, I can help you analyze what you have and define the right strategy.
+
+The answer is not always microservices. Sometimes it is a better modular monolith. Sometimes it is extracting one specific service. The difference can be months of work and significant migration cost.
+
+Contact us through [WhatsApp](/en/services#contacto) or [email](/en/services#contacto), and we can start with a free diagnosis.

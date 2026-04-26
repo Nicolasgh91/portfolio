@@ -34,6 +34,7 @@
 - **Bloque de contenido:** `div` `relative z-[1]`, `flex flex-col`, `max-w-full md:max-w-[50%]`, `p-8 md:p-10`, `justify-end md:justify-center`, alineación según `direction`. Tipografía: título Outfit `font-medium` blanco; cuerpo Inter `text-sm` `text-white/65`.
 - **CTA visual:** línea “Ver proyecto →” como `<span>` (no es un segundo enlace); la flecha va en **`span.arrow`** con `aria-hidden="true"` y reutiliza **`bounce-right`** vía [`tokens.css`](../../src/styles/tokens.css) (`.group\/card:hover .arrow`, mismo patrón que `.btn-bounce`). El hover sobre cualquier zona de la tarjeta anima la flecha (overlay `<a>` es descendiente del `article.group/card`).
 - **Enlace:** `<a>` overlay vacío `absolute inset-0 z-[2]`, `rounded-2xl`, `aria-labelledby={headingId}` para nombre conciso del enlace (título en el `h3`). Sin flex ni layout de texto en el `<a>`.
+- **i18n:** título, descripción, badge y CTA visual se resuelven por SSR con `localeFromPathname`; no se renderizan pares ocultos ES/EN.
 
 ## Stacking (solo dentro del `article`)
 

@@ -45,8 +45,8 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const blogBaseHref =
-  localeFromPathname(Astro.url.pathname) === "en" ? "/en/blog" : "/blog";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const blogBaseHref = isEnglish ? "/en/blog" : "/blog";
 
 const coverByKey: Record<CoverImageKey, typeof humanAi> = {
   "human-ai": humanAi,
@@ -70,15 +70,20 @@ const coverSrc = post.data.coverImageKey
   ? coverByKey[post.data.coverImageKey]
   : fallbackCover;
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString("es-AR", {
+function formatDate(date: Date, locale: string): string {
+  return date.toLocaleDateString(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
 }
 
-const readLabel = `Leer artículo: ${post.data.title}`;
+const title = isEnglish
+  ? (post.data.titleEn ?? post.data.title)
+  : post.data.title;
+const readLabel = isEnglish
+  ? `Read article: ${title}`
+  : `Leer artículo: ${title}`;
 ---
 
 <article class="blog-card">
@@ -86,7 +91,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
   <div class="blog-card__cover">
     <Image
       src={coverSrc}
-      alt={post.data.coverAlt ?? post.data.title}
+      alt={post.data.coverAlt ?? title}
       width={640}
       height={360}
       loading="lazy"
@@ -110,7 +115,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
       data-en="Read article"
       data-es="Leer artículo"
     >
-      Leer artículo
+      {isEnglish ? "Read article" : "Leer artículo"}
     </span>
     <span class="blog-card__cta-btn" aria-hidden="true">
       <svg
@@ -133,7 +138,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
     <!-- Meta: fecha · tiempo de lectura -->
     <div class="blog-card__meta">
       <time datetime={post.data.pubDate.toISOString()} class="blog-card__date">
-        {formatDate(post.data.pubDate)}
+        {formatDate(post.data.pubDate, isEnglish ? "en-US" : "es-AR")}
       </time>
 
       {
@@ -159,7 +164,9 @@ const readLabel = `Leer artículo: ${post.data.title}`;
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 6v6l4 2" />
               </svg>
-              {post.data.readingTime} min
+              {isEnglish
+                ? `${post.data.readingTime} min read`
+                : `${post.data.readingTime} min`}
             </span>
           </>
         )
@@ -172,7 +179,7 @@ const readLabel = `Leer artículo: ${post.data.title}`;
       data-en={post.data.titleEn ?? post.data.title}
       data-es={post.data.title}
     >
-      {post.data.title}
+      {title}
     </h3>
 
     <!-- Divisor sutil -->
@@ -184,7 +191,11 @@ const readLabel = `Leer artículo: ${post.data.title}`;
       data-en={post.data.descriptionEn ?? post.data.description}
       data-es={post.data.description}
     >
-      {post.data.description}
+      {
+        isEnglish
+          ? (post.data.descriptionEn ?? post.data.description)
+          : post.data.description
+      }
     </p>
   </div>
 </article>

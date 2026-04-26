@@ -9,6 +9,7 @@ interface BilingualField {
   es: string;
   en?: string;
 }
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   headingId: string;
@@ -24,14 +25,14 @@ const { headingId, title, description, tags } = Astro.props;
 const roi = description.roiFocus;
 const titleEn = title.en ?? title.es;
 const shortEn = description.short.en ?? description.short.es;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div
   class="flex min-w-0 flex-1 flex-col justify-center gap-3 p-6 md:gap-4 md:p-8 md:py-10"
 >
   <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
-    <span data-es>Servicio</span>
-    <span data-en class="hidden">Service</span>
+    {isEnglish ? "Service" : "Servicio"}
   </p>
   <h3
     id={headingId}
@@ -39,14 +40,14 @@ const shortEn = description.short.en ?? description.short.es;
     data-en={titleEn}
     data-es={title.es}
   >
-    {title.es}
+    {isEnglish ? titleEn : title.es}
   </h3>
   <p
     class="text-sm leading-relaxed text-[var(--text-secondary)] md:line-clamp-none line-clamp-4"
     data-en={shortEn}
     data-es={description.short.es}
   >
-    {description.short.es}
+    {isEnglish ? shortEn : description.short.es}
   </p>
   {
     roi && (
@@ -55,7 +56,7 @@ const shortEn = description.short.en ?? description.short.es;
         data-en={roi.en ?? roi.es}
         data-es={roi.es}
       >
-        {roi.es}
+        {isEnglish ? (roi.en ?? roi.es) : roi.es}
       </p>
     )
   }

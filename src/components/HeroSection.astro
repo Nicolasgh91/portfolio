@@ -2,9 +2,28 @@
 import { Image } from "astro:assets";
 /** Fondo atmosférico del hero (LCP); asset dedicado home. */
 import heroBackdrop from "../assets/home/hero-banner.webp";
+import { localeFromPathname } from "../lib/locale-path";
 
 const heroNoiseBg =
   'url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%20opacity%3D%220.04%22/%3E%3C/svg%3E")';
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const activityItems = [
+  {
+    color: "#34d399",
+    text: isEnglish ? "New booking confirmed" : "Nueva reserva confirmada",
+    time: "2m",
+  },
+  {
+    color: "var(--color-accent-400)",
+    text: isEnglish ? "Payment processed $3,200" : "Pago procesado $3.200",
+    time: "8m",
+  },
+  {
+    color: "#34d399",
+    text: isEnglish ? "AI-qualified lead" : "Lead calificado por IA",
+    time: "15m",
+  },
+];
 ---
 
 <section
@@ -58,28 +77,28 @@ const heroNoiseBg =
         class="font-display font-bold leading-[1.08] tracking-tight text-white"
         style="font-size: var(--text-5xl);"
       >
-        <span data-es
-          >Software a medida para <strong class="font-bold text-orange-400"
-            >multiplicar</strong
-          > el ROI.</span
-        >
-        <span data-en class="hidden"
-          >Custom software to <strong class="font-bold text-orange-400"
-            >multiply</strong
-          > your ROI.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Custom software to{" "}
+              <strong class="font-bold text-orange-400">multiply</strong> your
+              ROI.
+            </>
+          ) : (
+            <>
+              Software a medida para{" "}
+              <strong class="font-bold text-orange-400">multiplicar</strong> el
+              ROI.
+            </>
+          )
+        }
       </h1>
       <p class="mt-6 max-w-lg font-body text-lg leading-relaxed text-slate-300">
-        <span data-es
-          >Reducimos costos operativos con automatización, IA y sistemas de
-          gestión exclusivos. Tu negocio deja de pagar por herramientas y
-          empieza a cobrar por resultados.</span
-        >
-        <span data-en class="hidden"
-          >We cut operating costs with automation, AI and proprietary management
-          systems. Your business stops paying for tools and starts earning from
-          outcomes.</span
-        >
+        {
+          isEnglish
+            ? "We cut operating costs with automation, AI and proprietary management systems. Your business stops paying for tools and starts earning from outcomes."
+            : "Reducimos costos operativos con automatización, IA y sistemas de gestión exclusivos. Tu negocio deja de pagar por herramientas y empieza a cobrar por resultados."
+        }
       </p>
     </div>
 
@@ -96,9 +115,11 @@ const heroNoiseBg =
           ↑
         </div>
         <div class="leading-tight">
-          <div class="text-xs font-medium text-slate-200">ROI este mes</div>
+          <div class="text-xs font-medium text-slate-200">
+            {isEnglish ? "ROI this month" : "ROI este mes"}
+          </div>
           <div class="text-[10px] text-emerald-400">
-            +340% vs herramientas SaaS
+            {isEnglish ? "+340% vs SaaS tools" : "+340% vs herramientas SaaS"}
           </div>
         </div>
       </div>
@@ -115,7 +136,7 @@ const heroNoiseBg =
             <div class="h-2 w-2 rounded-full bg-[#27c93f]"></div>
           </div>
           <span class="ml-1 text-xs text-slate-400"
-            >Panel operativo — Double Click™</span
+            >{isEnglish ? "Operations dashboard" : "Panel operativo"} — Double Click™</span
           >
         </div>
         <div class="flex flex-col gap-4 p-5">
@@ -128,7 +149,9 @@ const heroNoiseBg =
               >
                 $847k
               </div>
-              <div class="text-[10px] text-slate-400">Facturación mes</div>
+              <div class="text-[10px] text-slate-400">
+                {isEnglish ? "Monthly revenue" : "Facturación mes"}
+              </div>
             </div>
             <div
               class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3"
@@ -138,7 +161,9 @@ const heroNoiseBg =
               >
                 +28%
               </div>
-              <div class="text-[10px] text-slate-400">Retención clientes</div>
+              <div class="text-[10px] text-slate-400">
+                {isEnglish ? "Client retention" : "Retención clientes"}
+              </div>
             </div>
             <div
               class="rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3"
@@ -148,7 +173,9 @@ const heroNoiseBg =
               >
                 142
               </div>
-              <div class="text-[10px] text-slate-400">Reservas activas</div>
+              <div class="text-[10px] text-slate-400">
+                {isEnglish ? "Active bookings" : "Reservas activas"}
+              </div>
             </div>
           </div>
           <div
@@ -156,11 +183,11 @@ const heroNoiseBg =
           >
             <div class="mb-3.5 flex items-center justify-between">
               <span class="text-xs font-medium text-slate-300"
-                >Ingresos por semana</span
+                >{isEnglish ? "Weekly income" : "Ingresos por semana"}</span
               >
               <span
                 class="rounded-md border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-400"
-                >↑ 18% vs mes ant.</span
+                >{isEnglish ? "↑ 18% vs last month" : "↑ 18% vs mes ant."}</span
               >
             </div>
             <div class="flex h-[70px] items-end gap-1.5">
@@ -199,26 +226,10 @@ const heroNoiseBg =
               class="flex-1 rounded-[10px] border border-slate-700/80 bg-slate-800/80 p-3"
             >
               <div class="mb-2.5 text-[11px] text-slate-400">
-                Actividad reciente
+                {isEnglish ? "Recent activity" : "Actividad reciente"}
               </div>
               {
-                [
-                  {
-                    color: "#34d399",
-                    text: "Nueva reserva confirmada",
-                    time: "2m",
-                  },
-                  {
-                    color: "var(--color-accent-400)",
-                    text: "Pago procesado $3.200",
-                    time: "8m",
-                  },
-                  {
-                    color: "#34d399",
-                    text: "Lead calificado por IA",
-                    time: "15m",
-                  },
-                ].map((item) => (
+                activityItems.map((item) => (
                   <div class="flex items-center gap-2 border-b border-slate-700/60 py-1.5 last:border-b-0">
                     <div
                       class="h-1.5 w-1.5 shrink-0 rounded-full"
@@ -238,13 +249,17 @@ const heroNoiseBg =
               <div
                 class="text-[10px] font-semibold uppercase tracking-widest text-orange-400"
               >
-                IA activa
+                {isEnglish ? "Active AI" : "IA activa"}
               </div>
               <div class="font-display text-[22px] font-bold text-orange-400">
                 24/7
               </div>
               <div class="text-[10px] leading-snug text-slate-400">
-                Respondiendo consultas sin intervención manual.
+                {
+                  isEnglish
+                    ? "Answering inquiries without manual intervention."
+                    : "Respondiendo consultas sin intervención manual."
+                }
               </div>
             </div>
           </div>

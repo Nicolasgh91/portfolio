@@ -14,10 +14,12 @@ import type { CollectionEntry } from "astro:content";
 import pricing from "../data/pricing.json";
 import { buildFaqPageJsonLd } from "../lib/faq-jsonld";
 import { serviceAnchorId } from "../lib/service-anchor-id";
+import { localeFromPathname } from "../lib/locale-path";
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection("services");
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 // FAQ: un archivo JSON = un ítem de colección; `data` es el array validado por Zod.
 const faqDocs = await getCollection("faq");
@@ -107,9 +109,11 @@ const servicesJsonLd = {
   "@context": "https://schema.org",
   "@graph": sortedServices.map((s) => ({
     "@type": "Service",
-    name: s.data.title,
-    description: s.data.shortDescription ?? s.data.description,
-    url: `${siteUrl}/servicios#${serviceAnchorId(s.slug)}`,
+    name: isEnglish ? s.data.titleEn : s.data.title,
+    description: isEnglish
+      ? (s.data.shortDescriptionEn ?? s.data.descriptionEn)
+      : (s.data.shortDescription ?? s.data.description),
+    url: `${siteUrl}${isEnglish ? "/en/services" : "/servicios"}#${serviceAnchorId(s.slug)}`,
     provider: {
       "@type": "Person",
       name: "Nicolás Hruszczak",
@@ -133,6 +137,8 @@ const altRevealDelays: Record<string, number> = {};
 <Layout
   title="Servicios B2B — Nicolás Hruszczak"
   description="Para locales, profesionales y creadores: web y automatización a medida. Ordenamos mensajes y procesos, más ventas y tiempo recuperado, sin jerga técnica."
+  titleEn="B2B Services — Nicolás Hruszczak"
+  descriptionEn="For shops, professionals, and creators: custom websites and automation. We organize messages and processes so you gain sales and recover time, without technical jargon."
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
@@ -147,7 +153,9 @@ const altRevealDelays: Record<string, number> = {};
   <main id="main-content">
     <PageHeroSection
       image={heroServiciosDerecha}
-      alt="Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."
+      alt={isEnglish
+        ? "Visual banner for the services catalog with a warm atmosphere and detail on the right."
+        : "Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."}
       imageWidth={1536}
       imageHeight={1024}
       headingId="services-hero-heading"
@@ -155,40 +163,64 @@ const altRevealDelays: Record<string, number> = {};
       labelTextEn="For entrepreneurs, creators & small businesses"
     >
       <Fragment slot="heading">
-        <span data-es
-          >Tecnología a medida para que tu negocio <em
-            class="not-italic text-[var(--accent-text)]">crezca sin estrés</em
-          >.</span
-        >
-        <span data-en class="hidden"
-          >Tailored technology so your business can <em
-            class="not-italic text-[var(--accent-text)]"
-            >grow without the stress</em
-          >.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Tailored technology so your business can{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                grow without the stress
+              </em>
+              .
+            </>
+          ) : (
+            <>
+              Tecnología a medida para que tu negocio{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                crezca sin estrés
+              </em>
+              .
+            </>
+          )
+        }
       </Fragment>
       <p>
-        <span data-es
-          >Ya sea que tengas un local comercial, ofrezcas servicios
-          profesionales o crees contenido, <em
-            class="not-italic text-[var(--accent-text)]"
-            >diseñamos tu web y automatizamos tus procesos</em
-          >. Convertí el caos de mensajes en <em
-            class="not-italic text-[var(--accent-text)]">ventas automáticas</em
-          > y <em class="not-italic text-[var(--accent-text)]"
-            >recuperá tu tiempo</em
-          >.</span
-        >
-        <span data-en class="hidden"
-          >Whether you run a store, offer professional services, or create
-          content, we <em class="not-italic text-[var(--accent-text)]"
-            >design your site and automate your workflows</em
-          >. Turn message chaos into <em
-            class="not-italic text-[var(--accent-text)]">automatic sales</em
-          > and <em class="not-italic text-[var(--accent-text)]"
-            >get your time back</em
-          >.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Whether you run a store, offer professional services, or create
+              content, we{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                design your site and automate your workflows
+              </em>
+              . Turn message chaos into{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                automatic sales
+              </em>{" "}
+              and{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                get your time back
+              </em>
+              .
+            </>
+          ) : (
+            <>
+              Ya sea que tengas un local comercial, ofrezcas servicios
+              profesionales o crees contenido,{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                diseñamos tu web y automatizamos tus procesos
+              </em>
+              . Convertí el caos de mensajes en{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                ventas automáticas
+              </em>{" "}
+              y{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                recuperá tu tiempo
+              </em>
+              .
+            </>
+          )
+        }
       </p>
     </PageHeroSection>
 
@@ -209,17 +241,14 @@ const altRevealDelays: Record<string, number> = {};
           id="services-heading"
           class="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] md:text-4xl"
         >
-          <span data-es>Servicios</span>
-          <span data-en class="hidden">Services</span>
+          {isEnglish ? "Services" : "Servicios"}
         </h2>
         <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          <span data-es>
-            {sortedServices.length} ejes de intervención con impacto directo en la
-            operación.
-          </span>
-          <span data-en class="hidden">
-            {sortedServices.length} focus areas with direct operational impact.
-          </span>
+          {
+            isEnglish
+              ? `${sortedServices.length} focus areas with direct operational impact.`
+              : `${sortedServices.length} ejes de intervención con impacto directo en la operación.`
+          }
         </p>
       </header>
 
@@ -269,66 +298,59 @@ const altRevealDelays: Record<string, number> = {};
             id="case-heading"
             class="font-display text-xl font-bold tracking-tight text-[var(--text-primary)] md:text-2xl"
           >
-            <span data-es
-              >Caso de éxito: gestión integral deportiva (Double Click™)</span
-            >
-            <span data-en class="hidden"
-              >Success story: comprehensive sports management (Double Click™)</span
-            >
+            {
+              isEnglish
+                ? "Success story: comprehensive sports management (Double Click™)"
+                : "Caso de éxito: gestión integral deportiva (Double Click™)"
+            }
           </h2>
           <span
             class="inline-flex items-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent-text)]"
           >
-            <span data-es>En curso</span>
-            <span data-en class="hidden">In progress</span>
+            {isEnglish ? "In progress" : "En curso"}
           </span>
         </div>
         <p class="mb-8 text-sm leading-relaxed text-[var(--text-secondary)]">
-          <span data-es
-            >Una aplicación a medida centraliza reservas, facturación y
-            retención de clientes para un estudio de Pilates, eliminando la
-            necesidad de tres herramientas de software con pago mensual.</span
-          >
-          <span data-en class="hidden"
-            >A custom application centralizes bookings, billing, and client
-            retention for a Pilates studio — eliminating the need for three
-            separate paid software tools.</span
-          >
+          {
+            isEnglish
+              ? "A custom application centralizes bookings, billing, and client retention for a Pilates studio, eliminating the need for three separate paid software tools."
+              : "Una aplicación a medida centraliza reservas, facturación y retención de clientes para un estudio de Pilates, eliminando la necesidad de tres herramientas de software con pago mensual."
+          }
         </p>
         <div class="grid gap-6 md:grid-cols-2">
           <div
             class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 text-center text-xs text-[var(--text-muted)]"
             role="img"
-            aria-label="Espacio reservado para captura del dashboard de gestión"
+            aria-label={isEnglish
+              ? "Reserved space for the management dashboard screenshot"
+              : "Espacio reservado para captura del dashboard de gestión"}
           >
             [ Dashboard mockup ]<br /><br />
-            Panel de reservas · Métricas · Clientes
+            {
+              isEnglish
+                ? "Bookings panel · Metrics · Clients"
+                : "Panel de reservas · Métricas · Clientes"
+            }
           </div>
           <div class="card self-start">
             <h3
               class="mb-2 font-display text-base font-bold text-[var(--text-primary)]"
             >
-              <span data-es>Resultado</span>
-              <span data-en class="hidden">Result</span>
+              {isEnglish ? "Result" : "Resultado"}
             </h3>
             <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-              <span data-es
-                >Eliminación de 3 suscripciones mensuales. Reducción
-                significativa del tiempo de gestión administrativa. Panel
-                unificado de métricas de retención de clientes.</span
-              >
-              <span data-en class="hidden"
-                >Elimination of 3 monthly subscriptions. Significant reduction
-                in administrative management time. Unified client retention
-                metrics panel.</span
-              >
+              {
+                isEnglish
+                  ? "Elimination of 3 monthly subscriptions. Significant reduction in administrative management time. Unified client retention metrics panel."
+                  : "Eliminación de 3 suscripciones mensuales. Reducción significativa del tiempo de gestión administrativa. Panel unificado de métricas de retención de clientes."
+              }
             </p>
             <div class="tags mt-4">
               <span class="tag">Python</span>
               <span class="tag">Next.js</span>
               <span class="tag">PostgreSQL</span>
               <a
-                href="#contacto"
+                href={isEnglish ? "/en/services#contacto" : "#contacto"}
                 class="tag tag-accent btn-bounce inline-flex items-center gap-1"
               >
                 <span
@@ -354,8 +376,7 @@ const altRevealDelays: Record<string, number> = {};
       <h2
         class="mb-4 text-center font-display text-2xl font-bold text-white md:mb-16 md:text-3xl"
       >
-        <span data-es>Cómo trabajamos</span>
-        <span data-en class="hidden">How we work</span>
+        {isEnglish ? "How we work" : "Cómo trabajamos"}
       </h2>
       <div class="grid gap-12 md:grid-cols-3">
         <div class="relative pt-[calc(var(--text-6xl)*1)]">
@@ -369,18 +390,14 @@ const altRevealDelays: Record<string, number> = {};
           <h3
             class="relative z-10 mt-0 font-display text-xl font-bold text-white"
           >
-            <span data-es>Diagnóstico</span>
-            <span data-en class="hidden">Discovery</span>
+            {isEnglish ? "Discovery" : "Diagnóstico"}
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es
-              >Entendemos procesos, cuellos de botella y oportunidades de
-              automatización con métricas claras.</span
-            >
-            <span data-en class="hidden"
-              >We map processes, bottlenecks and automation opportunities with
-              clear metrics.</span
-            >
+            {
+              isEnglish
+                ? "We map processes, bottlenecks and automation opportunities with clear metrics."
+                : "Entendemos procesos, cuellos de botella y oportunidades de automatización con métricas claras."
+            }
           </p>
         </div>
         <div class="relative pt-[calc(var(--text-6xl)*1)]">
@@ -394,18 +411,14 @@ const altRevealDelays: Record<string, number> = {};
           <h3
             class="relative z-10 mt-0 font-display text-xl font-bold text-white"
           >
-            <span data-es>Propuesta y entrega</span>
-            <span data-en class="hidden">Proposal &amp; delivery</span>
+            {isEnglish ? "Proposal & delivery" : "Propuesta y entrega"}
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es
-              >Priorizamos impacto, definimos alcance y ejecutamos con entregas
-              iterativas visibles.</span
-            >
-            <span data-en class="hidden"
-              >We prioritize impact, define scope and ship in visible
-              iterations.</span
-            >
+            {
+              isEnglish
+                ? "We prioritize impact, define scope and ship in visible iterations."
+                : "Priorizamos impacto, definimos alcance y ejecutamos con entregas iterativas visibles."
+            }
           </p>
         </div>
         <div class="relative pt-[calc(var(--text-6xl)*1)]">
@@ -419,18 +432,14 @@ const altRevealDelays: Record<string, number> = {};
           <h3
             class="relative z-10 mt-0 font-display text-xl font-bold text-white"
           >
-            <span data-es>Evolución</span>
-            <span data-en class="hidden">Evolution</span>
+            {isEnglish ? "Evolution" : "Evolución"}
           </h3>
           <p class="mt-2 text-sm font-medium leading-relaxed">
-            <span data-es
-              >Mediciones, mejoras y soporte para que el sistema siga pagándose
-              solo en el tiempo.</span
-            >
-            <span data-en class="hidden"
-              >Measurement, improvements and support so the system keeps paying
-              for itself.</span
-            >
+            {
+              isEnglish
+                ? "Measurement, improvements and support so the system keeps paying for itself."
+                : "Mediciones, mejoras y soporte para que el sistema siga pagándose solo en el tiempo."
+            }
           </p>
         </div>
       </div>
@@ -465,30 +474,29 @@ const altRevealDelays: Record<string, number> = {};
         <h2
           class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl"
         >
-          <span data-es>¿Listo para el siguiente paso?</span>
-          <span data-en class="hidden">Ready for the next step?</span>
+          {
+            isEnglish
+              ? "Ready for the next step?"
+              : "¿Listo para el siguiente paso?"
+          }
         </h2>
         <p
           class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90"
         >
-          <span data-es
-            >Agendá un diagnóstico gratuito de 30 minutos: analizamos tu
-            operación y te decimos si tiene sentido trabajar juntos. También
-            podés escribirnos por el formulario de abajo cuando quieras.</span
-          >
-          <span data-en class="hidden"
-            >Book a free 30-minute diagnosis — we review your operations and
-            tell you if working together makes sense. You can also reach us
-            anytime via the form below.</span
-          >
+          {
+            isEnglish
+              ? "Book a free 30-minute diagnosis. We review your operations and tell you if working together makes sense. You can also reach us anytime via the form below."
+              : "Agendá un diagnóstico gratuito de 30 minutos: analizamos tu operación y te decimos si tiene sentido trabajar juntos. También podés escribirnos por el formulario de abajo cuando quieras."
+          }
         </p>
         <p class="mt-8">
           <a
-            href="#contacto"
+            href={isEnglish ? "/en/services#contacto" : "#contacto"}
             class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
           >
-            <span data-es>Contactar</span>
-            <span data-en class="hidden">Contact</span>
+            <span data-es data-en="Contact">
+              {isEnglish ? "Contact" : "Contactar"}
+            </span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
         </p>
@@ -504,7 +512,9 @@ const altRevealDelays: Record<string, number> = {};
       revealDelayMs={altRevealDelays.contact}
     >
       <div class="section-header mb-10">
-        <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
+        <span class="label" data-en="Contact" data-es="Contacto">
+          {isEnglish ? "Contact" : "Contacto"}
+        </span>
         <h2
           id="contact-heading"
           class="font-display text-2xl font-bold text-[var(--text-primary)] md:text-3xl"

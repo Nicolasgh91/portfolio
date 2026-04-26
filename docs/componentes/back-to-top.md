@@ -15,6 +15,7 @@
 - Botón fijo centrado abajo (`data-back-to-top`); oculto con `opacity-0` y `pointer-events-none` hasta que `scrollY > 300`.
 - Click hace scroll al inicio (`scrollTo` suave o instantáneo según script).
 - Una sola instancia por página (inyectada desde Layout).
+- `aria-label` localizado por `localeFromPathname`.
 
 ## Decisiones de diseño
 

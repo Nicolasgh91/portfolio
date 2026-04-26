@@ -1,6 +1,7 @@
 ---
 import { randomUUID } from "node:crypto";
 import { filterTocHeadings, type TocHeading } from "../../lib/toc";
+import { localeFromPathname } from "../../lib/locale-path";
 
 interface Props {
   headings: TocHeading[];
@@ -9,6 +10,7 @@ interface Props {
 const { headings } = Astro.props;
 const tocHeadings = filterTocHeadings(headings);
 const tocRootId = `toc-root-${randomUUID()}`;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 {
@@ -16,11 +18,13 @@ const tocRootId = `toc-root-${randomUUID()}`;
     <nav
       id={tocRootId}
       class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 [scrollbar-width:thin] [scrollbar-color:var(--border-normal)_transparent]"
-      aria-label="Índice del artículo"
+      aria-label={
+        isEnglish ? "Article table of contents" : "Índice del artículo"
+      }
       data-toc-root
     >
       <p class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">
-        En este articulo
+        {isEnglish ? "In this article" : "En este artículo"}
       </p>
 
       <ul class="list-none space-y-1 text-[13px]">

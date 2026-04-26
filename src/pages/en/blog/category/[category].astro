@@ -1,0 +1,8 @@
+---
+import CategoryPage from "../../../blog/categoria/[category].astro";
+export { getStaticPaths } from "../../../blog/categoria/[category].astro";
+
+const { category, posts } = Astro.props;
+---
+
+<CategoryPage category={category} posts={posts} />

@@ -16,9 +16,8 @@ window.nhTheme = {
 
 // ── Idioma ─────────────────────────────────────────────
 window.nhLang = {
-  isEN: false,
-  toggle() {
-    this.isEN = !this.isEN;
+  isEN: document.documentElement.lang === "en",
+  apply() {
     const lang = this.isEN ? "en" : "es";
     document.documentElement.lang = lang;
     const btn = document.getElementById("lang-btn");
@@ -38,7 +37,12 @@ window.nhLang = {
         this.isEN ? "Cambiar a español" : "Switch to English",
       );
   },
+  toggle() {
+    this.isEN = !this.isEN;
+    this.apply();
+  },
 };
+window.nhLang.apply();
 
 // ── Accesibilidad ──────────────────────────────────────
 function nhInitialMotionReduced() {

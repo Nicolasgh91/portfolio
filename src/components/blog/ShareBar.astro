@@ -1,5 +1,6 @@
 ---
 import { randomUUID } from "node:crypto";
+import { localeFromPathname } from "../../lib/locale-path";
 
 interface Props {
   title: string;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { title, url } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const shareRootId = `share-bar-${randomUUID()}`;
 const xShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
 const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
@@ -18,17 +20,17 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
   data-share-bar
   class="mt-6 inline-flex flex-wrap items-center gap-2"
   role="group"
-  aria-label="Compartir articulo"
+  aria-label={isEnglish ? "Share article" : "Compartir artículo"}
 >
   <span class="mr-1 text-xs font-medium text-[var(--text-muted)]"
-    >Compartir</span
+    >{isEnglish ? "Share" : "Compartir"}</span
   >
 
   <a
     href={xShareUrl}
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="Compartir en X"
+    aria-label={isEnglish ? "Share on X" : "Compartir en X"}
     class="social-icon-link social-icon-link--brand-x h-9 w-9 rounded-lg"
   >
     <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true">
@@ -43,7 +45,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
     href={linkedInShareUrl}
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="Compartir en LinkedIn"
+    aria-label={isEnglish ? "Share on LinkedIn" : "Compartir en LinkedIn"}
     class="social-icon-link social-icon-link--brand-li h-9 w-9 rounded-lg"
   >
     <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true">
@@ -58,7 +60,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
     href={whatsAppShareUrl}
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="Compartir en WhatsApp"
+    aria-label={isEnglish ? "Share on WhatsApp" : "Compartir en WhatsApp"}
     class="social-icon-link social-icon-link--brand-wa h-9 w-9 rounded-lg"
   >
     <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true">
@@ -72,7 +74,7 @@ const whatsAppShareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${u
   <button
     type="button"
     data-copy-url={url}
-    aria-label="Copiar enlace"
+    aria-label={isEnglish ? "Copy link" : "Copiar enlace"}
     class="social-icon-link h-9 w-9 rounded-lg border-0 bg-transparent p-0"
   >
     <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true">

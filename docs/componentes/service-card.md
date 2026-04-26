@@ -41,7 +41,7 @@
   - `price === 'Consultar'`: pie fijo con “Consultar precio” y WhatsApp opcional (`site.json`); borde superior **`var(--border-normal)`**, fondo pie **`var(--bg-surface-container-low)`**; si hay `href`, la zona imagen+texto es un `<a>`; si no hay `href`, solo el pie enlaza.
   - `price` distinto de `Consultar` y `href`: `<article>` con **overlay** `<a>` a pantalla completa (`aria-labelledby={headingId}`), `target="_blank` solo si `href` comienza con `http`.
   - Sin `href`: bloque informativo con precio si aplica, sin overlay.
-- **Bilingüe:** `data-en` / `data-es` en textos conmutables.
+- **Bilingüe:** encabezado, descripción, ROI y rótulo de servicio se resuelven por SSR con `localeFromPathname`; `data-en` / `data-es` solo debe quedar en piezas que requieran sincronización cliente explícita.
 
 ## Verificación / despliegue
 

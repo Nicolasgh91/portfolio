@@ -1,13 +1,29 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
+import { localeFromPathname } from "../../lib/locale-path";
 
 const title = "Hub de contenido para creadores — bio, FAQ, videos y links";
 const description =
   "Plantilla one-page: biografía, preguntas frecuentes en acordeón, espacio para videos y enlaces categorizados. Base para marca personal y monetización.";
+const titleEn = "Content hub for creators — bio, FAQ, videos and links";
+const descriptionEn =
+  "One-page template: biography, accordion FAQ, space for videos and categorized links. A base for personal brand and monetization.";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const blogHref = isEnglish ? "/en/blog" : "/blog";
+const talentHref = isEnglish ? "/en/talent" : "/talento";
+const servicesContactHref = isEnglish
+  ? "/en/services#contacto"
+  : "/servicios#contacto";
 ---
 
-<Layout {title} {description} ogImage="/og-desktop.png">
+<Layout
+  {title}
+  {description}
+  {titleEn}
+  {descriptionEn}
+  ogImage="/og-desktop.png"
+>
   <Nav activePage="home" />
 
   <main id="main-content">
@@ -16,12 +32,18 @@ const description =
         <h1
           class="mb-4 font-display text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-4xl"
         >
-          Hub de contenido para creadores
+          {
+            isEnglish
+              ? "Content hub for creators"
+              : "Hub de contenido para creadores"
+          }
         </h1>
         <p class="mb-10 text-base leading-relaxed text-[var(--text-secondary)]">
-          Ejemplo de estructura de producto empaquetado: una sola página rápida
-          con todo lo que tus seguidores necesitan — sin depender solo de
-          Linktree genérico.
+          {
+            isEnglish
+              ? "Example structure for a packaged product: one fast page with everything your followers need, without depending only on a generic Linktree."
+              : "Ejemplo de estructura de producto empaquetado: una sola página rápida con todo lo que tus seguidores necesitan — sin depender solo de Linktree genérico."
+          }
         </p>
 
         <section class="mb-12" aria-labelledby="bio-heading">
@@ -32,10 +54,11 @@ const description =
             Bio
           </h2>
           <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-            Nicolás Hruszczak — analista funcional y desarrollador full stack.
-            Ayudo a pymes a ordenar procesos, automatizar con IA y tener
-            presencia web que convierta. Este bloque en tu hub sería tu historia
-            y propuesta en 2–3 párrafos.
+            {
+              isEnglish
+                ? "Nicolás Hruszczak — functional analyst and full stack developer. I help SMEs organize processes, automate with AI, and build web presence that converts. In your hub, this block would be your story and offer in 2-3 paragraphs."
+                : "Nicolás Hruszczak — analista funcional y desarrollador full stack. Ayudo a pymes a ordenar procesos, automatizar con IA y tener presencia web que convierta. Este bloque en tu hub sería tu historia y propuesta en 2–3 párrafos."
+            }
           </p>
         </section>
 
@@ -44,7 +67,7 @@ const description =
             id="faq-heading"
             class="mb-4 text-lg font-bold text-[var(--text-primary)]"
           >
-            Preguntas frecuentes
+            {isEnglish ? "Frequently asked questions" : "Preguntas frecuentes"}
           </h2>
           <div class="space-y-2">
             <details
@@ -53,11 +76,18 @@ const description =
               <summary
                 class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
               >
-                ¿Qué incluye el hub?
+                {
+                  isEnglish
+                    ? "What does the hub include?"
+                    : "¿Qué incluye el hub?"
+                }
               </summary>
               <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                Bio, enlaces por categoría, FAQ expandible y bloque para videos
-                o reels embebidos.
+                {
+                  isEnglish
+                    ? "Bio, categorized links, expandable FAQ and a block for embedded videos or reels."
+                    : "Bio, enlaces por categoría, FAQ expandible y bloque para videos o reels embebidos."
+                }
               </p>
             </details>
             <details
@@ -66,11 +96,18 @@ const description =
               <summary
                 class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
               >
-                ¿Puedo sumar chatbot después?
+                {
+                  isEnglish
+                    ? "Can I add a chatbot later?"
+                    : "¿Puedo sumar chatbot después?"
+                }
               </summary>
               <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                Sí. El mismo stack modular permite agregar widget de IA sin
-                rehacer la landing.
+                {
+                  isEnglish
+                    ? "Yes. The same modular stack lets you add an AI widget without rebuilding the landing page."
+                    : "Sí. El mismo stack modular permite agregar widget de IA sin rehacer la landing."
+                }
               </p>
             </details>
           </div>
@@ -81,20 +118,24 @@ const description =
             id="videos-heading"
             class="mb-4 text-lg font-bold text-[var(--text-primary)]"
           >
-            Videos destacados
+            {isEnglish ? "Featured videos" : "Videos destacados"}
           </h2>
           <div class="grid gap-3 sm:grid-cols-2" role="list">
             <div
               role="listitem"
               class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-[var(--border-normal)] bg-[var(--bg-tertiary)] text-xs text-[var(--text-muted)]"
-              aria-label="Espacio reservado para video 1"
+              aria-label={isEnglish
+                ? "Reserved space for video 1"
+                : "Espacio reservado para video 1"}
             >
               Video / embed
             </div>
             <div
               role="listitem"
               class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-[var(--border-normal)] bg-[var(--bg-tertiary)] text-xs text-[var(--text-muted)]"
-              aria-label="Espacio reservado para video 2"
+              aria-label={isEnglish
+                ? "Reserved space for video 2"
+                : "Espacio reservado para video 2"}
             >
               Video / embed
             </div>
@@ -106,28 +147,30 @@ const description =
             id="links-heading"
             class="mb-4 text-lg font-bold text-[var(--text-primary)]"
           >
-            Links por categoría
+            {isEnglish ? "Links by category" : "Links por categoría"}
           </h2>
           <div class="space-y-6">
             <div>
               <h3
                 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]"
               >
-                Recursos
+                {isEnglish ? "Resources" : "Recursos"}
               </h3>
               <ul class="space-y-2 text-sm">
                 <li>
                   <a
-                    href="/blog"
+                    href={blogHref}
                     class="text-[var(--accent-text)] underline-offset-2 hover:underline"
-                    >Blog técnico</a
+                    >{isEnglish ? "Technical blog" : "Blog técnico"}</a
                   >
                 </li>
                 <li>
                   <a
-                    href="/talento"
+                    href={talentHref}
                     class="text-[var(--accent-text)] underline-offset-2 hover:underline"
-                    >Perfil y proyectos</a
+                    >{
+                      isEnglish ? "Profile and projects" : "Perfil y proyectos"
+                    }</a
                   >
                 </li>
               </ul>
@@ -136,12 +179,12 @@ const description =
               <h3
                 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]"
               >
-                Contacto
+                {isEnglish ? "Contact" : "Contacto"}
               </h3>
               <ul class="space-y-2 text-sm">
                 <li>
                   <a
-                    href="/servicios#contacto"
+                    href={servicesContactHref}
                     class="text-[var(--accent-text)] underline-offset-2 hover:underline"
                   >
                     Formulario B2B

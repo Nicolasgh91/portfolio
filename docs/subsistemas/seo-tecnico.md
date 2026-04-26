@@ -6,7 +6,7 @@
   - `meta description`, `canonical`, `robots` con URL absoluta.
   - Open Graph base + Twitter card (alineados con canonical actual).
   - `hreflang` (`es`, `en`, `x-default`) con URLs ES/EN separadas.
-  - JSON-LD global (`Person`, `ProfessionalService`).
+  - JSON-LD global (`Person`, `ProfessionalService`) localizado por `localeFromPathname`.
   - `<link rel="sitemap" href="/sitemap-index.xml">`.
 
 ## JSON-LD por tipo
@@ -21,7 +21,7 @@
 
 - Fuente de verdad: `@astrojs/sitemap` en `astro.config.mjs`.
 - Genera `sitemap-index.xml` + `sitemap-0.xml`.
-- Incluye rutas ES y EN indexables (`/en`, `/en/services`, `/en/talent`, `/en/blog`, `/en/templates` y dinámicas EN de blog/templates).
+- Incluye rutas ES y EN indexables (`/en`, `/en/services`, `/en/talent`, `/en/blog`, `/en/templates`, taxonomías EN de blog, ofertas EN y dinámicas EN de blog/templates).
 - Excluye rutas de desarrollo vía `filter: (page) => !page.includes('/dev/')`.
 
 ## Robots y rastreo
@@ -40,6 +40,8 @@
 - Rutas EN activas en `src/pages/en/**`.
 - El selector de idioma del nav usa navegación por URL (anchor con `href` a la ruta alterna), no mutación de contenido via JS.
 - Navegación y footer resuelven enlaces internos por locale para reforzar descubrimiento de URLs EN.
+- Las rutas EN reutilizan plantillas Astro compartidas; el copy visible se resuelve por SSR con `localeFromPathname`, evitando DOM duplicado por idioma. `controllers.js` queda limitado a sincronizar nodos interactivos con `data-es` / `data-en`.
+- El cuerpo traducido de artículos usa la colección `blog-en` (`src/content/blog-en/*`) solo para `/en/blog/:slug`, mientras `blog` conserva metadatos, taxonomía y rutas.
 
 ## 404 y señales de calidad
 

@@ -11,6 +11,7 @@ import vercelSvg from "../assets/marquee/vercel.svg?raw";
 import pythonSvg from "../assets/marquee/python.svg?raw";
 import nodejsSvg from "../assets/marquee/nodejs.svg?raw";
 import supabaseSvg from "../assets/marquee/supabase.svg?raw";
+import { localeFromPathname } from "../lib/locale-path";
 
 /** Orden alineado a roadmap RD-3.3 (monocromo + filtro tipo SquareBlack). */
 const logoSvgs = [
@@ -35,6 +36,7 @@ for (const svg of logoSvgs) {
 }
 
 const logoSlotClass = "logo-marquee__slot";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div
@@ -46,14 +48,12 @@ const logoSlotClass = "logo-marquee__slot";
     <p
       class="text-center text-xs font-bold uppercase tracking-widest sm:text-left"
     >
-      <span data-es>Stack y herramientas</span>
-      <span data-en class="hidden">Stack &amp; tools</span>
+      {isEnglish ? "Stack & tools" : "Stack y herramientas"}
     </p>
     <p
       class="text-center text-[0.65rem] font-bold uppercase tracking-[0.2em] sm:text-right"
     >
-      <span data-es>Stack principal</span>
-      <span data-en class="hidden">Core stack</span>
+      {isEnglish ? "Core stack" : "Stack principal"}
     </p>
   </div>
 

@@ -7,6 +7,7 @@ import {
   VERTICAL_LABELS,
 } from "../../data/landing-templates";
 import { resolveTemplateDemoUrl } from "../../lib/resolve-template-demo-url";
+import { localeFromPathname } from "../../lib/locale-path";
 import site from "../../data/site.json";
 
 export const getStaticPaths = () =>
@@ -27,20 +28,27 @@ const templatePymeBase =
   "https://template-pyme.escalatunegocioconia.com";
 
 const resolvedDemoUrl = resolveTemplateDemoUrl(template, templatePymeBase);
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const templatesHref = isEnglish ? "/en/templates" : "/plantillas";
+const servicesContactHref = isEnglish
+  ? "/en/services#contacto"
+  : "/servicios#contacto";
 
 const siteUrl = site.author.siteUrl ?? "https://escalatunegocioconia.com";
-const canonicalUrl = `${siteUrl}/plantillas/${template.slug}`;
+const canonicalUrl = `${siteUrl}${templatesHref}/${template.slug}`;
 
 const vertical = VERTICAL_LABELS[template.vertical];
 
 const pageTitle = `${template.title} | Plantilla`;
+const pageTitleEn = `${template.titleEn ?? template.title} | Template`;
 const pageDescription = template.description;
+const pageDescriptionEn = template.descriptionEn ?? template.description;
 
 const pageJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: template.title,
-  description: template.description,
+  name: isEnglish ? (template.titleEn ?? template.title) : template.title,
+  description: isEnglish ? pageDescriptionEn : pageDescription,
   url: canonicalUrl,
 };
 ---
@@ -48,6 +56,8 @@ const pageJsonLd = {
 <Layout
   title={pageTitle}
   description={pageDescription}
+  titleEn={pageTitleEn}
+  descriptionEn={pageDescriptionEn}
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
@@ -59,7 +69,7 @@ const pageJsonLd = {
     <article class="mt-[var(--sp-lg)] max-w-3xl">
       <p class="text-sm text-[var(--text-muted)]">
         <a
-          href="/plantillas"
+          href={templatesHref}
           class="font-medium text-[hsl(var(--accent-h),var(--accent-s),56%)] underline-offset-2 hover:underline"
           data-es="← Volver al catálogo"
           data-en="← Back to catalog"
@@ -80,7 +90,7 @@ const pageJsonLd = {
           data-es={vertical.es}
           data-en={vertical.en}
         >
-          {vertical.es}
+          {isEnglish ? vertical.en : vertical.es}
         </span>
       </p>
       <p
@@ -88,7 +98,11 @@ const pageJsonLd = {
         data-es={template.description}
         data-en={template.descriptionEn ?? template.description}
       >
-        {template.description}
+        {
+          isEnglish
+            ? (template.descriptionEn ?? template.description)
+            : template.description
+        }
       </p>
 
       <h2
@@ -96,16 +110,16 @@ const pageJsonLd = {
         data-es="Incluye"
         data-en="Includes"
       >
-        Incluye
+        {isEnglish ? "Includes" : "Incluye"}
       </h2>
       <ul
         class="mt-4 list-disc space-y-2 pl-6 text-[var(--text-secondary)]"
         role="list"
       >
         {
-          template.features.map((f) => (
-            <li data-es={f} data-en={f}>
-              {f}
+          template.features.map((f, i) => (
+            <li data-es={f} data-en={template.featuresEn?.[i] ?? f}>
+              {isEnglish ? (template.featuresEn?.[i] ?? f) : f}
             </li>
           ))
         }
@@ -122,7 +136,7 @@ const pageJsonLd = {
               data-es="Ver demo"
               data-en="View demo"
             >
-              Ver demo
+              {isEnglish ? "View demo" : "Ver demo"}
             </a>
           ) : (
             <span
@@ -130,17 +144,17 @@ const pageJsonLd = {
               data-es="Próximamente"
               data-en="Coming soon"
             >
-              Próximamente
+              {isEnglish ? "Coming soon" : "Próximamente"}
             </span>
           )
         }
         <a
-          href="/servicios#contacto"
+          href={servicesContactHref}
           class="inline-flex rounded-[var(--radius-lg)] border border-[color:var(--accent-border)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[color:var(--accent-border)]"
           data-es="Consultar"
           data-en="Inquire"
         >
-          Consultar
+          {isEnglish ? "Inquire" : "Consultar"}
         </a>
       </div>
     </article>

@@ -6,15 +6,15 @@
 
 ## Props
 
-| Prop         | Tipo     | Requerida | Descripción                                 |
-| ------------ | -------- | --------- | ------------------------------------------- |
-| `text`       | `string` | Sí        | Texto ES (visible por defecto).             |
-| `textEn`     | `string` | Sí        | Texto EN (`hidden` hasta `nhLang`).         |
-| `colorClass` | `string` | No        | Clases de color; default `text-orange-400`. |
+| Prop         | Tipo     | Requerida | Descripción                                  |
+| ------------ | -------- | --------- | -------------------------------------------- |
+| `text`       | `string` | Sí        | Texto ES (visible por defecto).              |
+| `textEn`     | `string` | Sí        | Texto EN renderizado por SSR en rutas `/en`. |
+| `colorClass` | `string` | No        | Clases de color; default `text-orange-400`.  |
 
 ## Comportamiento
 
-- `<span>` con pares `data-es` / `data-en` para el toggle de idioma global.
+- `<span>` único con texto resuelto por `localeFromPathname`; no depende de `nhLang` ni de `.hidden`.
 
 ## Estado
 

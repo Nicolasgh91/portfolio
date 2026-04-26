@@ -29,8 +29,8 @@
 
 - Portada: `coverImageKey` → asset importado; si falta, fallback por `category` (`arquitectura`, `infraestructura`, `metodología`) y luego default.
 - Overlay y CTA “Leer artículo” visibles en hover (desktop); enlace principal con `aria-label` descriptivo.
-- Meta: fecha localizada `es-AR`, tiempo de lectura opcional con icono.
-- i18n: `data-en` / `data-es` en título, descripción, CTA y tiempo de lectura.
+- Meta: fecha localizada por ruta (`es-AR` / `en-US`), tiempo de lectura opcional con icono.
+- i18n: título, descripción, CTA, alt y tiempo de lectura se renderizan desde `localeFromPathname`; `data-en` / `data-es` quedan como metadatos para el toggle global.
 
 ## Decisiones de diseño
 

@@ -4,6 +4,7 @@ import Nav from "../../components/Nav.astro";
 import BlogCard from "../../components/BlogCard.astro";
 import TaxonomyFilter from "../../components/TaxonomyFilter.astro";
 import { getCollection } from "astro:content";
+import { localeFromPathname } from "../../lib/locale-path";
 
 // Filtra donde draft NO es true
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -13,38 +14,52 @@ const posts = allPosts.sort(
 
 const categories = [...new Set(posts.map((p) => p.data.category))].sort();
 const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const tagBaseHref = isEnglish ? "/en/blog/tag" : "/blog/etiqueta";
 ---
 
 <Layout
   title="Blog técnico — Nicolás Hruszczak"
   description="Artículos sobre arquitectura de software, inteligencia artificial aplicada y automatización para empresas. Perspectiva práctica, sin teoría vacía."
+  titleEn="Technical Blog — Nicolás Hruszczak"
+  descriptionEn="Articles about software architecture, applied artificial intelligence, and business automation. Practical perspective without empty theory."
   ogImage="/og-desktop.png"
 >
   <Nav activePage="blog" />
 
   <main id="main-content">
     <div class="page-container">
-      <section class="hero" aria-label="Blog técnico">
+      <section
+        class="hero"
+        aria-label={isEnglish ? "Technical blog" : "Blog técnico"}
+      >
         <div
           class="badge"
           data-en="Technical articles"
           data-es="Artículos técnicos"
         >
-          Artículos técnicos
+          {isEnglish ? "Technical articles" : "Artículos técnicos"}
         </div>
         <h1
           data-en="Architecture, AI & automation"
           data-es="Arquitectura, IA y automatización"
         >
-          Arquitectura, IA y automatización
+          {
+            isEnglish
+              ? "Architecture, AI & automation"
+              : "Arquitectura, IA y automatización"
+          }
         </h1>
         <p
           class="hero-sub"
           data-en="Practical perspective on software, artificial intelligence and process optimization. No empty theory."
           data-es="Perspectiva práctica sobre software, inteligencia artificial y optimización de procesos. Sin teoría vacía."
         >
-          Perspectiva práctica sobre software, inteligencia artificial y
-          optimización de procesos. Sin teoría vacía.
+          {
+            isEnglish
+              ? "Practical perspective on software, artificial intelligence and process optimization. No empty theory."
+              : "Perspectiva práctica sobre software, inteligencia artificial y optimización de procesos. Sin teoría vacía."
+          }
         </p>
       </section>
 
@@ -57,15 +72,24 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           class="section-header reveal reveal--scale"
           style="--reveal-delay: 0ms"
         >
-          <span class="label"
-            >{posts.length} artículo{posts.length !== 1 ? "s" : ""}</span
-          >
-          <h2 id="posts-heading" class="sr-only">Artículos</h2>
+          <span class="label">
+            {posts.length}
+            {
+              isEnglish
+                ? ` article${posts.length !== 1 ? "s" : ""}`
+                : ` artículo${posts.length !== 1 ? "s" : ""}`
+            }
+          </span>
+          <h2 id="posts-heading" class="sr-only">
+            {isEnglish ? "Articles" : "Artículos"}
+          </h2>
         </div>
 
         {
           posts.length === 0 ? (
-            <p class="empty">Próximamente...</p>
+            <p class="empty">
+              {isEnglish ? "Coming soon..." : "Próximamente..."}
+            </p>
           ) : (
             <div class="posts-grid">
               {posts.map((post, i) => (
@@ -90,13 +114,13 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           >
             <div class="section-header">
               <h2 id="blog-tags-heading" class="label">
-                Etiquetas
+                {isEnglish ? "Tags" : "Etiquetas"}
               </h2>
             </div>
             <div class="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <a
-                  href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
+                  href={`${tagBaseHref}/${encodeURIComponent(tag)}`}
                   class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
                 >
                   #{tag}

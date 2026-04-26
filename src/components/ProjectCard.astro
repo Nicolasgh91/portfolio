@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { localeFromPathname } from "../lib/locale-path";
 
 type CoverPosition = "top" | "center" | "bottom";
 type Direction = "left" | "right";
@@ -74,6 +75,7 @@ const badgeClass =
   badgeVariant === "live"
     ? "rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-success)]"
     : "rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#eab308]";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <article
@@ -125,10 +127,7 @@ const badgeClass =
     {
       badge && (
         <span class:list={["mb-3 inline-flex w-fit", badgeClass]}>
-          <span data-es>{badge}</span>
-          <span data-en class="hidden">
-            {badgeEn ?? badge}
-          </span>
+          {isEnglish ? (badgeEn ?? badge) : badge}
         </span>
       )
     }
@@ -136,14 +135,12 @@ const badgeClass =
       id={headingId}
       class="font-display text-xl font-medium text-white md:text-2xl"
     >
-      <span data-es>{title}</span>
-      <span data-en class="hidden">{titleEn}</span>
+      {isEnglish ? titleEn : title}
     </h3>
     <p
       class="mt-2 max-w-prose text-sm font-normal leading-relaxed text-white/65"
     >
-      <span data-es>{description}</span>
-      <span data-en class="hidden">{descriptionEn}</span>
+      {isEnglish ? descriptionEn : description}
     </p>
     {
       tags.length > 0 && (
@@ -165,8 +162,7 @@ const badgeClass =
       class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white"
       aria-hidden="true"
     >
-      <span data-es>Ver proyecto</span>
-      <span data-en class="hidden">View project</span>
+      <span>{isEnglish ? "View project" : "Ver proyecto"}</span>
       <span class="arrow" aria-hidden="true">→</span>
     </span>
   </div>

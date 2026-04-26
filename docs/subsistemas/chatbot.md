@@ -4,7 +4,7 @@
 
 - Widget en `public/chatbot/widget/` + datos en `public/chatbot/data/`.
 - Backend BFF en `api/chat.js` (Vercel Edge); allowlist de `Origin` para preview acotada a hostnames del despliegue (`VERCEL_URL` / `VERCEL_BRANCH_URL` / `{VERCEL_PROJECT_NAME}.vercel.app`, ver [seguridad.md](./seguridad.md) SEC-004).
-- Inyección global del iframe desde `src/layouts/Layout.astro`.
+- Inyección global del iframe desde `src/layouts/Layout.astro` mediante script empaquetado por Astro, no inline, para respetar la CSP de preview/deploy.
 
 ## Flujo end-to-end
 
@@ -46,7 +46,7 @@ sequenceDiagram
 
 ## Integración con sitio
 
-- `Layout.astro` inserta iframe fijo y escucha `postMessage` (`open`/`close`).
+- `Layout.astro` inserta iframe fijo y escucha `postMessage` (`open`/`close`) desde el mismo script que controla el click-outside-to-close; ese bloque comparte estado `chatOpen` y referencia a `iframe.contentWindow`.
 - El widget sincroniza `light/dark` y tokens desde el documento padre (incluye variables del sistema de botones: `--btn-primary-bg`, `--btn-primary-bg-hover`, `--btn-disabled-opacity`, `--color-on-accent`, `--text-lg` para `#send-btn`).
 
 ## Decisiones
@@ -54,6 +54,7 @@ sequenceDiagram
 - API key nunca en browser (proxy Edge).
 - System prompt server-side con cache por perfil.
 - Fallo “fail-silent”: fallback legible ante errores de proveedor.
+- El inyector del iframe no usa `define:vars`; resuelve labels ES/EN en runtime desde `document.documentElement.lang` para que Astro lo emita como asset externo permitido por `script-src 'self'`.
 
 ## Deuda técnica
 

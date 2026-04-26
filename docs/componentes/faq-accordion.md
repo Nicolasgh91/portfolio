@@ -25,6 +25,7 @@ Misma superficie que el bloque FAQ “nativo” de [`FaqSection`](./faq-section.
 - **Sin microdata** en el HTML; el FAQ estructurado para buscadores debe inyectarse en `<Fragment slot="head">` con `buildFaqPageJsonLd` (u otro helper) en la página que consume el componente.
 - Chips de categoría si `entries.length > 8` (igual que FaqSection modo native).
 - **`darkBand`:** borde exterior naranja suave, fondo `slate-900/95`, ítems del acordeón con bordes `white/10` y estados `open` con acento naranja; categorías usan clases Tailwind fijas en lugar de variables de tema.
+- **i18n:** eyebrow, heading, intro, CTA, preguntas, respuestas y chips se resuelven por SSR con `localeFromPathname`; no depende de spans ocultos.
 
 ## SEO / QA
 

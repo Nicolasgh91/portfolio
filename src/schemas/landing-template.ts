@@ -21,6 +21,12 @@ export const landingTemplateSchema = z.object({
       "available: plantilla con URL canónica publicada y apta para JSON-LD; coming_soon: sin ficha indexable como ItemList.",
     ),
   features: z.array(z.string()).min(1),
+  featuresEn: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "Lista de beneficios traducida al inglés, alineada por índice con features.",
+    ),
   thumbnail: z
     .string()
     .optional()

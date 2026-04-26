@@ -1,0 +1,8 @@
+---
+import TagPage from "../../../blog/etiqueta/[tag].astro";
+export { getStaticPaths } from "../../../blog/etiqueta/[tag].astro";
+
+const { tag, posts } = Astro.props;
+---
+
+<TagPage tag={tag} posts={posts} />

@@ -20,8 +20,8 @@ Tarjeta del carrusel del catálogo de plantillas.
 - **Sin precio en UI** (`priceLabel` no se renderiza).
 - CTAs:
   - `status === 'coming_soon'`: texto “Próximamente” / “Coming soon”, tarjeta atenuada.
-  - `available` + demo: enlace “Ver demo” + flecha en `span.arrow`, patrón [`btn-bounce`](./btn-bounce.md) (externo, `rel="noopener noreferrer"`).
-  - `available` sin demo: enlace “Ver ficha” + flecha, mismo patrón, a `/plantillas/{slug}`.
+  - `available` + demo: enlace “Ver demo” + flecha en `span.arrow`, patrón [`btn-bounce`](./btn-bounce.md) (externo, `rel="noopener noreferrer"`). Si la demo interna apunta a `/servicios`, se localiza a `/en/services` en rutas EN.
+  - `available` sin demo: enlace “Ver ficha” + flecha, mismo patrón, a `/plantillas/{slug}` o `/en/templates/{slug}` según locale.
 
 ## Estilo y contraste
 
@@ -31,7 +31,7 @@ Tarjeta del carrusel del catálogo de plantillas.
 
 ## i18n
 
-Título, descripción, badge, CTAs con `data-es` / `data-en` cuando aplica.
+Título, descripción, badge y CTAs se renderizan según `localeFromPathname`; `data-es` / `data-en` se conservan cuando aplica para el toggle global.
 
 ## Orden en el índice `/plantillas`
 

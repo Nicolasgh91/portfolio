@@ -8,8 +8,14 @@ import ProjectCard from "../components/ProjectCard.astro";
 import LiquidGlassMarquee from "../components/LiquidGlassMarquee.astro";
 import { getCollection } from "astro:content";
 import bannerTalentoNaranja from "../assets/talento/banner-talento-naranja.webp";
+import { localeFromPathname } from "../lib/locale-path";
 
 const GITHUB_REPOS_URL = "https://github.com/Nicolasgh91?tab=repositories";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const talentHref = isEnglish ? "/en/talent" : "/talento";
+const servicesContactHref = isEnglish
+  ? "/en/services#contacto"
+  : "/servicios#contacto";
 
 const allProjects = await getCollection("projects");
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
@@ -105,6 +111,8 @@ const softSkills = [
 <Layout
   title="Perfil profesional — Nicolás Hruszczak"
   description="Analista funcional, desarrollador full stack y arquitecto de software. Stack: Python, Astro, Next.js. Especialización en agentes de IA e ingeniería de contexto."
+  titleEn="Professional Profile — Nicolás Hruszczak"
+  descriptionEn="Functional analyst, full stack developer, and software architect. Stack: Python, Astro, Next.js. Specialized in AI agents and context engineering."
   ogImage="/og-desktop.png"
 >
   <Nav activePage="talento" />
@@ -112,7 +120,9 @@ const softSkills = [
   <main id="main-content">
     <PageHeroSection
       image={bannerTalentoNaranja}
-      alt="Banner visual cálido en tonos naranja para la página de perfil profesional."
+      alt={isEnglish
+        ? "Warm orange visual banner for the professional profile page."
+        : "Banner visual cálido en tonos naranja para la página de perfil profesional."}
       imageWidth={1671}
       imageHeight={940}
       headingId="talento-hero-heading"
@@ -121,37 +131,51 @@ const softSkills = [
     >
       <Fragment slot="heading">Nicolás Hruszczak</Fragment>
       <p>
-        <span data-es
-          >Analista desarrollador de <em
-            class="not-italic text-[var(--accent-text)]"
-            >soluciones full stack o funcionales</em
-          >
-          para cualquier aplicación de Software. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Análisis de necesidades y puntos de dolor</em
-          >, con <em class="not-italic text-[var(--accent-text)]"
-            >propuestas de mejora eficientes</em
-          > y acorde al alcance establecido. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Comunicación clara con negocio y stakeholders</em
-          >, mentoría a perfiles en formación y criterio de producto para
-          priorizar entregas con impacto.</span
-        >
-        <span data-en class="hidden"
-          >Analyst-developer of <em class="not-italic text-[var(--accent-text)]"
-            >full-stack or functional solutions</em
-          >
-          for any software application. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Analysis of needs and pain points</em
-          >, with <em class="not-italic text-[var(--accent-text)]"
-            >efficient improvement proposals</em
-          > aligned with the agreed scope. <em
-            class="not-italic text-[var(--accent-text)]"
-            >Clear communication with business and stakeholders</em
-          >, mentoring for early-career profiles and product judgment to
-          prioritize high-impact delivery.</span
-        >
+        {
+          isEnglish ? (
+            <>
+              Analyst-developer of{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                full-stack or functional solutions
+              </em>{" "}
+              for any software application.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Analysis of needs and pain points
+              </em>
+              , with{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                efficient improvement proposals
+              </em>{" "}
+              aligned with the agreed scope.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Clear communication with business and stakeholders
+              </em>
+              , mentoring for early-career profiles and product judgment to
+              prioritize high-impact delivery.
+            </>
+          ) : (
+            <>
+              Analista desarrollador de{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                soluciones full stack o funcionales
+              </em>{" "}
+              para cualquier aplicación de Software.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Análisis de necesidades y puntos de dolor
+              </em>
+              , con{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                propuestas de mejora eficientes
+              </em>{" "}
+              y acorde al alcance establecido.{" "}
+              <em class="not-italic text-[var(--accent-text)]">
+                Comunicación clara con negocio y stakeholders
+              </em>
+              , mentoría a perfiles en formación y criterio de producto para
+              priorizar entregas con impacto.
+            </>
+          )
+        }
       </p>
       <div class="mt-8 flex justify-center md:justify-start">
         <a
@@ -159,7 +183,9 @@ const softSkills = [
           class="btn-secondary border-white/20 bg-white/5 text-white hover:border-white/35 hover:bg-white/10"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Ver repositorios en GitHub"
+          aria-label={isEnglish
+            ? "View GitHub repositories"
+            : "Ver repositorios en GitHub"}
           data-en="GitHub repositories"
           data-es="Repositorios en GitHub"
         >
@@ -178,15 +204,13 @@ const softSkills = [
           <p
             class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
           >
-            <span data-es>Capacidades</span>
-            <span data-en class="hidden">Capabilities</span>
+            {isEnglish ? "Capabilities" : "Capacidades"}
           </p>
           <h2
             id="capabilities-heading"
             class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            <span data-es>Capacidades técnicas</span>
-            <span data-en class="hidden">Technical capabilities</span>
+            {isEnglish ? "Technical capabilities" : "Capacidades técnicas"}
           </h2>
         </header>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
@@ -194,16 +218,10 @@ const softSkills = [
             capabilities.map((cap) => (
               <div class="service-card-shell-bg shell-hover rounded-2xl p-6 md:p-8">
                 <h3 class="font-display text-xl font-semibold tracking-tight text-[var(--text-primary)] md:text-2xl">
-                  <span data-es>{cap.title}</span>
-                  <span data-en class="hidden">
-                    {cap.titleEn}
-                  </span>
+                  {isEnglish ? cap.titleEn : cap.title}
                 </h3>
                 <p class="mt-3 text-base font-normal leading-relaxed text-[var(--text-secondary)]">
-                  <span data-es>{cap.description}</span>
-                  <span data-en class="hidden">
-                    {cap.descriptionEn}
-                  </span>
+                  {isEnglish ? cap.descriptionEn : cap.description}
                 </p>
               </div>
             ))
@@ -233,7 +251,12 @@ const softSkills = [
             <span
               class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Professional background"
-              data-es="Trayectoria profesional">Trayectoria profesional</span
+              data-es="Trayectoria profesional"
+              >{
+                isEnglish
+                  ? "Professional background"
+                  : "Trayectoria profesional"
+              }</span
             >
           </div>
           <h2
@@ -242,7 +265,7 @@ const softSkills = [
             data-en="Roles & experience"
             data-es="Roles y experiencia"
           >
-            Roles y experiencia
+            {isEnglish ? "Roles & experience" : "Roles y experiencia"}
           </h2>
         </header>
 
@@ -261,16 +284,22 @@ const softSkills = [
                 data-en="Developer & software architect"
                 data-es="Desarrollador y arquitecto de software"
               >
-                Desarrollador y arquitecto de software
+                {
+                  isEnglish
+                    ? "Developer & software architect"
+                    : "Desarrollador y arquitecto de software"
+                }
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
                 data-es="Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
               >
-                Diseño e implementación de arquitecturas escalables (Huella del
-                fuego en Argentina), creación de microservicios con FastAPI,
-                desarrollo full stack y despliegue en la nube.
+                {
+                  isEnglish
+                    ? "Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
+                    : "Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
+                }
               </p>
             </div>
           </article>
@@ -289,16 +318,18 @@ const softSkills = [
                 data-en="Functional analyst"
                 data-es="Analista funcional"
               >
-                Analista funcional
+                {isEnglish ? "Functional analyst" : "Analista funcional"}
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
                 data-es="Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
               >
-                Ingeniería de requerimientos bajo marco Scrum (Finnegans),
-                documentación de workflows (MRM), modelado BPMN y soporte al
-                Product Owner en la gestión del backlog.
+                {
+                  isEnglish
+                    ? "Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
+                    : "Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
+                }
               </p>
             </div>
           </article>
@@ -317,16 +348,18 @@ const softSkills = [
                 data-en="Content analyst"
                 data-es="Analista de contenido"
               >
-                Analista de contenido
+                {isEnglish ? "Content analyst" : "Analista de contenido"}
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
                 data-es="Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
               >
-                Redacción técnica y de producto, estructura de documentación y
-                criterios editoriales alineados a SEO y claridad para el usuario
-                final.
+                {
+                  isEnglish
+                    ? "Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
+                    : "Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
+                }
               </p>
             </div>
           </article>
@@ -345,16 +378,22 @@ const softSkills = [
                 data-en="Mentor & technical facilitator"
                 data-es="Mentor y facilitador técnico"
               >
-                Mentor y facilitador técnico
+                {
+                  isEnglish
+                    ? "Mentor & technical facilitator"
+                    : "Mentor y facilitador técnico"
+                }
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
                 data-es="Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
               >
-                Experiencia como ayudante de cátedra y tutor para Programación
-                Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros
-                pasos técnicos.
+                {
+                  isEnglish
+                    ? "Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
+                    : "Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
+                }
               </p>
             </div>
           </article>
@@ -431,16 +470,10 @@ const softSkills = [
             softSkills.map((item) => (
               <div class="service-card-shell-bg shell-hover rounded-2xl p-5 md:p-6">
                 <h3 class="font-display text-lg font-semibold tracking-tight text-[var(--text-primary)]">
-                  <span data-es>{item.title}</span>
-                  <span data-en class="hidden">
-                    {item.titleEn}
-                  </span>
+                  {isEnglish ? item.titleEn : item.title}
                 </h3>
                 <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
-                  <span data-es>{item.description}</span>
-                  <span data-en class="hidden">
-                    {item.descriptionEn}
-                  </span>
+                  {isEnglish ? item.descriptionEn : item.description}
                 </p>
               </div>
             ))
@@ -605,15 +638,13 @@ const softSkills = [
           <p
             class="text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
           >
-            <span data-es>Ingeniería</span>
-            <span data-en class="hidden">Engineering</span>
+            {isEnglish ? "Engineering" : "Ingeniería"}
           </p>
           <h2
             id="projects-heading"
             class="mt-2 font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl"
           >
-            <span data-es>Proyectos técnicos</span>
-            <span data-en class="hidden">Technical projects</span>
+            {isEnglish ? "Technical projects" : "Proyectos técnicos"}
           </h2>
         </header>
 
@@ -635,8 +666,10 @@ const softSkills = [
                     project.data.url
                       ? project.data.url
                       : project.slug === "huelladelfuego"
-                        ? "/blog/caso-huelladelfuego"
-                        : `/talento#${project.slug}`
+                        ? isEnglish
+                          ? "/en/blog/caso-huelladelfuego"
+                          : "/blog/caso-huelladelfuego"
+                        : `${talentHref}#${project.slug}`
                   }
                   badge={
                     project.data.status === "live" ||
@@ -674,31 +707,23 @@ const softSkills = [
           <h2
             class="font-display text-2xl font-bold text-[var(--color-on-accent)] md:text-3xl"
           >
-            <span data-es>¿Hablamos?</span>
-            <span data-en class="hidden">Let&apos;s talk</span>
+            {isEnglish ? "Let's talk" : "¿Hablamos?"}
           </h2>
           <p
             class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-on-accent)] opacity-90"
           >
-            <span data-es
-              >Si tenés dudas sobre mi perfil, querés consultar referencias o
-              explorar una colaboración de consultoría, el pie del sitio incluye
-              el formulario de contacto si preferís dejar un mensaje
-              estructurado.</span
-            >
-            <span data-en class="hidden"
-              >If you have questions about my background, want to check
-              references, or explore a consulting engagement, the site footer
-              includes the contact form if you prefer a structured message.</span
-            >
+            {
+              isEnglish
+                ? "If you have questions about my background, want to check references, or explore a consulting engagement, the site footer includes the contact form if you prefer a structured message."
+                : "Si tenés dudas sobre mi perfil, querés consultar referencias o explorar una colaboración de consultoría, el pie del sitio incluye el formulario de contacto si preferís dejar un mensaje estructurado."
+            }
           </p>
           <p class="mt-8">
             <a
-              href="/servicios#contacto"
+              href={servicesContactHref}
               class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
             >
-              <span data-es>Contactar</span>
-              <span data-en class="hidden">Contact</span>
+              <span>{isEnglish ? "Contact" : "Contactar"}</span>
               <span class="arrow" aria-hidden="true">→</span>
             </a>
           </p>
