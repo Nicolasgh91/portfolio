@@ -8,8 +8,14 @@ import ProjectCard from "../components/ProjectCard.astro";
 import LiquidGlassMarquee from "../components/LiquidGlassMarquee.astro";
 import { getCollection } from "astro:content";
 import bannerTalentoNaranja from "../assets/talento/banner-talento-naranja.webp";
+import { localeFromPathname } from "../lib/locale-path";
 
 const GITHUB_REPOS_URL = "https://github.com/Nicolasgh91?tab=repositories";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const talentHref = isEnglish ? "/en/talent" : "/talento";
+const servicesContactHref = isEnglish
+  ? "/en/services#contacto"
+  : "/servicios#contacto";
 
 const allProjects = await getCollection("projects");
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
@@ -105,6 +111,8 @@ const softSkills = [
 <Layout
   title="Perfil profesional — Nicolás Hruszczak"
   description="Analista funcional, desarrollador full stack y arquitecto de software. Stack: Python, Astro, Next.js. Especialización en agentes de IA e ingeniería de contexto."
+  titleEn="Professional Profile — Nicolás Hruszczak"
+  descriptionEn="Functional analyst, full stack developer, and software architect. Stack: Python, Astro, Next.js. Specialized in AI agents and context engineering."
   ogImage="/og-desktop.png"
 >
   <Nav activePage="talento" />
@@ -112,7 +120,9 @@ const softSkills = [
   <main id="main-content">
     <PageHeroSection
       image={bannerTalentoNaranja}
-      alt="Banner visual cálido en tonos naranja para la página de perfil profesional."
+      alt={isEnglish
+        ? "Warm orange visual banner for the professional profile page."
+        : "Banner visual cálido en tonos naranja para la página de perfil profesional."}
       imageWidth={1671}
       imageHeight={940}
       headingId="talento-hero-heading"
@@ -159,7 +169,9 @@ const softSkills = [
           class="btn-secondary border-white/20 bg-white/5 text-white hover:border-white/35 hover:bg-white/10"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Ver repositorios en GitHub"
+          aria-label={isEnglish
+            ? "View GitHub repositories"
+            : "Ver repositorios en GitHub"}
           data-en="GitHub repositories"
           data-es="Repositorios en GitHub"
         >
@@ -233,7 +245,12 @@ const softSkills = [
             <span
               class="inline-flex rounded-full bg-[hsla(var(--accent-h),var(--accent-s),56%,0.12)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]"
               data-en="Professional background"
-              data-es="Trayectoria profesional">Trayectoria profesional</span
+              data-es="Trayectoria profesional"
+              >{
+                isEnglish
+                  ? "Professional background"
+                  : "Trayectoria profesional"
+              }</span
             >
           </div>
           <h2
@@ -242,7 +259,7 @@ const softSkills = [
             data-en="Roles & experience"
             data-es="Roles y experiencia"
           >
-            Roles y experiencia
+            {isEnglish ? "Roles & experience" : "Roles y experiencia"}
           </h2>
         </header>
 
@@ -261,16 +278,22 @@ const softSkills = [
                 data-en="Developer & software architect"
                 data-es="Desarrollador y arquitecto de software"
               >
-                Desarrollador y arquitecto de software
+                {
+                  isEnglish
+                    ? "Developer & software architect"
+                    : "Desarrollador y arquitecto de software"
+                }
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
                 data-es="Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
               >
-                Diseño e implementación de arquitecturas escalables (Huella del
-                fuego en Argentina), creación de microservicios con FastAPI,
-                desarrollo full stack y despliegue en la nube.
+                {
+                  isEnglish
+                    ? "Design and implementation of scalable architectures (Huella del fuego en Argentina), microservices creation with FastAPI, full stack development, and cloud deployment."
+                    : "Diseño e implementación de arquitecturas escalables (Huella del fuego en Argentina), creación de microservicios con FastAPI, desarrollo full stack y despliegue en la nube."
+                }
               </p>
             </div>
           </article>
@@ -289,16 +312,18 @@ const softSkills = [
                 data-en="Functional analyst"
                 data-es="Analista funcional"
               >
-                Analista funcional
+                {isEnglish ? "Functional analyst" : "Analista funcional"}
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
                 data-es="Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
               >
-                Ingeniería de requerimientos bajo marco Scrum (Finnegans),
-                documentación de workflows (MRM), modelado BPMN y soporte al
-                Product Owner en la gestión del backlog.
+                {
+                  isEnglish
+                    ? "Requirements engineering under Scrum (Finnegans), workflow documentation (MRM), BPMN modeling, and Product Owner support for backlog management."
+                    : "Ingeniería de requerimientos bajo marco Scrum (Finnegans), documentación de workflows (MRM), modelado BPMN y soporte al Product Owner en la gestión del backlog."
+                }
               </p>
             </div>
           </article>
@@ -317,16 +342,18 @@ const softSkills = [
                 data-en="Content analyst"
                 data-es="Analista de contenido"
               >
-                Analista de contenido
+                {isEnglish ? "Content analyst" : "Analista de contenido"}
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
                 data-es="Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
               >
-                Redacción técnica y de producto, estructura de documentación y
-                criterios editoriales alineados a SEO y claridad para el usuario
-                final.
+                {
+                  isEnglish
+                    ? "Technical and product copy, documentation structure, and editorial criteria aligned with SEO and clarity for end users."
+                    : "Redacción técnica y de producto, estructura de documentación y criterios editoriales alineados a SEO y claridad para el usuario final."
+                }
               </p>
             </div>
           </article>
@@ -345,16 +372,22 @@ const softSkills = [
                 data-en="Mentor & technical facilitator"
                 data-es="Mentor y facilitador técnico"
               >
-                Mentor y facilitador técnico
+                {
+                  isEnglish
+                    ? "Mentor & technical facilitator"
+                    : "Mentor y facilitador técnico"
+                }
               </h3>
               <p
                 class="text-sm leading-relaxed text-[var(--text-secondary)] md:text-base"
                 data-en="Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
                 data-es="Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
               >
-                Experiencia como ayudante de cátedra y tutor para Programación
-                Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros
-                pasos técnicos.
+                {
+                  isEnglish
+                    ? "Experience as a teaching assistant and tutor for Initial Programming I at UTN Avellaneda."
+                    : "Experiencia como ayudante de cátedra y tutor para Programación Inicial I en la UTN Avellaneda, guiando alumnos en sus primeros pasos técnicos."
+                }
               </p>
             </div>
           </article>
@@ -635,8 +668,10 @@ const softSkills = [
                     project.data.url
                       ? project.data.url
                       : project.slug === "huelladelfuego"
-                        ? "/blog/caso-huelladelfuego"
-                        : `/talento#${project.slug}`
+                        ? isEnglish
+                          ? "/en/blog/caso-huelladelfuego"
+                          : "/blog/caso-huelladelfuego"
+                        : `${talentHref}#${project.slug}`
                   }
                   badge={
                     project.data.status === "live" ||
@@ -694,7 +729,7 @@ const softSkills = [
           </p>
           <p class="mt-8">
             <a
-              href="/servicios#contacto"
+              href={servicesContactHref}
               class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
             >
               <span data-es>Contactar</span>

@@ -1,7 +1,13 @@
+---
+import { localeFromPathname } from "../lib/locale-path";
+
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+---
+
 <button
   type="button"
   data-back-to-top
-  aria-label="Volver arriba"
+  aria-label={isEnglish ? "Back to top" : "Volver arriba"}
   class="btn-secondary btn-secondary--icon-only pointer-events-none fixed bottom-[28px] left-1/2 z-40 h-[58px] w-[58px] min-h-[58px] min-w-[58px] -translate-x-1/2 border border-white/15 bg-black/55 text-white opacity-0 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md hover:border-[color:var(--color-accent-400)]/40 hover:bg-black/65 max-[480px]:bottom-[20px]"
 >
   <span aria-hidden="true" class="text-lg leading-none">↑</span>

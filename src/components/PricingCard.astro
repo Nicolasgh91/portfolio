@@ -1,5 +1,6 @@
 ---
 import type { PricingPlan } from "../schemas";
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   plan: PricingPlan;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const { plan, orderClass = "" } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 const nameEs = plan.name;
 const nameEn = plan.nameEn ?? plan.name;
@@ -22,7 +24,15 @@ const badgeEn = plan.recommendedLabelEn ?? "Recommended";
 
 const ctaEs = plan.ctaText;
 const ctaEn = plan.ctaTextEn ?? plan.ctaText;
-const ctaHref = plan.ctaHref;
+const ctaHref =
+  isEnglish && plan.ctaHref.startsWith("/servicios")
+    ? plan.ctaHref.replace("/servicios", "/en/services")
+    : plan.ctaHref;
+const priceDetailEnById: Record<string, string> = {
+  basico: "one-time payment per page",
+  plantilla: "one time — first maintenance month included",
+  full: "monthly",
+};
 
 const priceDisplay =
   typeof plan.price === "number"
@@ -47,7 +57,7 @@ const priceDisplay =
           data-es={badgeEs}
           data-en={badgeEn}
         >
-          {badgeEs}
+          {isEnglish ? badgeEn : badgeEs}
         </span>
       </div>
     )
@@ -58,14 +68,14 @@ const priceDisplay =
       data-es={nameEs}
       data-en={nameEn}
     >
-      {nameEs}
+      {isEnglish ? nameEn : nameEs}
     </h3>
     <p
       class="mt-1 text-sm text-[var(--text-secondary)]"
       data-es={subEs}
       data-en={subEn}
     >
-      {subEs}
+      {isEnglish ? subEn : subEs}
     </p>
     <p class="mt-4 flex flex-wrap items-baseline gap-2">
       <span
@@ -80,9 +90,11 @@ const priceDisplay =
           <span
             class="text-sm text-[var(--text-muted)]"
             data-es={plan.priceDetail}
-            data-en={plan.priceDetail}
+            data-en={priceDetailEnById[plan.id] ?? plan.priceDetail}
           >
-            {plan.priceDetail}
+            {isEnglish
+              ? (priceDetailEnById[plan.id] ?? plan.priceDetail)
+              : plan.priceDetail}
           </span>
         )
       }
@@ -119,7 +131,7 @@ const priceDisplay =
             </svg>
           </span>
           <span data-es={f} data-en={featuresEn[i] ?? f}>
-            {f}
+            {isEnglish ? (featuresEn[i] ?? f) : f}
           </span>
         </li>
       ))
@@ -131,6 +143,6 @@ const priceDisplay =
     data-es={ctaEs}
     data-en={ctaEn}
   >
-    {ctaEs}
+    {isEnglish ? ctaEn : ctaEs}
   </a>
 </div>

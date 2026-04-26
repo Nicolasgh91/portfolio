@@ -3,13 +3,17 @@ interface Props {
   tags: string[];
   category: string;
 }
+import { localeFromPathname } from "../../lib/locale-path";
 
 const { tags, category } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const categoryBaseHref = isEnglish ? "/en/blog/category" : "/blog/categoria";
+const tagBaseHref = isEnglish ? "/en/blog/tag" : "/blog/etiqueta";
 ---
 
 <footer class="mt-12 border-t border-[color:var(--border-subtle)] pt-8">
   <a
-    href={`/blog/categoria/${encodeURIComponent(category)}`}
+    href={`${categoryBaseHref}/${encodeURIComponent(category)}`}
     class="mb-4 inline-block text-xs uppercase tracking-widest text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--color-accent-400)]"
   >
     {category}
@@ -19,7 +23,7 @@ const { tags, category } = Astro.props;
     {
       tags.map((tag) => (
         <a
-          href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
+          href={`${tagBaseHref}/${encodeURIComponent(tag)}`}
           class="inline-flex items-center rounded-full border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)]/50 px-3 py-1 text-xs text-[var(--text-secondary)] no-underline transition-all duration-200 hover:border-[color:var(--color-accent-400)]/30 hover:text-[var(--color-accent-400)]"
         >
           #{tag}

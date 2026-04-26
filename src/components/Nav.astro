@@ -18,10 +18,36 @@ const servicesEcommerceHref = `${servicesHref}#ecommerce`;
 const servicesAutomationHref = `${servicesHref}#automatizacion`;
 const servicesContactHref = `${servicesHref}#contacto`;
 const languageSwitchHref = getAlternatePathname(pathname);
+const mainNavLabel = isEnglish ? "Main navigation" : "Navegación principal";
+const servicesMenuLabel = isEnglish
+  ? "Open B2B services submenu"
+  : "Abrir submenú de servicios B2B";
+const themeLabel = isEnglish
+  ? "Toggle light/dark theme"
+  : "Cambiar tema claro/oscuro";
+const a11yLabel = isEnglish
+  ? "Accessibility options"
+  : "Opciones de accesibilidad";
+const diagnosisLabel = isEnglish
+  ? "Request a free diagnosis"
+  : "Solicitar diagnóstico gratuito";
+const burgerLabel = isEnglish
+  ? "Open navigation menu"
+  : "Abrir menú de navegación";
+const drawerLabel = isEnglish ? "Mobile menu" : "Menú móvil";
+const a11yPanelLabel = isEnglish
+  ? "Accessibility panel"
+  : "Panel de accesibilidad";
+const drawerA11yPanelLabel = isEnglish
+  ? "Mobile menu accessibility panel"
+  : "Panel de accesibilidad del menú móvil";
+const textSizeLabel = isEnglish ? "Text size" : "Tamaño de texto";
+const contrastLabel = isEnglish ? "Contrast" : "Contraste";
+const motionLabel = isEnglish ? "Motion" : "Movimiento";
 ---
 
 <header>
-  <nav class="nav" role="navigation" aria-label="Navegación principal">
+  <nav class="nav" role="navigation" aria-label={mainNavLabel}>
     <!-- Logo -->
     <a
       href={homeHref}
@@ -41,7 +67,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`nav-tab ${activePage === "home" ? "active" : ""}`}
           aria-current={activePage === "home" ? "page" : undefined}
           data-en="Home"
-          data-es="Inicio">Inicio</a
+          data-es="Inicio">{isEnglish ? "Home" : "Inicio"}</a
         >
       </li>
 
@@ -52,7 +78,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`nav-tab nav-tab--services-main ${activePage === "servicios" ? "active" : ""}`}
           aria-current={activePage === "servicios" ? "page" : undefined}
           data-en="B2B Services"
-          data-es="Servicios B2B">Servicios B2B</a
+          data-es="Servicios B2B"
+          >{isEnglish ? "B2B Services" : "Servicios B2B"}</a
         >
         <button
           type="button"
@@ -61,7 +88,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="services-menu"
-          aria-label="Abrir submenú de servicios B2B"
+          aria-label={servicesMenuLabel}
           ><span class="dropdown-arrow" aria-hidden="true">▾</span></button
         >
         <div
@@ -86,7 +113,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
                 d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
               ></path></svg
             >
-            Chatbots IA
+            {isEnglish ? "AI chatbots" : "Chatbots IA"}
           </a>
           <a role="menuitem" href={servicesEcommerceHref} class="services-item">
             <svg
@@ -130,7 +157,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
                 y2="3"></line><polyline points="21 16 21 21 16 21"
               ></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg
             >
-            Automatización
+            {isEnglish ? "Automation" : "Automatización"}
           </a>
           <a role="menuitem" href={templatesHref} class="services-item">
             <svg
@@ -146,7 +173,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
               ><rect x="3" y="3" width="18" height="18" rx="2"></rect><path
                 d="M3 9h18M9 21V9"></path></svg
             >
-            Sitios web
+            {isEnglish ? "Websites" : "Sitios web"}
           </a>
         </div>
       </li>
@@ -167,7 +194,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`nav-tab ${activePage === "talento" ? "active" : ""}`}
           aria-current={activePage === "talento" ? "page" : undefined}
           data-en="Profile"
-          data-es="Perfil profesional">Perfil profesional</a
+          data-es="Perfil profesional"
+          >{isEnglish ? "Profile" : "Perfil profesional"}</a
         >
       </li>
     </ul>
@@ -180,8 +208,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           id="theme-btn"
           class="ctrl-btn"
           data-action="theme-toggle"
-          aria-label="Cambiar tema claro/oscuro"
-          title="Tema">◑ Dark</button
+          aria-label={themeLabel}
+          title={isEnglish ? "Theme" : "Tema"}>◑ Dark</button
         >
 
         <a
@@ -196,10 +224,11 @@ const languageSwitchHref = getAlternatePathname(pathname);
           id="a11y-btn"
           class="ctrl-btn"
           data-action="a11y-toggle-panel"
-          aria-label="Opciones de accesibilidad"
+          aria-label={a11yLabel}
           aria-expanded="false"
           aria-controls="a11y-panel"
-          title="Accesibilidad">☰ Accesibilidad</button
+          title={isEnglish ? "Accessibility" : "Accesibilidad"}
+          >☰ {isEnglish ? "Accessibility" : "Accesibilidad"}</button
         >
       </div>
 
@@ -209,7 +238,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
         class="btn-primary btn-primary--sm btn-primary--glow"
         data-en="Free diagnosis →"
         data-es="Diagnóstico gratis →"
-        aria-label="Solicitar diagnóstico gratuito">Diagnóstico gratis →</a
+        aria-label={diagnosisLabel}
+        >{isEnglish ? "Free diagnosis →" : "Diagnóstico gratis →"}</a
       >
     </div>
 
@@ -220,13 +250,14 @@ const languageSwitchHref = getAlternatePathname(pathname);
         class="btn-primary btn-primary--sm btn-primary--glow btn-primary--compact"
         data-en="Diagnosis →"
         data-es="Diagnóstico →"
-        aria-label="Solicitar diagnóstico gratuito">Diagnóstico →</a
+        aria-label={diagnosisLabel}
+        >{isEnglish ? "Diagnosis →" : "Diagnóstico →"}</a
       >
 
       <button
         class="nav-burger"
         id="nav-burger"
-        aria-label="Abrir menú de navegación"
+        aria-label={burgerLabel}
         aria-expanded="false"
         aria-controls="nav-drawer"
       >
@@ -241,7 +272,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
   <div
     id="nav-drawer"
     class="nav-drawer"
-    aria-label="Menú móvil"
+    aria-label={drawerLabel}
     aria-hidden="true"
   >
     <ul class="drawer-links">
@@ -251,7 +282,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`drawer-link ${activePage === "home" ? "active" : ""}`}
           aria-current={activePage === "home" ? "page" : undefined}
           data-en="Home"
-          data-es="Inicio">Inicio</a
+          data-es="Inicio">{isEnglish ? "Home" : "Inicio"}</a
         >
       </li>
 
@@ -261,7 +292,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`drawer-link ${activePage === "servicios" ? "active" : ""}`}
           aria-current={activePage === "servicios" ? "page" : undefined}
           data-en="B2B Services"
-          data-es="Servicios B2B">Servicios B2B</a
+          data-es="Servicios B2B"
+          >{isEnglish ? "B2B Services" : "Servicios B2B"}</a
         >
       </li>
 
@@ -270,7 +302,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
           href={servicesAiHref}
           class="drawer-link drawer-link--sub"
           data-en="AI chatbots"
-          data-es="Chatbots IA">Chatbots IA</a
+          data-es="Chatbots IA">{isEnglish ? "AI chatbots" : "Chatbots IA"}</a
         >
       </li>
       <li>
@@ -286,7 +318,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           href={servicesAutomationHref}
           class="drawer-link drawer-link--sub"
           data-en="Automation"
-          data-es="Automatización">Automatización</a
+          data-es="Automatización"
+          >{isEnglish ? "Automation" : "Automatización"}</a
         >
       </li>
       <li>
@@ -294,7 +327,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
           href={templatesHref}
           class="drawer-link drawer-link--sub"
           data-en="Websites"
-          data-es="Sitios web">Sitios web</a
+          data-es="Sitios web">{isEnglish ? "Websites" : "Sitios web"}</a
         >
       </li>
 
@@ -314,7 +347,8 @@ const languageSwitchHref = getAlternatePathname(pathname);
           class={`drawer-link ${activePage === "talento" ? "active" : ""}`}
           aria-current={activePage === "talento" ? "page" : undefined}
           data-en="Profile"
-          data-es="Perfil profesional">Perfil profesional</a
+          data-es="Perfil profesional"
+          >{isEnglish ? "Profile" : "Perfil profesional"}</a
         >
       </li>
     </ul>
@@ -324,7 +358,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
       <button
         class="ctrl-btn"
         data-action="theme-toggle"
-        aria-label="Cambiar tema claro/oscuro">◑ Dark</button
+        aria-label={themeLabel}>◑ Dark</button
       >
 
       <a
@@ -338,20 +372,21 @@ const languageSwitchHref = getAlternatePathname(pathname);
         id="drawer-a11y-toggle"
         class="ctrl-btn"
         type="button"
-        aria-label="Opciones de accesibilidad"
+        aria-label={a11yLabel}
         aria-expanded="false"
-        aria-controls="drawer-a11y-panel">☰ Accesibilidad</button
+        aria-controls="drawer-a11y-panel"
+        >☰ {isEnglish ? "Accessibility" : "Accesibilidad"}</button
       >
 
       <div
         id="drawer-a11y-panel"
         class="drawer-a11y-panel"
         role="region"
-        aria-label="Panel de accesibilidad del menú móvil"
+        aria-label={drawerA11yPanelLabel}
       >
         <div class="drawer-a11y-group">
           <span class="a11y-label" id="drawer-font-size-label"
-            >Tamaño de texto</span
+            >{textSizeLabel}</span
           >
           <div
             class="a11y-btns"
@@ -380,7 +415,9 @@ const languageSwitchHref = getAlternatePathname(pathname);
         </div>
 
         <div class="drawer-a11y-group">
-          <span class="a11y-label" id="drawer-contrast-label">Contraste</span>
+          <span class="a11y-label" id="drawer-contrast-label"
+            >{contrastLabel}</span
+          >
           <div
             class="a11y-btns"
             role="group"
@@ -396,13 +433,14 @@ const languageSwitchHref = getAlternatePathname(pathname);
               class="a11y-btn"
               data-action="a11y-high-contrast"
               data-value="on"
-              aria-pressed="false">Alto contraste</button
+              aria-pressed="false"
+              >{isEnglish ? "High contrast" : "Alto contraste"}</button
             >
           </div>
         </div>
 
         <div class="drawer-a11y-group">
-          <span class="a11y-label" id="drawer-motion-label">Movimiento</span>
+          <span class="a11y-label" id="drawer-motion-label">{motionLabel}</span>
           <div
             class="a11y-btns"
             role="group"
@@ -412,13 +450,13 @@ const languageSwitchHref = getAlternatePathname(pathname);
               class="a11y-btn on"
               data-action="a11y-reduced-motion"
               data-value="off"
-              aria-pressed="true">Activado</button
+              aria-pressed="true">{isEnglish ? "On" : "Activado"}</button
             >
             <button
               class="a11y-btn"
               data-action="a11y-reduced-motion"
               data-value="on"
-              aria-pressed="false">Reducido</button
+              aria-pressed="false">{isEnglish ? "Reduced" : "Reducido"}</button
             >
           </div>
         </div>
@@ -430,7 +468,11 @@ const languageSwitchHref = getAlternatePathname(pathname);
       class="btn-primary btn-primary--lg mt-2 w-full shrink-0 text-center font-bold"
       data-en="Request free diagnosis →"
       data-es="Solicitar diagnóstico gratuito →"
-      >Solicitar diagnóstico gratuito →</a
+      >{
+        isEnglish
+          ? "Request free diagnosis →"
+          : "Solicitar diagnóstico gratuito →"
+      }</a
     >
 
     <!-- Iconos sociales — solo visibles en mobile drawer -->
@@ -515,10 +557,10 @@ const languageSwitchHref = getAlternatePathname(pathname);
     id="a11y-panel"
     class="a11y-panel"
     role="region"
-    aria-label="Panel de accesibilidad"
+    aria-label={a11yPanelLabel}
   >
     <div class="a11y-group">
-      <span class="a11y-label" id="font-size-label">Tamaño de texto</span>
+      <span class="a11y-label" id="font-size-label">{textSizeLabel}</span>
       <div class="a11y-btns" role="group" aria-labelledby="font-size-label">
         <button
           class="a11y-btn a11y-fs-btn on"
@@ -542,7 +584,7 @@ const languageSwitchHref = getAlternatePathname(pathname);
     </div>
 
     <div class="a11y-group">
-      <span class="a11y-label" id="contrast-label">Contraste</span>
+      <span class="a11y-label" id="contrast-label">{contrastLabel}</span>
       <div class="a11y-btns" role="group" aria-labelledby="contrast-label">
         <button
           class="a11y-btn on"
@@ -556,27 +598,28 @@ const languageSwitchHref = getAlternatePathname(pathname);
           id="hc-on"
           data-action="a11y-high-contrast"
           data-value="on"
-          aria-pressed="false">Alto contraste</button
+          aria-pressed="false"
+          >{isEnglish ? "High contrast" : "Alto contraste"}</button
         >
       </div>
     </div>
 
     <div class="a11y-group">
-      <span class="a11y-label" id="motion-label">Movimiento</span>
+      <span class="a11y-label" id="motion-label">{motionLabel}</span>
       <div class="a11y-btns" role="group" aria-labelledby="motion-label">
         <button
           class="a11y-btn on"
           id="mot-on"
           data-action="a11y-reduced-motion"
           data-value="off"
-          aria-pressed="true">Activado</button
+          aria-pressed="true">{isEnglish ? "On" : "Activado"}</button
         >
         <button
           class="a11y-btn"
           id="mot-off"
           data-action="a11y-reduced-motion"
           data-value="on"
-          aria-pressed="false">Reducido</button
+          aria-pressed="false">{isEnglish ? "Reduced" : "Reducido"}</button
         >
       </div>
     </div>

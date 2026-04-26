@@ -10,6 +10,8 @@
 | --------------- | ------------------ | --------- | -------------------------------------------- |
 | `title`         | `string`           | Sí        | `<title>` y Open Graph / Twitter.            |
 | `description`   | `string`           | Sí        | Meta description y OG/Twitter.               |
+| `titleEn`       | `string`           | No        | Variante inglesa de `<title>` y OG/Twitter.  |
+| `descriptionEn` | `string`           | No        | Variante inglesa de meta description.        |
 | `lang`          | `'es' \| 'en'`     | No        | `lang` del `<html>`; default `'es'`.         |
 | `ogImage`       | `string`           | No        | Ruta OG; default `/og-desktop.png`.          |
 | `ogImageType`   | `string`           | No        | MIME OG; si falta, se infiere por extensión. |
@@ -26,9 +28,9 @@
 ## Comportamiento
 
 - Importa `tokens.css`, meta canonical, OG, Twitter, CSP (comentario SEC-005), hreflang, favicon, sitemap link.
-- JSON-LD global: `Person` (datos desde `site.json`) y `ProfessionalService` estático.
+- JSON-LD global: `Person` (datos desde `site.json`) y `ProfessionalService` con copy ES/EN según `localeFromPathname`.
 - Script inline **en** `<head>` (antes del primer paint): anti-flash de tema (`nh-theme` + `prefers-color-scheme`), strip de `no-js`, y clase `no-motion` según `nh-reduced-motion` / `prefers-reduced-motion` (detalle en [`docs/README.md`](../README.md) y [`docs/scroll-reveal.md`](../scroll-reveal.md)).
-- Body: skip link, slot, `BackToTop`, `Footer`, Vercel Analytics + SpeedInsights.
+- Body: skip link localizado, slot, `BackToTop`, `Footer`, Vercel Analytics + SpeedInsights.
 - Scripts globales: `nhTheme`, `nhLang`, `nhA11y` (claves `localStorage`: ver [`docs/README.md`](../README.md)).
 - Chatbot: crea `<iframe src="/chatbot/widget/index.html">`, redimensiona con `postMessage` (`chat: open/close`), click en documento intenta cerrar el widget.
 

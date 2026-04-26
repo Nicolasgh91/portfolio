@@ -14,10 +14,12 @@ import type { CollectionEntry } from "astro:content";
 import pricing from "../data/pricing.json";
 import { buildFaqPageJsonLd } from "../lib/faq-jsonld";
 import { serviceAnchorId } from "../lib/service-anchor-id";
+import { localeFromPathname } from "../lib/locale-path";
 
 // Obtener servicios ordenados desde la colección de contenido
 const allServices = await getCollection("services");
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 // FAQ: un archivo JSON = un ítem de colección; `data` es el array validado por Zod.
 const faqDocs = await getCollection("faq");
@@ -107,9 +109,11 @@ const servicesJsonLd = {
   "@context": "https://schema.org",
   "@graph": sortedServices.map((s) => ({
     "@type": "Service",
-    name: s.data.title,
-    description: s.data.shortDescription ?? s.data.description,
-    url: `${siteUrl}/servicios#${serviceAnchorId(s.slug)}`,
+    name: isEnglish ? s.data.titleEn : s.data.title,
+    description: isEnglish
+      ? (s.data.shortDescriptionEn ?? s.data.descriptionEn)
+      : (s.data.shortDescription ?? s.data.description),
+    url: `${siteUrl}${isEnglish ? "/en/services" : "/servicios"}#${serviceAnchorId(s.slug)}`,
     provider: {
       "@type": "Person",
       name: "Nicolás Hruszczak",
@@ -133,6 +137,8 @@ const altRevealDelays: Record<string, number> = {};
 <Layout
   title="Servicios B2B — Nicolás Hruszczak"
   description="Para locales, profesionales y creadores: web y automatización a medida. Ordenamos mensajes y procesos, más ventas y tiempo recuperado, sin jerga técnica."
+  titleEn="B2B Services — Nicolás Hruszczak"
+  descriptionEn="For shops, professionals, and creators: custom websites and automation. We organize messages and processes so you gain sales and recover time, without technical jargon."
   ogImage="/og-desktop.png"
 >
   <Fragment slot="head">
@@ -147,7 +153,9 @@ const altRevealDelays: Record<string, number> = {};
   <main id="main-content">
     <PageHeroSection
       image={heroServiciosDerecha}
-      alt="Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."
+      alt={isEnglish
+        ? "Visual banner for the services catalog with a warm atmosphere and detail on the right."
+        : "Banner visual del catálogo de servicios con ambiente cálido y detalle a la derecha."}
       imageWidth={1536}
       imageHeight={1024}
       headingId="services-hero-heading"
@@ -299,10 +307,16 @@ const altRevealDelays: Record<string, number> = {};
           <div
             class="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-[var(--border-normal)] bg-[var(--bg-secondary)] p-8 text-center text-xs text-[var(--text-muted)]"
             role="img"
-            aria-label="Espacio reservado para captura del dashboard de gestión"
+            aria-label={isEnglish
+              ? "Reserved space for the management dashboard screenshot"
+              : "Espacio reservado para captura del dashboard de gestión"}
           >
             [ Dashboard mockup ]<br /><br />
-            Panel de reservas · Métricas · Clientes
+            {
+              isEnglish
+                ? "Bookings panel · Metrics · Clients"
+                : "Panel de reservas · Métricas · Clientes"
+            }
           </div>
           <div class="card self-start">
             <h3
@@ -328,7 +342,7 @@ const altRevealDelays: Record<string, number> = {};
               <span class="tag">Next.js</span>
               <span class="tag">PostgreSQL</span>
               <a
-                href="#contacto"
+                href={isEnglish ? "/en/services#contacto" : "#contacto"}
                 class="tag tag-accent btn-bounce inline-flex items-center gap-1"
               >
                 <span
@@ -484,11 +498,12 @@ const altRevealDelays: Record<string, number> = {};
         </p>
         <p class="mt-8">
           <a
-            href="#contacto"
+            href={isEnglish ? "/en/services#contacto" : "#contacto"}
             class="btn-secondary btn-bounce border-black/25 bg-black/10 text-[var(--color-on-accent)] hover:border-black/40 hover:bg-black/15"
           >
-            <span data-es>Contactar</span>
-            <span data-en class="hidden">Contact</span>
+            <span data-es data-en="Contact">
+              {isEnglish ? "Contact" : "Contactar"}
+            </span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
         </p>
@@ -504,7 +519,9 @@ const altRevealDelays: Record<string, number> = {};
       revealDelayMs={altRevealDelays.contact}
     >
       <div class="section-header mb-10">
-        <span class="label" data-en="Contact" data-es="Contacto">Contacto</span>
+        <span class="label" data-en="Contact" data-es="Contacto">
+          {isEnglish ? "Contact" : "Contacto"}
+        </span>
         <h2
           id="contact-heading"
           class="font-display text-2xl font-bold text-[var(--text-primary)] md:text-3xl"

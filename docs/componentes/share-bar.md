@@ -15,6 +15,7 @@
 
 - Enlaces externos con `target="_blank"` y `rel="noopener noreferrer"`.
 - `shareRootId` único vía `randomUUID()` para evitar colisiones si hay varias barras en la misma página (página de auditoría).
+- Labels visibles y `aria-label` se resuelven en ES/EN con `localeFromPathname`.
 
 ## Decisiones de diseño
 

@@ -22,7 +22,7 @@
 - Botón enviar: texto por defecto **“Enviar consulta”** / **“Send inquiry”** (`data-es` / `data-en`); tras envío, el script restaura el label desde esos atributos.
 - Clases: `btn-primary btn-primary--lg w-full` (sistema en `tokens.css`); margen superior vía `#submit-btn` en scoped.
 - Snackbar y grid del formulario estilizados con `<style>` scoped + variables CSS del sitio.
-- Campos con `data-en` / `data-es` para el toggle de idioma global.
+- Campos, labels, placeholders, selector de métrica, `subject` oculto, snackbar y `aria-label` se resuelven por `localeFromPathname` / `<html lang>`. Los atributos `data-en` / `data-es` se mantienen como fuente para el script de idioma y restauración del botón.
 
 ## Deuda técnica conocida
 

@@ -12,6 +12,12 @@ import { landingTemplates } from "../data/landing-templates";
 import type { LandingTemplate } from "../schemas";
 import { getTemplateCarouselImage } from "../data/template-carousel-images";
 import { resolveTemplateDemoUrl } from "../lib/resolve-template-demo-url";
+import { localeFromPathname } from "../lib/locale-path";
+
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const servicesHref = isEnglish ? "/en/services" : "/servicios";
+const talentHref = isEnglish ? "/en/talent" : "/talento";
+const blogHref = isEnglish ? "/en/blog" : "/blog";
 
 const allProjects = await getCollection("projects");
 const featuredProjects = allProjects
@@ -38,6 +44,8 @@ const templatesWithResolvedDemo = landingTemplates
 <Layout
   title="Nicolás Hruszczak — Software, IA y automatización para empresas"
   description="Desarrollo full stack, análisis funcional e implementación de IA para empresas y pymes que buscan resultados medibles. Diagnóstico gratuito."
+  titleEn="Nicolás Hruszczak — Software, AI and automation for businesses"
+  descriptionEn="Full stack development, functional analysis, and AI implementation for companies and SMEs that need measurable outcomes. Free diagnosis."
   ogImage="/og-desktop.png"
 >
   <Nav activePage="home" />
@@ -53,10 +61,10 @@ const templatesWithResolvedDemo = landingTemplates
     >
       <nav
         class="grid gap-6 md:grid-cols-2 md:gap-8"
-        aria-label="Rutas de navegación"
+        aria-label={isEnglish ? "Navigation routes" : "Rutas de navegación"}
       >
         <a
-          href="/servicios"
+          href={servicesHref}
           class="btn-bounce flex flex-col gap-5 rounded-2xl border border-[var(--border-normal)] border-l-4 border-l-[var(--color-accent-600)] bg-[var(--bg-secondary)] p-6 transition-transform duration-200 hover:-translate-y-1 hover:bg-[var(--bg-tertiary)] md:p-8"
         >
           <h2
@@ -97,7 +105,7 @@ const templatesWithResolvedDemo = landingTemplates
         </a>
 
         <a
-          href="/talento"
+          href={talentHref}
           class="btn-bounce flex flex-col gap-5 rounded-2xl border border-[var(--border-normal)] border-l-4 border-l-[var(--text-muted)] bg-[var(--bg-secondary)] p-6 transition-transform duration-200 hover:-translate-y-1 hover:bg-[var(--bg-tertiary)] md:p-8"
         >
           <h2
@@ -202,7 +210,7 @@ const templatesWithResolvedDemo = landingTemplates
 
       <div class="mt-12 text-center md:mt-16">
         <a
-          href="/blog"
+          href={blogHref}
           class="btn-secondary btn-bounce inline-flex items-center gap-1.5"
         >
           <span data-es>Leer artículos técnicos</span>

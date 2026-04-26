@@ -14,6 +14,7 @@
 
 - Filtra `depth` 2 y 3; no renderiza nada si la lista queda vacía.
 - Lista de enlaces `#slug`; `id` del nav único por `randomUUID()`.
+- Label del bloque (“En este artículo” / “In this article”) y `aria-label` se resuelven por locale.
 - El `<script>` está **fuera** del bloque condicional del markup (misma razón que otros componentes con cliente mínimo: Prettier/parser); solo enlaza `[data-toc-root]` si existe. `IntersectionObserver` sobre `article h2[id], article h3[id]` para resaltar el enlace activo (clases Tailwind toggled en runtime).
 
 ## Decisiones de diseño

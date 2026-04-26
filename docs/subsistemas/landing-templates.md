@@ -42,11 +42,11 @@
 | Campo                          | Notas                                                                                                                            |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
 | `slug`, `title`, `description` | Obligatorios                                                                                                                     |
-| `titleEn`, `descriptionEn`     | Opcionales (i18n en tarjetas)                                                                                                    |
+| `titleEn`, `descriptionEn`     | Opcionales (i18n en tarjetas, fichas, JSON-LD y meta)                                                                            |
 | `vertical`                     | `gastronomia` \| `profesionales` \| `contenido` \| `ecommerce` \| `salud` \| `inmobiliaria` — display solo vía `VERTICAL_LABELS` |
 | `status`                       | `available` \| `coming_soon` — solo `available` entra en JSON-LD `ItemList` del índice; ambas se listan en UI                    |
 | `type`                         | `landing` \| `menu-digital` \| `hub-contenido` \| `catalogo`                                                                     |
-| `features`                     | Array mínimo 1 string                                                                                                            |
+| `features`, `featuresEn`       | `features` es obligatorio; `featuresEn` es opcional y se alinea por índice para fichas EN                                        |
 | `thumbnail`                    | Opcional; `/public` u URL absoluta (otros usos). Carrusel: ver `template-carousel-images.ts` + assets en `src/assets/templates/` |
 | `cardBackground`               | `dark` \| `light` \| `warm` — fondo de tarjeta en carrusel                                                                       |
 | `demoUrl`                      | Opcional; URL absoluta o path `/...` (resolución solo en la página)                                                              |

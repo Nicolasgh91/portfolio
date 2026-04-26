@@ -9,6 +9,8 @@ import { getAlternatePathname, localeFromPathname } from "../lib/locale-path";
 interface Props {
   title: string;
   description: string;
+  titleEn?: string;
+  descriptionEn?: string;
   lang?: "es" | "en";
   ogImage?: string;
   /** MIME type for og:image (e.g. image/webp). If omitted, inferred from ogImage path extension. */
@@ -20,6 +22,8 @@ interface Props {
 const {
   title,
   description,
+  titleEn,
+  descriptionEn,
   lang,
   ogImage = "/og-desktop.png",
   ogImageType: ogImageTypeProp,
@@ -38,11 +42,44 @@ const englishHref =
 const spanishHref =
   locale === "es" ? canonical : new URL(alternatePathname, siteUrl).href;
 const xDefaultHref = spanishHref;
-const resolvedTitle = locale === "en" ? `${title} | English` : title;
+const resolvedTitle = locale === "en" ? (titleEn ?? title) : title;
 const resolvedDescription =
+  locale === "en" ? (descriptionEn ?? description) : description;
+const skipLinkLabel =
+  locale === "en" ? "Skip to main content" : "Saltar al contenido principal";
+const chatTitle = locale === "en" ? "Virtual assistant" : "Asistente virtual";
+const chatAriaLabel =
+  locale === "en" ? "Assistance chat" : "Chat de asistencia";
+const personJobTitle =
   locale === "en"
-    ? `${description} English version for international audiences.`
-    : description;
+    ? "Functional Analyst and Full Stack Developer"
+    : "Analista Funcional y Desarrollador Full Stack";
+const personDescription =
+  locale === "en"
+    ? "Technology management, software architecture, and AI implementation for scalable solutions."
+    : "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.";
+const serviceName =
+  locale === "en"
+    ? "Nicolás Hruszczak — Software Development"
+    : "Nicolás Hruszczak — Desarrollo de Software";
+const serviceDescription =
+  locale === "en"
+    ? "Custom software, intelligent automation, and SEO/GEO positioning for companies and SMEs."
+    : "Software a medida, automatización inteligente y posicionamiento SEO/GEO para empresas y pymes.";
+const serviceTypes =
+  locale === "en"
+    ? [
+        "Custom software development",
+        "AI automation",
+        "Process audit and optimization",
+        "SEO/GEO positioning",
+      ]
+    : [
+        "Desarrollo de software a medida",
+        "Automatización con IA",
+        "Auditoría y optimización de procesos",
+        "Posicionamiento SEO/GEO",
+      ];
 
 function inferOgImageType(path: string): string {
   const lower = path.split("?")[0].toLowerCase();
@@ -111,9 +148,8 @@ const ogImageHeight = ogImageHeightProp ?? 768;
         "@context": "https://schema.org",
         "@type": "Person",
         name: site.author.name,
-        jobTitle: "Analista Funcional y Desarrollador Full Stack",
-        description:
-          "Gestión de tecnología, arquitectura de software e implementación de IA para soluciones escalables.",
+        jobTitle: personJobTitle,
+        description: personDescription,
         url: site.author.siteUrl,
         sameAs: Object.values(site.social),
         knowsAbout: site.stack,
@@ -121,23 +157,19 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     />
 
     <!-- JSON-LD global: ProfessionalService -->
-    <script type="application/ld+json">
-      {
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
-        "name": "Nicolás Hruszczak — Desarrollo de Software",
-        "description": "Software a medida, automatización inteligente y posicionamiento SEO/GEO para empresas y pymes.",
-        "url": "https://escalatunegocioconia.com",
-        "areaServed": ["Argentina", "United States"],
-        "availableLanguage": ["Spanish", "English"],
-        "serviceType": [
-          "Desarrollo de software a medida",
-          "Automatización con IA",
-          "Auditoría y optimización de procesos",
-          "Posicionamiento SEO/GEO"
-        ]
-      }
-    </script>
+        name: serviceName,
+        description: serviceDescription,
+        url: siteUrl,
+        areaServed: ["Argentina", "United States"],
+        availableLanguage: ["Spanish", "English"],
+        serviceType: serviceTypes,
+      })}
+    />
 
     <!-- SLOT: JSON-LD y meta adicional por página (artículos, etc.) -->
     <slot name="head" />
@@ -157,7 +189,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
   </head>
 
   <body>
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <a href="#main-content" class="skip-link">{skipLinkLabel}</a>
 
     <slot />
     <BackToTop />
@@ -167,14 +199,14 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <!-- Controladores globales (nhTheme/nhLang/nhA11y) y reveal observer cargados
          desde /scripts/*.js en <head>. Ver public/scripts/ y vercel.json CSP. -->
 
-    <script>
+    <script define:vars={{ chatTitle, chatAriaLabel }}>
       (function () {
         function initChatWidget() {
           const iframe = document.createElement("iframe");
           iframe.src = "/chatbot/widget/index.html";
           iframe.setAttribute("allowtransparency", "true");
-          iframe.setAttribute("title", "Asistente virtual");
-          iframe.setAttribute("aria-label", "Chat de asistencia");
+          iframe.setAttribute("title", chatTitle);
+          iframe.setAttribute("aria-label", chatAriaLabel);
 
           iframe.style.cssText = [
             "position:fixed",

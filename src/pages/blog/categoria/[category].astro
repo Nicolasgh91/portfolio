@@ -4,6 +4,7 @@ import Nav from "../../../components/Nav.astro";
 import BlogCard from "../../../components/BlogCard.astro";
 import TaxonomyFilter from "../../../components/TaxonomyFilter.astro";
 import { getCollection } from "astro:content";
+import { localeFromPathname } from "../../../lib/locale-path";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -28,23 +29,35 @@ const { category, posts } = Astro.props;
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const allCategories = [...new Set(allPosts.map((p) => p.data.category))].sort();
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <Layout
   title={`${category} — Blog técnico · Nicolás Hruszczak`}
   description={`Artículos sobre ${category}: arquitectura de software, IA aplicada y automatización para empresas.`}
+  titleEn={`${category} — Technical Blog · Nicolás Hruszczak`}
+  descriptionEn={`Articles about ${category}: software architecture, applied AI, and business automation.`}
 >
   <Nav activePage="blog" />
 
   <main id="main-content">
     <div class="page-container">
-      <section class="hero" aria-label={`Categoría: ${category}`}>
+      <section
+        class="hero"
+        aria-label={isEnglish
+          ? `Category: ${category}`
+          : `Categoría: ${category}`}
+      >
         <div class="badge" data-en="Category" data-es="Categoría">
-          Categoría
+          {isEnglish ? "Category" : "Categoría"}
         </div>
         <h1>{category}</h1>
         <p class="hero-sub">
-          {posts.length} artículo{posts.length !== 1 ? "s" : ""} en esta categoría.
+          {
+            isEnglish
+              ? `${posts.length} article${posts.length !== 1 ? "s" : ""} in this category.`
+              : `${posts.length} artículo${posts.length !== 1 ? "s" : ""} en esta categoría.`
+          }
         </p>
       </section>
 
@@ -64,7 +77,7 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
           data-en={`Articles in ${category}`}
           data-es={`Artículos en ${category}`}
         >
-          Artículos en {category}
+          {isEnglish ? `Articles in ${category}` : `Artículos en ${category}`}
         </h2>
         <div class="posts-grid">
           {

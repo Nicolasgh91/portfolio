@@ -38,6 +38,11 @@
 
 Si `entries.length > FAQ_TAG_THRESHOLD` (8), en modo `native` se muestran chips de categoría por ítem (no en el markup animado del catálogo de plantillas, donde el umbral no se supera).
 
+## i18n
+
+- El contenido visible se resuelve en SSR con `localeFromPathname` para que `/en/*` emita headings, preguntas, respuestas y CTA en inglés desde el HTML inicial.
+- Los atributos `data-es` / `data-en` se conservan como metadatos para el controlador global de idioma.
+
 ## Decisiones de diseño
 
 - CTA lateral (cuando `showSidebarCta`): enlace con `btn-primary btn-bounce w-fit font-medium` y flecha en `span.arrow` (ver [`btn-bounce.md`](./btn-bounce.md)).

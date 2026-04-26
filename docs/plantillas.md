@@ -16,7 +16,7 @@ Páginas generadas en Astro SSG:
 
 1. Hero — `h1`, subtítulo.
 2. Filtro por vertical — pills (`.taxonomy__pill` en [`tokens.css`](../src/styles/tokens.css)); botones con `data-filter`; script inline en la página (no reemplazar por `TaxonomyFilter` sin beneficio; ver deuda P3 en [`deuda-tecnica.md`](deuda-tecnica.md)).
-3. Carrusel — `scroll-snap`, track con `px-4` en mobile y flechas: desktop `btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0` a los lados (`btn-prev` / `btn-next`); mobile fila bajo el track (`btn-prev-mobile` / `btn-next-mobile`); mismo scroll en script. Tarjetas [`PlantillaCarouselCard`](componentes/plantilla-carousel-card.md); miniaturas vía [`template-carousel-images.ts`](../src/data/template-carousel-images.ts) y `src/assets/templates/`. **Orden del listado:** un solo array `sortedTemplatesWithDemo` en la página: primero plantillas con demo efectiva (`Boolean(resolvedDemoUrl)`), luego `priority` descendente y `title` (`es`); misma fuente para el `.map` del carrusel y para el JSON-LD (sin segundo `.sort()`).
+3. Carrusel — `scroll-snap`, track con `px-4` en mobile y flechas: desktop `btn-secondary btn-secondary--sm btn-secondary--icon-only catalog-carousel__nav flex-shrink-0` a los lados (`btn-prev` / `btn-next`); mobile fila bajo el track (`btn-prev-mobile` / `btn-next-mobile`); mismo scroll en script. Tarjetas [`PlantillaCarouselCard`](componentes/plantilla-carousel-card.md); miniaturas vía [`template-carousel-images.ts`](../src/data/template-carousel-images.ts) y `src/assets/templates/`. **Orden del listado:** un solo array `sortedTemplatesWithDemo` en la página: primero plantillas con demo efectiva (`Boolean(resolvedDemoUrl)`), luego `priority` descendente y título según locale (`title` / `titleEn`); misma fuente para el `.map` del carrusel y para el JSON-LD (sin segundo `.sort()`).
 4. Social proof — tres métricas.
 5. Planes — [`PricingCard`](componentes/pricing-card.md) con CTA desde datos del plan.
 6. FAQ — [`FaqSection`](componentes/faq-section.md), `showSidebarCta={false}`.
@@ -46,7 +46,7 @@ Páginas generadas en Astro SSG:
 
 ## i18n
 
-Textos con pares `data-es` / `data-en` donde aplica; labels de vertical siempre desde `VERTICAL_LABELS` en datos.
+Textos resueltos por locale con pares `data-es` / `data-en` donde aplica; labels de vertical siempre desde `VERTICAL_LABELS` en datos.
 
 ## Estado
 

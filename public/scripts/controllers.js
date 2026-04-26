@@ -16,9 +16,8 @@ window.nhTheme = {
 
 // ── Idioma ─────────────────────────────────────────────
 window.nhLang = {
-  isEN: false,
-  toggle() {
-    this.isEN = !this.isEN;
+  isEN: document.documentElement.lang === "en",
+  apply() {
     const lang = this.isEN ? "en" : "es";
     document.documentElement.lang = lang;
     const btn = document.getElementById("lang-btn");
@@ -32,13 +31,24 @@ window.nhLang = {
         el.textContent = val;
       }
     });
+    document.querySelectorAll("[data-en]:not([data-es])").forEach((el) => {
+      el.classList.toggle("hidden", !this.isEN);
+    });
+    document.querySelectorAll("[data-es]:not([data-en])").forEach((el) => {
+      el.classList.toggle("hidden", this.isEN);
+    });
     if (btn)
       btn.setAttribute(
         "aria-label",
         this.isEN ? "Cambiar a español" : "Switch to English",
       );
   },
+  toggle() {
+    this.isEN = !this.isEN;
+    this.apply();
+  },
 };
+window.nhLang.apply();
 
 // ── Accesibilidad ──────────────────────────────────────
 function nhInitialMotionReduced() {

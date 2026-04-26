@@ -1,0 +1,40 @@
+---
+title: "Case study: Huella del fuego en Argentina"
+description: "How an environmental analysis platform was built with FastAPI microservices, PostGIS, Docker, and Oracle Cloud."
+---
+
+Huella del fuego en Argentina is an environmental analysis platform that centralizes and visualizes wildfire data in Argentina. This article documents the architecture decisions and the lessons learned during the process.
+
+## The problem
+
+Wildfire data in Argentina was scattered across multiple sources: CONAE, INTA, the National Fire Management Service, and independent provincial records. Without a unified interface, analysis required manual downloads, cleaning, and cross-checking datasets with heterogeneous formats.
+
+## The microservices decision
+
+From the beginning it was clear that the system would contain components with very different load profiles. Geospatial processing is CPU intensive and can take minutes. The public API must respond in milliseconds. The frontend can receive unpredictable traffic spikes.
+
+Putting everything into one monolith meant that a heavy analysis process could degrade the experience of users consulting the map. Splitting the system into microservices solved that: each component can scale independently.
+
+## Architecture in detail
+
+The system has four main services. The **ingester** downloads and normalizes data from external sources. The **processor** runs geospatial analysis with PostGIS on PostgreSQL. The **API** exposes results through REST endpoints with FastAPI. The **frontend** in React consumes the API and renders data on interactive maps.
+
+Celery with Redis handles asynchronous processing tasks. When a new dataset arrives, the ingester queues a task and responds immediately. The processor runs it in the background without blocking the rest of the system.
+
+## PostGIS: the right decision
+
+For geospatial data, PostGIS on PostgreSQL was the right choice. The ecosystem is mature, the documentation is strong, and complex spatial queries can run directly in SQL without exporting data to external tools.
+
+A query that would require iterating over thousands of geometries in Python can be expressed as a single SQL statement in PostGIS and run in milliseconds.
+
+## Deployment on Oracle Cloud
+
+Oracle Cloud includes a free tier with two ARM instances, each with 4 vCPUs and 24 GB of RAM. For a project without external funding, that was decisive. Docker Compose orchestrates the containers, with Nginx acting as the reverse proxy.
+
+## Lessons learned
+
+Microservices introduce real operational complexity from day one: distributed logs, tracing across services, and partial failure management. In a monolith those problems either do not exist or are trivial.
+
+PostGIS has a steep learning curve, but the return is immediate. Investing time in spatial indexes and the correct geometry types avoided expensive rewrites.
+
+Docker Compose is enough to start, but the lack of more advanced orchestration becomes visible when you need zero-downtime updates or automatic scaling.

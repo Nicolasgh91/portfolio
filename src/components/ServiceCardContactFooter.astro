@@ -4,18 +4,20 @@
  * de ServiceCard. Se coloca FUERA del `<a>` envolvente para preservar la
  * accesibilidad de enlaces anidados. Extraído de ServiceCard.astro (M-08).
  */
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   whatsappHref?: string;
 }
 
 const { whatsappHref } = Astro.props;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div
   class="relative z-20 flex flex-shrink-0 flex-wrap gap-3 border-t border-[var(--border-normal)] bg-[var(--bg-surface-container-low)] px-6 py-4 md:px-8"
   role="group"
-  aria-label="Contacto comercial"
+  aria-label={isEnglish ? "Commercial contact" : "Contacto comercial"}
 >
   <a
     href="#contacto"

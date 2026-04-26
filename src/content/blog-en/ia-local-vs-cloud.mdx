@@ -1,0 +1,32 @@
+---
+title: "Local AI vs cloud AI"
+description: "When it makes sense to deploy an LLM on your own infrastructure and when an external API is the better choice."
+---
+
+The question is not whether to use artificial intelligence, but where to run it. Choosing between a cloud LLM and a locally deployed model determines cost, latency, privacy, and operational control.
+
+## The fundamental distinction
+
+A cloud LLM, such as OpenAI, Anthropic, or Google, means each request leaves your infrastructure, travels to an external server, and returns with an answer. It is fast to implement, expensive at scale, and gives limited guarantees about what happens with your data.
+
+A local LLM, using tools such as Ollama, llama.cpp, or vLLM, runs on your own hardware or on a VM you control. Latency depends on your infrastructure, marginal cost per request is zero once installed, and data never leaves your network.
+
+## When to use the cloud
+
+The cloud wins when request volume is low or unpredictable, when you need the most capable models available, or when implementation speed matters more than long-term cost. It also makes sense when the processed data is not sensitive.
+
+## When to deploy locally
+
+Local deployment wins when data is confidential because of regulation or internal policy: medical, legal, financial, or customer data that cannot leave your infrastructure. It also wins when volume is high and predictable, making the cloud cost per token exceed the cost of operating your own hardware.
+
+Current open-source models, including Llama, Mistral, and Qwen families, are competitive for most business use cases that do not require frontier reasoning.
+
+## The real cost analysis
+
+An A10G GPU on AWS costs roughly USD 1.50 per hour. With that you can run a 13B-parameter model at around 30 tokens per second. If your use case generates 100,000 tokens per day, you are looking at less than USD 2 per day, versus potentially USD 30-60 per day through external APIs.
+
+The break-even point is usually between 500,000 and 1,000,000 monthly tokens. Below that threshold, the cloud is cheaper. Above it, local infrastructure almost always wins.
+
+## Practical conclusion
+
+Start in the cloud to validate the use case. When volume justifies the infrastructure investment, migrate. The architecture should make that change possible from day one.

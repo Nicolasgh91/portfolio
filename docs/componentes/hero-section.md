@@ -14,7 +14,7 @@ Ninguna; copy y estructura viven en el componente.
 - **LCP / imagen prioritaria:** el fondo usa `loading="eager"`, `fetchpriority="high"`, `decoding="async"`, `sizes="100vw"` y `widths` responsivos para que el navegador elija ancho adecuado. `alt=""` (decorativa tras capas de oscurecimiento).
 - Titular y párrafo con pares **`data-es` / `data-en`**. Sin CTA en el hero: la conversión principal está en las tarjetas de audiencia y en el resto de la home.
 - Grid principal: **`gap-10`** en una columna (stack móvil), **`lg:gap-16`** en dos columnas para separar copy y mockup en desktop. Bloque de texto: **`min-w-0 max-w-2xl`** para no expandir el titular hacia el mockup en viewports anchos.
-- Columna derecha: mock de dashboard (markup + Tailwind), sin segunda imagen raster (evita competir con el LCP del fondo).
+- Columna derecha: mock de dashboard (markup + Tailwind), sin segunda imagen raster (evita competir con el LCP del fondo). El microcopy del mock se resuelve por `localeFromPathname` para `/en`.
 - `aria-labelledby` apuntando al `<h1>`.
 
 ## Decisiones de diseño

@@ -2,13 +2,14 @@
 
 ## Colecciones activas
 
-- `blog`, `services`, `projects` (content) y `faq` (data) en `src/content/config.ts`.
+- `blog`, `blog-en`, `services`, `projects` (content) y `faq` (data) en `src/content/config.ts`.
 - Los frontmatter validan por Zod y usan `.describe()` (Fase 1).
 
 ## Frontmatter mínimo por colección
 
 - `services`: `title`, `titleEn`, `description`, `descriptionEn`, `order` (+ opcionales: `icon`, `shortDescription`, `roiFocus`, `module`, `priceFrom`, `coverImage` vía `image()`, `imageKey` como respaldo, `href`, etc.).
-- `blog`: `title`, `description`, `pubDate`, `category`, `tags` (+ opcionales: `readingTime`, `coverImageKey`, `priority`, `pillarSlug`, `vertical`, `slides`).
+- `blog`: `title`, `description`, `pubDate`, `category`, `tags` (+ opcionales: `titleEn`, `descriptionEn`, `readingTime`, `coverImageKey`, `priority`, `pillarSlug`, `vertical`, `slides`).
+- `blog-en`: cuerpo MDX traducido para `/en/blog/:slug`; el nombre de archivo debe coincidir con el slug del post ES. Frontmatter mínimo: `title`, `description` (+ opcional `sourceSlug` si alguna vez se desacopla el nombre).
 - `projects`: `title`, `description`, `descriptionEn`, `status`, `tags`, `order`, `featured` (+ opcionales: `icon`, `coverImage` vía `image()`, `coverPosition` `top` \| `center` \| `bottom` con default `top`, URLs, etc.).
 
 ## Estructura editorial recomendada (extraída de backlog)

@@ -21,7 +21,7 @@
 ## Tema y a11y
 
 - `nhTheme`: alterna clase `light`.
-- `nhLang`: cambia textos `data-en/data-es`.
+- `nhLang`: inicializa desde `<html lang>`, sincroniza textos `data-en/data-es` y alterna visibilidad de pares separados (`span data-es` / `span data-en class="hidden"`). `tokens.css` define la visibilidad inicial para evitar que `/en` pinte primero en español.
 - `nhA11y`: escala, alto contraste y motion reduction.
 
 ## Ancho de layout

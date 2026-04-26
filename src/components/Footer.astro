@@ -11,6 +11,26 @@ const year = new Date().getFullYear();
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const servicesHref = isEnglish ? "/en/services" : "/servicios";
 const blogHref = isEnglish ? "/en/blog" : "/blog";
+const footerAriaLabel = isEnglish ? "Footer" : "Pie de página";
+const readyLabel = isEnglish ? "Ready to start?" : "¿Listo para empezar?";
+const ctaHeading = isEnglish
+  ? "Turn your operations into a competitive advantage."
+  : "Convertí tu operación en una ventaja competitiva.";
+const ctaBody = isEnglish
+  ? "30 minutes. No commitment. We tell you exactly where the loss is and how to fix it."
+  : "30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla.";
+const brandDescription = isEnglish
+  ? "Functional analyst and full stack developer."
+  : "Analista funcional y desarrollador full stack.";
+const freeDiagnosisLabel = isEnglish
+  ? "Free diagnosis"
+  : "Diagnóstico gratuito";
+const freePillLabel = isEnglish ? "Free" : "Gratis";
+const newPillLabel = isEnglish ? "New" : "Nuevo";
+const bookMeetingLabel = isEnglish ? "Book a meeting" : "Agendar reunión";
+const rightsLabel = isEnglish
+  ? "All rights reserved."
+  : "Todos los derechos reservados.";
 
 // Dynamic services — sorted by `order` field
 const services = (await getCollection("services")).sort(
@@ -30,11 +50,13 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
     "@context": "https://schema.org",
     "@type": "SiteNavigationElement",
     name: [
-      ...services.map((s) => s.data.title),
-      "Diagnóstico gratuito",
-      ...blogPosts.map((p) => p.data.title),
+      ...services.map((s) => (isEnglish ? s.data.titleEn : s.data.title)),
+      freeDiagnosisLabel,
+      ...blogPosts.map((p) =>
+        isEnglish ? (p.data.titleEn ?? p.data.title) : p.data.title,
+      ),
       "Email",
-      "Agendar reunión",
+      bookMeetingLabel,
     ],
     url: [
       ...services.map(
@@ -50,7 +72,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
 
 <footer
   role="contentinfo"
-  aria-label="Pie de página"
+  aria-label={footerAriaLabel}
   class="bg-[var(--footer-bg)] border-t-[0.5px] border-[var(--border-subtle)]"
 >
   <div
@@ -64,17 +86,16 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
       <div aria-hidden="true" class="footer-glow"></div>
 
       <div class="relative max-w-[560px]">
-        <p class="label">¿Listo para empezar?</p>
+        <p class="label">{readyLabel}</p>
         <h2
           class="font-[family-name:var(--font-display)] text-[length:var(--text-2xl)] font-extrabold tracking-[-1px] text-[var(--text-primary)] mb-[var(--sp-sm)]"
         >
-          Convertí tu operación en una ventaja competitiva.
+          {ctaHeading}
         </h2>
         <p
           class="text-[length:var(--text-base)] leading-[1.75] text-[var(--text-secondary)] mb-[var(--sp-lg)]"
         >
-          30 minutos. Sin compromiso. Te decimos exactamente dónde está la
-          pérdida y cómo resolverla.
+          {ctaBody}
         </p>
         <a href={`${servicesHref}#contacto`} class="btn-primary btn-bounce">
           <span data-es>Agenda una reunión</span>
@@ -96,7 +117,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
         <p
           class="text-[length:var(--text-xs)] leading-[1.6] text-[var(--text-muted)] mb-[var(--sp-md)]"
         >
-          Analista funcional<br />y desarrollador full stack.
+          {brandDescription}
         </p>
 
         <!-- Social icons -->
@@ -106,7 +127,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
             href={social.github}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Perfil en GitHub"
+            aria-label={isEnglish ? "GitHub profile" : "Perfil en GitHub"}
             class="social-icon-link social-icon-link--brand-gh"
           >
             <svg
@@ -126,7 +147,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
             href={social.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Perfil en LinkedIn"
+            aria-label={isEnglish ? "LinkedIn profile" : "Perfil en LinkedIn"}
             class="social-icon-link social-icon-link--brand-li"
           >
             <svg
@@ -146,7 +167,9 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
             href={social.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Perfil en X / Twitter"
+            aria-label={isEnglish
+              ? "X / Twitter profile"
+              : "Perfil en X / Twitter"}
             class="social-icon-link social-icon-link--brand-x"
           >
             <svg
@@ -166,7 +189,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
             href={social.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Perfil en Instagram"
+            aria-label={isEnglish ? "Instagram profile" : "Perfil en Instagram"}
             class="social-icon-link social-icon-link--brand-ig"
           >
             <svg
@@ -186,7 +209,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
 
       <!-- Servicios column (dynamic) -->
       <div>
-        <FooterColumnHeader label="Servicios" />
+        <FooterColumnHeader label={isEnglish ? "Services" : "Servicios"} />
         <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           {
             services.map((svc) => (
@@ -198,7 +221,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
                   }
                   class="footer-link"
                 >
-                  {svc.data.title}
+                  {isEnglish ? svc.data.titleEn : svc.data.title}
                 </a>
               </li>
             ))
@@ -208,8 +231,8 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
               href={`${servicesHref}#contacto`}
               class="footer-link inline-flex items-center gap-[var(--sp-xs)]"
             >
-              Diagnóstico gratuito
-              <FooterPill label="Gratis" />
+              {freeDiagnosisLabel}
+              <FooterPill label={freePillLabel} />
             </a>
           </li>
         </ul>
@@ -217,7 +240,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
 
       <!-- Recursos column (dynamic from blog) -->
       <div>
-        <FooterColumnHeader label="Recursos" />
+        <FooterColumnHeader label={isEnglish ? "Resources" : "Recursos"} />
         <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           {
             blogPosts.map((post, i) => (
@@ -226,8 +249,10 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
                   href={`${blogHref}/${post.slug}`}
                   class="footer-link inline-flex items-center gap-[var(--sp-xs)]"
                 >
-                  {post.data.title}
-                  {i === 0 && <FooterPill label="Nuevo" />}
+                  {isEnglish
+                    ? (post.data.titleEn ?? post.data.title)
+                    : post.data.title}
+                  {i === 0 && <FooterPill label={newPillLabel} />}
                 </a>
               </li>
             ))
@@ -237,7 +262,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
 
       <!-- Contacto column (static) -->
       <div>
-        <FooterColumnHeader label="Contacto" />
+        <FooterColumnHeader label={isEnglish ? "Contact" : "Contacto"} />
         <ul class="list-none flex flex-col gap-[var(--sp-sm)]">
           <li>
             <a href={`mailto:${author.email}`} class="footer-link">
@@ -260,7 +285,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
           }
           <li>
             <a href={`${servicesHref}#contacto`} class="footer-link">
-              Agendar reunión
+              {bookMeetingLabel}
             </a>
           </li>
           <li>
@@ -277,7 +302,7 @@ const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
     <div class="footer-bottom">
       <p class="text-[length:var(--text-xs)] text-[var(--text-muted)] m-0">
         © {year}
-        {author.name}. Todos los derechos reservados.
+        {author.name}. {rightsLabel}
       </p>
     </div>
   </div>

@@ -6,6 +6,8 @@ const PATH_TRANSLATIONS: Record<string, string> = {
   "/talento": "/en/talent",
   "/blog": "/en/blog",
   "/plantillas": "/en/templates",
+  "/oferta/menu-digital": "/en/offer/digital-menu",
+  "/oferta/hub-creadores": "/en/offer/creator-hub",
 };
 
 const REVERSE_TRANSLATIONS = Object.fromEntries(
@@ -17,6 +19,14 @@ export function localeFromPathname(pathname: string): Locale {
 }
 
 function swapBlogPost(pathname: string): string | null {
+  if (pathname.startsWith("/blog/categoria/"))
+    return pathname.replace("/blog/categoria/", "/en/blog/category/");
+  if (pathname.startsWith("/en/blog/category/"))
+    return pathname.replace("/en/blog/category/", "/blog/categoria/");
+  if (pathname.startsWith("/blog/etiqueta/"))
+    return pathname.replace("/blog/etiqueta/", "/en/blog/tag/");
+  if (pathname.startsWith("/en/blog/tag/"))
+    return pathname.replace("/en/blog/tag/", "/blog/etiqueta/");
   if (pathname.startsWith("/blog/"))
     return pathname.replace("/blog/", "/en/blog/");
   if (pathname.startsWith("/en/blog/"))

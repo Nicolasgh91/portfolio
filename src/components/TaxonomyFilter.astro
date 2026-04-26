@@ -12,17 +12,22 @@ interface Props {
 }
 
 const { categories, tags = [], activeCategory, activeTag } = Astro.props;
-const blogBaseHref =
-  localeFromPathname(Astro.url.pathname) === "en" ? "/en/blog" : "/blog";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const blogBaseHref = isEnglish ? "/en/blog" : "/blog";
+const categoryBaseHref = isEnglish ? "/en/blog/category" : "/blog/categoria";
+const tagBaseHref = isEnglish ? "/en/blog/tag" : "/blog/etiqueta";
 ---
 
-<nav class="taxonomy" aria-label="Filtros del blog">
+<nav
+  class="taxonomy"
+  aria-label={isEnglish ? "Blog filters" : "Filtros del blog"}
+>
   <!-- Categorías -->
   {
     categories.length > 0 && (
       <div class="taxonomy__group">
         <span class="taxonomy__label" data-en="Categories" data-es="Categorías">
-          Categorías
+          {isEnglish ? "Categories" : "Categorías"}
         </span>
         <ul class="taxonomy__pills">
           <li>
@@ -33,13 +38,13 @@ const blogBaseHref =
               data-en="All"
               data-es="Todos"
             >
-              Todos
+              {isEnglish ? "All" : "Todos"}
             </a>
           </li>
           {categories.map((cat) => (
             <li>
               <a
-                href={`/blog/categoria/${encodeURIComponent(cat)}`}
+                href={`${categoryBaseHref}/${encodeURIComponent(cat)}`}
                 class={`taxonomy__pill ${activeCategory === cat ? "taxonomy__pill--active" : ""}`}
                 aria-current={activeCategory === cat ? "page" : undefined}
               >
@@ -57,13 +62,13 @@ const blogBaseHref =
     tags.length > 0 && (
       <div class="taxonomy__group">
         <span class="taxonomy__label" data-en="Tags" data-es="Etiquetas">
-          Etiquetas
+          {isEnglish ? "Tags" : "Etiquetas"}
         </span>
         <ul class="taxonomy__pills">
           {tags.map((tag) => (
             <li>
               <a
-                href={`/blog/etiqueta/${encodeURIComponent(tag)}`}
+                href={`${tagBaseHref}/${encodeURIComponent(tag)}`}
                 class={`taxonomy__pill taxonomy__pill--tag ${activeTag === tag ? "taxonomy__pill--active" : ""}`}
                 aria-current={activeTag === tag ? "page" : undefined}
               >

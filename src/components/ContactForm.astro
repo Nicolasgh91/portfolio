@@ -5,29 +5,39 @@
 // 3. Replace YOUR_WEB3FORMS_ACCESS_KEY below with your actual key
 //    (you can also store it in a .env file as PUBLIC_WEB3FORMS_KEY
 //     and reference it as import.meta.env.PUBLIC_WEB3FORMS_KEY)
+import { localeFromPathname } from "../lib/locale-path";
 
 const WEB3FORMS_KEY =
   import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "YOUR_WEB3FORMS_ACCESS_KEY";
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div
   class="rounded-[var(--radius-lg)] border-[0.5px] border-[var(--border-normal)] bg-[var(--bg-secondary)] p-[var(--sp-xl)] mt-[var(--sp-xl)]"
   role="form"
-  aria-label="Formulario de contacto B2B"
+  aria-label={isEnglish ? "B2B contact form" : "Formulario de contacto B2B"}
 >
   <h3
     class="mb-1.5"
     data-en="Evaluate your company's potential"
     data-es="Evaluar el potencial de su empresa"
   >
-    Evaluar el potencial de su empresa
+    {
+      isEnglish
+        ? "Evaluate your company's potential"
+        : "Evaluar el potencial de su empresa"
+    }
   </h3>
   <p
     class="mb-[var(--sp-lg)] text-[length:var(--text-sm)]"
     data-en="Complete the form to schedule a free diagnosis session."
     data-es="Complete el formulario para coordinar un diagnóstico sin costo."
   >
-    Complete el formulario para coordinar un diagnóstico sin costo.
+    {
+      isEnglish
+        ? "Complete the form to schedule a free diagnosis session."
+        : "Complete el formulario para coordinar un diagnóstico sin costo."
+    }
   </p>
 
   <form id="contact-form" novalidate>
@@ -45,7 +55,9 @@ const WEB3FORMS_KEY =
       name="subject"
       data-en="New B2B inquiry — Portfolio"
       data-es="Nueva consulta B2B — Portfolio"
-      value="Nueva consulta B2B — Portfolio"
+      value={isEnglish
+        ? "New B2B inquiry — Portfolio"
+        : "Nueva consulta B2B — Portfolio"}
     />
     <input type="hidden" name="from_name" value="Portfolio NH" />
     <input type="hidden" name="redirect" value="false" />
@@ -58,13 +70,13 @@ const WEB3FORMS_KEY =
           data-en="Full name *"
           data-es="Nombre completo *"
         >
-          Nombre completo *
+          {isEnglish ? "Full name *" : "Nombre completo *"}
         </label>
         <input
           type="text"
           id="contact-name"
           name="name"
-          placeholder="Juan García"
+          placeholder={isEnglish ? "Jane Smith" : "Juan García"}
           autocomplete="name"
           required
           aria-required="true"
@@ -83,13 +95,13 @@ const WEB3FORMS_KEY =
           data-en="Work email *"
           data-es="Email de trabajo *"
         >
-          Email de trabajo *
+          {isEnglish ? "Work email *" : "Email de trabajo *"}
         </label>
         <input
           type="email"
           id="contact-email"
           name="email"
-          placeholder="juan@miempresa.com"
+          placeholder={isEnglish ? "jane@mycompany.com" : "juan@miempresa.com"}
           autocomplete="email"
           required
           aria-required="true"
@@ -108,13 +120,13 @@ const WEB3FORMS_KEY =
           data-en="Company"
           data-es="Empresa"
         >
-          Empresa
+          {isEnglish ? "Company" : "Empresa"}
         </label>
         <input
           type="text"
           id="contact-company"
           name="company"
-          placeholder="Mi Empresa S.A."
+          placeholder={isEnglish ? "My Company LLC" : "Mi Empresa S.A."}
           autocomplete="organization"
         />
       </div>
@@ -126,46 +138,69 @@ const WEB3FORMS_KEY =
           data-en="Expected success metric"
           data-es="Métrica de éxito esperada"
         >
-          Métrica de éxito esperada
+          {isEnglish ? "Expected success metric" : "Métrica de éxito esperada"}
         </label>
         <select id="contact-metric" name="metric">
           <option
             value=""
             data-en="Select a metric..."
-            data-es="Seleccionar métrica...">Seleccionar métrica...</option
+            data-es="Seleccionar métrica..."
+            >{
+              isEnglish ? "Select a metric..." : "Seleccionar métrica..."
+            }</option
           >
           <option
             value="cost-reduction"
             data-en="Reduction of operational costs"
             data-es="Reducción de costos operativos"
-            >Reducción de costos operativos</option
+            >{
+              isEnglish
+                ? "Reduction of operational costs"
+                : "Reducción de costos operativos"
+            }</option
           >
           <option
             value="automation"
             data-en="Process automation"
             data-es="Automatización de procesos manuales"
-            >Automatización de procesos manuales</option
+            >{
+              isEnglish
+                ? "Process automation"
+                : "Automatización de procesos manuales"
+            }</option
           >
           <option
             value="sales"
             data-en="Increased sales / leads"
             data-es="Aumento de ventas / leads"
-            >Aumento de ventas / leads</option
+            >{
+              isEnglish
+                ? "Increased sales / leads"
+                : "Aumento de ventas / leads"
+            }</option
           >
           <option
             value="visibility"
             data-en="Improved online visibility"
             data-es="Mejora de visibilidad online"
-            >Mejora de visibilidad online</option
+            >{
+              isEnglish
+                ? "Improved online visibility"
+                : "Mejora de visibilidad online"
+            }</option
           >
           <option
             value="centralization"
             data-en="Operations centralization"
             data-es="Centralización de operaciones"
-            >Centralización de operaciones</option
+            >{
+              isEnglish
+                ? "Operations centralization"
+                : "Centralización de operaciones"
+            }</option
           >
           <option value="other" data-en="Other" data-es="Otra métrica"
-            >Otra métrica</option
+            >{isEnglish ? "Other" : "Otra métrica"}</option
           >
         </select>
       </div>
@@ -177,13 +212,19 @@ const WEB3FORMS_KEY =
           data-en="Main operational challenge to solve *"
           data-es="Desafío operativo principal a resolver *"
         >
-          Desafío operativo principal a resolver *
+          {
+            isEnglish
+              ? "Main operational challenge to solve *"
+              : "Desafío operativo principal a resolver *"
+          }
         </label>
         <textarea
           id="contact-challenge"
           name="challenge"
           rows="4"
-          placeholder="Describa el problema o ineficiencia que quiere resolver, mencionando el impacto actual en su operación..."
+          placeholder={isEnglish
+            ? "Describe the problem or inefficiency you want to solve, including its current impact on your operations..."
+            : "Describa el problema o ineficiencia que quiere resolver, mencionando el impacto actual en su operación..."}
           required
           aria-required="true"></textarea>
         <span
@@ -201,7 +242,7 @@ const WEB3FORMS_KEY =
       data-en="Send inquiry"
       data-es="Enviar consulta"
     >
-      Enviar consulta
+      {isEnglish ? "Send inquiry" : "Enviar consulta"}
     </button>
   </form>
 </div>
@@ -219,7 +260,8 @@ const WEB3FORMS_KEY =
   <button
     class="snackbar-close"
     id="snackbar-close"
-    aria-label="Cerrar notificación">✕</button
+    aria-label={isEnglish ? "Close notification" : "Cerrar notificación"}
+    >✕</button
   >
 </div>
 

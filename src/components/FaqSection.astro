@@ -9,6 +9,7 @@ import {
   FAQ_CATEGORY_CLASS,
   type FaqCategory,
 } from "../lib/faq-taxonomy";
+import { localeFromPathname } from "../lib/locale-path";
 
 export interface FaqItem {
   order: number;
@@ -59,6 +60,7 @@ const {
 const showTags = entries.length > FAQ_TAG_THRESHOLD;
 const categoryLabel = FAQ_CATEGORY_LABEL;
 const categoryTagClass = FAQ_CATEGORY_CLASS;
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <div
@@ -79,7 +81,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
         data-en={eyebrowEn}
         data-es={eyebrowEs}
       >
-        {eyebrowEs}
+        {isEnglish ? eyebrowEn : eyebrowEs}
       </p>
       <h2
         id="faq-heading"
@@ -87,14 +89,14 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
         data-en={headingEn}
         data-es={headingEs}
       >
-        {headingEs}
+        {isEnglish ? headingEn : headingEs}
       </h2>
       <p
         class="m-0 text-sm leading-relaxed text-[var(--text-muted)]"
         data-en={introEn}
         data-es={introEs}
       >
-        {introEs}
+        {isEnglish ? introEn : introEs}
       </p>
     </div>
     {
@@ -105,20 +107,22 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
             data-en="Have a question that isn't listed here?"
             data-es="¿Tenés una duda que no está acá?"
           >
-            ¿Tenés una duda que no está acá?
+            {isEnglish
+              ? "Have a question that isn't listed here?"
+              : "¿Tenés una duda que no está acá?"}
           </p>
           <p
             class="m-0 text-[13px] leading-relaxed text-[var(--text-muted)]"
             data-en="Book a free 30-minute diagnosis. We'll review your operation and tell you whether working together makes sense."
             data-es="Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar juntos."
           >
-            Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu
-            operación y te decimos si tiene sentido trabajar juntos.
+            {isEnglish
+              ? "Book a free 30-minute diagnosis. We'll review your operation and tell you whether working together makes sense."
+              : "Agendá un diagnóstico gratuito de 30 minutos. Analizamos tu operación y te decimos si tiene sentido trabajar juntos."}
           </p>
           <a href={ctaHref} class="btn-primary btn-bounce w-fit font-medium">
-            <span data-es>Agendar diagnóstico gratis</span>
-            <span data-en class="hidden">
-              Book free diagnosis
+            <span data-es data-en="Book free diagnosis">
+              {isEnglish ? "Book free diagnosis" : "Agendar diagnóstico gratis"}
             </span>
             <span class="arrow" aria-hidden="true">
               →
@@ -148,7 +152,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                     data-en={categoryLabel[item.category].en}
                     data-es={categoryLabel[item.category].es}
                   >
-                    {categoryLabel[item.category].es}
+                    {categoryLabel[item.category][isEnglish ? "en" : "es"]}
                   </span>
                 )}
                 <span
@@ -156,7 +160,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                   data-en={item.questionEn}
                   data-es={item.question}
                 >
-                  {item.question}
+                  {isEnglish ? item.questionEn : item.question}
                 </span>
               </span>
               <span
@@ -173,7 +177,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                   data-en={item.answerEn}
                   data-es={item.answer}
                 >
-                  {item.answer}
+                  {isEnglish ? item.answerEn : item.answer}
                 </p>
               </div>
             </div>
@@ -203,7 +207,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                 data-en={item.questionEn}
                 data-es={item.question}
               >
-                {item.question}
+                {isEnglish ? item.questionEn : item.question}
               </span>
               <span class="faq-icon shrink-0" aria-hidden="true">
                 +
@@ -217,7 +221,7 @@ const categoryTagClass = FAQ_CATEGORY_CLASS;
                     data-en={item.answerEn}
                     data-es={item.answer}
                   >
-                    {item.answer}
+                    {isEnglish ? item.answerEn : item.answer}
                   </p>
                 </div>
               </div>
