@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import darkLiquidBg from "../assets/talento/dark_liquid.webp";
 import lightLiquidBg from "../assets/talento/light_liquid.webp";
+import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   items: string[];
@@ -20,11 +21,12 @@ const {
 } = Astro.props;
 
 const marqueeItems = [...items, ...items];
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 ---
 
 <section
   class={`liquid-glass-marquee ${className}`.trim()}
-  aria-label="Stack tecnológico"
+  aria-label={isEnglish ? "Technology stack" : "Stack tecnológico"}
 >
   <div class="liquid-glass-marquee__bg" aria-hidden="true">
     <Image
