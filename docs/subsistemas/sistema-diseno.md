@@ -27,6 +27,7 @@
 ## Ancho de layout
 
 - **`.page-container`** (`tokens.css`): `max-width: 960px`, centrado; pensado para listados, talento y lectura de blog donde conviene acotar la línea de texto. Padding horizontal `var(--sp-lg)` (equivalente a `1.5rem` / `px-6` con `rem` por defecto).
+- **`.hero-sub`** (`tokens.css`): descripción de hero centrada con `max-width: 780px`; permite copies largos de blog y taxonomías sin líneas demasiado cortas.
 - **Footer** (`Footer.astro`): no usa `.page-container`; usa **`max-w-7xl` + `mx-auto` + `px-6`** para alinearse con `SectionWrapper` en páginas anchas. La grilla de enlaces del pie se beneficia del ancho extra sin forzar artículos a 1280px.
 
 ## Tailwind y tokens

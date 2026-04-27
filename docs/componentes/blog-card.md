@@ -28,14 +28,14 @@
 ## Comportamiento
 
 - Portada: `coverImageKey` → asset importado; si falta, fallback por `category` (`arquitectura`, `infraestructura`, `metodología`) y luego default.
-- Overlay y CTA “Leer artículo” visibles en hover (desktop); enlace principal con `aria-label` descriptivo.
+- Toda la tarjeta es el enlace principal al artículo, con `aria-label` descriptivo; el CTA “Leer artículo” funciona como señal visual visible en hover/focus.
 - Meta: fecha localizada por ruta (`es-AR` / `en-US`), tiempo de lectura opcional con icono.
 - i18n: título, descripción, CTA, alt y tiempo de lectura se renderizan desde `localeFromPathname`; `data-en` / `data-es` quedan como metadatos para el toggle global.
 
 ## Decisiones de diseño
 
 - `<Image />` con dimensiones fijas y `loading="lazy"` en listados.
-- Card con `<style>` scoped para layout hover y tipografía (no solo utilidades Tailwind).
+- Card con `<style>` scoped para layout hover/focus, tipografía y área clickeable completa (no solo utilidades Tailwind).
 
 ## Deuda técnica conocida
 

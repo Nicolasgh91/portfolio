@@ -102,34 +102,34 @@ const readLabel = isEnglish
   <!-- ── OVERLAY (visible solo en hover) ── -->
   <div class="blog-card__overlay" aria-hidden="true"></div>
 
-  <!-- ── CTA flotante (visible solo en hover) ── -->
+  <!-- ── Enlace de tarjeta completa con CTA flotante ── -->
   <a
     href={`${blogBaseHref}/${post.slug}`}
-    class="blog-card__cta"
+    class="blog-card__link"
     aria-label={readLabel}
-    data-en="Read article"
-    data-es="Leer artículo"
   >
-    <span
-      class="blog-card__cta-text"
-      data-en="Read article"
-      data-es="Leer artículo"
-    >
-      {isEnglish ? "Read article" : "Leer artículo"}
-    </span>
-    <span class="blog-card__cta-btn" aria-hidden="true">
-      <svg
-        width="13"
-        height="13"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="#111"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+    <span class="blog-card__cta" aria-hidden="true">
+      <span
+        class="blog-card__cta-text"
+        data-en="Read article"
+        data-es="Leer artículo"
       >
-        <path d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-      </svg>
+        {isEnglish ? "Read article" : "Leer artículo"}
+      </span>
+      <span class="blog-card__cta-btn">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#111"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </span>
     </span>
   </a>
 
@@ -213,6 +213,7 @@ const readLabel = isEnglish
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 1rem;
     overflow: hidden;
+    cursor: pointer;
     transition:
       transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 350ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -221,7 +222,8 @@ const readLabel = isEnglish
   /* ─────────────────────────────────────────
      HOVER — card completa
   ───────────────────────────────────────── */
-  .blog-card:hover {
+  .blog-card:hover,
+  .blog-card:focus-within {
     transform: translateY(-6px);
     box-shadow:
       0 24px 48px -10px rgba(251, 191, 36, 0.13),
@@ -245,7 +247,8 @@ const readLabel = isEnglish
     transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .blog-card:hover .blog-card__img {
+  .blog-card:hover .blog-card__img,
+  .blog-card:focus-within .blog-card__img {
     transform: scale(1.07);
   }
 
@@ -267,23 +270,36 @@ const readLabel = isEnglish
     pointer-events: none;
   }
 
-  .blog-card:hover .blog-card__overlay {
+  .blog-card:hover .blog-card__overlay,
+  .blog-card:focus-within .blog-card__overlay {
     opacity: 1;
   }
 
   /* ─────────────────────────────────────────
      CTA flotante
   ───────────────────────────────────────── */
+  .blog-card__link {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: 1rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-card__link:focus-visible {
+    outline: 2px solid #fbbf24;
+    outline-offset: -4px;
+  }
+
   .blog-card__cta {
     position: absolute;
+    right: 20px;
     bottom: 20px;
     left: 20px;
-    right: 20px;
-    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    text-decoration: none;
     opacity: 0;
     transform: translateY(10px);
     transition:
@@ -291,7 +307,8 @@ const readLabel = isEnglish
       transform 300ms ease 60ms;
   }
 
-  .blog-card:hover .blog-card__cta {
+  .blog-card:hover .blog-card__cta,
+  .blog-card:focus-within .blog-card__cta {
     opacity: 1;
     transform: translateY(0);
   }
@@ -316,7 +333,8 @@ const readLabel = isEnglish
     transition: transform 220ms ease;
   }
 
-  .blog-card:hover .blog-card__cta-btn {
+  .blog-card:hover .blog-card__cta-btn,
+  .blog-card:focus-within .blog-card__cta-btn {
     transform: translateX(3px);
   }
 
@@ -377,7 +395,8 @@ const readLabel = isEnglish
     transition: color 200ms ease;
   }
 
-  .blog-card:hover .blog-card__title {
+  .blog-card:hover .blog-card__title,
+  .blog-card:focus-within .blog-card__title {
     color: #ffffff;
   }
 
