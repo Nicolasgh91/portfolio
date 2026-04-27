@@ -20,9 +20,10 @@
 - El tooltip de play/pausa actualiza su texto junto con el estado: escuchar, pausar o reanudar.
 - Al hacer click sobre el botón o el badge, el tooltip se oculta aunque el cursor siga encima; se reactiva al salir y volver a hacer hover.
 - El tooltip del badge solo puede aparecer mientras el badge está visible, porque el wrapper completo se oculta fuera del estado de reproducción.
+- La barra de progreso se renderiza como extensión compacta del control, usando tokens de marca (`--accent`, `--accent-bg`, `--accent-border`, `--text-muted`) para respetar dark/light/high contrast.
 - La inicialización se difiere con `IntersectionObserver` sobre `[data-article-player]`, equivalente al objetivo de `client:visible` sin crear una isla de framework.
-- Si existe `audioSrc`, el componente usa un `HTMLAudioElement` creado por script y controla play/pausa/velocidad sobre el MP3.
-- Si no existe `audioSrc`, usa Web Speech API como fallback.
+- Si existe `audioSrc`, el componente usa un `HTMLAudioElement` creado por script y controla play/pausa/velocidad/progreso sobre el MP3.
+- Si no existe `audioSrc`, usa Web Speech API como fallback y muestra progreso aproximado por chunks.
 - Si el navegador no soporta `speechSynthesis` o `SpeechSynthesisUtterance` y tampoco existe `audioSrc`, el contenedor queda oculto y no bloquea la lectura.
 - La extracción clona el artículo y remueve `pre`, `code`, `table` y `figcaption` antes de leer `textContent`.
 - El texto se divide en chunks de unas 200 palabras para evitar cancelaciones de Chrome en utterances largas.
@@ -39,6 +40,8 @@ public/audio/manifest.json → blog/[slug].astro → ShareBar → ArticlePlayer
 - `src/pages/blog/[slug].astro` importa `public/audio/manifest.json` en build time y resuelve el archivo por `post.slug` + idioma activo (`es` o `en`).
 - `ShareBar` recibe `audioSrc` y lo pasa sin alterar el diseño visual del bloque de compartir.
 - `ArticlePlayer` usa MP3 cuando `audioSrc` existe; si el manifiesto no tiene entrada para el artículo/idioma, mantiene Web Speech API.
+- En MP3, la barra es un `input[type="range"]` interactivo: `timeupdate` sincroniza el valor y `input` hace seek con `audio.currentTime`.
+- En Web Speech, la barra usa `role="progressbar"` y avanza por `chunkIndex / chunks.length`; no es interactiva porque Web Speech API no expone seek real.
 - Para regenerar audio manualmente en GitHub Actions, ejecutar el workflow `Generate TTS audio` con `workflow_dispatch`.
 - Para cambiar voces por defecto, editar las constantes `voices` en `scripts/generate-tts.mjs`; para una tanda puntual, usar `TTS_ES_VOICE` y/o `TTS_EN_VOICE`.
 - Para invalidar todo el cache de audio, aumentar `TTS_ENGINE_VERSION` en el workflow o al ejecutar el script localmente.
@@ -49,6 +52,7 @@ public/audio/manifest.json → blog/[slug].astro → ShareBar → ArticlePlayer
 - La calidad, disponibilidad y acento de Web Speech API depende del sistema operativo y del navegador del usuario; no aplica cuando existe MP3 pre-generado.
 - `speechSynthesis.getVoices()` puede devolver vacío en el primer llamado; el componente espera `voiceschanged` y reintenta solo en fallback Web Speech.
 - La velocidad cambia entre `1x`, `1.2x` y `0.85x`; en MP3 aplica inmediatamente y en Web Speech aplica al siguiente chunk.
+- La barra Web Speech es aproximada y no permite adelantar/retroceder; solo el MP3 pre-generado soporta seek real.
 
 ## Decisiones de diseño
 
@@ -59,7 +63,7 @@ public/audio/manifest.json → blog/[slug].astro → ShareBar → ArticlePlayer
 
 ## Ruta de upgrade
 
-Próximo upgrade posible: exponer una barra de progreso nativa/custom para permitir seek explícito en MP3 pre-generados, manteniendo el botón compacto actual en la `ShareBar`.
+Próximo upgrade posible: enriquecer la barra con marcadores de secciones si el manifiesto llega a guardar timestamps por heading.
 
 ## Estado
 
