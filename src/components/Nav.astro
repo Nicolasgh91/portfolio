@@ -13,9 +13,6 @@ const servicesHref = isEnglish ? "/en/services" : "/servicios";
 const blogHref = isEnglish ? "/en/blog" : "/blog";
 const talentHref = isEnglish ? "/en/talent" : "/talento";
 const templatesHref = isEnglish ? "/en/templates" : "/plantillas";
-const servicesAiHref = `${servicesHref}#agentes-ia`;
-const servicesEcommerceHref = `${servicesHref}#ecommerce`;
-const servicesAutomationHref = `${servicesHref}#automatizacion`;
 const servicesContactHref = `${servicesHref}#contacto`;
 const languageSwitchHref = getAlternatePathname(pathname);
 const mainNavLabel = isEnglish ? "Main navigation" : "Navegación principal";
@@ -98,67 +95,6 @@ const motionLabel = isEnglish ? "Motion" : "Movimiento";
           aria-labelledby="services-tab-link"
           hidden
         >
-          <a role="menuitem" href={servicesAiHref} class="services-item">
-            <svg
-              aria-hidden="true"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><circle cx="12" cy="12" r="3"></circle><path
-                d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
-              ></path></svg
-            >
-            {isEnglish ? "AI chatbots" : "Chatbots IA"}
-          </a>
-          <a role="menuitem" href={servicesEcommerceHref} class="services-item">
-            <svg
-              aria-hidden="true"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><circle cx="9" cy="21" r="1"></circle><circle
-                cx="20"
-                cy="21"
-                r="1"></circle><path
-                d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-              ></path></svg
-            >
-            E-commerce
-          </a>
-          <a
-            role="menuitem"
-            href={servicesAutomationHref}
-            class="services-item"
-          >
-            <svg
-              aria-hidden="true"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><polyline points="16 3 21 3 21 8"></polyline><line
-                x1="4"
-                y1="20"
-                x2="21"
-                y2="3"></line><polyline points="21 16 21 21 16 21"
-              ></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg
-            >
-            {isEnglish ? "Automation" : "Automatización"}
-          </a>
           <a role="menuitem" href={templatesHref} class="services-item">
             <svg
               aria-hidden="true"
@@ -297,31 +233,6 @@ const motionLabel = isEnglish ? "Motion" : "Movimiento";
         >
       </li>
 
-      <li>
-        <a
-          href={servicesAiHref}
-          class="drawer-link drawer-link--sub"
-          data-en="AI chatbots"
-          data-es="Chatbots IA">{isEnglish ? "AI chatbots" : "Chatbots IA"}</a
-        >
-      </li>
-      <li>
-        <a
-          href={servicesEcommerceHref}
-          class="drawer-link drawer-link--sub"
-          data-en="E-commerce"
-          data-es="E-commerce">E-commerce</a
-        >
-      </li>
-      <li>
-        <a
-          href={servicesAutomationHref}
-          class="drawer-link drawer-link--sub"
-          data-en="Automation"
-          data-es="Automatización"
-          >{isEnglish ? "Automation" : "Automatización"}</a
-        >
-      </li>
       <li>
         <a
           href={templatesHref}
