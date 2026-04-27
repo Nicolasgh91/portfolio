@@ -1,6 +1,6 @@
 # CI con GitHub Actions
 
-Validación automática en cada push y cada pull request hacia `main`.
+Validación automática en cada push y cada pull request hacia `main`, más generación bajo demanda de assets de audio para artículos.
 
 ## Flujo del pipeline
 
@@ -8,6 +8,12 @@ Orden **fail-fast** (el paso más barato primero: si falla el formato, no se eje
 
 ```text
 push/PR → checkout → setup node + cache → npm ci → lint → check → build → ✓/✗
+```
+
+La generación TTS corre en un workflow separado para evitar acoplar el build de validación con credenciales externas:
+
+```text
+push main blog/script o workflow_dispatch → checkout → setup node → npm ci → escribir credenciales /tmp → generate-tts → limpiar credenciales → commit public/audio
 ```
 
 ## Workflow
@@ -19,9 +25,21 @@ push/PR → checkout → setup node + cache → npm ci → lint → check → bu
 - **Disparadores:** `push` y `pull_request` restringidos a la rama `main`.
 - **Secretos:** el workflow no define variables de entorno sensibles ni usa `secrets.*`.
 
+## Workflow TTS
+
+- **Archivo:** [`.github/workflows/generate-tts.yml`](../../.github/workflows/generate-tts.yml)
+- **Job:** `tts` en `ubuntu-latest`, `timeout-minutes: 20`.
+- **Permisos:** `contents: write`, necesario solo para commitear MP3 y `public/audio/manifest.json`.
+- **Concurrencia:** `group: tts-audio-${{ github.ref }}`, sin cancelación para no interrumpir una generación ya iniciada.
+- **Disparadores:** `push` a `main` si cambian `src/content/blog/**`, `src/content/blog-en/**` o `scripts/generate-tts.mjs`; también `workflow_dispatch` manual.
+- **Secretos:** requiere `GOOGLE_TTS_SA_KEY` con el JSON completo de la service account. El workflow lo escribe en `/tmp/gcp-tts-key.json`, ejecuta el script y lo borra con un paso `if: always()`.
+- **Cache de audio:** `scripts/generate-tts.mjs` calcula hash por slug, idioma, voz, texto y `TTS_ENGINE_VERSION`; si el hash coincide, no llama a Google Cloud TTS.
+- **Voces:** el workflow fija `TTS_ES_VOICE=es-US-Neural2-A` y `TTS_EN_VOICE=en-US-Neural2-F` para generar voces femeninas por defecto.
+- **Commit bot:** solo agrega `public/audio/`; si no hay diff staged, no commitea. El mensaje incluye `[skip ci]`.
+
 ## Node.js y dependencias
 
-- Versión de Node: archivo [`.node-version`](../../.node-version) (actualmente `22`), consumido por `actions/setup-node@v4` con `node-version-file`.
+- Versión de Node: archivo [`.node-version`](../../.node-version) (actualmente `24`), consumido por `actions/setup-node@v4` con `node-version-file`.
 - **Caché:** `cache: npm` en `setup-node` para acelerar `npm ci`.
 
 ## Pasos del job

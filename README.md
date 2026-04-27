@@ -93,6 +93,18 @@ Este repositorio implementa flujos de trabajo profesionales para garantizar la e
 
 <br>
 
+## Variables de entorno
+
+La app pública usa variables `PUBLIC_*` cuando corresponde. La generación local de audio del blog usa credenciales de Google Cloud solo en scripts:
+
+```bash
+GOOGLE_TTS_SA_KEY_PATH=./keys/tts-generator.json
+```
+
+En GitHub Actions, el workflow `Generate TTS audio` requiere el secret `GOOGLE_TTS_SA_KEY` con el JSON completo de la service account. Ese secreto se escribe temporalmente en `/tmp` durante el job y no se commitea.
+
+<br>
+
 ## Estructura del repositorio
 
 ```text

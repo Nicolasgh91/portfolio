@@ -11,6 +11,7 @@ import SlideViewer from "../../components/SlideViewer.astro";
 import SectionSpacer from "../../components/SectionSpacer.astro";
 import { filterTocHeadings } from "../../lib/toc";
 import { localeFromPathname } from "../../lib/locale-path";
+import audioManifest from "../../../public/audio/manifest.json";
 import humanAi from "../../assets/blog/human-ai.webp";
 import satellite from "../../assets/blog/satellite.webp";
 import cloudServers from "../../assets/blog/cloud-servers.webp";
@@ -25,6 +26,10 @@ type CoverImageKey =
   | "huella-del-fuego"
   | "arquitectura-gran-escala"
   | "microservicios-urban-blueprint";
+
+type AudioManifest = {
+  articles?: Record<string, Partial<Record<"es" | "en", { file?: string }>>>;
+};
 
 const coverByKey: Record<CoverImageKey, typeof humanAi> = {
   "human-ai": humanAi,
@@ -45,11 +50,16 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const activeLang = isEnglish ? "en" : "es";
 const blogBaseHref = isEnglish ? "/en/blog" : "/blog";
 const categoryBaseHref = isEnglish ? "/en/blog/category" : "/blog/categoria";
 const servicesContactHref = isEnglish
   ? "/en/services#contacto"
   : "/servicios#contacto";
+const audioEntry = (audioManifest as AudioManifest).articles?.[post.slug]?.[
+  activeLang
+];
+const audioSrc = audioEntry?.file ? `/audio/${audioEntry.file}` : undefined;
 const englishPosts = isEnglish ? await getCollection("blog-en") : [];
 const englishPost = englishPosts.find((entry) => entry.slug === post.slug);
 const renderEntry = englishPost ?? post;
@@ -261,7 +271,8 @@ const related = allPosts
             <ShareBar
               title={localizedTitle}
               url={postUrl}
-              lang={isEnglish ? "en" : "es"}
+              lang={activeLang}
+              audioSrc={audioSrc}
             />
           </div>
 
