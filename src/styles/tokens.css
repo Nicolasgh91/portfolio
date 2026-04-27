@@ -490,7 +490,7 @@ em {
 .hero-sub {
   font-size: calc(var(--text-base) * var(--font-scale));
   color: var(--text-secondary);
-  max-width: 580px;
+  max-width: 780px;
   margin: 0 auto var(--sp-lg);
   line-height: 1.8;
 }
