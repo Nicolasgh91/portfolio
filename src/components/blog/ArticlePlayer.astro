@@ -1,0 +1,319 @@
+---
+interface Props {
+  lang: "es" | "en";
+  articleSelector?: string;
+}
+
+const { lang, articleSelector = "article" } = Astro.props;
+const speechLang = lang === "es" ? "es-AR" : "en-US";
+const listenLabel = lang === "es" ? "Escuchar" : "Listen";
+const pauseLabel = lang === "es" ? "Pausar" : "Pause";
+const resumeLabel = lang === "es" ? "Reanudar" : "Resume";
+const speedLabel = lang === "es" ? "Cambiar velocidad" : "Change speed";
+const playerTooltipClass =
+  "pointer-events-none absolute bottom-full right-0 z-20 mb-2 whitespace-nowrap rounded-md border border-[color:var(--border-subtle)] bg-[var(--bg-tertiary)] px-2 py-1 text-xs font-medium text-[var(--text-primary)] opacity-0 shadow-lg transition-opacity group-hover:opacity-100";
+---
+
+<div
+  data-article-player
+  data-lang={speechLang}
+  data-article-selector={articleSelector}
+  data-label-listen={listenLabel}
+  data-label-pause={pauseLabel}
+  data-label-resume={resumeLabel}
+  hidden
+  class="ml-auto inline-flex items-center gap-1.5 text-[var(--text-secondary)]"
+>
+  <span data-tooltip-root class="group relative inline-flex">
+    <button
+      type="button"
+      data-article-player-toggle
+      aria-label={listenLabel}
+      class="inline-flex h-9 w-9 items-center justify-center rounded-lg border-0 bg-transparent p-0 text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+    >
+      <span data-article-player-play-icon aria-hidden="true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"
+          ></polygon>
+        </svg>
+      </span>
+      <span data-article-player-pause-icon aria-hidden="true" hidden>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="10" y1="9" x2="10" y2="15"></line>
+          <line x1="14" y1="9" x2="14" y2="15"></line>
+        </svg>
+      </span>
+    </button>
+    <span
+      data-article-player-tooltip
+      data-tooltip-content
+      class={playerTooltipClass}
+      aria-hidden="true">{listenLabel}</span
+    >
+  </span>
+
+  <span
+    data-article-player-rate-wrap
+    data-tooltip-root
+    class="group relative inline-flex"
+    hidden
+  >
+    <button
+      type="button"
+      data-article-player-rate
+      aria-label={speedLabel}
+      class="cursor-pointer border-0 bg-transparent p-0 text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+    >
+      <span data-article-player-rate-label>1x</span>
+    </button>
+    <span data-tooltip-content class={playerTooltipClass} aria-hidden="true"
+      >{speedLabel}</span
+    >
+  </span>
+</div>
+
+<script>
+  type PlayerState = "idle" | "playing" | "paused";
+
+  const rateOptions = [1, 1.2, 0.85] as const;
+
+  const getPlayerLabel = (
+    root: HTMLElement,
+    key: "listen" | "pause" | "resume",
+  ) => root.dataset[`label${key[0].toUpperCase()}${key.slice(1)}`] ?? "";
+
+  const getVoicesForLang = (lang: string) => {
+    const voices = speechSynthesis.getVoices();
+    const langPrefix = lang.slice(0, 2).toLowerCase();
+    return (
+      voices.find((voice) => voice.lang.toLowerCase() === lang.toLowerCase()) ??
+      voices.find((voice) => voice.lang.toLowerCase().startsWith(langPrefix)) ??
+      null
+    );
+  };
+
+  const waitForVoices = (
+    lang: string,
+    callback: (voice: SpeechSynthesisVoice | null) => void,
+  ) => {
+    const voice = getVoicesForLang(lang);
+    if (voice || speechSynthesis.getVoices().length > 0) {
+      callback(voice);
+      return;
+    }
+
+    const onVoicesChanged = () => {
+      speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      callback(getVoicesForLang(lang));
+    };
+
+    speechSynthesis.addEventListener("voiceschanged", onVoicesChanged, {
+      once: true,
+    });
+  };
+
+  const getArticleText = (selector: string) => {
+    const article = document.querySelector(selector);
+    if (!(article instanceof HTMLElement)) return "";
+
+    const clone = article.cloneNode(true);
+    if (!(clone instanceof HTMLElement)) return "";
+
+    clone
+      .querySelectorAll("pre, code, table, figcaption")
+      .forEach((node) => node.remove());
+
+    return (clone.textContent ?? "").replace(/\s+/g, " ").trim();
+  };
+
+  const chunkText = (text: string, wordsPerChunk = 200) => {
+    const words = text.split(/\s+/).filter(Boolean);
+    const chunks: string[] = [];
+
+    for (let index = 0; index < words.length; index += wordsPerChunk) {
+      chunks.push(words.slice(index, index + wordsPerChunk).join(" "));
+    }
+
+    return chunks;
+  };
+
+  const initArticlePlayer = (root: HTMLElement) => {
+    if (root.dataset.articlePlayerReady === "true") return;
+    root.dataset.articlePlayerReady = "true";
+
+    const toggle = root.querySelector("[data-article-player-toggle]");
+    const toggleTooltip = root.querySelector("[data-article-player-tooltip]");
+    const playIcon = root.querySelector("[data-article-player-play-icon]");
+    const pauseIcon = root.querySelector("[data-article-player-pause-icon]");
+    const rateWrap = root.querySelector("[data-article-player-rate-wrap]");
+    const rateButton = root.querySelector("[data-article-player-rate]");
+    const rateLabel = root.querySelector("[data-article-player-rate-label]");
+
+    if (
+      !(toggle instanceof HTMLButtonElement) ||
+      !(toggleTooltip instanceof HTMLElement) ||
+      !(playIcon instanceof HTMLElement) ||
+      !(pauseIcon instanceof HTMLElement) ||
+      !(rateWrap instanceof HTMLElement) ||
+      !(rateButton instanceof HTMLButtonElement) ||
+      !(rateLabel instanceof HTMLElement)
+    )
+      return;
+
+    const lang = root.dataset.lang ?? "es-AR";
+    const selector = root.dataset.articleSelector ?? "article";
+    let state: PlayerState = "idle";
+    let chunks: string[] = [];
+    let chunkIndex = 0;
+    let rateIndex = 0;
+    let activeVoice: SpeechSynthesisVoice | null = null;
+
+    root.querySelectorAll("[data-tooltip-root]").forEach((tooltipRoot) => {
+      const tooltip = tooltipRoot.querySelector("[data-tooltip-content]");
+      if (!(tooltip instanceof HTMLElement)) return;
+
+      tooltipRoot.addEventListener("click", () => {
+        tooltip.hidden = true;
+      });
+
+      tooltipRoot.addEventListener("mouseleave", () => {
+        tooltip.hidden = false;
+      });
+    });
+
+    const setState = (nextState: PlayerState) => {
+      state = nextState;
+      rateWrap.hidden = state !== "playing";
+      playIcon.hidden = state === "playing";
+      pauseIcon.hidden = state !== "playing";
+
+      const label =
+        state === "playing"
+          ? getPlayerLabel(root, "pause")
+          : state === "paused"
+            ? getPlayerLabel(root, "resume")
+            : getPlayerLabel(root, "listen");
+
+      toggle.setAttribute("aria-label", label);
+      toggleTooltip.textContent = label;
+    };
+
+    const cancel = () => {
+      speechSynthesis.cancel();
+      chunks = [];
+      chunkIndex = 0;
+      setState("idle");
+    };
+
+    const speakCurrentChunk = () => {
+      const text = chunks[chunkIndex];
+      if (!text) {
+        cancel();
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = rateOptions[rateIndex];
+      if (activeVoice) utterance.voice = activeVoice;
+      utterance.onend = () => {
+        if (state !== "playing") return;
+        chunkIndex += 1;
+        if (chunkIndex >= chunks.length) {
+          cancel();
+          return;
+        }
+        speakCurrentChunk();
+      };
+      utterance.onerror = cancel;
+
+      speechSynthesis.speak(utterance);
+      setState("playing");
+    };
+
+    const start = () => {
+      const text = getArticleText(selector);
+      chunks = chunkText(text);
+      chunkIndex = 0;
+      if (chunks.length === 0) return;
+
+      waitForVoices(lang, (voice) => {
+        activeVoice = voice;
+        speakCurrentChunk();
+      });
+    };
+
+    toggle.addEventListener("click", () => {
+      if (state === "playing") {
+        speechSynthesis.pause();
+        setState("paused");
+        return;
+      }
+
+      if (state === "paused") {
+        speechSynthesis.resume();
+        setState("playing");
+        return;
+      }
+
+      start();
+    });
+
+    rateButton.addEventListener("click", () => {
+      rateIndex = (rateIndex + 1) % rateOptions.length;
+      rateLabel.textContent = `${rateOptions[rateIndex]}x`;
+    });
+
+    window.addEventListener("beforeunload", cancel, { once: true });
+  };
+
+  if ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) {
+    const players = Array.from(
+      document.querySelectorAll("[data-article-player]"),
+    ).filter((root): root is HTMLElement => root instanceof HTMLElement);
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!(entry.target instanceof HTMLElement) || !entry.isIntersecting)
+            return;
+
+          initArticlePlayer(entry.target);
+          observer.unobserve(entry.target);
+        });
+      });
+
+      players.forEach((player) => {
+        player.hidden = false;
+        observer.observe(player);
+      });
+    } else {
+      players.forEach((player) => {
+        player.hidden = false;
+        initArticlePlayer(player);
+      });
+    }
+  }
+</script>

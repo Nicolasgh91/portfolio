@@ -36,6 +36,7 @@
 | [componentes/page-hero-section.md](./componentes/page-hero-section.md)       | `PageHeroSection`                                 |
 | [componentes/faq-section.md](./componentes/faq-section.md)                   | `FaqSection`                                      |
 | [componentes/service-card.md](./componentes/service-card.md)                 | `ServiceCard`                                     |
+| [componentes/ArticlePlayer.md](./componentes/ArticlePlayer.md)               | `ArticlePlayer`                                   |
 
 El resto de fichas en [`componentes/`](./componentes/) siguen el mismo formato (ruta, props, comportamiento).
 

@@ -258,7 +258,11 @@ const related = allPosts
           </header>
 
           <div class="reveal reveal--scale" style="--reveal-delay: 0ms">
-            <ShareBar title={localizedTitle} url={postUrl} />
+            <ShareBar
+              title={localizedTitle}
+              url={postUrl}
+              lang={isEnglish ? "en" : "es"}
+            />
           </div>
 
           {
@@ -275,6 +279,7 @@ const related = allPosts
 
           <div class="reveal reveal--scale" style="--reveal-delay: 200ms">
             <article
+              data-article-content
               class="prose max-w-none text-[var(--text-secondary)] [&_a]:text-[var(--color-accent-400)] [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-6 [&_h2]:mt-16 [&_h2]:text-[var(--text-primary)] [&_h3]:mb-4 [&_h3]:mt-10 [&_h3]:text-[var(--text-primary)] [&_p]:mb-7 [&_strong]:text-[var(--text-primary)] [&_table_th]:border-b [&_table_th]:border-[color:var(--border-normal)] [&_table_th]:bg-[var(--bg-tertiary)]/50 [&_table_th]:px-4 [&_table_th]:py-3 [&_table_th]:text-xs [&_table_th]:font-semibold [&_table_th]:uppercase [&_table_th]:tracking-wider [&_table_th]:text-[var(--text-muted)] [&_table_td]:border-b [&_table_td]:border-[color:var(--border-subtle)] [&_table_td]:px-4 [&_table_td]:py-3 [&_table_td]:text-[var(--text-secondary)] [&_tbody_tr:nth-child(even)]:bg-white/[0.02] [&_tbody_tr:hover]:bg-white/[0.03]"
               aria-label={isEnglish
                 ? `Content: ${localizedTitle}`

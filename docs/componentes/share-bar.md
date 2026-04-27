@@ -6,20 +6,27 @@
 
 ## Props
 
-| Prop    | Tipo     | Requerida | Descripción                                              |
-| ------- | -------- | --------- | -------------------------------------------------------- |
-| `title` | `string` | Sí        | Texto prellenado para compartir (X, LinkedIn, WhatsApp). |
-| `url`   | `string` | Sí        | URL absoluta o canónica del artículo.                    |
+| Prop              | Tipo           | Requerida | Descripción                                                                       |
+| ----------------- | -------------- | --------- | --------------------------------------------------------------------------------- |
+| `title`           | `string`       | Sí        | Texto prellenado para compartir (X, LinkedIn, WhatsApp).                          |
+| `url`             | `string`       | Sí        | URL absoluta o canónica del artículo.                                             |
+| `lang`            | `"es" \| "en"` | No        | Idioma activo para componer `ArticlePlayer`. Default: se deriva de la ruta.       |
+| `articleSelector` | `string`       | No        | Selector del artículo que lee `ArticlePlayer`. Default: `[data-article-content]`. |
 
 ## Comportamiento
 
 - Enlaces externos con `target="_blank"` y `rel="noopener noreferrer"`.
 - `shareRootId` único vía `randomUUID()` para evitar colisiones si hay varias barras en la misma página (página de auditoría).
-- Labels visibles y `aria-label` se resuelven en ES/EN con `localeFromPathname`.
+- Labels visibles, `aria-label` y tooltips visuales se resuelven en ES/EN con `localeFromPathname`.
+- Los tooltips usan markup local con Tailwind (`group-hover`) en vez de `title` nativo para evitar inconsistencias de navegador o WebView.
+- Al hacer click sobre un control, el tooltip se oculta aunque el cursor siga encima; se reactiva al salir y volver a hacer hover.
+- La raíz usa `flex` con `justify-between`: el grupo social queda a la izquierda y `ArticlePlayer` se ubica a la derecha.
+- Compone `ArticlePlayer` para escuchar el artículo con Web Speech API cuando el navegador lo soporta.
 
 ## Decisiones de diseño
 
 - Sin SDK de redes: solo URLs de intent/share estándar.
+- La reproducción TTS se mantiene dentro de la barra porque es una acción secundaria del artículo y comparte contexto con los controles sociales.
 
 ## Deuda técnica conocida
 
