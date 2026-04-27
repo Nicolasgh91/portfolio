@@ -300,6 +300,38 @@ const related = allPosts
             </article>
           </div>
 
+          {
+            post.data.references && post.data.references.length > 0 && (
+              <section class="mt-16 border-t border-[color:var(--border-normal)] pt-8">
+                <h2 class="mb-6 text-xl font-semibold text-[var(--text-primary)]">
+                  {isEnglish
+                    ? "Sources and references"
+                    : "Fuentes y referencias"}
+                </h2>
+                <ol class="list-inside list-decimal space-y-3 text-sm text-[var(--text-muted)]">
+                  {post.data.references.map((ref) => (
+                    <li>
+                      {ref.url ? (
+                        <a
+                          href={ref.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="underline transition-colors hover:text-[var(--accent)]"
+                        >
+                          {ref.title}
+                        </a>
+                      ) : (
+                        <span>{ref.title}</span>
+                      )}
+                      {ref.author && <span> — {ref.author}</span>}
+                      {ref.year && <span> ({ref.year})</span>}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )
+          }
+
           <div class="reveal reveal--scale" style="--reveal-delay: 300ms">
             <ArticleFooter
               tags={post.data.tags}

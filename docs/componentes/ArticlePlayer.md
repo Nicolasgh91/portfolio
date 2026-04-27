@@ -21,6 +21,7 @@
 - Al hacer click sobre el botón o el badge, el tooltip se oculta aunque el cursor siga encima; se reactiva al salir y volver a hacer hover.
 - El tooltip del badge solo puede aparecer mientras el badge está visible, porque el wrapper completo se oculta fuera del estado de reproducción.
 - La barra de progreso se renderiza como extensión compacta del control, usando tokens de marca (`--accent`, `--accent-bg`, `--accent-border`, `--text-muted`) para respetar dark/light/high contrast.
+- En mobile, el progreso usa un ancho reducido y oculta el tiempo visible hasta `sm` para mantenerse en la misma línea que los íconos de `ShareBar`.
 - La inicialización se difiere con `IntersectionObserver` sobre `[data-article-player]`, equivalente al objetivo de `client:visible` sin crear una isla de framework.
 - Si existe `audioSrc`, el componente usa un `HTMLAudioElement` creado por script y controla play/pausa/velocidad/progreso sobre el MP3.
 - Si no existe `audioSrc`, usa Web Speech API como fallback y muestra progreso aproximado por chunks.

@@ -20,7 +20,8 @@
 - Labels visibles, `aria-label` y tooltips visuales se resuelven en ES/EN con `localeFromPathname`.
 - Los tooltips usan markup local con Tailwind (`group-hover`) en vez de `title` nativo para evitar inconsistencias de navegador o WebView.
 - Al hacer click sobre un control, el tooltip se oculta aunque el cursor siga encima; se reactiva al salir y volver a hacer hover.
-- La raíz usa `flex` con `justify-between`: el grupo social queda a la izquierda y `ArticlePlayer` se ubica a la derecha.
+- La raíz usa `flex-nowrap`, `justify-between` y `mb-6`: el grupo social queda a la izquierda, `ArticlePlayer` se ubica a la derecha y el bloque deja `1.5rem` de separación inferior antes del contenido siguiente.
+- En mobile los botones sociales bajan a `2rem` y el gap se reduce para mantener el reproductor en la misma línea que los íconos.
 - Compone `ArticlePlayer` para escuchar el artículo con Web Speech API cuando el navegador lo soporta.
 
 ## Decisiones de diseño

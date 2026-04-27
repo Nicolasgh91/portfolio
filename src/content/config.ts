@@ -254,6 +254,29 @@ const blog = defineCollection({
       .default("transversal")
       .describe("Vertical de negocio para badge y segmentación."),
     slides: blogSlidesSchema.optional(),
+    references: z
+      .array(
+        z.object({
+          title: z
+            .string()
+            .describe("Título de la fuente o referencia citada."),
+          url: z
+            .string()
+            .url()
+            .optional()
+            .describe("URL pública de la fuente, si existe."),
+          author: z
+            .string()
+            .optional()
+            .describe("Autor, entidad o publicación responsable de la fuente."),
+          year: z
+            .number()
+            .optional()
+            .describe("Año de publicación o consulta de la referencia."),
+        }),
+      )
+      .optional()
+      .describe("Bibliografía o fuentes del artículo renderizadas al final."),
   }),
 });
 
