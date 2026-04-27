@@ -12,7 +12,7 @@
 
 ## Comportamiento
 
-- Navegación principal: logo, enlaces (Inicio, Servicios B2B con submenú anclado a `/servicios#…` — p. ej. `#agentes-ia`, `#ecommerce`, `#automatizacion`; el ítem “Sitios web” enlaza a `/plantillas`, Blog, Perfil), CTA "Diagnóstico gratis".
+- Navegación principal: logo, enlaces (Inicio, Servicios B2B con submenú de una sola opción: “Sitios web”, enlazada a `/plantillas` o `/en/templates`, Blog, Perfil), CTA "Diagnóstico gratis".
 - **Tema:** botón que llama `nhTheme.toggle()` (definido en `Layout.astro`): alterna clase `light` en `<html>` y persiste en `localStorage`.
 - **Idioma:** el enlace navega a la ruta alterna de `locale-path.ts`; labels, aria y submenú se resuelven por `localeFromPathname`. `nhLang` queda como sincronizador de nodos `data-en` / `data-es` cuando la página ya cargó.
 - **Accesibilidad desktop:** `nhA11y.togglePanel()` (botón `#a11y-btn`) abre/cierra `#a11y-panel` horizontal bajo el header. El panel controla escala de fuente, contraste y movimiento.
@@ -21,7 +21,7 @@
 - **Drawer mobile — fondo:** `.nav-drawer` usa capa propia con alfa **0.92**: dark `hsla(240, 10%, 6%, 0.92)`, light `hsla(0, 0%, 100%, 0.92)` vía `:root.light`. No emplea `--nav-bg` para no acoplar el drawer al glass de `.nav` ni tocar el token global.
 - **Drawer mobile — scroll:** si el menú está abierto y `window.scrollY > 10`, el drawer se cierra por completo (misma rutina que `Escape` y click en links del drawer), patrón habitual en apps móviles.
 - **Dropdown servicios (click en el botón):** alterna abrir/cerrar con `if (servicesMenu?.hasAttribute("hidden")) { openServices(); } else { closeServices(); }`. Se evita un ternario como sentencia suelta porque `@typescript-eslint/no-unused-expressions` lo rechaza (valor del ternario descartado).
-- **Keyboard nav — dropdown servicios:** `ArrowUp`/`ArrowDown` para navegar ítems, `Escape` para cerrar y devolver foco al botón, `Tab` para cerrar y continuar.
+- **Keyboard nav — dropdown servicios:** `ArrowUp`/`ArrowDown` enfoca el único ítem disponible (“Sitios web”), `Escape` cierra y devuelve foco al botón, `Tab` cierra y continúa.
 - **Keyboard nav — drawer mobile:** `Escape` cierra el drawer y devuelve foco al burger. Links dentro del drawer cierran el drawer al hacer click.
 
 ## Decisiones de diseño
