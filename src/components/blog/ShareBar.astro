@@ -8,6 +8,7 @@ interface Props {
   url: string;
   lang?: "es" | "en";
   articleSelector?: string;
+  audioSrc?: string;
 }
 
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
@@ -16,6 +17,7 @@ const {
   url,
   lang = isEnglish ? "en" : "es",
   articleSelector = "[data-article-content]",
+  audioSrc,
 } = Astro.props;
 const shareRootId = `share-bar-${randomUUID()}`;
 const xShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
@@ -121,7 +123,11 @@ const tooltipClass =
     </span>
   </div>
 
-  <ArticlePlayer lang={lang} articleSelector={articleSelector} />
+  <ArticlePlayer
+    lang={lang}
+    articleSelector={articleSelector}
+    audioSrc={audioSrc}
+  />
 </div>
 
 <script>

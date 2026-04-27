@@ -2,9 +2,10 @@
 interface Props {
   lang: "es" | "en";
   articleSelector?: string;
+  audioSrc?: string;
 }
 
-const { lang, articleSelector = "article" } = Astro.props;
+const { lang, articleSelector = "article", audioSrc } = Astro.props;
 const speechLang = lang === "es" ? "es-AR" : "en-US";
 const listenLabel = lang === "es" ? "Escuchar" : "Listen";
 const pauseLabel = lang === "es" ? "Pausar" : "Pause";
@@ -18,6 +19,7 @@ const playerTooltipClass =
   data-article-player
   data-lang={speechLang}
   data-article-selector={articleSelector}
+  data-audio-src={audioSrc}
   data-label-listen={listenLabel}
   data-label-pause={pauseLabel}
   data-label-resume={resumeLabel}
@@ -105,7 +107,7 @@ const playerTooltipClass =
   ) => root.dataset[`label${key[0].toUpperCase()}${key.slice(1)}`] ?? "";
 
   const getVoicesForLang = (lang: string) => {
-    const voices = speechSynthesis.getVoices();
+    const voices = window.speechSynthesis.getVoices();
     const langPrefix = lang.slice(0, 2).toLowerCase();
     return (
       voices.find((voice) => voice.lang.toLowerCase() === lang.toLowerCase()) ??
@@ -119,17 +121,20 @@ const playerTooltipClass =
     callback: (voice: SpeechSynthesisVoice | null) => void,
   ) => {
     const voice = getVoicesForLang(lang);
-    if (voice || speechSynthesis.getVoices().length > 0) {
+    if (voice || window.speechSynthesis.getVoices().length > 0) {
       callback(voice);
       return;
     }
 
     const onVoicesChanged = () => {
-      speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      window.speechSynthesis.removeEventListener(
+        "voiceschanged",
+        onVoicesChanged,
+      );
       callback(getVoicesForLang(lang));
     };
 
-    speechSynthesis.addEventListener("voiceschanged", onVoicesChanged, {
+    window.speechSynthesis.addEventListener("voiceschanged", onVoicesChanged, {
       once: true,
     });
   };
@@ -184,11 +189,13 @@ const playerTooltipClass =
 
     const lang = root.dataset.lang ?? "es-AR";
     const selector = root.dataset.articleSelector ?? "article";
+    const audioSrc = root.dataset.audioSrc;
     let state: PlayerState = "idle";
     let chunks: string[] = [];
     let chunkIndex = 0;
     let rateIndex = 0;
     let activeVoice: SpeechSynthesisVoice | null = null;
+    let audio: HTMLAudioElement | null = null;
 
     root.querySelectorAll("[data-tooltip-root]").forEach((tooltipRoot) => {
       const tooltip = tooltipRoot.querySelector("[data-tooltip-content]");
@@ -220,8 +227,23 @@ const playerTooltipClass =
       toggleTooltip.textContent = label;
     };
 
+    const getAudio = () => {
+      if (!audioSrc) return null;
+      if (!audio) {
+        audio = new Audio(audioSrc);
+        audio.preload = "metadata";
+        audio.addEventListener("ended", () => setState("idle"));
+        audio.addEventListener("error", () => setState("idle"));
+      }
+      return audio;
+    };
+
     const cancel = () => {
-      speechSynthesis.cancel();
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
       chunks = [];
       chunkIndex = 0;
       setState("idle");
@@ -249,11 +271,11 @@ const playerTooltipClass =
       };
       utterance.onerror = cancel;
 
-      speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(utterance);
       setState("playing");
     };
 
-    const start = () => {
+    const startSpeech = () => {
       const text = getArticleText(selector);
       chunks = chunkText(text);
       chunkIndex = 0;
@@ -265,35 +287,69 @@ const playerTooltipClass =
       });
     };
 
-    toggle.addEventListener("click", () => {
+    const startAudio = async () => {
+      const activeAudio = getAudio();
+      if (!activeAudio) return;
+
+      activeAudio.playbackRate = rateOptions[rateIndex];
+
+      try {
+        await activeAudio.play();
+        setState("playing");
+      } catch {
+        setState("idle");
+      }
+    };
+
+    toggle.addEventListener("click", async () => {
       if (state === "playing") {
-        speechSynthesis.pause();
+        if (audioSrc) {
+          getAudio()?.pause();
+        } else {
+          window.speechSynthesis.pause();
+        }
         setState("paused");
         return;
       }
 
       if (state === "paused") {
-        speechSynthesis.resume();
-        setState("playing");
+        if (audioSrc) {
+          await startAudio();
+        } else {
+          window.speechSynthesis.resume();
+          setState("playing");
+        }
         return;
       }
 
-      start();
+      if (audioSrc) {
+        await startAudio();
+      } else {
+        startSpeech();
+      }
     });
 
     rateButton.addEventListener("click", () => {
       rateIndex = (rateIndex + 1) % rateOptions.length;
       rateLabel.textContent = `${rateOptions[rateIndex]}x`;
+      const activeAudio = getAudio();
+      if (activeAudio) activeAudio.playbackRate = rateOptions[rateIndex];
     });
 
     window.addEventListener("beforeunload", cancel, { once: true });
   };
 
-  if ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) {
-    const players = Array.from(
-      document.querySelectorAll("[data-article-player]"),
-    ).filter((root): root is HTMLElement => root instanceof HTMLElement);
+  const supportsSpeech =
+    "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  const players = Array.from(
+    document.querySelectorAll("[data-article-player]"),
+  ).filter(
+    (root): root is HTMLElement =>
+      root instanceof HTMLElement &&
+      (Boolean(root.dataset.audioSrc) || supportsSpeech),
+  );
 
+  if (players.length > 0) {
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {

@@ -1,0 +1,98 @@
+{
+  "version": "1.0",
+  "engine": "google-cloud-tts-neural2",
+  "engine_version": "1",
+  "generated": "2026-04-27T15:12:05.522Z",
+  "articles": {
+    "ia-local-vs-cloud": {
+      "es": {
+        "file": "ia-local-vs-cloud.es.mp3",
+        "hash": "315e4769",
+        "voice": "es-US-Neural2-B",
+        "duration_seconds": 140,
+        "size_bytes": 1123008,
+        "generated_at": "2026-04-27T15:04:23.324Z"
+      },
+      "en": {
+        "file": "ia-local-vs-cloud.en.mp3",
+        "hash": "21d0f7bb",
+        "voice": "en-US-Neural2-J",
+        "duration_seconds": 138,
+        "size_bytes": 1105536,
+        "generated_at": "2026-04-27T15:04:29.620Z"
+      }
+    },
+    "analista-funcional-era-ia": {
+      "es": {
+        "file": "analista-funcional-era-ia.es.mp3",
+        "hash": "83a312fe",
+        "voice": "es-US-Neural2-A",
+        "duration_seconds": 255,
+        "size_bytes": 1986816,
+        "generated_at": "2026-04-27T15:07:57.864Z"
+      },
+      "en": {
+        "file": "analista-funcional-era-ia.en.mp3",
+        "hash": "2133e1ca",
+        "voice": "en-US-Neural2-F",
+        "duration_seconds": 227,
+        "size_bytes": 1946496,
+        "generated_at": "2026-04-27T15:08:08.249Z"
+      }
+    },
+    "arquitectura-sistemas-gran-escala": {
+      "es": {
+        "file": "arquitectura-sistemas-gran-escala.es.mp3",
+        "hash": "93da2920",
+        "voice": "es-US-Neural2-A",
+        "duration_seconds": 657,
+        "size_bytes": 5226240,
+        "generated_at": "2026-04-27T15:08:33.015Z"
+      },
+      "en": {
+        "file": "arquitectura-sistemas-gran-escala.en.mp3",
+        "hash": "a5290321",
+        "voice": "en-US-Neural2-F",
+        "duration_seconds": 371,
+        "size_bytes": 3124992,
+        "generated_at": "2026-04-27T15:08:47.244Z"
+      }
+    },
+    "caso-huelladelfuego": {
+      "es": {
+        "file": "caso-huelladelfuego.es.mp3",
+        "hash": "16687c33",
+        "voice": "es-US-Neural2-A",
+        "duration_seconds": 173,
+        "size_bytes": 1492416,
+        "generated_at": "2026-04-27T15:08:58.208Z"
+      },
+      "en": {
+        "file": "caso-huelladelfuego.en.mp3",
+        "hash": "143655f3",
+        "voice": "en-US-Neural2-F",
+        "duration_seconds": 164,
+        "size_bytes": 1482048,
+        "generated_at": "2026-04-27T15:09:09.414Z"
+      }
+    },
+    "diseniar-microservicios": {
+      "es": {
+        "file": "diseniar-microservicios.es.mp3",
+        "hash": "1a1d79e9",
+        "voice": "es-US-Neural2-A",
+        "duration_seconds": 1742,
+        "size_bytes": 14065728,
+        "generated_at": "2026-04-27T15:11:40.539Z"
+      },
+      "en": {
+        "file": "diseniar-microservicios.en.mp3",
+        "hash": "9d5e9e5d",
+        "voice": "en-US-Neural2-F",
+        "duration_seconds": 475,
+        "size_bytes": 4090944,
+        "generated_at": "2026-04-27T15:12:05.521Z"
+      }
+    }
+  }
+}
