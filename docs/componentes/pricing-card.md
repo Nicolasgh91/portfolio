@@ -13,24 +13,25 @@ Tarjeta de plan de precios para el catálogo de landings.
 
 ## Variantes
 
-- **Normal:** borde `var(--border-subtle)`, fondo `var(--bg-secondary)`; hover `border-white/12`, `-translate-y-0.5`, transición 300ms.
-- **Recomendado** (`plan.recommended`): fondo `var(--accent-bg)`, borde `var(--accent-border)`, escala base `1.02`, hover misma escala + `-translate-y-0.5`, transición 300ms. Colores de acento alineados a la paleta global (`--accent`, `--color-on-accent` en el sitio, ~`#F5B800` en modo oscuro), sin duplicar hex paralelos.
+- **Normal:** fondo `var(--bg-surface-container-low)`; hover `-translate-y-0.5` y subida tonal.
+- **Recomendado** (`plan.recommended`): fondo `var(--bg-surface-container-lowest)`, elevación extra, badge superior y glow ambiental con `--accent-glow` (sin borde duro).
 
 ## Badge
 
-Si `recommended` es true, el texto del badge sale de `plan.recommendedLabel` / `plan.recommendedLabelEn` (datos). Si faltan, fallback **Recomendado** / **Recommended**. Estilo: badge sólido `bg-[var(--accent)]`, texto `var(--color-on-accent)`, uppercase compacto. **Posicionamiento:** contenedor `absolute -top-3 left-0 right-0 flex justify-center` con `pointer-events-none` para centrar sin chocar con el `scale` del padre (evita `left-1/2` + `translate` sobre el transform del card). El `<span>` del badge es el portador de `data-es` / `data-en`. Si en el futuro el badge fuera un enlace o botón, añadir `pointer-events-auto` al elemento interactivo interno.
+Si `recommended` es true, el texto del badge sale de `plan.recommendedLabel` / `plan.recommendedLabelEn` (datos). Si faltan, fallback **Recomendado** / **Recommended**. Estilo: badge sólido `bg-[var(--accent)]`, texto `var(--color-on-accent)`. Posicionamiento centrado en tope con `pointer-events-none`.
 
 ## Contenido
 
 - `h3` con nombre del plan
-- Subtítulo (`subtitle`); precio: si `plan.price` es número, `$` + `toLocaleString('es-AR')`; `priceDetail` opcional
-- Separador horizontal (`h-px`, opacidad baja) entre bloque de precio y lista
+- `pitch` como propuesta de valor principal (ES/EN)
+- Separador horizontal (`h-px`, opacidad baja) entre bloque de pitch y lista; márgenes `mt-[19px] mb-6` respecto al bloque superior para un hueco vertical compacto respecto a la lista
 - Lista de features: cada ítem incluye un **SVG check** inline (círculo + stroke en color acento vía tokens), sin pseudo-elementos globales en CSS
-- **CTA obligatorio:** enlace con `plan.ctaText`, `plan.ctaTextEn` y `plan.ctaHref`; clases `btn-primary w-full font-semibold` (variante primaria del sistema de botones).
+- Sin CTA en la tarjeta: los campos `ctaText` / `ctaHref` del plan siguen en datos y schema para SSOT u otros usos, pero no se renderizan aquí.
+- **A11y recomendado:** la tarjeta recomendada anuncia jerarquía con texto `sr-only` y etiqueta aria de plan recomendado.
 
 ## i18n
 
-Textos visibles resueltos por `localeFromPathname`; `data-es` / `data-en` quedan como metadatos para el toggle global. Features usan `features` y `featuresEn` alineados por índice. Los CTAs que apuntan a `/servicios` se localizan a `/en/services` en rutas EN, y `priceDetail` tiene equivalentes EN por `id` del plan.
+Textos visibles resueltos por `localeFromPathname`; `data-es` / `data-en` quedan como metadatos para el toggle global. Features usan `features` y `featuresEn` alineados por índice.
 
 ## Estado
 

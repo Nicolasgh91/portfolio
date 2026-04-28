@@ -10,6 +10,13 @@ export const pricingPlanSchema = z.object({
   nameEn: z.string().optional(),
   subtitle: z.string(),
   subtitleEn: z.string().optional(),
+  pitch: z
+    .string()
+    .describe("Propuesta de valor breve del plan en español (sin precio)."),
+  pitchEn: z
+    .string()
+    .optional()
+    .describe("Versión en inglés de la propuesta de valor del plan."),
   price: z
     .union([z.number().int().nonnegative(), z.string()])
     .describe(

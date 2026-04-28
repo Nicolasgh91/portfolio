@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { Fragment } from "astro/jsx-runtime";
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
@@ -16,6 +17,9 @@ import { pricingPlans } from "../data/pricing-plans";
 import { resolveTemplateDemoUrl } from "../lib/resolve-template-demo-url";
 import { localeFromPathname } from "../lib/locale-path";
 import site from "../data/site.json";
+import heroTemplatesBackdrop from "../assets/templates/hero_templates-v2.webp";
+const heroNoiseBg =
+  'url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%224%22%20stitchTiles%3D%22stitch%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%20opacity%3D%220.04%22/%3E%3C/svg%3E")';
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const templatesHref = isEnglish ? "/en/templates" : "/plantillas";
 const servicesContactHref = isEnglish
@@ -73,6 +77,25 @@ const plansById = Object.fromEntries(
   pricingPlans.map((p) => [p.id, p]),
 ) as Record<(typeof plansOrdered)[number], (typeof pricingPlans)[0]>;
 const orderedPricing = plansOrdered.map((id) => plansById[id]);
+
+const pricingPlansJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: isEnglish ? "Landing plans" : "Planes de landing",
+  serviceType: isEnglish
+    ? "Landing website plans for SMEs"
+    : "Planes de sitios landing para pymes",
+  areaServed: "AR",
+  url: `${siteUrl}${templatesHref}#planes`,
+  offers: orderedPricing.map((plan) => ({
+    "@type": "Offer",
+    name: isEnglish ? (plan.nameEn ?? plan.name) : plan.name,
+    description: isEnglish ? (plan.pitchEn ?? plan.pitch) : plan.pitch,
+    url: `${siteUrl}${templatesHref}#planes`,
+    category: isEnglish ? "Website plan" : "Plan web",
+    availability: "https://schema.org/InStock",
+  })),
+};
 
 const planOrderClass: Record<(typeof plansOrdered)[number], string> = {
   basico: "md:order-1",
@@ -151,53 +174,190 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
       type="application/ld+json"
       set:html={JSON.stringify(catalogFaqJsonLd)}
     />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(pricingPlansJsonLd)}
+    />
   </Fragment>
   <Nav activePage="servicios" />
   <main id="main-content">
-    <div class="page-container pb-[var(--sp-xl)]">
-      <section
-        class="hero"
-        aria-label={isEnglish ? "Template catalog" : "Catálogo de plantillas"}
+    <section
+      class="templates-hero section-dark reveal reveal--scale bg-slate-950"
+      style="--reveal-delay: 0ms"
+      aria-label={isEnglish ? "Template catalog" : "Catálogo de plantillas"}
+    >
+      <div
+        class="templates-hero__bg-image pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        <h1
-          class="max-w-3xl font-[family-name:var(--font-display)] text-[clamp(36px,5.5vw,68px)] font-extrabold leading-[1.1] tracking-[-2px] text-[var(--text-primary)]"
-          data-es="Comenzá tu emprendimiento con un sitio y posicionamiento estratégico"
-          data-en="Start your business with a website and strategic positioning"
-        >
-          {
-            isEnglish
-              ? "Start your business with a website"
-              : "Comenzá tu emprendimiento con un sitio"
-          }<br />
-          {isEnglish ? "and " : "y "}<em
-            >{
-              isEnglish
-                ? "strategic positioning"
-                : "posicionamiento estratégico"
-            }</em
-          >
-        </h1>
-        <p
-          class="hero-sub mt-4 max-w-2xl text-lg font-light text-[var(--text-muted)]"
-          data-es="Plantillas profesionales optimizadas para SEO y diseñadas para convertir."
-          data-en="Professional templates optimized for SEO and designed to convert."
-        >
-          {
-            isEnglish
-              ? "Professional templates optimized for SEO and designed to convert."
-              : "Plantillas profesionales optimizadas para SEO y diseñadas para convertir."
-          }
-        </p>
-      </section>
+        <Image
+          src={heroTemplatesBackdrop}
+          alt=""
+          width={1536}
+          height={1024}
+          widths={[640, 768, 1024, 1280, 1536]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover"
+        />
+      </div>
+      <div
+        class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/85 via-slate-950/75 to-transparent"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute inset-0 z-[2] opacity-[0.35] motion-reduce:hidden"
+        aria-hidden="true"
+        style={`background-image:${heroNoiseBg}`}
+      >
+      </div>
+      <div
+        class="hero-glow pointer-events-none absolute -top-28 left-1/2 z-[2] h-[400px] w-[600px] -translate-x-1/2 motion-reduce:hidden"
+        aria-hidden="true"
+        style="background: radial-gradient(ellipse, hsla(var(--accent-h), var(--accent-s), 56%, 0.12) 0%, transparent 70%);"
+      >
+      </div>
 
+      <div class="templates-hero__inner">
+        <div class="templates-hero__copy">
+          <div class="templates-hero__topline">
+            <span
+              class="block text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
+              data-es="Plantillas B2B · Producción en 2 semanas"
+              data-en="B2B templates · Live in 2 weeks"
+            >
+              {
+                isEnglish
+                  ? "B2B templates · Live in 2 weeks"
+                  : "Plantillas B2B · Producción en 2 semanas"
+              }
+            </span>
+            <span
+              class="block text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]"
+              data-es="SEO técnico"
+              data-en="Technical SEO"
+            >
+              {isEnglish ? "Technical SEO" : "SEO técnico"}
+            </span>
+          </div>
+
+          <h1
+            class="font-display text-[clamp(2.4rem,5.1vw,4.2rem)] font-extrabold leading-[1.05] tracking-tight text-white"
+          >
+            {
+              isEnglish ? (
+                <>
+                  Templates ready
+                  <br />
+                  to sell from
+                  <br />
+                  day <em class="not-italic">one</em>.
+                </>
+              ) : (
+                <>
+                  Plantillas listas
+                  <br />
+                  para vender desde
+                  <br />
+                  el <em class="not-italic">primer día</em>.
+                </>
+              )
+            }
+          </h1>
+
+          <p
+            class="mt-6 max-w-lg font-body text-lg leading-relaxed text-slate-300"
+          >
+            {
+              isEnglish ? (
+                <>
+                  Designed for a specific industry, optimized for{" "}
+                  <em class="not-italic">Google</em> and built to{" "}
+                  <em class="not-italic">convert</em>. Every template comes from
+                  a real client case.
+                </>
+              ) : (
+                <>
+                  Diseñadas para una industria específica, optimizadas para{" "}
+                  <em class="not-italic">Google</em> y pensadas para{" "}
+                  <em class="not-italic">convertir</em>. Cada plantilla nace de
+                  un caso real.
+                </>
+              )
+            }
+          </p>
+        </div>
+
+        <div class="templates-hero__visual" aria-hidden="true">
+          <div class="templates-hero__mockup templates-hero__mockup--left">
+            <div class="templates-hero__mockup-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="templates-hero__mockup-content">
+              <div
+                class="templates-hero__thumb templates-hero__thumb--realestate"
+              >
+              </div>
+              <div class="templates-hero__line w-[78%]"></div>
+              <div class="templates-hero__line w-[58%]"></div>
+            </div>
+          </div>
+
+          <div class="templates-hero__mockup templates-hero__mockup--center">
+            <div class="templates-hero__mockup-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="templates-hero__mockup-content">
+              <div class="templates-hero__thumb templates-hero__thumb--health">
+                <span
+                  >{
+                    isEnglish
+                      ? "Boost your energy naturally"
+                      : "Energía natural para tu día"
+                  }</span
+                >
+              </div>
+              <div class="flex gap-2">
+                <div
+                  class="templates-hero__line templates-hero__line--accent w-[32%]"
+                >
+                </div>
+                <div class="templates-hero__line w-[52%]"></div>
+              </div>
+              <div class="templates-hero__line w-[68%]"></div>
+            </div>
+          </div>
+
+          <div class="templates-hero__mockup templates-hero__mockup--right">
+            <div class="templates-hero__mockup-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="templates-hero__mockup-content">
+              <div class="grid h-[72%] grid-cols-2 gap-2">
+                <div class="templates-hero__cell"></div>
+                <div class="templates-hero__cell"></div>
+                <div class="templates-hero__cell"></div>
+                <div class="templates-hero__cell templates-hero__cell--accent">
+                </div>
+              </div>
+              <div class="templates-hero__line w-[66%]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-container templates-index-stack pb-[var(--sp-2xl)]">
       <section
-        class="section mt-[var(--sp-xl)] scroll-mt-24 reveal reveal--scale"
+        class="templates-index-section scroll-mt-24 reveal reveal--scale"
         style="--reveal-delay: 0ms"
         aria-labelledby="plantillas-heading"
         id="plantillas"
       >
         <p
-          class="mb-2 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+          class="mb-3 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
           data-es="Plantillas"
           data-en="Templates"
         >
@@ -216,7 +376,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
           }
         </h2>
         <p
-          class="mt-2 max-w-2xl text-[var(--text-secondary)]"
+          class="mt-4 max-w-2xl text-[var(--text-secondary)] md:mt-5"
           data-es="Cada plantilla fue diseñada para un rubro y objetivo específico."
           data-en="Each template was designed for a specific industry and goal."
         >
@@ -229,7 +389,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
 
         <nav
           id="catalog-filters"
-          class="taxonomy mt-6"
+          class="taxonomy mt-10"
           aria-label={isEnglish ? "Filter by vertical" : "Filtro por vertical"}
         >
           <ul class="taxonomy__pills">
@@ -285,7 +445,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             </p>
           ) : (
             <Fragment>
-              <div class="relative mt-8">
+              <div class="relative mt-10">
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 z-[1] w-10 bg-gradient-to-r from-[var(--bg-primary)] to-transparent md:w-14"
                   aria-hidden="true"
@@ -296,7 +456,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
                 />
                 <div
                   id="catalog-carousel"
-                  class="relative z-0 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] md:gap-6 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
+                  class="relative z-0 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] md:gap-10 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
                 >
                   {sortedTemplatesWithDemo.map((t) => (
                     <PlantillaCarouselCard
@@ -350,79 +510,14 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
       </section>
 
       <section
-        class="section mt-[var(--sp-xl)] rounded-[var(--radius-lg)] bg-[var(--bg-tertiary)] px-6 py-10 reveal reveal--scale"
-        style="--reveal-delay: 0ms"
-        aria-labelledby="social-heading"
-      >
-        <h2
-          id="social-heading"
-          class="sr-only"
-          data-es="Métricas"
-          data-en="Metrics"
-        >
-          {isEnglish ? "Metrics" : "Métricas"}
-        </h2>
-        <div class="grid gap-8 md:grid-cols-3 md:gap-6">
-          <div class="text-center md:text-left">
-            <p
-              class="text-sm text-[var(--text-secondary)]"
-              data-es="Plantillas entregadas"
-              data-en="Templates delivered"
-            >
-              {isEnglish ? "Templates delivered" : "Plantillas entregadas"}
-            </p>
-            <p
-              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
-              data-es="50+"
-              data-en="50+"
-            >
-              50+
-            </p>
-          </div>
-          <div class="text-center md:text-left">
-            <p
-              class="text-sm text-[var(--text-secondary)]"
-              data-es="Tiempo de entrega"
-              data-en="Delivery time"
-            >
-              {isEnglish ? "Delivery time" : "Tiempo de entrega"}
-            </p>
-            <p
-              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
-              data-es="1–2 semanas"
-              data-en="1–2 weeks"
-            >
-              {isEnglish ? "1-2 weeks" : "1–2 semanas"}
-            </p>
-          </div>
-          <div class="text-center md:text-left">
-            <p
-              class="text-sm text-[var(--text-secondary)]"
-              data-es="Visibilidad en buscadores"
-              data-en="Search visibility"
-            >
-              {isEnglish ? "Search visibility" : "Visibilidad en buscadores"}
-            </p>
-            <p
-              class="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--text-primary)]"
-              data-es="Optimizado para Google"
-              data-en="Optimized for Google"
-            >
-              {isEnglish ? "Optimized for Google" : "Optimizado para Google"}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="section mt-[var(--sp-xl)] scroll-mt-24 reveal reveal--scale"
+        class="templates-index-section scroll-mt-24 reveal reveal--scale"
         style="--reveal-delay: 0ms"
         id="planes"
         aria-labelledby="planes-heading"
       >
         <div class="mx-auto max-w-3xl text-center">
           <p
-            class="mb-2 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+            class="mb-3 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
             data-es="Planes"
             data-en="Plans"
           >
@@ -441,18 +536,18 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             }
           </h2>
           <p
-            class="mt-2 text-[var(--text-secondary)]"
-            data-es="Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos."
-            data-en="Each plan includes what you need to get started. No surprises or hidden costs."
+            class="mt-4 text-[var(--text-secondary)] md:mt-5"
+            data-es="Cada plan tiene un alcance claro. El precio lo conversamos en una llamada de 30 minutos."
+            data-en="Each plan has a clear scope. We discuss pricing in a 30-minute call."
           >
             {
               isEnglish
-                ? "Each plan includes what you need to get started. No surprises or hidden costs."
-                : "Cada plan incluye lo necesario para comenzar. Sin sorpresas ni costos ocultos."
+                ? "Each plan has a clear scope. We discuss pricing in a 30-minute call."
+                : "Cada plan tiene un alcance claro. El precio lo conversamos en una llamada de 30 minutos."
             }
           </p>
         </div>
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <div class="mt-12 grid gap-8 md:grid-cols-3 md:gap-10">
           {
             orderedPricing.map((plan) => (
               <PricingCard plan={plan} orderClass={planOrderClass[plan.id]} />
@@ -462,7 +557,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
       </section>
 
       <section
-        class="section mx-auto mt-[var(--sp-xl)] max-w-4xl reveal reveal--scale"
+        class="templates-index-section mx-auto max-w-4xl scroll-mt-24 reveal reveal--scale"
         style="--reveal-delay: 0ms"
         aria-labelledby="faq-heading"
       >
@@ -480,7 +575,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
       </section>
 
       <section
-        class="section relative isolate mt-[var(--sp-xl)] reveal reveal--scale"
+        class="templates-index-section relative isolate scroll-mt-24 reveal reveal--scale"
         style="--reveal-delay: 0ms"
         aria-labelledby="plantillas-cta-heading"
       >
@@ -493,7 +588,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
           >
           </div>
           <p
-            class="relative mb-3 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
+            class="relative mb-4 text-xs font-medium uppercase tracking-[2px] text-[var(--accent)]"
             data-es="Listo para empezar"
             data-en="Ready to start"
           >
@@ -512,7 +607,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
             }
           </h2>
           <p
-            class="relative mx-auto mt-4 max-w-xl text-[var(--text-secondary)]"
+            class="relative mx-auto mt-5 max-w-xl text-[var(--text-secondary)] md:mt-6"
             data-es="30 minutos. Sin compromiso. Te decimos exactamente dónde está la pérdida y cómo resolverla."
             data-en="30 minutes. No strings attached. We show you exactly where you're losing value and how to fix it."
           >

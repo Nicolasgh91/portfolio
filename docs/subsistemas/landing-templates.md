@@ -18,6 +18,26 @@
 - **Mapeo:** [`template-carousel-images.ts`](../../src/data/template-carousel-images.ts) — registro explícito cuando el nombre de archivo no coincide con el slug (ej. `viandas.webp` → `menu-digital-viandas`).
 - El campo Zod `thumbnail` no duplica este mapeo; sirve para rutas `/public` u otras URLs si otro flujo las necesita.
 
+## Hero del catálogo `/plantillas`
+
+- El hero vive inline en [`src/pages/plantillas.astro`](../../src/pages/plantillas.astro) y adopta composición consistente con Home (copy + visual mockup en dos columnas para desktop).
+- Estructura funcional:
+  - Fondo del hero con `<Image />` (Astro assets) desde `src/assets/templates/hero_templates-v2.webp` en contenedor `.templates-hero__bg-image` con **`mask-image`** linear hacia transparencia inferior (y prefijo **`-webkit-mask-image`**).
+  - Overlay vertical suave desde arriba; capa de ruido + glow; sin gradiente inferior pesado encima de la imagen (la máscara hace la fusión con el fondo).
+  - Línea superior sobre `h1` con dos `span` usando utilitarias del patrón **`SectionLabel`** (`block text-xs font-bold uppercase tracking-widest text-[var(--accent-text)]`), sin pill y sin clases custom de kicker.
+  - Copy: `h1` en `text-white` con `<em class="not-italic text-[var(--accent-text)]">`; párrafo introductorio con `em` y el mismo token donde aplica contraste con [`talento`](../../src/pages/talento.astro) / [`servicios`](../../src/pages/servicios.astro). Para conservar estos `em`, el `h1` y el párrafo no usan `data-es/data-en` (evita que el switch de idioma los sobrescriba como texto plano).
+  - Sin CTA en hero (sin botones “Ver plantillas / Ver planes”).
+  - Mockups decorativos (`.templates-hero__mockup*`) visibles solo en desktop.
+  - Proporción horizontal calibrada para desktop (ancho/espaciado consistente con hero de Home) y bloque de copy centrado verticalmente.
+- Restricciones aplicadas:
+  - Sin pills/chips de hero.
+  - Sin bloque de métricas en el hero.
+  - Sin colores hardcodeados para acento funcional; el resaltado se resuelve con utilitarias + `--accent-text` para respetar tema (`light` naranja, default/dark ámbar).
+
+## Cuerpo del índice (debajo del hero)
+
+- El contenido principal mantiene `.page-container` estándar y usa `templates-index-stack` + `templates-index-section` en [`tokens.css`](../../src/styles/tokens.css), aplicados en [`plantillas.astro`](../../src/pages/plantillas.astro), para reforzar solo el ritmo vertical entre plantillas / planes / FAQ / CTA. Se sostienen gaps amplios en carrusel (`gap-8` / `md:gap-10`) y en grid de planes (`gap-8` / `md:gap-10`), sin comprimir el ancho horizontal del bloque.
+
 ## Strip de demos en la home
 
 - **Datos:** mismos `landingTemplates` + [`resolveTemplateDemoUrl`](../../src/lib/resolve-template-demo-url.ts) + `PUBLIC_TEMPLATE_PYME_URL` (fallback como en `plantillas.astro`). Solo entradas **`status === 'available'`** y con demo resuelto (no `null`).

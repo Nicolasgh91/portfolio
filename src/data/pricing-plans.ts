@@ -7,6 +7,10 @@ const rawPricingPlans = [
     nameEn: "Basic",
     subtitle: "Una landing page lista para vender",
     subtitleEn: "A landing page ready to sell",
+    pitch:
+      "Ideal para validar una idea o tener presencia online en una semana.",
+    pitchEn:
+      "Ideal to validate an idea or have an online presence in one week.",
     price: 30_000,
     priceDetail: "pago único por página",
     features: [
@@ -24,8 +28,8 @@ const rawPricingPlans = [
       "1 revision round",
     ],
     recommended: false,
-    ctaText: "Empezar con Básico",
-    ctaTextEn: "Start with Basic",
+    ctaText: "Coordinar llamada",
+    ctaTextEn: "Book a call",
     ctaHref: "/servicios#contacto",
   },
   {
@@ -34,6 +38,10 @@ const rawPricingPlans = [
     nameEn: "Available template",
     subtitle: "Diseño listo para personalizar tu rubro",
     subtitleEn: "Design ready to customize for your industry",
+    pitch:
+      "Para quien necesita salir rápido con una base profesional ya probada.",
+    pitchEn:
+      "For those who need to launch fast with a proven professional base.",
     price: 70_000,
     priceDetail: "por única vez — primer mes de mantenimiento incluido",
     features: [
@@ -55,8 +63,8 @@ const rawPricingPlans = [
     recommended: true,
     recommendedLabel: "Más elegido",
     recommendedLabelEn: "Most chosen",
-    ctaText: "Empezar con Plantilla",
-    ctaTextEn: "Start with Template",
+    ctaText: "Coordinar llamada",
+    ctaTextEn: "Book a call",
     ctaHref: "/servicios#contacto",
   },
   {
@@ -65,6 +73,9 @@ const rawPricingPlans = [
     nameEn: "Full",
     subtitle: "Sitio a medida con soporte continuo",
     subtitleEn: "Custom site with ongoing support",
+    pitch:
+      "Para negocios que necesitan un sitio a medida con mantenimiento continuo.",
+    pitchEn: "For businesses that need a custom site with ongoing maintenance.",
     price: 85_000,
     priceDetail: "mensual",
     features: [
@@ -84,8 +95,8 @@ const rawPricingPlans = [
       "Priority support",
     ],
     recommended: false,
-    ctaText: "Hablar del plan Full",
-    ctaTextEn: "Discuss the Full plan",
+    ctaText: "Coordinar llamada",
+    ctaTextEn: "Book a call",
     ctaHref: "/servicios#contacto",
   },
 ] as const;
