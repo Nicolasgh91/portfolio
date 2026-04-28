@@ -20,6 +20,7 @@
 | [decisiones/adr-002-sitio-docs.md](./decisiones/adr-002-sitio-docs.md)                             | Starlight / sitio docs dedicado                                                                     | Diferido |
 | [decisiones/adr-003-servicios-tonal-layering.md](./decisiones/adr-003-servicios-tonal-layering.md) | Capas tonales + glass solo en oscuro en `/servicios`                                                | Activo   |
 | [decisiones/adr-004-chatbot-faq-ssot.md](./decisiones/adr-004-chatbot-faq-ssot.md)                 | SSOT conversacional del chatbot en `public/chatbot/data/faq.json`                                   | Activo   |
+| [decisiones/adr-005-pricing-ssot-por-dominio.md](./decisiones/adr-005-pricing-ssot-por-dominio.md) | SSOT de pricing separado: `pricing.json` para `/servicios` y `pricing-plans.ts` para `/plantillas`  | Activo   |
 | [subsistemas/landing-templates.md](./subsistemas/landing-templates.md)                             | Contrato Zod, demos, carrusel `/plantillas`, strip de demos en home (`template-carousel-images.ts`) | Activo   |
 | [subsistemas/seo-tecnico.md](./subsistemas/seo-tecnico.md)                                         | Sitemap único con `@astrojs/sitemap`, `robots.txt`, i18n ES/EN indexable y checklist operativo GSC  | Activo   |
 | [subsistemas/sistema-diseno.md](./subsistemas/sistema-diseno.md)                                   | Tokens, `.section-dark` / `.section-accent`, safelist, animación marquee                            | Activo   |

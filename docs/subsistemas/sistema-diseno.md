@@ -44,6 +44,7 @@ Ver subsistema dedicado: [`botones.md`](botones.md) (incluye `.btn-bounce` / `bo
 
 ## Catálogo de landings (excepciones en `tokens.css`)
 
+- Hero `/plantillas`: bloque `.templates-hero` (copy + stack visual decorativo) con estructura en dos capas: sección de fondo y wrapper `.templates-hero__inner` para contenido. El top line usa `.templates-hero__kicker` + `.templates-hero__seo-tag`; los acentos consumen `--accent` / `--accent-text` (sin hex de marca). Configuración actual alineada al ritmo del hero Home: fondo con imagen + gradiente vertical + refuerzo inferior + ruido + glow, sin CTAs en hero y grid desktop `1fr / 34rem`.
 - Carrusel en `/plantillas`: scrollbar oculto vía utilidades en el track (`[scrollbar-width:none]`, `[&::-webkit-scrollbar]:hidden`); la clase `.catalog-scroll-hide` puede seguir existiendo por compatibilidad.
 - `.plantilla-card[data-filtered]`: colapsa tarjetas filtradas sin `position: absolute` (compatibilidad con `scroll-snap`).
 - `.catalog-carousel__nav`: vidrio + blur sobre `.btn-secondary--sm` en flechas del carrusel; contraste con `html.light`.

@@ -13,47 +13,43 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 
 const nameEs = plan.name;
 const nameEn = plan.nameEn ?? plan.name;
-const subEs = plan.subtitle;
-const subEn = plan.subtitleEn ?? plan.subtitle;
+const pitchEs = plan.pitch;
+const pitchEn = plan.pitchEn ?? plan.pitch;
 const featuresEn = plan.featuresEn ?? plan.features;
 
 const isRecommended = plan.recommended;
 
 const badgeEs = plan.recommendedLabel ?? "Recomendado";
 const badgeEn = plan.recommendedLabelEn ?? "Recommended";
-
-const ctaEs = plan.ctaText;
-const ctaEn = plan.ctaTextEn ?? plan.ctaText;
-const ctaHref =
-  isEnglish && plan.ctaHref.startsWith("/servicios")
-    ? plan.ctaHref.replace("/servicios", "/en/services")
-    : plan.ctaHref;
-const priceDetailEnById: Record<string, string> = {
-  basico: "one-time payment per page",
-  plantilla: "one time — first maintenance month included",
-  full: "monthly",
-};
-
-const priceDisplay =
-  typeof plan.price === "number"
-    ? `$${plan.price.toLocaleString("es-AR")}`
-    : plan.price;
 ---
 
-<div
+<article
   class:list={[
-    "relative flex h-full flex-col rounded-[var(--radius-lg)] p-6",
+    "relative flex h-full flex-col overflow-visible rounded-[24px] p-8 transition-all duration-300",
     orderClass,
     isRecommended
-      ? "border border-[var(--accent-border)] bg-[var(--accent-bg)] scale-[1.02] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
-      : "border border-[color:var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-white/12 hover:-translate-y-0.5",
+      ? "bg-[var(--bg-surface-container-lowest)] -translate-y-2 shadow-[0_20px_48px_-24px_var(--accent-glow)] hover:-translate-y-3 hover:shadow-[0_26px_56px_-22px_var(--accent-glow)]"
+      : "bg-[var(--bg-surface-container-low)] hover:-translate-y-0.5 hover:bg-[var(--bg-tertiary)]",
   ]}
+  aria-label={isRecommended
+    ? isEnglish
+      ? `${nameEn} - recommended plan`
+      : `${nameEs} - plan recomendado`
+    : undefined}
 >
   {
     isRecommended && (
-      <div class="pointer-events-none absolute -top-3 left-0 right-0 z-[1] flex justify-center">
+      <div
+        class="pointer-events-none absolute inset-[-2px] -z-[1] rounded-[26px] bg-[radial-gradient(circle_at_top,hsla(var(--accent-h),var(--accent-s),56%,0.22)_0%,transparent_62%)]"
+        aria-hidden="true"
+      />
+    )
+  }
+  {
+    isRecommended && (
+      <div class="pointer-events-none absolute -top-3 left-0 right-0 z-[2] flex justify-center">
         <span
-          class="whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-1 text-[11px] font-bold uppercase tracking-[1px] text-[var(--color-on-accent)]"
+          class="whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-1 text-[11px] font-bold tracking-[0.3px] text-[var(--color-on-accent)]"
           data-es={badgeEs}
           data-en={badgeEn}
         >
@@ -71,39 +67,27 @@ const priceDisplay =
       {isEnglish ? nameEn : nameEs}
     </h3>
     <p
-      class="mt-1 text-sm text-[var(--text-secondary)]"
-      data-es={subEs}
-      data-en={subEn}
+      class="mt-2 min-h-[72px] text-sm leading-relaxed text-[var(--text-secondary)]"
+      data-es={pitchEs}
+      data-en={pitchEn}
     >
-      {isEnglish ? subEn : subEs}
-    </p>
-    <p class="mt-4 flex flex-wrap items-baseline gap-2">
-      <span
-        class="text-2xl font-bold text-[var(--text-primary)]"
-        data-es={priceDisplay}
-        data-en={priceDisplay}
-      >
-        {priceDisplay}
-      </span>
-      {
-        plan.priceDetail && (
-          <span
-            class="text-sm text-[var(--text-muted)]"
-            data-es={plan.priceDetail}
-            data-en={priceDetailEnById[plan.id] ?? plan.priceDetail}
-          >
-            {isEnglish
-              ? (priceDetailEnById[plan.id] ?? plan.priceDetail)
-              : plan.priceDetail}
-          </span>
-        )
-      }
+      {isEnglish ? pitchEn : pitchEs}
     </p>
   </div>
-  <div class="h-px bg-white/[0.07] my-7" aria-hidden="true"></div>
+  {
+    isRecommended && (
+      <p class="sr-only" data-es="Plan recomendado" data-en="Recommended plan">
+        {isEnglish ? "Recommended plan" : "Plan recomendado"}
+      </p>
+    )
+  }
+  <div
+    class="mt-[19px] mb-6 h-px bg-[var(--border-subtle)] opacity-70"
+    aria-hidden="true"
+  >
+  </div>
   <ul
     class="mb-6 flex flex-1 flex-col gap-0 text-sm text-[var(--text-secondary)]"
-    role="list"
   >
     {
       plan.features.map((f, i) => (
@@ -137,12 +121,4 @@ const priceDisplay =
       ))
     }
   </ul>
-  <a
-    href={ctaHref}
-    class="btn-primary mt-auto w-full font-semibold"
-    data-es={ctaEs}
-    data-en={ctaEn}
-  >
-    {isEnglish ? ctaEn : ctaEs}
-  </a>
-</div>
+</article>

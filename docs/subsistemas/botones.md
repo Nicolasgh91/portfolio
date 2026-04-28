@@ -5,6 +5,7 @@
 - Implementación: `src/styles/tokens.css`, bloque `@layer components` (variantes, modificadores, `--btn-*` en `:root` / `html.light`).
 - Al **final** del mismo `@layer components`, reglas para `a.btn-primary` / `a.btn-secondary` / `a.btn-tertiary` (y `:hover`): anulan el color del `a` global del mismo archivo. Conviven en el layer para que `.section-dark` / `.section-accent` ganen por especificidad donde corresponda (ver [`sistema-diseno.md`](sistema-diseno.md)).
 - No hay componente Astro `Button`; enlaces y `<button>` comparten las mismas clases.
+- Verificación vigente: no existe `src/components/Button.astro`; la base de botones en producción sigue siendo este sistema de clases.
 - **Iframe chatbot:** `public/chatbot/widget/index.html` inyecta `--btn-primary-*`, `--btn-disabled-opacity`, `--color-on-accent`, `--text-lg`; `chat.css` usa esas variables en `#send-btn` (y mantiene el trigger con gradiente propio).
 
 ## Variantes de acción
@@ -35,6 +36,7 @@
 ## Flecha animada (`.btn-bounce`)
 
 - Patrón documentado en [`../componentes/btn-bounce.md`](../componentes/btn-bounce.md): hook `btn-bounce` + hijo `.arrow`; animación `bounce-right` en keyframes **fuera** de `@layer components` en `tokens.css`; overrides `prefers-reduced-motion` en el layer y `:root.no-motion` en **raíz** del archivo (sin `!important`).
+- Las tarjetas de planes en `/plantillas` ([`PricingCard`](../componentes/pricing-card.md)) ya no incluyen CTA con este patrón; la conversión puede canalizarse vía FAQ u otras secciones de la página.
 
 ## Estados
 
@@ -49,7 +51,7 @@
 
 ## Jerarquía en vista de pricing
 
-Por defecto, el CTA de **PricingCard** es **primary** (conversión por plan). Si el producto define que en `/servicios` el único CTA primario sea el del **FaqSection** y el de la tarjeta deba ser secundario, documentar aquí la **inversión de jerarquía** y usar `.btn-secondary` en la tarjeta.
+En `/plantillas`, las tarjetas de planes no muestran botón/enlace de conversión; no aplica jerarquía primary vs secondary dentro de **PricingCard**. En `/servicios`, los CTAs siguen el patrón documentado en FAQ y bloques de contacto.
 
 ## Controles sobre media (SlideViewer)
 
