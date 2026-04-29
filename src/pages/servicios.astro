@@ -7,7 +7,7 @@ import SectionWrapper from "../components/SectionWrapper.astro";
 import SectionLabel from "../components/SectionLabel.astro";
 import PageHeroSection from "../components/PageHeroSection.astro";
 import heroServiciosDerecha from "../assets/services/hero-servicios-derecha.webp";
-import FAQAccordion from "../components/FAQAccordion.astro";
+import FaqSection from "../components/FaqSection.astro";
 import { getCollection } from "astro:content";
 import ServiceCard from "../components/ServiceCard.astro";
 import type { CollectionEntry } from "astro:content";
@@ -452,7 +452,7 @@ const altRevealDelays: Record<string, number> = {};
       revealAlt
       revealDelayMs={altRevealDelays.faq}
     >
-      <FAQAccordion
+      <FaqSection
         variant="darkBand"
         entries={faqEntries}
         ctaHref="#contacto"

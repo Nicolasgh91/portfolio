@@ -1,9 +1,9 @@
 /**
  * Fuente única para la taxonomía de FAQ: umbral de tags, etiquetas bilingües
- * y clases de Tailwind por categoría. Antes se duplicaba entre
- * `FAQAccordion.astro` y `FaqSection.astro` (M-10).
+ * y clases de Tailwind por categoría. Consumido por `FaqSection.astro` (M-10).
  *
- * Nota: la paleta "darkBand" sigue siendo específica de FAQAccordion y vive ahí.
+ * Nota: la paleta "darkBand" vive dentro de `FaqSection.astro` ya que solo
+ * aplica a su variante darkBand.
  */
 export type FaqCategory = "proceso" | "comercial" | "tecnico" | "soporte";
 

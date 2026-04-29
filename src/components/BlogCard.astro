@@ -209,14 +209,14 @@ const readLabel = isEnglish
     flex-direction: column;
     height: 100%;
     position: relative;
-    background-color: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 1rem;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
     transition:
-      transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 350ms cubic-bezier(0.22, 1, 0.36, 1);
+      transform 350ms var(--ease-out-expo),
+      box-shadow 350ms var(--ease-out-expo);
   }
 
   /* ─────────────────────────────────────────
@@ -226,8 +226,8 @@ const readLabel = isEnglish
   .blog-card:focus-within {
     transform: translateY(-6px);
     box-shadow:
-      0 24px 48px -10px rgba(251, 191, 36, 0.13),
-      0 0 0 1px rgba(251, 191, 36, 0.1);
+      0 24px 48px -10px hsla(var(--accent-h), var(--accent-s), 56%, 0.13),
+      0 0 0 1px hsla(var(--accent-h), var(--accent-s), 56%, 0.1);
   }
 
   /* ─────────────────────────────────────────
@@ -244,7 +244,7 @@ const readLabel = isEnglish
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 550ms var(--ease-out-expo);
   }
 
   .blog-card:hover .blog-card__img,
@@ -288,7 +288,7 @@ const readLabel = isEnglish
   }
 
   .blog-card__link:focus-visible {
-    outline: 2px solid #fbbf24;
+    outline: 2px solid var(--accent);
     outline-offset: -4px;
   }
 
@@ -318,14 +318,14 @@ const readLabel = isEnglish
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #fbbf24;
+    color: var(--accent);
   }
 
   .blog-card__cta-btn {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #f59e0b;
+    background: var(--color-accent-500);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -360,20 +360,20 @@ const readLabel = isEnglish
   }
 
   .blog-card__sep {
-    color: #475569;
+    color: var(--text-muted);
     font-size: 0.625rem;
   }
 
   .blog-card__date {
     font-size: 0.625rem;
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--text-secondary);
   }
 
   .blog-card__time {
     font-size: 0.625rem;
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--text-secondary);
     display: inline-flex;
     align-items: center;
     gap: 3px;
@@ -385,7 +385,7 @@ const readLabel = isEnglish
   .blog-card__title {
     font-size: 0.9375rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--text-primary);
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -397,7 +397,7 @@ const readLabel = isEnglish
 
   .blog-card:hover .blog-card__title,
   .blog-card:focus-within .blog-card__title {
-    color: #ffffff;
+    color: var(--text-primary);
   }
 
   /* ─────────────────────────────────────────
@@ -405,7 +405,7 @@ const readLabel = isEnglish
   ───────────────────────────────────────── */
   .blog-card__divider {
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid var(--border-subtle);
     margin: 0 0 12px;
   }
 
@@ -414,7 +414,7 @@ const readLabel = isEnglish
   ───────────────────────────────────────── */
   .blog-card__desc {
     font-size: 0.8125rem;
-    color: #94a3b8;
+    color: var(--text-secondary);
     line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 3;

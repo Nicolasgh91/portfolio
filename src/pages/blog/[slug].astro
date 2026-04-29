@@ -42,13 +42,21 @@ const coverByKey: Record<CoverImageKey, typeof humanAi> = {
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return posts.map((post) => {
+    const related = posts
+      .filter(
+        (p) => p.slug !== post.slug && p.data.category === post.data.category,
+      )
+      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+      .slice(0, 2);
+    return {
+      params: { slug: post.slug },
+      props: { post, related },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, related } = Astro.props;
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const activeLang = isEnglish ? "en" : "es";
 const blogBaseHref = isEnglish ? "/en/blog" : "/blog";
@@ -160,12 +168,6 @@ function formatDate(date: Date): string {
     day: "numeric",
   });
 }
-
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-const related = allPosts
-  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 2);
 ---
 
 <Layout

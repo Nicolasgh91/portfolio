@@ -1,8 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import site from "../data/site.json";
 import { serviceAnchorId } from "../lib/service-anchor-id";
 import { localeFromPathname } from "../lib/locale-path";
+import { getFooterData } from "../lib/footer-data";
 import FooterColumnHeader from "./FooterColumnHeader.astro";
 import FooterPill from "./FooterPill.astro";
 
@@ -32,15 +32,7 @@ const rightsLabel = isEnglish
   ? "All rights reserved."
   : "Todos los derechos reservados.";
 
-// Dynamic services — sorted by `order` field
-const services = (await getCollection("services")).sort(
-  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
-);
-
-// Dynamic blog posts — published only, newest first, up to 6
-const blogPosts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 6);
+const { services, blogPosts } = await getFooterData();
 ---
 
 <!-- FT-07: SiteNavigationElement structured data -->

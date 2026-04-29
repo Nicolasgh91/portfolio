@@ -9,7 +9,7 @@ const heroNoiseBg =
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const activityItems = [
   {
-    color: "#34d399",
+    color: "var(--color-success)",
     text: isEnglish ? "New booking confirmed" : "Nueva reserva confirmada",
     time: "2m",
   },
@@ -19,7 +19,7 @@ const activityItems = [
     time: "8m",
   },
   {
-    color: "#34d399",
+    color: "var(--color-success)",
     text: isEnglish ? "AI-qualified lead" : "Lead calificado por IA",
     time: "15m",
   },

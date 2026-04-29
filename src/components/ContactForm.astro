@@ -335,8 +335,8 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
     pointer-events: auto;
   }
   .snackbar.success {
-    background: #1d9e75;
-    color: #fff;
+    background: var(--color-success);
+    color: var(--color-on-accent);
   }
   .snackbar.error {
     background: var(--color-danger);

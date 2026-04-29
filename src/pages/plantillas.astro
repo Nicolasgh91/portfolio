@@ -5,6 +5,7 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import PlantillaCarouselCard from "../components/PlantillaCarouselCard.astro";
 import PricingCard from "../components/PricingCard.astro";
+import EmptyState from "../components/EmptyState.astro";
 import FaqSection from "../components/FaqSection.astro";
 import type { FaqItem } from "../components/FaqSection.astro";
 import { buildFaqPageJsonLd } from "../lib/faq-jsonld";
@@ -436,13 +437,7 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(catalogFaqEntries);
 
         {
           sortedTemplatesWithDemo.length === 0 ? (
-            <p
-              class="mt-10 py-[var(--sp-xl)] text-center text-[var(--text-muted)]"
-              data-en="Coming soon..."
-              data-es="Próximamente..."
-            >
-              {isEnglish ? "Coming soon..." : "Próximamente..."}
-            </p>
+            <EmptyState class="mt-10" />
           ) : (
             <Fragment>
               <div class="relative mt-10">
