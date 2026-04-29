@@ -340,6 +340,7 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
   }
   .snackbar.error {
     background: var(--color-danger);
+    /* allow-raw-hex: pure white maximises contrast over the danger background. */
     color: #fff;
   }
   .snackbar-close {

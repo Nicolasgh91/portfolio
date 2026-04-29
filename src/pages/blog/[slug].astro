@@ -2,7 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import { getCollection } from "astro:content";
-import { getImage } from "astro:assets";
 import TableOfContents from "../../components/blog/TableOfContents.astro";
 import ArticleFooter from "../../components/blog/ArticleFooter.astro";
 import ShareBar from "../../components/blog/ShareBar.astro";
@@ -11,33 +10,15 @@ import SlideViewer from "../../components/SlideViewer.astro";
 import SectionSpacer from "../../components/SectionSpacer.astro";
 import { filterTocHeadings } from "../../lib/toc";
 import { localeFromPathname } from "../../lib/locale-path";
+import { resolveCover } from "../../lib/blog-cover";
+import {
+  buildArticleJsonLd,
+  buildBlogBreadcrumbJsonLd,
+} from "../../lib/blog-jsonld";
 import audioManifest from "../../../public/audio/manifest.json";
-import humanAi from "../../assets/blog/human-ai.webp";
-import satellite from "../../assets/blog/satellite.webp";
-import cloudServers from "../../assets/blog/cloud-servers.webp";
-import ogHuellaDelFuego from "../../assets/open-graphs/og-huella-del-fuego.webp";
-import thumbArquitecturaGranEscala from "../../assets/blog/thumbnails/thumb-articulo-arquitectura-a-gran-escala.webp";
-import thumbMicroservicies from "../../assets/blog/thumbnails/thumb-microservicies.webp";
-
-type CoverImageKey =
-  | "human-ai"
-  | "cloud-servers"
-  | "satellite"
-  | "huella-del-fuego"
-  | "arquitectura-gran-escala"
-  | "microservicios-urban-blueprint";
 
 type AudioManifest = {
   articles?: Record<string, Partial<Record<"es" | "en", { file?: string }>>>;
-};
-
-const coverByKey: Record<CoverImageKey, typeof humanAi> = {
-  "human-ai": humanAi,
-  satellite,
-  "cloud-servers": cloudServers,
-  "huella-del-fuego": ogHuellaDelFuego,
-  "arquitectura-gran-escala": thumbArquitecturaGranEscala,
-  "microservicios-urban-blueprint": thumbMicroservicies,
 };
 
 export async function getStaticPaths() {
@@ -80,85 +61,40 @@ const localizedDescription = isEnglish
   ? (post.data.descriptionEn ?? post.data.description)
   : post.data.description;
 
-// Datos para JSON-LD
 const siteUrl = "https://escalatunegocioconia.com";
 const postUrl = `${siteUrl}${blogBaseHref}/${post.slug}`;
 const authorName = "Nicolás Hruszczak";
 const pubDateISO = post.data.pubDate.toISOString();
 
-let ogImagePath = "/og-desktop.png";
-let articleImageAbsolute: string | undefined;
-let ogImageWidth: string | undefined;
-let ogImageHeight: string | undefined;
-let ogImageType: string | undefined;
+const cover = await resolveCover(post.data.coverImageKey, siteUrl);
+const {
+  ogImagePath,
+  articleImageAbsolute,
+  ogImageWidth,
+  ogImageHeight,
+  ogImageType,
+} = cover;
 
-if (post.data.coverImageKey) {
-  const coverSrc = coverByKey[post.data.coverImageKey];
-  const optimized = await getImage({ src: coverSrc, width: 1200 });
-  ogImagePath = optimized.src;
-  articleImageAbsolute = new URL(optimized.src, siteUrl).href;
-  const w = optimized.attributes.width as number | undefined;
-  const h = optimized.attributes.height as number | undefined;
-  const fallbackH = h ?? Math.round((coverSrc.height * 1200) / coverSrc.width);
-  ogImageWidth = String(w ?? 1200);
-  ogImageHeight = String(fallbackH);
-  ogImageType = "image/webp";
-}
-
-// JSON-LD: TechArticle (dateModified = pubDate hasta que exista updatedDate en Zod del blog)
-const jsonLdArticle = {
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  headline: localizedTitle,
+const jsonLdArticle = buildArticleJsonLd({
+  title: localizedTitle,
   description: localizedDescription,
-  datePublished: pubDateISO,
-  dateModified: pubDateISO,
-  author: {
-    "@type": "Person",
-    name: authorName,
-    url: siteUrl,
-  },
-  publisher: {
-    "@type": "Organization",
-    name: "escalatunegocioconia.com",
-    url: siteUrl,
-  },
   url: postUrl,
-  inLanguage: isEnglish ? "en-US" : "es-AR",
-  keywords: post.data.tags.join(", "),
-  ...(post.data.readingTime != null && {
-    timeRequired: `PT${post.data.readingTime}M`,
-  }),
-  ...(articleImageAbsolute && {
-    image: articleImageAbsolute,
-  }),
-};
+  pubDateISO,
+  tags: post.data.tags,
+  isEnglish,
+  authorName,
+  siteUrl,
+  readingTime: post.data.readingTime,
+  imageAbsolute: articleImageAbsolute,
+});
 
-// JSON-LD: BreadcrumbList schema
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Inicio",
-      item: `${siteUrl}${isEnglish ? "/en" : "/"}`,
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Blog",
-      item: `${siteUrl}${blogBaseHref}`,
-    },
-    {
-      "@type": "ListItem",
-      position: 3,
-      name: localizedTitle,
-      item: postUrl,
-    },
-  ],
-};
+const breadcrumbJsonLd = buildBlogBreadcrumbJsonLd({
+  siteUrl,
+  blogBaseHref,
+  postUrl,
+  postTitle: localizedTitle,
+  isEnglish,
+});
 
 // Formatear fecha
 function formatDate(date: Date): string {

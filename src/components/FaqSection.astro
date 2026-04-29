@@ -7,20 +7,11 @@ import {
   FAQ_TAG_THRESHOLD,
   FAQ_CATEGORY_LABEL,
   FAQ_CATEGORY_CLASS,
-  type FaqCategory,
+  type FaqItem,
 } from "../lib/faq-taxonomy";
 import { localeFromPathname } from "../lib/locale-path";
 
-export interface FaqItem {
-  order: number;
-  category: FaqCategory;
-  question: string;
-  questionEn: string;
-  answer: string;
-  answerEn: string;
-  highlight?: string;
-  highlightEn?: string;
-}
+export type { FaqItem } from "../lib/faq-taxonomy";
 
 interface Props {
   entries: FaqItem[];
