@@ -1,0 +1,75 @@
+---
+/**
+ * Standard empty-state for paginated/listing pages (blog, templates, etc.).
+ * Centered, muted copy with optional eyebrow + CTA so visual treatment stays
+ * consistent across the site.
+ */
+import { localeFromPathname } from "../lib/locale-path";
+
+interface Props {
+  /** Mensaje principal (es). Por defecto "Próximamente...". */
+  messageEs?: string;
+  /** Mensaje principal (en). Por defecto "Coming soon...". */
+  messageEn?: string;
+  /** Etiqueta opcional encima del mensaje (eyebrow). */
+  eyebrowEs?: string;
+  eyebrowEn?: string;
+  /** CTA opcional debajo del mensaje. */
+  ctaHref?: string;
+  ctaLabelEs?: string;
+  ctaLabelEn?: string;
+  /** Clases adicionales para el contenedor. */
+  class?: string;
+}
+
+const {
+  messageEs = "Próximamente...",
+  messageEn = "Coming soon...",
+  eyebrowEs,
+  eyebrowEn,
+  ctaHref,
+  ctaLabelEs,
+  ctaLabelEn,
+  class: rootClass = "",
+} = Astro.props;
+
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const eyebrow = isEnglish ? eyebrowEn : eyebrowEs;
+const message = isEnglish ? messageEn : messageEs;
+const ctaLabel = isEnglish ? ctaLabelEn : ctaLabelEs;
+---
+
+<div
+  class:list={[
+    "flex flex-col items-center justify-center gap-3 py-[var(--sp-xl)] text-center",
+    rootClass,
+  ]}
+  role="status"
+>
+  {
+    eyebrow && (
+      <p class="m-0 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--accent)]">
+        {eyebrow}
+      </p>
+    )
+  }
+  <p
+    class="m-0 text-sm leading-relaxed text-[var(--text-muted)]"
+    data-en={messageEn}
+    data-es={messageEs}
+  >
+    {message}
+  </p>
+  {
+    ctaHref && ctaLabel && (
+      <a href={ctaHref} class="btn-primary btn-bounce mt-2 w-fit font-medium">
+        <span data-en={ctaLabelEn} data-es={ctaLabelEs}>
+          {ctaLabel}
+        </span>
+        <span class="arrow" aria-hidden="true">
+          →
+        </span>
+      </a>
+    )
+  }
+</div>
