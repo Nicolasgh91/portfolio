@@ -7,6 +7,18 @@
  */
 export type FaqCategory = "proceso" | "comercial" | "tecnico" | "soporte";
 
+/** Shape of a single FAQ entry consumed by FaqSection.astro. */
+export interface FaqItem {
+  order: number;
+  category: FaqCategory;
+  question: string;
+  questionEn: string;
+  answer: string;
+  answerEn: string;
+  highlight?: string;
+  highlightEn?: string;
+}
+
 /** Umbral de entradas a partir del cual renderizamos tags de categoría. */
 export const FAQ_TAG_THRESHOLD = 8;
 

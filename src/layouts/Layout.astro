@@ -120,7 +120,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-    <!-- theme-color does not accept CSS vars; literal mirrors --color-accent-300 from tokens.css. -->
+    <!-- allow-raw-hex: theme-color does not accept CSS vars; mirrors --color-accent-300. -->
     <meta name="theme-color" content="#FBBF24" />
 
     <!-- SEC-005: Content Security Policy is now served as a header via vercel.json.
