@@ -1,6 +1,7 @@
 ---
 import "../styles/tokens.css";
 import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import Footer from "../components/Footer.astro";
 import BackToTop from "../components/BackToTop.astro";
 import site from "../data/site.json";
@@ -197,6 +198,7 @@ const ogImageHeight = ogImageHeightProp ?? 768;
     <BackToTop />
     <Footer />
     <Analytics />
+    <SpeedInsights />
 
     <!-- Controladores globales (nhTheme/nhLang/nhA11y), reveal observer y chat
          widget cargados desde /scripts/*.js en <head>. Ver public/scripts/ y
