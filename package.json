@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --import tsx --test ./schemas/index.test.ts ./src/lib/faq-jsonld.test.ts ./lib/chat-origin-allowlist.test.js",
+    "test": "node --import tsx --test ./schemas/index.test.ts ./src/lib/faq-jsonld.test.ts ./src/lib/faq-dist.test.ts ./lib/chat-origin-allowlist.test.js",
     "check": "astro sync && astro check && tsc --noEmit -p .",
     "lint": "prettier --check . && npm run lint:no-raw-hex",
     "lint:no-raw-hex": "node scripts/check-no-raw-hex.mjs",

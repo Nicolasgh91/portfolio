@@ -494,14 +494,14 @@ const catalogFaqJsonLd = buildFaqPageJsonLd(templatesFaqEntries);
       <section
         class="templates-index-section mx-auto max-w-4xl scroll-mt-24 reveal reveal--scale"
         style="--reveal-delay: 0ms"
-        aria-labelledby="faq-heading"
+        aria-labelledby="templates-faq-heading"
       >
         <FaqSection
           class="!mt-0"
+          idPrefix="templates-faq"
           entries={templatesFaqEntries}
           showSidebarCta={false}
-          accordionStyle="animated"
-          faqAnimatedRootId="faq-plantillas"
+          singleOpen
           headingEs="Dudas sobre plantillas y planes"
           headingEn="Questions about templates and plans"
           introEs="Resolvemos lo más habitual antes de contratar. Si tu caso es particular, lo vemos en una reunión."

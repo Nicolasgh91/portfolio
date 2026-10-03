@@ -1,0 +1,110 @@
+---
+/**
+ * Acordeón de FAQ: fuente única para todas las páginas (vía `FaqSection` o
+ * directo). `<details>`/`<summary>` nativo, sin JS: el navegador resuelve foco,
+ * estado expandido y apertura exclusiva (`name`); la animación es CSS
+ * (`.faq-accordion*` en `tokens.css`). Texto SSR por locale; `data-en`/`data-es`
+ * solo en spans hoja porque `nhLang.apply()` reemplaza su `textContent`.
+ */
+import {
+  FAQ_CATEGORY_CLASS,
+  FAQ_CATEGORY_CLASS_DARK,
+  FAQ_CATEGORY_LABEL,
+  type FaqAccordionItem,
+} from "../lib/faq-taxonomy";
+import { localeFromPathname } from "../lib/locale-path";
+
+interface Props {
+  items: FaqAccordionItem[];
+  /** Prefijo determinista y único por página (`services-faq`, `templates-faq`…): ids y grupo `name`. */
+  idPrefix: string;
+  /** `darkBand`: paleta fija para fondos oscuros (p. ej. /servicios). */
+  variant?: "default" | "darkBand";
+  /** Muestra el chip de categoría de cada ítem (requiere `category`). */
+  showTags?: boolean;
+  /** Índice abierto en el HTML inicial; `null` = todos cerrados. */
+  defaultOpen?: number | null;
+  /** Solo un ítem abierto a la vez (atributo nativo `name` de `<details>`). */
+  singleOpen?: boolean;
+}
+
+const {
+  items,
+  idPrefix,
+  variant = "default",
+  showTags = false,
+  defaultOpen = 0,
+  singleOpen = false,
+} = Astro.props;
+
+const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
+const tagClass =
+  variant === "darkBand" ? FAQ_CATEGORY_CLASS_DARK : FAQ_CATEGORY_CLASS;
+---
+
+<div
+  id={idPrefix}
+  data-faq-accordion
+  class:list={[
+    "faq-accordion",
+    { "faq-accordion--dark": variant === "darkBand" },
+  ]}
+>
+  {
+    items.map((item, index) => (
+      <details
+        id={`${idPrefix}-item-${index}`}
+        class="faq-accordion__item"
+        name={singleOpen ? idPrefix : undefined}
+        open={index === defaultOpen}
+      >
+        <summary class="faq-accordion__summary">
+          <span class="flex min-w-0 flex-1 items-center gap-3.5">
+            {showTags && item.category && (
+              <span
+                class:list={[
+                  "inline-flex shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium",
+                  tagClass[item.category],
+                ]}
+                data-en={FAQ_CATEGORY_LABEL[item.category].en}
+                data-es={FAQ_CATEGORY_LABEL[item.category].es}
+              >
+                {FAQ_CATEGORY_LABEL[item.category][isEnglish ? "en" : "es"]}
+              </span>
+            )}
+            <span
+              class="faq-accordion__question"
+              data-en={item.questionEn}
+              data-es={item.question}
+            >
+              {isEnglish ? item.questionEn : item.question}
+            </span>
+          </span>
+          <span class="faq-accordion__icon">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M1 6h10" />
+              <path class="faq-accordion__icon-v" d="M6 1v10" />
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-accordion__panel">
+          <div class="faq-accordion__answer">
+            <p data-en={item.answerEn} data-es={item.answer}>
+              {isEnglish ? item.answerEn : item.answer}
+            </p>
+          </div>
+        </div>
+      </details>
+    ))
+  }
+</div>

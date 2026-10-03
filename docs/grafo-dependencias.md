@@ -10,7 +10,7 @@
 | `components/Footer.astro`                 | _(ningún otro componente)_                                                                                      |
 | `components/BackToTop.astro`              | _(ninguno)_                                                                                                     |
 | `pages/index.astro`                       | `Layout`, `Nav`, `HeroSection`                                                                                  |
-| `pages/servicios.astro`                   | `Layout`, `Nav`, `PageHeroSection`, `ServiceCard`, `ContactForm`, `FAQAccordion`, …                             |
+| `pages/servicios.astro`                   | `Layout`, `Nav`, `PageHeroSection`, `ServiceCard`, `ContactForm`, `FaqSection` → `FaqAccordion`, …              |
 | `pages/talento.astro`                     | `Layout`, `Nav`, `CapabilityCard`                                                                               |
 | `pages/blog/index.astro`                  | `Layout`, `Nav`, `BlogCard`, `TaxonomyFilter`                                                                   |
 | `pages/blog/[slug].astro`                 | `Layout`, `Nav`, `TableOfContents`, `ArticleFooter`, `ShareBar`, `TableWrapper`, `SlideViewer`, `SectionSpacer` |

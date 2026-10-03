@@ -1420,39 +1420,141 @@ html.light .catalog-carousel__nav {
     box-shadow: var(--btn-glow-shadow-static);
   }
 
-  details.faq-item--native summary {
-    @apply flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-5 text-left font-medium;
-    color: var(--text-primary);
+  /* ── FAQ accordion (FaqAccordion.astro) ────────────────────────────
+     <details>/<summary> nativo: foco, aria y apertura exclusiva (`name`)
+     los resuelve el navegador, sin JS. La animación de altura usa
+     ::details-content + grid 0fr→1fr; sin soporte abre/cierra al instante.
+     Separación tonal entre ítems (fondo + gap), sin líneas divisorias. */
+  .faq-accordion {
+    @apply flex flex-col gap-1.5;
   }
-  details.faq-item--native summary::-webkit-details-marker {
+  .faq-accordion__item {
+    @apply overflow-hidden rounded-xl border border-transparent;
+    background-color: var(--bg-tertiary);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .faq-accordion__item[open] {
+    border-color: var(--accent-border);
+    background-color: var(--bg-secondary);
+  }
+  .faq-accordion__summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-5 text-left;
+    /* El ítem recorta overflow: el outline global va hacia adentro. */
+    outline-offset: -2px;
+  }
+  .faq-accordion__summary::-webkit-details-marker {
     display: none;
   }
-  details.faq-item--native[open] > summary {
+  .faq-accordion__question {
+    @apply text-[15px] font-medium leading-snug;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+  .faq-accordion__summary:hover .faq-accordion__question {
+    color: var(--text-primary);
+  }
+  /* Texto: --accent-text (accent-700 en light) para contraste WCAG AA. */
+  .faq-accordion__item[open] .faq-accordion__question {
+    color: var(--accent-text);
+  }
+  .faq-accordion__icon {
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full border;
+    border-color: var(--border-normal);
+    background-color: var(--bg-secondary);
     color: var(--accent);
-  }
-
-  .faq-item--animated .faq-answer-panel {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.3s ease;
-  }
-  .faq-item--animated.open .faq-answer-panel {
-    grid-template-rows: 1fr;
-  }
-  .faq-icon {
-    @apply flex h-7 w-7 min-w-[1.75rem] items-center justify-center rounded-full border border-white/[0.07] text-lg text-[var(--accent)];
     transition:
-      transform 0.3s ease,
-      border-color 0.3s ease,
       background-color 0.3s ease,
+      border-color 0.3s ease,
       color 0.3s ease;
   }
-  .faq-item--animated.open .faq-icon {
-    @apply rotate-45 border-[var(--accent)] bg-[var(--accent)] text-[var(--color-on-accent)];
+  .faq-accordion__summary:hover .faq-accordion__icon {
+    border-color: var(--accent);
+  }
+  .faq-accordion__item[open] .faq-accordion__icon {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    color: var(--color-on-accent);
+  }
+  /* Trazo vertical del "+": rota 90° y se superpone al horizontal ("−"). */
+  .faq-accordion__icon-v {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-accordion__item[open] .faq-accordion__icon-v {
+    transform: rotate(90deg);
+  }
+  .faq-accordion__panel {
+    @apply min-h-0 overflow-hidden;
+  }
+  .faq-accordion__answer {
+    @apply px-5 pb-5;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-accordion__item[open] .faq-accordion__answer {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.08s;
+  }
+  .faq-accordion__answer > p {
+    @apply m-0 text-sm leading-relaxed;
+    color: var(--text-secondary);
+  }
+  @supports selector(::details-content) {
+    .faq-accordion__item::details-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition:
+        grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        content-visibility 0.35s allow-discrete;
+    }
+    .faq-accordion__item[open]::details-content {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  /* darkBand: paleta fija sobre fondos oscuros (no depende de html.light). */
+  .faq-accordion--dark .faq-accordion__item {
+    @apply bg-slate-950/70;
+  }
+  .faq-accordion--dark .faq-accordion__item[open] {
+    @apply border-orange-500/45 bg-slate-900/90;
+  }
+  .faq-accordion--dark .faq-accordion__question {
+    @apply text-slate-200;
+  }
+  .faq-accordion--dark .faq-accordion__summary:hover .faq-accordion__question {
+    @apply text-white;
+  }
+  .faq-accordion--dark .faq-accordion__item[open] .faq-accordion__question {
+    @apply text-orange-400;
+  }
+  .faq-accordion--dark .faq-accordion__icon {
+    @apply border-white/20 bg-slate-900 text-orange-400;
+  }
+  .faq-accordion--dark .faq-accordion__summary:hover .faq-accordion__icon {
+    @apply border-orange-400;
+  }
+  .faq-accordion--dark .faq-accordion__item[open] .faq-accordion__icon {
+    @apply border-orange-400 bg-orange-400 text-[var(--color-on-accent)];
+  }
+  .faq-accordion--dark .faq-accordion__answer > p {
+    @apply text-slate-300;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .faq-icon {
+    .faq-accordion__item,
+    .faq-accordion__item::details-content,
+    .faq-accordion__question,
+    .faq-accordion__icon,
+    .faq-accordion__icon-v,
+    .faq-accordion__answer {
       transition: none;
     }
   }

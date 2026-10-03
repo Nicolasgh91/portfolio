@@ -48,7 +48,7 @@ Ver subsistema dedicado: [`botones.md`](botones.md) (incluye `.btn-bounce` / `bo
 - Carrusel en `/plantillas`: scrollbar oculto vía utilidades en el track (`[scrollbar-width:none]`, `[&::-webkit-scrollbar]:hidden`); la clase `.catalog-scroll-hide` puede seguir existiendo por compatibilidad.
 - `.plantilla-card[data-filtered]`: colapsa tarjetas filtradas sin `position: absolute` (compatibilidad con `scroll-snap`).
 - `.catalog-carousel__nav`: vidrio + blur sobre `.btn-secondary--sm` en flechas del carrusel; contraste con `html.light`.
-- `.faq-item summary` / `details.faq-item[open] > summary`: estilos del acordeón FAQ reutilizables (ver [`FaqSection`](../componentes/faq-section.md)). FAQ animado: `.faq-icon` / `.faq-item--animated.open .faq-icon` en el mismo `@layer components`; `prefers-reduced-motion` para el ícono vive en ese layer (no mezclar cascada con reglas fuera del bloque FAQ).
+- `.faq-accordion*`: estilos únicos del acordeón FAQ (ver [`FaqAccordion`](../componentes/faq-accordion.md)). `<details>` nativo animado con `::details-content` + grid `0fr→1fr`, ícono SVG +→−, variante `.faq-accordion--dark` para `darkBand` y `prefers-reduced-motion`, todo en el mismo `@layer components`.
 - `#catalog-filters button[data-selected]`: estado activo/inactivo de chips de filtro.
 
 ## Chatbot

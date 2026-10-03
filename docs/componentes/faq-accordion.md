@@ -1,35 +1,59 @@
-# FAQAccordion
+# FaqAccordion
 
-**Ruta:** [`src/components/FAQAccordion.astro`](../../src/components/FAQAccordion.astro)
+**Ruta:** [`src/components/FaqAccordion.astro`](../../src/components/FaqAccordion.astro)
 
-**Usado en:** [`src/pages/servicios.astro`](../../src/pages/servicios.astro)
+**Fuente única del acordeón FAQ.** Cualquier cambio visual o de comportamiento se hace acá y llega a todas las instancias.
+
+**Usado en:**
+
+| Ruta                                             | Vía                                           | `idPrefix`        | Config                                |
+| ------------------------------------------------ | --------------------------------------------- | ----------------- | ------------------------------------- |
+| `/servicios`, `/en/services`                     | [`FaqSection`](./faq-section.md) (`darkBand`) | `services-faq`    | primero abierto, varios abiertos      |
+| `/plantillas`, `/en/templates`                   | [`FaqSection`](./faq-section.md)              | `templates-faq`   | primero abierto, **`singleOpen`**     |
+| `/oferta/hub-creadores`, `/en/offer/creator-hub` | directo                                       | `creator-hub-faq` | `defaultOpen={null}` (todos cerrados) |
 
 ## Props
 
-Misma superficie que el bloque FAQ “nativo” de [`FaqSection`](./faq-section.md) **excepto** `accordionStyle`, `faqAnimatedRootId`: solo acordeón con `<details>` / `<summary>` (estilos `faq-item--native` en `tokens.css`).
-
-| Prop                      | Tipo                      | Requerida | Descripción                                                                                                                                                                                                                                                     |
-| ------------------------- | ------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entries`                 | `FaqItem[]`               | Sí        | Mismo shape que exporta `FaqSection.astro`.                                                                                                                                                                                                                     |
-| `ctaHref`                 | `string`                  | No        | Default `#contacto`.                                                                                                                                                                                                                                            |
-| `showSidebarCta`          | `boolean`                 | No        | Default `true`. Si es `false`, el grid superior pasa a una sola columna (`md:grid-cols-1`): el encabezado ocupa todo el ancho y **no queda columna vacía**; el listado de acordeones va debajo a ancho completo (p. ej. `/servicios`).                          |
-| `eyebrowEs` / `eyebrowEn` | `string`                  | No        | Rótulo superior.                                                                                                                                                                                                                                                |
-| `headingEs` / `headingEn` | `string`                  | No        | Título del bloque.                                                                                                                                                                                                                                              |
-| `introEs` / `introEn`     | `string`                  | No        | Intro.                                                                                                                                                                                                                                                          |
-| `class`                   | `string`                  | No        | Clases del contenedor raíz (p. ej. `!mt-0` para anular el `mt-10` por defecto).                                                                                                                                                                                 |
-| `variant`                 | `'default' \| 'darkBand'` | No        | Default `default`. En `darkBand`, colores fijos (slate/orange) para el bloque sobre fondo oscuro; evita que, con `html.light`, los tokens claros rompan contraste en FAQ incrustada en `section-dark` (p. ej. [`/servicios`](../../src/pages/servicios.astro)). |
+| Prop          | Tipo                      | Requerida | Default   | Descripción                                                                                                                                                                        |
+| ------------- | ------------------------- | --------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `FaqAccordionItem[]`      | Sí        | —         | `{ question, questionEn, answer, answerEn, category? }` ([`faq-taxonomy.ts`](../../src/lib/faq-taxonomy.ts)). `FaqItem` es compatible.                                             |
+| `idPrefix`    | `string`                  | Sí        | —         | Determinista y único por página. Genera `id={idPrefix}` en la raíz, `{idPrefix}-item-{i}` por ítem y el grupo `name` si `singleOpen`. Nunca usar valores aleatorios ni timestamps. |
+| `variant`     | `'default' \| 'darkBand'` | No        | `default` | `darkBand`: paleta fija slate/naranja para fondos oscuros; no depende de `html.light`.                                                                                             |
+| `showTags`    | `boolean`                 | No        | `false`   | Chip de categoría por ítem (requiere `category`). `FaqSection` lo activa con más de 8 entradas.                                                                                    |
+| `defaultOpen` | `number \| null`          | No        | `0`       | Índice abierto en el HTML inicial; `null` = todos cerrados.                                                                                                                        |
+| `singleOpen`  | `boolean`                 | No        | `false`   | Un solo ítem abierto a la vez, mediante el atributo nativo `name` de `<details>`.                                                                                                  |
 
 ## Comportamiento
 
-- CTA del sidebar (si `showSidebarCta`): `btn-primary btn-bounce` con flecha en `span.arrow` (ver [`btn-bounce.md`](./btn-bounce.md)).
-- **Sin microdata** en el HTML; el FAQ estructurado para buscadores debe inyectarse en `<Fragment slot="head">` con `buildFaqPageJsonLd` (u otro helper) en la página que consume el componente.
-- Chips de categoría si `entries.length > 8` (igual que FaqSection modo native).
-- **`darkBand`:** borde exterior naranja suave, fondo `slate-900/95`, ítems del acordeón con bordes `white/10` y estados `open` con acento naranja; categorías usan clases Tailwind fijas en lugar de variables de tema.
-- **i18n:** eyebrow, heading, intro, CTA, preguntas, respuestas y chips se resuelven por SSR con `localeFromPathname`; no depende de spans ocultos.
+- Marcado: `<details class="faq-accordion__item">` > `<summary>` (pregunta + ícono) + panel con la respuesta. **Sin `<script>`**: apertura, foco, estado expandido y exclusividad los resuelve el navegador.
+- Animación CSS en [`tokens.css`](../../src/styles/tokens.css) (`.faq-accordion*`, `@layer components`):
+  - altura con `::details-content` + `grid-template-rows: 0fr → 1fr` y `content-visibility … allow-discrete`, para animar también el cierre;
+  - la respuesta aparece con `opacity` + `translateY(-4px)`;
+  - ícono SVG: el trazo vertical rota 90° y el "+" pasa a "−"; el círculo pasa de borde a relleno con el acento.
+- Navegadores sin `::details-content`: abren y cierran al instante, sin animación (`@supports`).
+- Movimiento reducido: `@media (prefers-reduced-motion: reduce)` anula las transiciones; la preferencia del panel de accesibilidad (`:root.no-motion`) ya la cubre `controllers.js` con `transition: none !important` global.
 
-## SEO / QA
+## Accesibilidad
 
-Ver guía [`docs/subsistemas/faq-jsonld-seo.md`](../subsistemas/faq-jsonld-seo.md) (tests `npm test`, checklist Rich Results en producción).
+- `<summary>` es el control nativo: se activa con Tab, Enter y Espacio, y el lector de pantalla anuncia "expandido/contraído".
+- Contenido cerrado fuera del recorrido de foco: el navegador no renderiza el contenido de un `<details>` cerrado (`content-visibility: hidden`), así que no hace falta `inert` manual.
+- Foco visible: hereda el `:focus-visible` global con `outline-offset: -2px`, porque el ítem recorta su overflow.
+- Ícono `aria-hidden="true" focusable="false"`.
+- Las preguntas **no** son headings, a propósito: no se altera el outline de la página y se evitan los problemas de VoiceOver con headings dentro de `summary`.
+- Búsqueda en página (Ctrl+F): los navegadores que la soportan abren el `<details>` que contiene la coincidencia.
+
+## Reglas de uso
+
+- **`data-en`/`data-es` solo en elementos hoja** (pregunta, respuesta, chip). `nhLang.apply()` reemplaza su `textContent` y borraría el SVG o los chips si estuvieran en `summary`.
+- El texto se resuelve por SSR con `localeFromPathname`: el contenido está completo en el HTML, sin depender de JS.
+- Sin microdata. El JSON-LD `FAQPage` lo inyecta la página (ver [`faq-jsonld-seo.md`](../subsistemas/faq-jsonld-seo.md)).
+- **Separación tonal, sin líneas divisorias**: los ítems se separan por fondo (`--bg-tertiary`) y `gap`. El borde solo aparece en el ítem abierto, como acento (`--accent-border`).
+
+## Tests
+
+[`src/lib/faq-dist.test.ts`](../../src/lib/faq-dist.test.ts) (dentro de `npm test`, después de `npm run build`) valida en las 6 rutas: contenido visible vs. datos, FAQ visible vs. JSON-LD (ES), ids únicos, estado inicial, `name`, ícono decorativo, `data-*` en hojas y `lang`.
+
+Snapshot SSR/SEO antes/después: [`scripts/faq-snapshot.mjs`](../../scripts/faq-snapshot.mjs).
 
 ## Estado
 
