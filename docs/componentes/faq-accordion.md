@@ -6,26 +6,27 @@
 
 **Usado en:**
 
-| Ruta                                             | Vía                                           | `idPrefix`        | Config                                |
+| Ruta                                             | Vía                                           | `idPrefix`        | Estado inicial                        |
 | ------------------------------------------------ | --------------------------------------------- | ----------------- | ------------------------------------- |
-| `/servicios`, `/en/services`                     | [`FaqSection`](./faq-section.md) (`darkBand`) | `services-faq`    | primero abierto, varios abiertos      |
-| `/plantillas`, `/en/templates`                   | [`FaqSection`](./faq-section.md)              | `templates-faq`   | primero abierto, **`singleOpen`**     |
+| `/servicios`, `/en/services`                     | [`FaqSection`](./faq-section.md) (`darkBand`) | `services-faq`    | primero abierto                       |
+| `/plantillas`, `/en/templates`                   | [`FaqSection`](./faq-section.md)              | `templates-faq`   | primero abierto                       |
 | `/oferta/hub-creadores`, `/en/offer/creator-hub` | directo                                       | `creator-hub-faq` | `defaultOpen={null}` (todos cerrados) |
+
+**Apertura exclusiva en todas las instancias:** abrir una pregunta cierra la que estaba abierta. Lo define el componente (no es un prop), para que todas las páginas se comporten igual.
 
 ## Props
 
-| Prop          | Tipo                      | Requerida | Default   | Descripción                                                                                                                                                                        |
-| ------------- | ------------------------- | --------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `FaqAccordionItem[]`      | Sí        | —         | `{ question, questionEn, answer, answerEn, category? }` ([`faq-taxonomy.ts`](../../src/lib/faq-taxonomy.ts)). `FaqItem` es compatible.                                             |
-| `idPrefix`    | `string`                  | Sí        | —         | Determinista y único por página. Genera `id={idPrefix}` en la raíz, `{idPrefix}-item-{i}` por ítem y el grupo `name` si `singleOpen`. Nunca usar valores aleatorios ni timestamps. |
-| `variant`     | `'default' \| 'darkBand'` | No        | `default` | `darkBand`: paleta fija slate/naranja para fondos oscuros; no depende de `html.light`.                                                                                             |
-| `showTags`    | `boolean`                 | No        | `false`   | Chip de categoría por ítem (requiere `category`). `FaqSection` lo activa con más de 8 entradas.                                                                                    |
-| `defaultOpen` | `number \| null`          | No        | `0`       | Índice abierto en el HTML inicial; `null` = todos cerrados.                                                                                                                        |
-| `singleOpen`  | `boolean`                 | No        | `false`   | Un solo ítem abierto a la vez, mediante el atributo nativo `name` de `<details>`.                                                                                                  |
+| Prop          | Tipo                      | Requerida | Default   | Descripción                                                                                                                                                                                                            |
+| ------------- | ------------------------- | --------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `FaqAccordionItem[]`      | Sí        | —         | `{ question, questionEn, answer, answerEn, category? }` ([`faq-taxonomy.ts`](../../src/lib/faq-taxonomy.ts)). `FaqItem` es compatible.                                                                                 |
+| `idPrefix`    | `string`                  | Sí        | —         | Determinista y único por página. Genera `id={idPrefix}` en la raíz, `{idPrefix}-item-{i}` por ítem y el grupo `name` compartido por todos los ítems (apertura exclusiva). Nunca usar valores aleatorios ni timestamps. |
+| `variant`     | `'default' \| 'darkBand'` | No        | `default` | `darkBand`: paleta fija slate/naranja para fondos oscuros; no depende de `html.light`.                                                                                                                                 |
+| `showTags`    | `boolean`                 | No        | `false`   | Chip de categoría por ítem (requiere `category`). `FaqSection` lo activa con más de 8 entradas.                                                                                                                        |
+| `defaultOpen` | `number \| null`          | No        | `0`       | Índice abierto en el HTML inicial; `null` = todos cerrados.                                                                                                                                                            |
 
 ## Comportamiento
 
-- Marcado: `<details class="faq-accordion__item">` > `<summary>` (pregunta + ícono) + panel con la respuesta. **Sin `<script>`**: apertura, foco, estado expandido y exclusividad los resuelve el navegador.
+- Marcado: `<details class="faq-accordion__item">` > `<summary>` (pregunta + ícono) + panel con la respuesta. **Sin `<script>`**: apertura, foco, estado expandido y exclusividad (atributo nativo `name` compartido) los resuelve el navegador.
 - Animación CSS en [`tokens.css`](../../src/styles/tokens.css) (`.faq-accordion*`, `@layer components`):
   - altura con `::details-content` + `grid-template-rows: 0fr → 1fr` y `content-visibility … allow-discrete`, para animar también el cierre;
   - la respuesta aparece con `opacity` + `translateY(-4px)`;

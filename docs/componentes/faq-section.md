@@ -2,7 +2,7 @@
 
 **Ruta:** [`src/components/FaqSection.astro`](../../src/components/FaqSection.astro)
 
-**Usado en:** [`src/pages/servicios.astro`](../../src/pages/servicios.astro) (`variant="darkBand"`, `idPrefix="services-faq"`) y [`src/pages/plantillas.astro`](../../src/pages/plantillas.astro) (`idPrefix="templates-faq"`, `singleOpen`). Las rutas `/en/services` y `/en/templates` reexportan esas páginas.
+**Usado en:** [`src/pages/servicios.astro`](../../src/pages/servicios.astro) (`variant="darkBand"`, `idPrefix="services-faq"`) y [`src/pages/plantillas.astro`](../../src/pages/plantillas.astro) (`idPrefix="templates-faq"`). Las rutas `/en/services` y `/en/templates` reexportan esas páginas.
 
 Bloque FAQ completo: eyebrow, heading, intro, CTA lateral opcional y el acordeón. El acordeón **no** se implementa acá: se delega en [`FaqAccordion`](./faq-accordion.md), la fuente única.
 
@@ -18,12 +18,12 @@ Bloque FAQ completo: eyebrow, heading, intro, CTA lateral opcional y el acordeó
 | `headingEs` / `headingEn` | `string`                  | No        | Título del bloque.                                                                                            |
 | `introEs` / `introEn`     | `string`                  | No        | Párrafo introductorio.                                                                                        |
 | `class`                   | `string`                  | No        | Clases extra en el contenedor raíz (p. ej. `!mt-0`).                                                          |
-| `singleOpen`              | `boolean`                 | No        | Default `false`. Se pasa a `FaqAccordion` (un ítem abierto a la vez).                                         |
 | `defaultOpen`             | `number \| null`          | No        | Default `0` (primer ítem abierto).                                                                            |
 | `variant`                 | `'default' \| 'darkBand'` | No        | `darkBand`: paleta fija slate/naranja sobre fondos oscuros, sin depender de `html.light`.                     |
 
 ## Comportamiento
 
+- Apertura exclusiva (abrir una pregunta cierra la abierta), definida en `FaqAccordion`.
 - Chips de categoría si `entries.length > FAQ_TAG_THRESHOLD` (8).
 - CTA del sidebar: `btn-primary btn-bounce` con flecha en `span.arrow` (ver [`btn-bounce.md`](./btn-bounce.md)).
 - Sin JS propio ni microdata. El JSON-LD `FAQPage` lo inyecta la página con `buildFaqPageJsonLd`.
