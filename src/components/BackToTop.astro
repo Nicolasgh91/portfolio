@@ -8,7 +8,7 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
   type="button"
   data-back-to-top
   aria-label={isEnglish ? "Back to top" : "Volver arriba"}
-  class="btn-secondary btn-secondary--icon-only pointer-events-none fixed bottom-[28px] left-1/2 z-40 h-[58px] w-[58px] min-h-[58px] min-w-[58px] -translate-x-1/2 border border-white/15 bg-black/55 text-white opacity-0 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md hover:border-[color:var(--color-accent-400)]/40 hover:bg-black/65 max-[480px]:bottom-[20px]"
+  class="btn-secondary btn-secondary--icon-only pointer-events-none fixed inset-x-0 bottom-[28px] z-40 mx-auto h-[58px] w-[58px] min-h-[58px] min-w-[58px] border border-white/15 bg-black/55 text-white opacity-0 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md hover:border-[color:var(--color-accent-400)]/40 hover:bg-black/65 max-[480px]:bottom-[20px]"
 >
   <span aria-hidden="true" class="text-lg leading-none">↑</span>
 </button>
@@ -17,6 +17,13 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
   (() => {
     const button = document.querySelector("[data-back-to-top]");
     if (!(button instanceof HTMLButtonElement)) return;
+
+    // Navegadores que ya muestran su propio botón "volver arriba" al hacer scroll.
+    const NATIVE_BACK_TO_TOP_UA = /SamsungBrowser|MiuiBrowser/i;
+    if (NATIVE_BACK_TO_TOP_UA.test(navigator.userAgent)) {
+      button.remove();
+      return;
+    }
 
     const threshold = 300;
 
