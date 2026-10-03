@@ -26,8 +26,6 @@ interface Props {
   introEn?: string;
   /** Clases extra en el contenedor (p. ej. `mt-0` cuando el padre ya define separación). */
   class?: string;
-  /** Solo un ítem abierto a la vez (ver `FaqAccordion`). */
-  singleOpen?: boolean;
   /** Índice abierto al cargar; `null` = todos cerrados. Default: el primero. */
   defaultOpen?: number | null;
   /**
@@ -49,7 +47,6 @@ const {
   introEs = "Respondemos las dudas que más aparecen antes de una primera reunión. Si no encontrás lo que buscás, el diagnóstico gratuito no tiene costo ni compromiso.",
   introEn = "We answer the questions that come up most before a first meeting. If yours isn't listed here, the free diagnosis has no cost or obligation.",
   class: rootClass = "",
-  singleOpen = false,
   defaultOpen = 0,
   variant = "default",
 } = Astro.props;
@@ -159,7 +156,6 @@ const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
     idPrefix={idPrefix}
     variant={variant}
     showTags={showTags}
-    singleOpen={singleOpen}
     defaultOpen={defaultOpen}
   />
 </div>

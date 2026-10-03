@@ -2,7 +2,9 @@
 /**
  * Acordeón de FAQ: fuente única para todas las páginas (vía `FaqSection` o
  * directo). `<details>`/`<summary>` nativo, sin JS: el navegador resuelve foco,
- * estado expandido y apertura exclusiva (`name`); la animación es CSS
+ * estado expandido y apertura exclusiva: todos los ítems comparten
+ * `name={idPrefix}`, así que abrir uno cierra el resto (siempre, en todas las
+ * páginas; no es configurable). La animación es CSS
  * (`.faq-accordion*` en `tokens.css`). Texto SSR por locale; `data-en`/`data-es`
  * solo en spans hoja porque `nhLang.apply()` reemplaza su `textContent`.
  */
@@ -16,7 +18,7 @@ import { localeFromPathname } from "../lib/locale-path";
 
 interface Props {
   items: FaqAccordionItem[];
-  /** Prefijo determinista y único por página (`services-faq`, `templates-faq`…): ids y grupo `name`. */
+  /** Prefijo determinista y único por página (`services-faq`, `templates-faq`…): ids y grupo `name` de apertura exclusiva. */
   idPrefix: string;
   /** `darkBand`: paleta fija para fondos oscuros (p. ej. /servicios). */
   variant?: "default" | "darkBand";
@@ -24,8 +26,6 @@ interface Props {
   showTags?: boolean;
   /** Índice abierto en el HTML inicial; `null` = todos cerrados. */
   defaultOpen?: number | null;
-  /** Solo un ítem abierto a la vez (atributo nativo `name` de `<details>`). */
-  singleOpen?: boolean;
 }
 
 const {
@@ -34,7 +34,6 @@ const {
   variant = "default",
   showTags = false,
   defaultOpen = 0,
-  singleOpen = false,
 } = Astro.props;
 
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
@@ -55,7 +54,7 @@ const tagClass =
       <details
         id={`${idPrefix}-item-${index}`}
         class="faq-accordion__item"
-        name={singleOpen ? idPrefix : undefined}
+        name={idPrefix}
         open={index === defaultOpen}
       >
         <summary class="faq-accordion__summary">

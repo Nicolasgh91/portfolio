@@ -42,7 +42,6 @@ type Route = {
     answerEn?: string;
   }[];
   open: number[];
-  singleOpen: boolean;
   hasFaqJsonLd: boolean;
 };
 
@@ -53,7 +52,6 @@ const ROUTES: Route[] = [
     idPrefix: "services-faq",
     data: servicesFaq,
     open: [0],
-    singleOpen: false,
     hasFaqJsonLd: true,
   },
   {
@@ -62,7 +60,6 @@ const ROUTES: Route[] = [
     idPrefix: "services-faq",
     data: servicesFaq,
     open: [0],
-    singleOpen: false,
     hasFaqJsonLd: true,
   },
   {
@@ -71,7 +68,6 @@ const ROUTES: Route[] = [
     idPrefix: "templates-faq",
     data: templatesFaqEntries,
     open: [0],
-    singleOpen: true,
     hasFaqJsonLd: true,
   },
   {
@@ -80,7 +76,6 @@ const ROUTES: Route[] = [
     idPrefix: "templates-faq",
     data: templatesFaqEntries,
     open: [0],
-    singleOpen: true,
     hasFaqJsonLd: true,
   },
   {
@@ -89,7 +84,6 @@ const ROUTES: Route[] = [
     idPrefix: "creator-hub-faq",
     data: hubFaq,
     open: [],
-    singleOpen: false,
     hasFaqJsonLd: false,
   },
   {
@@ -98,7 +92,6 @@ const ROUTES: Route[] = [
     idPrefix: "creator-hub-faq",
     data: hubFaq,
     open: [],
-    singleOpen: false,
     hasFaqJsonLd: false,
   },
 ];
@@ -205,11 +198,7 @@ for (const route of ROUTES) {
       items.flatMap((it, i) => (attr(it.tag, "open") !== null ? [i] : [])),
       route.open,
     );
-    for (const it of items)
-      assert.equal(
-        attr(it.tag, "name"),
-        route.singleOpen ? route.idPrefix : null,
-      );
+    for (const it of items) assert.equal(attr(it.tag, "name"), route.idPrefix);
   });
 
   test(
