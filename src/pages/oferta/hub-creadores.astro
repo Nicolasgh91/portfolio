@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
+import FaqAccordion from "../../components/FaqAccordion.astro";
 import { localeFromPathname } from "../../lib/locale-path";
 
 const title = "Hub de contenido para creadores — bio, FAQ, videos y links";
@@ -12,6 +13,24 @@ const descriptionEn =
 const isEnglish = localeFromPathname(Astro.url.pathname) === "en";
 const blogHref = isEnglish ? "/en/blog" : "/blog";
 const talentHref = isEnglish ? "/en/talent" : "/talento";
+const faqItems = [
+  {
+    question: "¿Qué incluye el hub?",
+    questionEn: "What does the hub include?",
+    answer:
+      "Bio, enlaces por categoría, FAQ expandible y bloque para videos o reels embebidos.",
+    answerEn:
+      "Bio, categorized links, expandable FAQ and a block for embedded videos or reels.",
+  },
+  {
+    question: "¿Puedo sumar chatbot después?",
+    questionEn: "Can I add a chatbot later?",
+    answer:
+      "Sí. El mismo stack modular permite agregar widget de IA sin rehacer la landing.",
+    answerEn:
+      "Yes. The same modular stack lets you add an AI widget without rebuilding the landing page.",
+  },
+];
 const servicesContactHref = isEnglish
   ? "/en/services#contacto"
   : "/servicios#contacto";
@@ -62,55 +81,18 @@ const servicesContactHref = isEnglish
           </p>
         </section>
 
-        <section class="mb-12" aria-labelledby="faq-heading">
+        <section class="mb-12" aria-labelledby="creator-hub-faq-heading">
           <h2
-            id="faq-heading"
+            id="creator-hub-faq-heading"
             class="mb-4 text-lg font-bold text-[var(--text-primary)]"
           >
             {isEnglish ? "Frequently asked questions" : "Preguntas frecuentes"}
           </h2>
-          <div class="space-y-2">
-            <details
-              class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3"
-            >
-              <summary
-                class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
-              >
-                {
-                  isEnglish
-                    ? "What does the hub include?"
-                    : "¿Qué incluye el hub?"
-                }
-              </summary>
-              <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                {
-                  isEnglish
-                    ? "Bio, categorized links, expandable FAQ and a block for embedded videos or reels."
-                    : "Bio, enlaces por categoría, FAQ expandible y bloque para videos o reels embebidos."
-                }
-              </p>
-            </details>
-            <details
-              class="rounded-lg border border-[var(--border-normal)] bg-[var(--bg-card)] px-4 py-3"
-            >
-              <summary
-                class="cursor-pointer text-sm font-semibold text-[var(--text-primary)]"
-              >
-                {
-                  isEnglish
-                    ? "Can I add a chatbot later?"
-                    : "¿Puedo sumar chatbot después?"
-                }
-              </summary>
-              <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                {
-                  isEnglish
-                    ? "Yes. The same modular stack lets you add an AI widget without rebuilding the landing page."
-                    : "Sí. El mismo stack modular permite agregar widget de IA sin rehacer la landing."
-                }
-              </p>
-            </details>
-          </div>
+          <FaqAccordion
+            idPrefix="creator-hub-faq"
+            items={faqItems}
+            defaultOpen={null}
+          />
         </section>
 
         <section class="mb-12" aria-labelledby="videos-heading">

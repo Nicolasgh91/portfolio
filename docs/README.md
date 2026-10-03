@@ -37,7 +37,7 @@
 | [componentes/btn-bounce.md](./componentes/btn-bounce.md)                     | Patrón `.btn-bounce` / `.arrow` (CTAs con flecha) |
 | [componentes/metric-display.md](./componentes/metric-display.md)             | `MetricDisplay`                                   |
 | [componentes/project-card.md](./componentes/project-card.md)                 | `ProjectCard`                                     |
-| [componentes/faq-accordion.md](./componentes/faq-accordion.md)               | `FAQAccordion`                                    |
+| [componentes/faq-accordion.md](./componentes/faq-accordion.md)               | `FaqAccordion` (fuente única del acordeón FAQ)    |
 | [componentes/LogoMarquee.md](./componentes/LogoMarquee.md)                   | `LogoMarquee`                                     |
 | [componentes/hero-section.md](./componentes/hero-section.md)                 | `HeroSection`                                     |
 | [componentes/liquid-glass-marquee.md](./componentes/liquid-glass-marquee.md) | `LiquidGlassMarquee`                              |
